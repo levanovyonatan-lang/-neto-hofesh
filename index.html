@@ -18,7 +18,7 @@
     <meta name="google-site-verification" content="iJyaxMFFVb_1gl_dreee-B0yxWKLTP6tmW1xwtJkJAI" />
     
     <!-- SEO - כותרת ותיאור -->
-    <title>נטו חופש | כמה ימי לימודים נשארו עד החופש הגדול 2026? (בלי שבתות שישי וחגים)</title>
+    <title>מתי החופש הגדול? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש</title>
     
     <!-- Favicon (הסמל שיופיע מעל שם האתר בחיפוש גוגל) וסמלילים למסך הבית -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E☀️%3C/text%3E%3C/svg%3E">
@@ -42,7 +42,7 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="http://neto-hofesh.co.il/">
-    <meta property="og:title" content="נטו חופש | כמה ימי לימודים נשארו עד החופש הגדול 2026? (בלי שבתות שישי וחגים)">
+    <meta property="og:title" content="מתי החופש הגדול? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש">
     <meta property="og:description" content="בודקים מתי החופש הגדול? מחשבון ספירה לאחור המראה בדיוק כמה ימים נשארו לחופש הגדול בלי שישי שבת וחגים! כנסו לבדוק.">
     <meta property="og:image" content="http://neto-hofesh.co.il/preview-image.png">
 
@@ -380,7 +380,7 @@
             <h2>מתי החופש הגדול 2026? ספירה לאחור לחופש הגדול</h2>
             <p>שואלים את עצמכם <strong>כמה ימים נשארו לחופש הגדול</strong>? או <strong>כמה זמן נשאר לחופש הגדול</strong>? הגעתם למקום הנכון! האתר "נטו חופש" הוא המחשבון המדויק ביותר שיענה לכם על השאלה <strong>כמה ימים נשארו לחופש הגדול בלי שישי שבת וחגים</strong>.</p>
             <h3>מתי יוצאים לחופש הגדול ומתי מסיימים ללמוד?</h3>
-            <p>לפי <strong>לוח חופשות משרד החינוך</strong>, <strong>תאריך החופש הגדול</strong> משתנה לפי הגיל: בתי הספר היסודיים מסיימים ב-30 ביוני, בעוד שחטיבות הביניים והתיכונים מסיימים ב-19 ביוני. אם אתם רוצים לדעת <strong>מתי מסתיימת שנת הלימודים</strong> בדיוק עבורכם, פשוט בחרו את השכבה שלכם במחשבון למעלה וקבלו <strong>ספירה לאחור לחופש הגדול</strong> בזמן אמת, שתראה לכם בדיוק <strong>מתי מסיימים ללמוד</strong> השנה!</p>
+            <p>לפי <strong>לוח חופשות משרד החינוך</strong>, <strong>תאריך החופש הגדול</strong> משתנה לפי הגיל: בתי הספר היסודיים מסיימים ב-30 ביוני, בעוד שחטיבות הביניים והתיכונים מסיימים ב-19 ביוני (או ב-18 ביוני למי שלא לומד בשישי). אם אתם רוצים לדעת <strong>מתי מסתיימת שנת הלימודים</strong> בדיוק עבורכם, פשוט בחרו את השכבה שלכם במחשבון למעלה וקבלו <strong>ספירה לאחור לחופש הגדול</strong> בזמן אמת, שתראה לכם בדיוק <strong>מתי מסיימים ללמוד</strong> השנה!</p>
             <div class="contact-area">
                 ליצירת קשר, שיתופי פעולה או דיווח על תקלות: 
                 <a href="mailto:levanov.yonatan@gmail.com" class="contact-link">levanov.yonatan@gmail.com</a>
@@ -751,8 +751,13 @@
             document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
             radio.parentElement.classList.add('selected');
             const hint = document.getElementById('school-hint-text');
+            const isFridayOff = !document.getElementById('friday-toggle').checked;
             hint.style.visibility = 'visible';
-            hint.textContent = radio.value === 'elem' ? 'לומדים עד ה-30 ביוני 🍉' : 'יוצאים לחופש ב-19 ביוני 🏖️';
+            if (radio.value === 'elem') {
+                hint.textContent = 'לומדים עד ה-30 ביוני 🍉';
+            } else {
+                hint.textContent = isFridayOff ? 'יוצאים לחופש ב-18 ביוני 🏖️' : 'יוצאים לחופש ב-19 ביוני 🏖️';
+            }
         }
 
         function updateFridayToggle() {
@@ -760,6 +765,11 @@
             const hint = document.getElementById('friday-hint-text');
             hint.textContent = toggle.checked ? 'כן, יש לנו לימודים בשישי ☹️' : 'לא, אצלנו שישי זה חופש 😊';
             hint.style.color = toggle.checked ? '#ef4444' : 'var(--text-muted)';
+            
+            const checkedSchool = document.querySelector('input[name="schoolType"]:checked');
+            if (checkedSchool) {
+                updateSchoolSelection(checkedSchool);
+            }
         }
 
         function calculateNetDays(targetDate) {
@@ -779,6 +789,16 @@
             document.getElementById('setup-screen').style.display = 'none';
             document.getElementById('main-screen').style.display = 'flex';
             document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
+            
+            const summerHighObj = allTargets.find(t => t.id === 'summerHigh');
+            if (summerHighObj) {
+                if (!userConfig.studyFriday) {
+                    summerHighObj.date = new Date('2026-06-18T08:15:00');
+                } else {
+                    summerHighObj.date = new Date('2026-06-19T08:15:00');
+                }
+            }
+
             const now = Date.now();
             activeEventsList = allTargets.filter(e => e.date.getTime() > now && (!e.isSummer || e.type === (userConfig.schoolType === 'elem' ? 'elem' : 'high')));
             activeEventsList.sort((a,b) => a.date - b.date);
