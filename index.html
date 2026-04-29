@@ -99,7 +99,7 @@
             to { transform: translate3d(-50%, -50%, 0) scale(1.3); opacity: 0.7; }
         }
 
-        .app-container { width: 100%; max-width: 480px; position: relative; padding-bottom: 40px; }
+        .app-container { width: 100%; max-width: 480px; position: relative; padding-bottom: 120px; }
         
         #setup-screen { display: flex; flex-direction: column; gap: 28px; animation: fadeIn 0.8s ease-out; }
         
@@ -245,12 +245,12 @@
             cursor: default;
         }
 
-        /* --- עיצוב כפתור ה-VIP (זהוב ויוקרתי בסגנון טינקרז) --- */
+        /* --- עיצוב כפתור ה-VIP (טבעי, רגוע ומשתלב באתר) --- */
         .vip-funnel-btn {
-            background: linear-gradient(135deg, #ffde21 0%, #ffb300 100%);
+            background: linear-gradient(135deg, #fde047 0%, #eab308 100%); /* צבע מעודן יותר */
             color: #422006; 
-            padding: 15px;
-            border-radius: 18px;
+            padding: 16px;
+            border-radius: 20px;
             font-size: 16px;
             font-weight: 900;
             cursor: pointer;
@@ -258,22 +258,44 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid #f59e0b;
-            margin-top: 18px;
-            margin-bottom: 5px;
-            box-shadow: 0 6px 12px rgba(251, 191, 36, 0.2);
+            border: none;
+            margin-top: 25px; 
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(234, 179, 8, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.4); /* הצללה רכה יותר */
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: vip-pulse-gold 3s infinite;
+            position: relative;
+            overflow: hidden;
         }
+        
         .vip-funnel-btn:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.4);
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 15px rgba(234, 179, 8, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.5);
         }
 
-        @keyframes vip-pulse-gold {
-            0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.5); }
-            70% { box-shadow: 0 0 0 12px rgba(251, 191, 36, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+        /* מעטפת דביקה (Sticky) לכפתור ה-VIP בתחתית המסך */
+        .sticky-vip-wrapper {
+            position: fixed;
+            bottom: 0; /* צמוד לחלוטין לתחתית המסך */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px; /* תואם לרוחב האפליקציה */
+            display: flex;
+            justify-content: center;
+            z-index: 900;
+        }
+        
+        .sticky-vip-wrapper .vip-funnel-btn {
+            margin: 0;
+            width: 100%;
+            max-width: 100%;
+            border-radius: 0; /* מרובע לחלוטין - נצמד לצדדים */
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+            padding-top: 18px;
+            padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); /* תמיכה בפס השחור של אייפון בתחתית */
+            box-shadow: 0 -3px 10px rgba(234, 179, 8, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4); /* הצללה רכה לפס התחתון */
         }
 
         .copy-data-row {
@@ -432,48 +454,43 @@
             </div>
 
             <div id="error-message" style="color: #ef4444; font-weight: 900; text-align: center; display: none; background: #fee2e2; padding: 12px; border-radius: 16px;">רגע! לא סימנתם איפה אתם לומדים 🎒</div>
-            <button class="btn-start" onclick="initApp()">התחל ספירה לאחור! 🚀</button>
-        </div>
+        <button class="btn-start" onclick="initApp()">התחל ספירה לאחור! 🚀</button>
+    </div>
 
-        <div id="main-screen">
-            <div id="main-timer-bg" class="main-timer-card">
-                <div id="main-target-title" style="font-weight: 800; font-size: 20px; margin-bottom: 10px;"></div>
-                <div class="net-days-container">
-                    <div style="font-weight: 800; color: var(--text-muted);">נשארו רק:</div>
-                    <div id="main-net-days" class="net-days">-</div>
-                    <div style="font-weight: 800; color: var(--text-muted);">ימי לימוד נטו!</div>
-                    <div id="excluding-label" style="font-size: 14px; font-weight: 600; color: var(--text-muted); margin-top: 8px;"></div>
-                </div>
+    <div id="main-screen">
+        <div id="main-timer-bg" class="main-timer-card">
+            <div id="main-target-title" style="font-weight: 800; font-size: 20px; margin-bottom: 10px;"></div>
+            <div class="net-days-container">
+                <div style="font-weight: 800; color: var(--text-muted);">נשארו רק:</div>
+                <div id="main-net-days" class="net-days">-</div>
+                <div style="font-weight: 800; color: var(--text-muted);">ימי לימוד נטו!</div>
+                <div id="excluding-label" style="font-size: 14px; font-weight: 600; color: var(--text-muted); margin-top: 8px;"></div>
+            </div>
 
-                <div class="absolute-timer" dir="ltr">
-                    <div class="time-box"><div id="abs-days" class="time-val">-</div><div class="time-lbl">ימים</div></div>
-                    <div class="time-box"><div id="abs-hours" class="time-val">-</div><div class="time-lbl">שעות</div></div>
-                    <div class="time-box"><div id="abs-mins" class="time-val">-</div><div class="time-lbl">דקות</div></div>
-                    <div class="time-box"><div id="abs-secs" class="time-val">-</div><div class="time-lbl">שניות</div></div>
-                </div>
+            <div class="absolute-timer" dir="ltr">
+                <div class="time-box"><div id="abs-days" class="time-val">-</div><div class="time-lbl">ימים</div></div>
+                <div class="time-box"><div id="abs-hours" class="time-val">-</div><div class="time-lbl">שעות</div></div>
+                <div class="time-box"><div id="abs-mins" class="time-val">-</div><div class="time-lbl">דקות</div></div>
+                <div class="time-box"><div id="abs-secs" class="time-val">-</div><div class="time-lbl">שניות</div></div>
+            </div>
 
-                <div class="total-days-label" style="margin-top: 8px;">סך הכל</div>
+            <div class="total-days-label" style="margin-top: 8px;">סך הכל</div>
 
-                <div style="text-align: center;">
-                    <div id="vacation-length-box" class="vacation-length-box">
-                        <span id="vacation-days-count"></span>
-                    </div>
-                </div>
-
-                <!-- כפתור הפיתיון ממש מתחת לשעון -->
-                <button id="vip-community-btn" class="vip-funnel-btn" onclick="openVipModal()">
-                    הרוויחו כסף ממשימות בטלפון 💸
-                </button>
-
-                <div class="ai-tools">
-                    <button class="ai-btn" id="main-ai-btn" onclick="handleAiTip()">
-                        <span id="ai-btn-loader" class="loader"></span>
-                        <span id="ai-btn-text">לחצו לטיפ אופטימיות יומי ✨</span>
-                    </button>
+            <div style="text-align: center;">
+                <div id="vacation-length-box" class="vacation-length-box">
+                    <span id="vacation-days-count"></span>
                 </div>
             </div>
-            
-            <div class="action-buttons-row" style="margin-top: 5px; margin-bottom: 5px; direction: rtl;">
+
+            <div class="ai-tools">
+                <button class="ai-btn" id="main-ai-btn" onclick="handleAiTip()">
+                    <span id="ai-btn-loader" class="loader"></span>
+                    <span id="ai-btn-text">לחצו לטיפ אופטימיות יומי ✨</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="action-buttons-row" style="margin-top: 5px; margin-bottom: 5px; direction: rtl;">
                 <a href="#" id="share-btn" class="btn-action btn-share-half" onclick="shareWhatsApp(event)">
                     <span style="order: 2;">📢</span>
                     <span style="order: 1;">שתפו לכיתה</span>
@@ -487,6 +504,13 @@
             <h2 style="font-size: 18px; margin-top: 15px; margin-bottom: 8px; text-align: center;">בחרו יעד לספירה:</h2>
             <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;"></div>
             <center><button class="reset-btn" onclick="resetApp()">שינוי הגדרות</button></center>
+            
+            <!-- מעטפת הכפתור הדביק בתחתית המסך -->
+            <div class="sticky-vip-wrapper">
+                <button id="vip-community-btn" class="vip-funnel-btn" onclick="openVipModal()">
+                    הרוויחו 💸 ממשימות בטלפון
+                </button>
+            </div>
         </div>
 
         <footer class="seo-footer">
