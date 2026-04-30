@@ -245,13 +245,12 @@
             cursor: default;
         }
 
-        /* --- עיצוב כפתור ה-VIP (טבעי, רגוע ומשתלב באתר) --- */
+        /* --- עיצוב כפתור ה-VIP (פס תחתון רגוע ומשתלב) --- */
         .vip-funnel-btn {
             background: linear-gradient(135deg, #fde047 0%, #eab308 100%); /* צבע מעודן יותר */
             color: #422006; 
             padding: 16px;
-            border-radius: 20px;
-            font-size: 16px;
+            font-size: 16.5px;
             font-weight: 900;
             cursor: pointer;
             width: 100%;
@@ -259,12 +258,9 @@
             justify-content: center;
             align-items: center;
             border: none;
-            margin-top: 25px; 
-            margin-bottom: 10px;
-            box-shadow: 0 4px 10px rgba(234, 179, 8, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.4); /* הצללה רכה יותר */
+            box-shadow: 0 4px 10px rgba(234, 179, 8, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.4);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
-            overflow: hidden;
         }
         
         .vip-funnel-btn:hover { 
@@ -290,12 +286,9 @@
             width: 100%;
             max-width: 100%;
             border-radius: 0; /* מרובע לחלוטין - נצמד לצדדים */
-            border-left: none;
-            border-right: none;
-            border-bottom: none;
             padding-top: 18px;
             padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); /* תמיכה בפס השחור של אייפון בתחתית */
-            box-shadow: 0 -3px 10px rgba(234, 179, 8, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4); /* הצללה רכה לפס התחתון */
+            box-shadow: 0 -3px 10px rgba(234, 179, 8, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
 
         .copy-data-row {
@@ -508,7 +501,7 @@
             <!-- מעטפת הכפתור הדביק בתחתית המסך -->
             <div class="sticky-vip-wrapper">
                 <button id="vip-community-btn" class="vip-funnel-btn" onclick="openVipModal()">
-                    הרוויחו 💸 ממשימות בטלפון
+                    שווה לכם ללחוץ על הכפתור הזה 💵
                 </button>
             </div>
         </div>
@@ -540,49 +533,50 @@
             </div>
         </div>
 
-        <!-- מודל ה-VIP (עיצוב זהוב עם אזהרת חובה) -->
+        <!-- מודל ה-VIP (הבקשה האישית וההרשמה) -->
         <div id="vip-modal" class="ios-modal-overlay" style="align-items: center; z-index: 9999;">
             <div class="ios-modal-content" style="max-width: 400px; max-height: 95vh; overflow-y: auto; position: relative; text-align: right; padding: 35px 25px;">
                 <button onclick="closeVipModal()" style="position: absolute; top: 15px; left: 15px; background: none; border: none; font-size: 24px; color: #cbd5e1; cursor: pointer; padding: 5px; line-height: 1;">✖</button>
 
-                <h3 style="font-size: 20px; font-weight: 900; color: #1e293b; margin-bottom: 10px; line-height: 1.2; white-space: nowrap;">מתחילים לעשות <span style="color: #ca8a04;">כסף מהטלפון</span> 💸</h3>
+                <h3 style="font-size: 22px; font-weight: 900; color: #1e293b; margin-bottom: 10px; line-height: 1.3;">קופצים לעשות קצת כסף בחופש? 💸</h3>
                 
-                <p style="font-weight: 500; font-size: 15.5px; color: #475569; margin-bottom: 25px; line-height: 1.5;">
+                <p style="font-weight: 500; font-size: 15.5px; color: #475569; margin-bottom: 12px; line-height: 1.5;">
                     בקהילת <b>Teenkerz</b> מרוויחים כסף אמיתי על השתתפות בסקרים קלילים, טעימות של חטיפים חדשים, קמפיינים שווים ומפגשי זום קצרים.
                 </p>
+                <p style="font-weight: 700; font-size: 15.5px; color: #334155; margin-bottom: 20px; line-height: 1.5;">
+                    כדי להירשם למשימות תעברו עכשיו לאתר של טינקרז.
+                </p>
 
-                <!-- אזור הצטרפות (חובה להרשמה) -->
-                <div style="background: #fffdf0; padding: 22px 18px 18px 18px; border-radius: 20px; border: 2px solid #fcd34d; margin-bottom: 25px; position: relative; box-shadow: 0 4px 15px rgba(254, 240, 138, 0.3);">
-                    
-                    <!-- תווית אזהרה מעודנת אך בולטת -->
-                    <div style="position: absolute; top: -14px; right: 18px; background: #f97316; color: white; font-size: 13px; font-weight: 900; padding: 4px 14px; border-radius: 20px; box-shadow: 0 4px 8px rgba(249, 115, 22, 0.3);">
-                        חובה להרשמה
-                    </div>
-
-                    <div style="font-weight: 900; font-size: 17px; color: #854d0e; margin-bottom: 8px; margin-top: 5px;">איך נכנסים למסלול המרוויחים? 💰</div>
-                    <p style="font-size: 14px; color: #92400e; margin-bottom: 18px; line-height: 1.5; font-weight: 600;">
-                        כדי שהמערכת תזהה ותאשר אתכם, <span style="text-decoration: underline;">חובה</span> למלא את הפרטים הבאים בטופס (בשאלה "הגעתם דרך חבר?"):
+                <!-- בקשה אישית (עיצוב שמייצר אמפתיה) -->
+                <div style="background: #f0fdfa; border: 2px solid #5eead4; border-radius: 16px; padding: 18px; margin-bottom: 20px; position: relative; box-shadow: 0 4px 10px rgba(94, 234, 212, 0.15);">
+                    <div style="font-weight: 900; font-size: 16px; color: #0f766e; margin-bottom: 8px;">בקשה קטנה ממני 🙏</div>
+                    <p style="font-size: 14px; color: #115e59; line-height: 1.5; font-weight: 500; margin-bottom: 0;">
+                        האתר של "נטו חופש" פועל בחינם, אבל להחזיק את השרתים ולתחזק את הכל עולה כסף. אם בא לכם לפרגן לי ולעזור לאתר להמשיך לעבוד בשבילכם – אני ממש אעריך אם תרשמו אותי בתור החבר שהביא אתכם! זה לא עולה לכם כלום, ולי זה עוזר המון.
                     </p>
+                </div>
 
-                    <div class="copy-data-row">
-                        <div>
-                            <div style="font-size: 12px; color: #b45309; margin-bottom: 2px; font-weight: 700;">שם מלא של החבר:</div>
-                            <div style="font-weight: 900; font-size: 18px; color: #0f172a;">חופש</div>
-                        </div>
-                        <!-- הורדנו את כפתור ההעתקה מכאן -->
+                <!-- איך עוזרים -->
+                <div style="background: #fffdf0; padding: 22px 18px 18px 18px; border-radius: 16px; border: 2px solid #fcd34d; margin-bottom: 20px;">
+                    <div style="font-weight: 900; font-size: 17px; color: #854d0e; margin-bottom: 15px;">איך עוזרים? פשוט מאוד:</div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-size: 14px; color: #92400e; font-weight: 700; margin-bottom: 6px;">1. בשדה 'שם החבר' - תרשמו:</div>
+                        <div style="font-weight: 900; font-size: 18px; color: #0f172a; background: #ffffff; display: inline-block; padding: 5px 15px; border-radius: 10px; border: 1px solid #fde047; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">חופש</div>
                     </div>
 
-                    <div class="copy-data-row" style="margin-bottom: 0;">
-                        <div>
-                            <div style="font-size: 12px; color: #b45309; margin-bottom: 2px; font-weight: 700;">טלפון של החבר:</div>
-                            <div style="font-weight: 900; font-size: 18px; color: #0f172a;" dir="ltr">0542633610</div>
-                        </div>
-                        <button class="copy-btn-small" id="copy-phone-btn" onclick="copyToClipboard('0542633610', 'copy-phone-btn')">העתק 📋</button>
+                    <div>
+                        <div style="font-size: 14px; color: #92400e; font-weight: 700; margin-bottom: 6px;">2. בשדה 'טלפון החבר' - תדביקו את המספר:</div>
+                        <div style="font-weight: 900; font-size: 18px; color: #0f172a; background: #ffffff; display: inline-block; padding: 5px 15px; border-radius: 10px; border: 1px solid #fde047; box-shadow: 0 2px 5px rgba(0,0,0,0.02);" dir="ltr">0542633610</div>
                     </div>
                 </div>
 
-                <button class="vip-funnel-btn" style="margin-top: 0; padding: 18px; font-size: 17px; box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);" onclick="goToRegistration()">
-                    אני רוצה להירשם בחינם >>
+                <div style="text-align: center; font-weight: 800; font-size: 15px; color: #ea580c; margin-bottom: 15px;">
+                    תודה ענקית לכל מי שמפרגן! ❤️
+                </div>
+
+                <!-- הכפתור שעושה פעולה כפולה: גם מעתיק וגם פותח את האתר -->
+                <button id="copy-and-go-btn" class="vip-funnel-btn" style="margin-top: 0; padding: 18px; font-size: 16px; box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);" onclick="copyAndGoToRegistration('0542633610', this)">
+                    העתק מספר ומעבר להרשמה
                 </button>
             </div>
         </div>
@@ -840,9 +834,9 @@
             document.getElementById('vip-modal').style.display = 'none';
         }
 
-        // פונקציית העתקה חכמה שיודעת להעתיק גם את השם וגם את הטלפון
-        function copyToClipboard(textToCopy, btnId) {
-            // יצירת אלמנט זמני להעתקה שעובד בכל הטלפונים
+        // פונקציית העתקה ומעבר משולבת (כפתור אחד שעושה הכל)
+        function copyAndGoToRegistration(textToCopy, btnElement) {
+            // העתקת המספר ללוח
             const tempInput = document.createElement("input");
             tempInput.value = textToCopy;
             document.body.appendChild(tempInput);
@@ -850,31 +844,26 @@
             document.execCommand("copy");
             document.body.removeChild(tempInput);
             
-            // פידבק למשתמש ספציפית על הכפתור שלחצו עליו
-            const btn = document.getElementById(btnId);
-            const originalText = btn.innerHTML;
+            // שליחת אירוע לאנליטיקס
+            trackEvent('copy_and_redirect_registration');
             
-            btn.innerHTML = "הועתק! ✔️";
-            btn.classList.add('copied');
+            // שינוי הטקסט של הכפתור כדי לתת פידבק למשתמש
+            const originalText = btnElement.innerHTML;
+            btnElement.innerHTML = "המספר הועתק! עובר להרשמה... ⏳";
+            btnElement.style.background = "linear-gradient(135deg, #86efac 0%, #22c55e 100%)"; // הופך לירוק
+            btnElement.style.color = "#ffffff";
             
-            if (textToCopy === "חופש") {
-                trackEvent('copy_friend_name');
-            } else {
-                trackEvent('copy_friend_phone');
-            }
-            
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.classList.remove('copied');
-            }, 2500);
-        }
-
-        function goToRegistration() {
-            trackEvent('click_vip_registration_link');
+            // פתיחת האתר החדש מיד! חוסמי פופ-אפ במחשב חוסמים פתיחה בתוך setTimeout
             const registrationLink = "https://teenk.co.il/teenkerz/"; 
             window.open(registrationLink, '_blank');
+            
+            // החזרת הכפתור למצבו המקורי אחרי זמן קצר (במידה והם חוזרים ללשונית)
+            setTimeout(() => { 
+                btnElement.innerHTML = originalText; 
+                btnElement.style.background = "";
+                btnElement.style.color = "";
+            }, 1500);
         }
-        // ------------------------------------
 
         function loadDailyState() {
             const now = new Date();
