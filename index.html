@@ -354,6 +354,7 @@
             margin-bottom: 12px;
             border: 2px solid #fef08a;
             transition: all 0.2s;
+            gap: 10px; /* מרווח בטוח בין הטקסט לכפתור */
         }
         .copy-data-row:hover { border-color: #f59e0b; background: #fffbeb; }
 
@@ -361,12 +362,18 @@
             background: #fef08a;
             color: #854d0e;
             border: 1px solid #fde047;
-            padding: 8px 14px;
+            padding: 0 16px;
             border-radius: 10px;
             font-weight: 800;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
             transition: 0.2s;
+            white-space: nowrap; /* מונע מהטקסט להישבר לשתי שורות */
+            flex-shrink: 0; /* מונע מהדפדפן למעוך את הכפתור */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 38px; /* גובה קבוע כדי שלא יהיה עבה מדי */
         }
         .copy-btn-small:active { transform: scale(0.95); }
         .copy-btn-small.copied { background: #dcfce7; color: #166534; border-color: #86efac; }
@@ -591,9 +598,9 @@
             <div class="ios-modal-content" style="max-width: 400px; max-height: 95vh; overflow-y: auto; position: relative; text-align: right; padding: 35px 25px;">
                 <button onclick="closeVipModal()" style="position: absolute; top: 15px; left: 15px; background: none; border: none; font-size: 24px; color: #cbd5e1; cursor: pointer; padding: 5px; line-height: 1;">✖</button>
 
-                <h3 style="font-size: 22px; font-weight: 900; color: #1e293b; margin-bottom: 12px; line-height: 1.3;">רוצים להרוויח כסף וחוויות? 💵</h3>
+                <h3 style="font-size: 22px; font-weight: 900; color: #1e293b; margin-bottom: 15px; line-height: 1.3;">רוצים להרוויח כסף וחוויות? 💵</h3>
                 
-                <!-- אזור סרטון אנכי (טעינה חכמה, מסך שחור התחלתי אלגנטי) -->
+                <!-- אזור סרטון אנכי (טוען מראש ברקע למהירות שיא) -->
                 <div style="border-radius: 16px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 2px solid #fde047; background: #000; position: relative; width: 80%; max-width: 240px; aspect-ratio: 9/16; margin-left: auto; margin-right: auto;">
                     
                     <!-- מסך פתיחה שחור עם הנחיה - נעלם כשמתחיל לנגן -->
@@ -602,9 +609,9 @@
                         <div style="color: white; font-weight: 900; font-size: 18px; letter-spacing: 0.5px;">הקליקו לתחילת הסרטון</div>
                     </div>
 
-                    <!-- הסרטון (ללא פוסטר, מסך שחור כברירת מחדל) -->
-                    <video id="promo-video" width="100%" height="100%" controls playsinline preload="metadata" style="display: block; object-fit: cover; width: 100%; height: 100%; cursor: pointer;" onclick="this.play();" onplay="document.getElementById('video-click-hint').style.display='none';">
-                        <source id="promo-source" data-src="https://www.dropbox.com/scl/fi/b0sl8jh424xtxn2czbtq3/Captions_9CA11D.MP4?rlkey=kj1bgcnnuc5txtcda1rainy3y&st=xpzz3k1w&raw=1" type="video/mp4">
+                    <!-- הסרטון (טוען ברקע בזכות preload=auto ו-src ישיר) -->
+                    <video id="promo-video" width="100%" height="100%" controls playsinline preload="auto" style="display: block; object-fit: cover; width: 100%; height: 100%; cursor: pointer;" onclick="this.play();" onplay="document.getElementById('video-click-hint').style.display='none';">
+                        <source id="promo-source" src="https://www.dropbox.com/scl/fi/b0sl8jh424xtxn2czbtq3/Captions_9CA11D.MP4?rlkey=kj1bgcnnuc5txtcda1rainy3y&st=xpzz3k1w&raw=1" type="video/mp4">
                         הדפדפן שלך לא תומך בהצגת סרטונים.
                     </video>
                 </div>
@@ -626,9 +633,10 @@
                     <div class="copy-data-row" style="margin-bottom: 0; border-color: #fde047; box-shadow: none; padding: 10px 12px;">
                         <div>
                             <div style="font-size: 12px; color: #b45309; margin-bottom: 2px; font-weight: 700;">2. טלפון החבר:</div>
-                            <div style="font-weight: 900; font-size: 19px; color: #0f172a;" dir="ltr">0542633610</div>
+                            <div id="phone-number-text" style="font-weight: 900; font-size: 19px; color: #0f172a; user-select: text; -webkit-user-select: text;" dir="ltr">0542633610</div>
                         </div>
-                        <button id="dedicated-copy-btn" class="copy-btn-small" style="padding: 10px 16px; font-size: 14px;" onclick="copyPhoneNumber(this)">העתק מספר 📋</button>
+                        <!-- קיצור הטקסט כך שייכנס מושלם גם במסכים צרים -->
+                        <button id="dedicated-copy-btn" class="copy-btn-small" onclick="copyPhoneNumber(this)">העתק 📋</button>
                     </div>
                 </div>
 
