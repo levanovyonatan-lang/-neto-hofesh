@@ -287,6 +287,9 @@
             100% { left: 200%; }
         }
 
+        /* ביטול הריצוד (אפקט הברק) לכפתור המעבר להרשמה */
+        .no-flicker::after { display: none !important; }
+
         /* אנימציות למשיכת תשומת לב */
         @keyframes point-down {
             0%, 100% { transform: translateY(0); }
@@ -375,8 +378,21 @@
             justify-content: center;
             height: 38px; /* גובה קבוע כדי שלא יהיה עבה מדי */
         }
+        
+        /* אנימציית "שקשוק" עדינה שמושכת את העין - פועלת כל 3 שניות */
+        @keyframes copy-attention-wiggle {
+            0%, 85%, 100% { transform: scale(1) rotate(0deg); }
+            88% { transform: scale(1.06) rotate(-3deg); background-color: #fde047; box-shadow: 0 4px 10px rgba(253, 224, 71, 0.5); }
+            91% { transform: scale(1.06) rotate(3deg); background-color: #fde047; box-shadow: 0 4px 10px rgba(253, 224, 71, 0.5); }
+            94% { transform: scale(1.06) rotate(-3deg); background-color: #fde047; box-shadow: 0 4px 10px rgba(253, 224, 71, 0.5); }
+            97% { transform: scale(1.06) rotate(3deg); background-color: #fde047; box-shadow: 0 4px 10px rgba(253, 224, 71, 0.5); }
+        }
+        
+        /* מפעיל את השקשוק רק אם עוד לא העתיקו */
+        .copy-btn-small:not(.copied) { animation: copy-attention-wiggle 3s infinite; }
+        
         .copy-btn-small:active { transform: scale(0.95); }
-        .copy-btn-small.copied { background: #dcfce7; color: #166534; border-color: #86efac; }
+        .copy-btn-small.copied { background: #dcfce7; color: #166534; border-color: #86efac; animation: none; transform: scale(1); }
 
         @keyframes tipUpdateAnim {
             0% { transform: scale(0.95); background-color: #fefce8; }
@@ -915,10 +931,11 @@
             
             const copyBtn = document.getElementById('dedicated-copy-btn');
             if (copyBtn) {
-                copyBtn.innerHTML = "העתק מספר 📋";
+                copyBtn.innerHTML = "העתק מספר";
                 copyBtn.style.background = "#fef08a";
                 copyBtn.style.color = "#854d0e";
                 copyBtn.style.borderColor = "#fde047";
+                copyBtn.classList.remove('copied'); // הפעלת האנימציה מחדש
             }
             
             // טעינה עצלה לסרטון (מתחיל להיטען רק עכשיו כשהחלון נפתח!)
@@ -954,7 +971,8 @@
             hasCopiedNumber = true; // סימון שהמשתמש ביצע את המשימה
             trackEvent('copied_number_via_btn'); // דיווח לאנליטיקס: הועתק דרך הכפתור
             
-            // שינוי עיצוב הכפתור כדי לתת פידבק הצלחה
+            // שינוי עיצוב הכפתור כדי לתת פידבק הצלחה נקי (כולל אימוג'י הפעם)
+            btnElement.classList.add('copied'); // עוצר את האנימציה
             btnElement.innerHTML = "הועתק! ✅";
             btnElement.style.background = "#dcfce7";
             btnElement.style.color = "#166534";
@@ -977,6 +995,7 @@
                     
                     const btnElement = document.getElementById('dedicated-copy-btn');
                     if (btnElement) {
+                        btnElement.classList.add('copied'); // עוצר את האנימציה
                         btnElement.innerHTML = "הועתק! ✅";
                         btnElement.style.background = "#dcfce7";
                         btnElement.style.color = "#166534";
