@@ -261,11 +261,62 @@
             box-shadow: 0 4px 10px rgba(234, 179, 8, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.4);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
+            overflow: hidden; /* חובה בשביל אפקט הברק */
         }
         
         .vip-funnel-btn:hover { 
             transform: translateY(-2px); 
             box-shadow: 0 6px 15px rgba(234, 179, 8, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        /* אפקט ברק (Shine) שרץ על הכפתור למשיכת עין חלקה */
+        .vip-funnel-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            animation: shine-glare 3.5s infinite;
+        }
+        
+        @keyframes shine-glare {
+            0%, 60% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        /* אנימציות למשיכת תשומת לב */
+        @keyframes point-down {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(6px); }
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            font-size: 13px;
+            font-weight: 900;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid white;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            animation: pulse-red 2s infinite;
+            z-index: 2;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
         /* מעטפת דביקה (Sticky) לכפתור ה-VIP בתחתית המסך */
@@ -277,6 +328,8 @@
             width: 100%;
             max-width: 480px; /* תואם לרוחב האפליקציה */
             display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
             z-index: 900;
         }
@@ -501,7 +554,7 @@
             <!-- מעטפת הכפתור הדביק בתחתית המסך -->
             <div class="sticky-vip-wrapper">
                 <button id="vip-community-btn" class="vip-funnel-btn" onclick="openVipModal()">
-                    שווה לכם ללחוץ על הכפתור הזה 💵
+                    כפתור הכסף 💸
                 </button>
             </div>
         </div>
@@ -533,50 +586,64 @@
             </div>
         </div>
 
-        <!-- מודל ה-VIP (הבקשה האישית וההרשמה) -->
+        <!-- מודל ה-VIP (מותאם לסרטון מ-Google Drive) -->
         <div id="vip-modal" class="ios-modal-overlay" style="align-items: center; z-index: 9999;">
             <div class="ios-modal-content" style="max-width: 400px; max-height: 95vh; overflow-y: auto; position: relative; text-align: right; padding: 35px 25px;">
                 <button onclick="closeVipModal()" style="position: absolute; top: 15px; left: 15px; background: none; border: none; font-size: 24px; color: #cbd5e1; cursor: pointer; padding: 5px; line-height: 1;">✖</button>
 
-                <h3 style="font-size: 22px; font-weight: 900; color: #1e293b; margin-bottom: 10px; line-height: 1.3;">קופצים לעשות קצת כסף בחופש? 💸</h3>
+                <h3 style="font-size: 22px; font-weight: 900; color: #1e293b; margin-bottom: 12px; line-height: 1.3;">רוצים להרוויח כסף וחוויות? 💵</h3>
                 
-                <p style="font-weight: 500; font-size: 15.5px; color: #475569; margin-bottom: 12px; line-height: 1.5;">
-                    בקהילת <b>Teenkerz</b> מרוויחים כסף אמיתי על השתתפות בסקרים קלילים, טעימות של חטיפים חדשים, קמפיינים שווים ומפגשי זום קצרים.
-                </p>
-                <p style="font-weight: 700; font-size: 15.5px; color: #334155; margin-bottom: 20px; line-height: 1.5;">
-                    כדי להירשם למשימות תעברו עכשיו לאתר של טינקרז.
+                <!-- אזור סרטון אנכי (טעינה חכמה, מסך שחור התחלתי אלגנטי) -->
+                <div style="border-radius: 16px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 2px solid #fde047; background: #000; position: relative; width: 80%; max-width: 240px; aspect-ratio: 9/16; margin-left: auto; margin-right: auto;">
+                    
+                    <!-- מסך פתיחה שחור עם הנחיה - נעלם כשמתחיל לנגן -->
+                    <div id="video-click-hint" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; pointer-events: none; transition: opacity 0.3s;">
+                        <div style="font-size: 50px; margin-bottom: 15px; animation: subtle-jump 2s infinite;">▶️</div>
+                        <div style="color: white; font-weight: 900; font-size: 18px; letter-spacing: 0.5px;">הקליקו לתחילת הסרטון</div>
+                    </div>
+
+                    <!-- הסרטון (ללא פוסטר, מסך שחור כברירת מחדל) -->
+                    <video id="promo-video" width="100%" height="100%" controls playsinline preload="metadata" style="display: block; object-fit: cover; width: 100%; height: 100%; cursor: pointer;" onclick="this.play();" onplay="document.getElementById('video-click-hint').style.display='none';">
+                        <source id="promo-source" data-src="https://www.dropbox.com/scl/fi/b0sl8jh424xtxn2czbtq3/Captions_9CA11D.MP4?rlkey=kj1bgcnnuc5txtcda1rainy3y&st=xpzz3k1w&raw=1" type="video/mp4">
+                        הדפדפן שלך לא תומך בהצגת סרטונים.
+                    </video>
+                </div>
+                
+                <p style="font-weight: 500; font-size: 15px; color: #475569; margin-bottom: 12px; line-height: 1.5;">
+                    כדי להירשם ולהרוויח כסף, <span style="color: #ca8a04; font-weight: 800;">בבקשה</span> מלאו בטופס את שני הפרטים הבאים (בשאלה "הגעתם דרך חבר?"):
                 </p>
 
-                <!-- בקשה אישית (עיצוב שמייצר אמפתיה) -->
-                <div style="background: #f0fdfa; border: 2px solid #5eead4; border-radius: 16px; padding: 18px; margin-bottom: 20px; position: relative; box-shadow: 0 4px 10px rgba(94, 234, 212, 0.15);">
-                    <div style="font-weight: 900; font-size: 16px; color: #0f766e; margin-bottom: 8px;">בקשה קטנה ממני 🙏</div>
+                <!-- אזור הפרטים (שני השדות בולטים וברורים) -->
+                <div style="background: #fffdf0; padding: 12px; border-radius: 16px; border: 2px solid #fcd34d; margin-bottom: 15px;">
+                    
+                    <div class="copy-data-row" style="margin-bottom: 10px; border-color: #fde047; box-shadow: none; padding: 10px 12px;">
+                        <div>
+                            <div style="font-size: 12px; color: #b45309; margin-bottom: 2px; font-weight: 700;">1. שם החבר:</div>
+                            <div style="font-weight: 900; font-size: 19px; color: #0f172a;">חופש</div>
+                        </div>
+                    </div>
+
+                    <div class="copy-data-row" style="margin-bottom: 0; border-color: #fde047; box-shadow: none; padding: 10px 12px;">
+                        <div>
+                            <div style="font-size: 12px; color: #b45309; margin-bottom: 2px; font-weight: 700;">2. טלפון החבר:</div>
+                            <div style="font-weight: 900; font-size: 19px; color: #0f172a;" dir="ltr">0542633610</div>
+                        </div>
+                        <button id="dedicated-copy-btn" class="copy-btn-small" style="padding: 10px 16px; font-size: 14px;" onclick="copyPhoneNumber(this)">העתק מספר 📋</button>
+                    </div>
+                </div>
+
+                <!-- הודעה קופצת - מוסתרת מראש ותקפוץ רק אם ינסו לעבור בלי להעתיק -->
+                <div id="small-request-alert" style="display: none; background: #f0fdfa; border: 2px solid #5eead4; border-radius: 16px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(94, 234, 212, 0.15); animation: fadeIn 0.4s ease-out;">
+                    <div style="font-weight: 900; font-size: 16px; color: #0f766e; margin-bottom: 8px;">רגע, בקשה קטנה ממני 🙏</div>
                     <p style="font-size: 14px; color: #115e59; line-height: 1.5; font-weight: 500; margin-bottom: 0;">
-                        האתר של "נטו חופש" פועל בחינם, אבל להחזיק את השרתים ולתחזק את הכל עולה כסף. אם בא לכם לפרגן לי ולעזור לאתר להמשיך לעבוד בשבילכם – אני ממש אעריך אם תרשמו אותי בתור החבר שהביא אתכם! זה לא עולה לכם כלום, ולי זה עוזר המון.
+                        האתר פועל בחינם, ואשמח ממש אם תפרגנו ותעזרו לאתר להמשיך לעבוד! 
+                        <br><b>אנא הקפידו לרשום "חופש" ולהעתיק את המספר</b>. זה לא עולה לכם כלום, ולי זה עוזר המון. תודה! ❤️
                     </p>
                 </div>
 
-                <!-- איך עוזרים -->
-                <div style="background: #fffdf0; padding: 22px 18px 18px 18px; border-radius: 16px; border: 2px solid #fcd34d; margin-bottom: 20px;">
-                    <div style="font-weight: 900; font-size: 17px; color: #854d0e; margin-bottom: 15px;">איך עוזרים? פשוט מאוד:</div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <div style="font-size: 14px; color: #92400e; font-weight: 700; margin-bottom: 6px;">1. בשדה 'שם החבר' - תרשמו:</div>
-                        <div style="font-weight: 900; font-size: 18px; color: #0f172a; background: #ffffff; display: inline-block; padding: 5px 15px; border-radius: 10px; border: 1px solid #fde047; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">חופש</div>
-                    </div>
-
-                    <div>
-                        <div style="font-size: 14px; color: #92400e; font-weight: 700; margin-bottom: 6px;">2. בשדה 'טלפון החבר' - תדביקו את המספר:</div>
-                        <div style="font-weight: 900; font-size: 18px; color: #0f172a; background: #ffffff; display: inline-block; padding: 5px 15px; border-radius: 10px; border: 1px solid #fde047; box-shadow: 0 2px 5px rgba(0,0,0,0.02);" dir="ltr">0542633610</div>
-                    </div>
-                </div>
-
-                <div style="text-align: center; font-weight: 800; font-size: 15px; color: #ea580c; margin-bottom: 15px;">
-                    תודה ענקית לכל מי שמפרגן! ❤️
-                </div>
-
-                <!-- הכפתור שעושה פעולה כפולה: גם מעתיק וגם פותח את האתר -->
-                <button id="copy-and-go-btn" class="vip-funnel-btn" style="margin-top: 0; padding: 18px; font-size: 16px; box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);" onclick="copyAndGoToRegistration('0542633610', this)">
-                    העתק מספר ומעבר להרשמה
+                <!-- כפתור מעבר סופי -->
+                <button class="vip-funnel-btn no-flicker" style="margin-top: 0; padding: 18px; font-size: 16.5px; box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);" onclick="attemptRegistration()">
+                    מעבר להרשמה >>
                 </button>
             </div>
         </div>
@@ -824,45 +891,126 @@
             document.getElementById('ios-modal').style.display = 'none';
         }
 
-        // --- פונקציות משפך המרות (VIP) ---
+        // --- פונקציות משפך המרות (VIP) ומנגנון העתקה חכם ---
+        let hasCopiedNumber = false;
+        let hasSeenWarning = false; // משתנה חדש שזוכר אם הם כבר ראו את האזהרה
+
         function openVipModal() {
+            // איפוס המשתנים בכל פתיחה מחדש של החלון
+            hasCopiedNumber = false;
+            hasSeenWarning = false;
+            document.getElementById('small-request-alert').style.display = 'none';
+            
+            // מחזיר את המסך השחור אם פתחו את החלון מחדש
+            const hint = document.getElementById('video-click-hint');
+            if(hint) hint.style.display = 'flex';
+            
+            const copyBtn = document.getElementById('dedicated-copy-btn');
+            if (copyBtn) {
+                copyBtn.innerHTML = "העתק מספר 📋";
+                copyBtn.style.background = "#fef08a";
+                copyBtn.style.color = "#854d0e";
+                copyBtn.style.borderColor = "#fde047";
+            }
+            
+            // טעינה עצלה לסרטון (מתחיל להיטען רק עכשיו כשהחלון נפתח!)
+            const vidSource = document.getElementById('promo-source');
+            const vidElement = document.getElementById('promo-video');
+            if (vidSource && !vidSource.src) {
+                vidSource.src = vidSource.getAttribute('data-src');
+                vidElement.load();
+            }
+            
             trackEvent('open_vip_funnel');
             document.getElementById('vip-modal').style.display = 'flex';
         }
 
         function closeVipModal() {
             document.getElementById('vip-modal').style.display = 'none';
+            // עצירת הסרטון הפנימי ברגע שסוגרים את החלון
+            const vid = document.getElementById('promo-video');
+            if (vid && typeof vid.pause === 'function') {
+                vid.pause();
+            }
         }
 
-        // פונקציית העתקה ומעבר משולבת (כפתור אחד שעושה הכל)
-        function copyAndGoToRegistration(textToCopy, btnElement) {
-            // העתקת המספר ללוח
+        // פונקציית העתקת המספר בלבד
+        function copyPhoneNumber(btnElement) {
             const tempInput = document.createElement("input");
-            tempInput.value = textToCopy;
+            tempInput.value = '0542633610';
             document.body.appendChild(tempInput);
             tempInput.select();
             document.execCommand("copy");
             document.body.removeChild(tempInput);
             
-            // שליחת אירוע לאנליטיקס
-            trackEvent('copy_and_redirect_registration');
+            hasCopiedNumber = true; // סימון שהמשתמש ביצע את המשימה
+            trackEvent('copied_number_via_btn'); // דיווח לאנליטיקס: הועתק דרך הכפתור
             
-            // שינוי הטקסט של הכפתור כדי לתת פידבק למשתמש
-            const originalText = btnElement.innerHTML;
-            btnElement.innerHTML = "המספר הועתק! עובר להרשמה... ⏳";
-            btnElement.style.background = "linear-gradient(135deg, #86efac 0%, #22c55e 100%)"; // הופך לירוק
-            btnElement.style.color = "#ffffff";
+            // שינוי עיצוב הכפתור כדי לתת פידבק הצלחה
+            btnElement.innerHTML = "הועתק! ✅";
+            btnElement.style.background = "#dcfce7";
+            btnElement.style.color = "#166534";
+            btnElement.style.borderColor = "#86efac";
             
-            // פתיחת האתר החדש מיד! חוסמי פופ-אפ במחשב חוסמים פתיחה בתוך setTimeout
+            // אם הבקשה הקטנה הייתה פתוחה כי הוא טעה מקודם - נשנה אותה לתודה
+            const alertBox = document.getElementById('small-request-alert');
+            if(alertBox.style.display === 'block') {
+                 alertBox.innerHTML = "<div style='font-weight: 900; color: #0f766e; text-align: center;'>תודה רבה! ❤️ עכשיו אפשר לעבור להרשמה.</div>";
+            }
+        }
+
+        // זיהוי העתקה ידנית (לחיצה ארוכה בטלפון והעתקה)
+        function setupManualCopyListener() {
+            const phoneTextElement = document.getElementById('phone-number-text');
+            if (phoneTextElement) {
+                phoneTextElement.addEventListener('copy', function() {
+                    hasCopiedNumber = true;
+                    trackEvent('copied_number_manually'); // דיווח לאנליטיקס: הועתק ידנית בטלפון
+                    
+                    const btnElement = document.getElementById('dedicated-copy-btn');
+                    if (btnElement) {
+                        btnElement.innerHTML = "הועתק! ✅";
+                        btnElement.style.background = "#dcfce7";
+                        btnElement.style.color = "#166534";
+                        btnElement.style.borderColor = "#86efac";
+                    }
+                    
+                    const alertBox = document.getElementById('small-request-alert');
+                    if(alertBox && alertBox.style.display === 'block') {
+                         alertBox.innerHTML = "<div style='font-weight: 900; color: #0f766e; text-align: center;'>תודה רבה! ❤️ עכשיו אפשר לעבור להרשמה.</div>";
+                    }
+                });
+            }
+        }
+
+        // פונקציית המעבר (בודקת אם העתיקו קודם, ואם לא - נותנת להם צ'אנס שני)
+        function attemptRegistration() {
             const registrationLink = "https://teenk.co.il/teenkerz/"; 
-            window.open(registrationLink, '_blank');
-            
-            // החזרת הכפתור למצבו המקורי אחרי זמן קצר (במידה והם חוזרים ללשונית)
-            setTimeout(() => { 
-                btnElement.innerHTML = originalText; 
-                btnElement.style.background = "";
-                btnElement.style.color = "";
-            }, 1500);
+
+            if (hasCopiedNumber) {
+                // העתיק? מעולה, מעבירים אותו מיד
+                trackEvent('success_reg_with_copy'); // דיווח לאנליטיקס: מעבר תקין
+                window.open(registrationLink, '_blank');
+            } else if (!hasSeenWarning) {
+                // לא העתיק ועוד לא ראה את האזהרה? עוצרים אותו, פותחים את הבקשה הקטנה
+                hasSeenWarning = true; // מסמנים שהוא ראה את האזהרה עכשיו
+                trackEvent('error_tried_reg_without_copy'); // דיווח לאנליטיקס: נחסם כי לא העתיק
+                const alertBox = document.getElementById('small-request-alert');
+                alertBox.style.display = 'block';
+                
+                // אפקט קפיצה קטן לכפתור ההעתקה כדי למשוך את העין
+                const copyBtn = document.getElementById('dedicated-copy-btn');
+                copyBtn.style.transition = 'none';
+                copyBtn.style.transform = 'scale(1.08)';
+                setTimeout(() => {
+                    copyBtn.style.transition = 'all 0.3s';
+                    copyBtn.style.transform = 'scale(1)';
+                }, 200);
+            } else {
+                 // לא העתיק, אבל כבר ראה את האזהרה? מאפשרים לו לעבור בפעם השנייה
+                 trackEvent('success_reg_ignored_warning'); // דיווח לאנליטיקס: עבר בלי להעתיק בכלל
+                 window.open(registrationLink, '_blank');
+            }
         }
 
         function loadDailyState() {
@@ -1013,6 +1161,7 @@
 
         window.onload = () => {
             initPWA();
+            setupManualCopyListener(); // הפעלת מעקב העתקה ידנית
             const saved = localStorage.getItem('holiday_calc_ultimate_local_ai_v6');
             if (saved) { 
                 try { userConfig = JSON.parse(saved); showMainScreen(); } catch(e) {}
