@@ -379,20 +379,20 @@
             height: 38px; /* גובה קבוע כדי שלא יהיה עבה מדי */
         }
         
-        /* אנימציית "שקשוק" עדינה שמושכת את העין - פועלת כל 3 שניות */
-        @keyframes copy-attention-wiggle {
-            0%, 85%, 100% { transform: scale(1) rotate(0deg); }
-            88% { transform: scale(1.06) rotate(-3deg); background-color: #fde047; box-shadow: 0 4px 10px rgba(253, 224, 71, 0.5); }
-            91% { transform: scale(1.06) rotate(3deg); background-color: #fde047; box-shadow: 0 4px 10px rgba(253, 224, 71, 0.5); }
-            94% { transform: scale(1.06) rotate(-3deg); background-color: #fde047; box-shadow: 0 4px 10px rgba(253, 224, 71, 0.5); }
-            97% { transform: scale(1.06) rotate(3deg); background-color: #fde047; box-shadow: 0 4px 10px rgba(253, 224, 71, 0.5); }
+        /* האנימציה המוקדמת נמחקה לחלוטין - הכפתור קפוא בזמן הצפייה */
+        
+        /* אנימציה בולטת שמופעלת *רק* כשהסרטון מסתיים */
+        @keyframes video-ended-pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(234, 179, 8, 0); }
+            50% { transform: scale(1.08); box-shadow: 0 0 12px rgba(234, 179, 8, 0.6); background-color: #fde047; }
+        }
+
+        .video-ended-highlight {
+            animation: video-ended-pulse 1.2s infinite !important; /* פועם עד שלוחצים */
         }
         
-        /* מפעיל את השקשוק רק אם עוד לא העתיקו */
-        .copy-btn-small:not(.copied) { animation: copy-attention-wiggle 3s infinite; }
-        
         .copy-btn-small:active { transform: scale(0.95); }
-        .copy-btn-small.copied { background: #dcfce7; color: #166534; border-color: #86efac; animation: none; transform: scale(1); }
+        .copy-btn-small.copied { background: #dcfce7; color: #166534; border-color: #86efac; animation: none !important; transform: scale(1); }
 
         @keyframes tipUpdateAnim {
             0% { transform: scale(0.95); background-color: #fefce8; }
@@ -599,11 +599,42 @@
         </footer>
 
         <div id="ios-modal" class="ios-modal-overlay">
-            <div class="ios-modal-content">
+            <!-- מצב 1: למשתמשים שכבר נמצאים בספארי -->
+            <div id="modal-safari-content" class="ios-modal-content" style="display: none;">
                 <h3 style="font-size: 20px; font-weight: 900; margin-bottom: 15px; color: var(--text-main);">התקנת "נטו" כאפליקציה ☀️</h3>
                 <div style="font-size: 15px; font-weight: 600; color: var(--text-main); line-height: 1.6; text-align: right; background: #f8fafc; padding: 15px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
                     <p style="margin-bottom: 10px;">1. בתחתית המסך (בדפדפן ספארי), לחצו על <b>כפתור השיתוף</b> (מרובע עם חץ כלפי מעלה <span style="font-size:18px;">⍐</span>).</p>
                     <p>2. בתפריט שייפתח, גללו קצת למטה ולחצו על השורה <b>"הוסף למסך הבית"</b> (Add to Home Screen ➕).</p>
+                </div>
+                <button class="ios-modal-close" onclick="closeIosModal()">הבנתי!</button>
+            </div>
+
+            <!-- מצב 2: למשתמשים שנתקעו באפליקציית גוגל / כרום באייפון -->
+            <div id="modal-nonsafari-content" class="ios-modal-content" style="display: none;">
+                <h3 style="font-size: 20px; font-weight: 900; margin-bottom: 15px; color: #b91c1c;">רגע, אתם לא ב-Safari! 🛑</h3>
+                <div style="font-size: 15px; font-weight: 600; color: var(--text-main); line-height: 1.6; text-align: right; background: #f8fafc; padding: 15px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+                    <p style="margin-bottom: 10px;">כדי להתקין את האפליקציה, חובה לפתוח את האתר דרך דפדפן ה-<b>Safari</b> המקורי.</p>
+                    
+                    <!-- כפתור קסם לפתיחה ישירה בספארי -->
+                    <a href="x-safari-https://neto-hofesh.co.il" onclick="trackEvent('click_auto_safari_link')" style="display: block; background: #0ea5e9; color: white; text-decoration: none; text-align: center; font-weight: 900; font-size: 16px; padding: 12px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3);">
+                        🚀 פתיחה אוטומטית בספארי
+                    </a>
+
+                    <p style="text-align: center; font-size: 13px; color: #64748b; margin-bottom: 8px;">(אם הכפתור חסום אצלכם, העתיקו את הקישור):</p>
+                    
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="site-url-input" value="neto-hofesh.co.il" readonly style="flex: 1; padding: 10px; border-radius: 10px; border: 2px solid #cbd5e1; font-size: 17px; text-align: center; background: #fff; color: #334155; font-weight: 900; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);" dir="ltr">
+                        <button onclick="copySiteUrlForSafari(this)" style="background: #fef08a; color: #854d0e; border: 1px solid #fde047; padding: 0 15px; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.2s;">העתק</button>
+                    </div>
+                </div>
+                <button class="ios-modal-close" onclick="closeIosModal()" style="background: #e2e8f0; color: #475569; box-shadow: none;">אנסה מאוחר יותר</button>
+            </div>
+
+            <!-- מצב 3: חלופת גיבוי לאנדרואיד (כשכפתור מובנה לא קופץ) -->
+            <div id="modal-android-content" class="ios-modal-content" style="display: none;">
+                <h3 style="font-size: 20px; font-weight: 900; margin-bottom: 15px; color: var(--text-main);">התקנת "נטו" כאפליקציה ☀️</h3>
+                <div style="font-size: 15px; font-weight: 600; color: var(--text-main); line-height: 1.6; text-align: right; background: #f8fafc; padding: 15px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+                    <p>לחצו על תפריט הדפדפן (שלוש הנקודות למעלה <b>⋮</b>) ובחרו בשורה <b>"הוספה למסך הבית"</b> (Add to Home Screen / Install App).</p>
                 </div>
                 <button class="ios-modal-close" onclick="closeIosModal()">הבנתי!</button>
             </div>
@@ -633,8 +664,8 @@
                             <div style="color: white; font-weight: 900; font-size: 18px; letter-spacing: 0.5px;">הקליקו לתחילת הסרטון</div>
                         </div>
 
-                        <!-- הסרטון (הקישור הישיר ל-MP4 מתוך Cloudinary) -->
-                        <video id="promo-video" width="100%" height="100%" controls playsinline preload="metadata" style="display: block; object-fit: cover; width: 100%; height: 100%;" onplay="document.getElementById('video-click-hint').style.display='none';">
+                        <!-- הסרטון (הוספנו onended שמדליק את האנימציה) -->
+                        <video id="promo-video" width="100%" height="100%" controls playsinline preload="metadata" style="display: block; object-fit: cover; width: 100%; height: 100%;" onplay="document.getElementById('video-click-hint').style.display='none';" onended="highlightCopyButton()">
                             <source id="promo-source" src="https://res.cloudinary.com/dxqmlklfc/video/upload/8mb.video-uwo-wvgmRfFE_l79qtf.mp4" type="video/mp4">
                             הדפדפן שלך לא תומך בהצגת סרטונים.
                         </video>
@@ -751,25 +782,28 @@
                 elem: {
                     far: [
                         "טיפ יומי: זה השלב בשנה שבו התיק מתחיל לשקול פחות, כי הפסקנו להביא ספרים ומביאים רק קלפים ופופ-איט. 🎒⚽",
+                        "עובדה: אם תשאירו סנדוויץ' בתיק מעכשיו ועד ספטמבר, יש סיכוי שהוא יתחיל לעשות שיעורי בית במקומכם. 🥪🧟‍♂️",
                         "הבנת המציאות: כשהמורה אומרת 'אני אחכה שיהיה שקט', פשוט תחשבו בלב 'סבבה, אנחנו נחכה לחופש הגדול'. 🤫⏳",
                         "תכנון: במקום לפתור תרגילים בחשבון, הגיע הזמן לחשב כמה שעות נשארו עד שמותר לישון עד 11:00 בבוקר. 🧮🛌",
                         "יצירה: המחברת של מולדת הפכה רשמית למפעל לייצור מטוסי נייר כיתתי. ✈️📄",
-                        "טיפ שירותים: המסע לשירותים וחזרה אמור לקחת מעכשיו מינימום 15 דקות. צריך לבדוק מה קורה במסדרונות! 🚽🚶‍♂️"
+                        "הידעתם? המחק שלכם קטן לא כי השתמשתם בו, אלא כי הוא מנסה לברוח מהקלמר מרוב שעמום. ✏️🏃",
+                        "משימה: נסו לספור כמה פעמים ביום המורה אומרת 'הצלצול הוא בשבילי'. המנצח זוכה בארטיק. 🔔🍦"
                     ],
                     mid: [
                         "זיהוי קיץ: אפשר כבר להריח את הכלור של הבריכה מתוך הכיתה. אל תתייאשו! 🏊‍♂️",
-                        "הצעת ייעול: הגיע הזמן להתחיל 'לאבד' ציוד בקלמר כדי שלא תצטרכו לעשות יותר שיעורי בית. 'המורה, אין לי עיפרון!' ✏️🤷‍♂️",
+                        "הצעת ייעול: הגיע הזמן להתחיל 'לאבד' ציוד בקלמר כדי שלא תצטרכו לעשות שיעורי בית. 'המורה, נגמרה לי העופרת!' ✏️🤷‍♂️",
                         "מחשבה יומית: צלצול לסוף שיעור הוא לא סתם רעש, הוא מוזיקת מלאכים שמקרבת אותנו לחופש הגדול. 🔔👼",
-                        "אזהרת מסע: אם תחפשו טוב בתיק, תמצאו שם כריך משבועות, מחק אכול ותקווה קטנה לקיץ. 🥪🎒"
+                        "אזהרת מסע: אם תחפשו טוב בתחתית התיק, תמצאו שם דף קשר מקומט, עיפרון שבור ותקווה לקיץ. 🎒🕵️",
+                        "טיפ: זה הזמן ללמוד איך מקפלים פתק קטן שיכול לעבור 4 שולחנות בלי שהמורה תשים לב. 📝🥷"
                     ],
                     close: [
                         "עדכון שטח: משחקי התופסת בהפסקה הפכו לאימון רשמי של הימלטות מבית הספר ביום האחרון ללימודים. 🏃‍♂️💨",
-                        "הוראת ציוד: מעכשיו מותר להביא לכיתה רק טאקי, דפי צביעה וחלומות על ארטיק רמזור. 🎨🃏",
+                        "הוראת ציוד: מעכשיו מותר להביא לכיתה רק טאקי, קלפי כדורגל וחלומות על ארטיק רמזור. 🎨🃏",
                         "טיפ סטיילינג: כפכפים לבית הספר זה לא זלזול, זו הצהרת כוונות על כך שהקיץ כבר כאן. 🩴☀️",
-                        "הצהרה: הקלמר שלכם נראה כרגע כמו זירת פשע של טושים פתוחים ועפרונות שבורים. לא נורא, סוף השנה! 🖍️🚔",
-                        "הישג: הגעתם לשלב שבו להביא יומן לבית ספר זו המלצה בלבד. 📓🤷‍♂️"
+                        "הצהרה: הקלמר שלכם נראה כרגע כמו זירת פשע של טושים פתוחים בלי פקק. לא נורא, סוף השנה! 🖍️🚔",
+                        "הישג: הגעתם לשלב שבו להביא יומן לבית ספר זו המלצה בלבד. גם ככה אף אחד לא רושם שם כלום. 📓🤷‍♂️"
                     ],
-                    tomorrow: [
+                    veryClose: [
                         "הנחיה למחר: מחר היום האחרון!! תכינו את בגדי הים, סיימנו עם שעורי הבית לשנה הקרובה! 🏖️🍉",
                         "מחר תעודות: לוקחים אותן, אומרים יפה תודה, מכניסים עמוק למגירה ורצים לים! 📜🏃‍♂️",
                         "הכנות לבוקר: מחר אין צלצול, אין תיק כבד ואין 'להוציא מחברות'. הגיע הזמן לחגוג! 🎉🍉"
@@ -780,53 +814,60 @@
                         "עובדת חיים: לקום ב-7 בבוקר זה פשע. החופש מתקרב, תחזיקו מעמד רק עוד קצת עם העיניים פקוחות. 😴✊",
                         "טיפ למידה: לצאת לשירותים באמצע שיעור מתמטיקה זה לא צורך פיזי, זה נטו צורך נפשי להשתחרר. 🚽🏃‍♂️",
                         "תירוץ אומנותי: 'המורה, אני לא מקשקש במחברת, אני מסכם את החומר חזותית בצורת מפלצת'. 🎨🎓",
-                        "מיומנות חטיבה: לומדים להסוות טלפון מתחת לשולחן הרבה יותר טוב מאשר את לוח הכפל. 📱🥷",
-                        "טיפ כלכלי: תפסיקו לקנות אוכל בקיוסק. תחסכו את הכסף לקניית אבטיח וקרטיבים בחופש! 💳🍉"
+                        "אם היה ציון על 'הסוואת טלפון ואוזניות מתחת לקפוצ'ון', כולנו היינו במחוננים עכשיו. 📱🥷",
+                        "טיפ כלכלי: תפסיקו לקנות אוכל בקיוסק. תחסכו את הכסף לקניית אבטיח וקרטיבים בחופש! 💳🍉",
+                        "הגדרת 'למידה' ביוני: לבהות במאוורר התקרה ולספור כמה סיבובים הוא עושה בדקה. 🌀👀",
+                        "מילון חטיבה: 'שכחתי את המחברת' = לא עשיתי שיעורי בית ואני מקווה שלא תבקשי לראות. 📓😬"
                     ],
                     mid: [
                         "פילוסופיה: הזמן שלוקח למורה להפעיל את המקרן בשיעור, מרגיש לפעמים ארוך יותר מכל החופש הגדול. 📽️🤦‍♂️",
                         "תופעת טבע: לצאת עכשיו לשירותים אומר לפגוש את כל השכבה במסדרון עושה בדיוק את אותו הדבר. 🚶‍♂️🚽",
                         "הישרדות: המזגן בכיתה מכוון או על כבשן או על סיביר. תמיד תביאו סוודר, גם אם בחוץ 30 מעלות. ❄️🔥",
-                        "דילמה: המורה אומרת שזה חומר למבחן. המוח שלכם עסוק בלשחזר את הפרק האחרון שראיתם בנטפליקס. 📺🧠"
+                        "דילמה: המורה אומרת שזה חומר למבחן. המוח שלכם עסוק בלשחזר את הפרק האחרון שראיתם בנטפליקס. 📺🧠",
+                        "טיפ יומי: קשר עין עם המורה זה מלכודת. תסתכלו על המחברת במבט חושב ותהנהנו מדי פעם. 🤓✍️"
                     ],
                     close: [
                         "אסטרטגיה: לבהות בנקודה בקיר ולדמיין שאתם כרגע ביוון הכל כלול. זה מעביר יופי את שעת אפס. 🇬🇷💭",
                         "הבנת המציאות: בשלב הזה מגיעים לבית ספר רק בשביל המזגן ובשביל לצחוק עם חברים. הלימודים הם רק בונוס. ❄️😂",
-                        "הישג אקדמי: התיק נשאר בבית, מגיעים רק עם טלפון, מטען ושקית ניילון בלויה. הניצחון קרוב! 🛍️🏆",
-                        "סקר נוכחות: מי שעוד יושב בכיתה עכשיו הם רק אלה שהגיעו לגבול חיסורי האחוזים. אתם גיבורים בעל כורחכם! 🚷"
+                        "הישג אקדמי: התיק נשאר בבית, מגיעים רק עם טלפון, מטען ושקית ניילון מהסופר. הניצחון קרוב! 🛍️🏆",
+                        "סקר נוכחות: מי שעוד יושב בכיתה עכשיו הם רק אלה שהגיעו לגבול חיסורי האחוזים. גיבורים בעל כורחכם! 🚷",
+                        "זיהוי עייפות: לנסות למחוק טעות במחברת עם האצבע כאילו זה מסך מגע. הגיע הזמן לישון. 🖐️📓"
                     ],
                     veryClose: [
-                        "סריקת מלאי: נשארתם בקלמר עם עט אחד שמצאתם על הרצפה, והוא בכלל כותב בירוק. זה מספיק. 🖊️✨",
-                        "הצהרה: נלחמתם, שרדתם, שמעתם חפירות. עכשיו מותר לכם לאבד ריכוז לחלוטין. 🔥🏆",
-                        "הכנה אחרונה: מחר תגלו מחדש איך נראה אור שמש בשעה 10 בבוקר, במקום אור הפלורסנט המרצד. ☀️🏄‍♂️",
-                        "זהו, נגמר! לא נשאר לכם שום תירוץ להישאר ערים עד מאוחר חוץ מזה שפשוט מותר לכם. 🌃🎮"
+                        "סריקת מלאי: נשארתם בקלמר עם עט אחד שמצאתם על הרצפה, והוא בכלל כותב בירוק. זה מספיק לשבוע האחרון. 🖊️✨",
+                        "הצהרה: נלחמתם, שרדתם, שמעתם חפירות. עכשיו מותר לכם לאבד ריכוז לחלוטין ולחשוב רק על הים. 🔥🏆",
+                        "הכנה אחרונה: מחר תגלו מחדש איך נראה אור שמש ב-10 בבוקר, במקום אור הפלורסנט המרצד. ☀️🏄‍♂️",
+                        "זהו, נגמר! לא נשאר לכם שום תירוץ להישאר ערים עד מאוחר חוץ מזה שפשוט... מותר לכם. 🌃🎮"
                     ]
                 },
                 high: {
                     far: [
                         "טיפ אסטרטגי: למה ללמוד חודש מראש לבגרות, כשאפשר להיזכר ללמוד לילה לפני עם המון פאניקה וקפה? ☕😱",
-                        "רמת עייפות: לנסות לעשות זום-אין למחברת אמיתית עם האצבע. אולי הגיע הזמן ללכת לישון. 📓🤏",
-                        "עובדה: תלמידי תיכון בתקופה הזאת מורכבים מ-90% אקסל זירו, 5% ייאוש ו-5% רצון להיות בים. 🔋🌊",
-                        "טיפ לשיעור ספורט: בשעה השביעית זה לא שיעור, זו המלצה חמה למצוא את החור הקרוב בגדר ולחתוך. 🏃‍♀️💨",
-                        "תכנון: זמן מעולה לשבת בשיעור ולחשב כמה אחוזים צריך לקבל במגן כדי לעבור את הבגרות בקושי. 🧮🤔"
+                        "זמן מחצית החיים של חומר לבגרות במוח: בדיוק 4 דקות אחרי שמגישים את המבחן לבוחנת. 🧠🗑️",
+                        "עובדה: תלמידי תיכון בתקופה הזאת מורכבים מ-90% אקסל, 5% ייאוש ו-5% רצון להיות בים. 🔋🌊",
+                        "טיפ לשיעור ספורט: בשעה השביעית זה לא שיעור, זו המלצה חמה למצוא את החור הקרוב בגדר ולחתוך הביתה. 🏃‍♀️💨",
+                        "תכנון: זמן מעולה לשבת בשיעור ולחשב בדיוק כמה אחוזים צריך במגן כדי לעבור את הבגרות ב-55. 🧮🤔",
+                        "טיפ לבגרות: 'תהליכים היסטוריים מורכבים ושינויים תרבותיים' זו תשובה שנשמעת נכון ל-90% מהשאלות. 📝😎",
+                        "מילון תיכון: 'אני בדרך' = הרגע פקחתי עיניים ואני שוקל אם תעודת בגרות זה באמת חובה להמשך החיים. 🛌"
                     ],
                     mid: [
-                        "תירוץ אמין להיום: 'איחרתי כי נתקעתי בפקק מנטלי עצום בין המיטה שלי לדלת החדר'. 🚌",
-                        "קונפליקט מתמטי: המספר 56 מעולם לא נראה זוהר, סקסי ומלא תקווה כמו בתקופת הבגרויות. 🧮🍀",
-                        "אזהרת בולשיט: מורים אומרים 'החומר הזה ילווה אתכם בחיים'. בחיים האמיתיים אנחנו רק צריכים גוגל ווייז. 🗺️📱",
-                        "כישורי למידה: לחפש ביוטיוב 'איך ללמוד לבגרות באזרחות ב-3 דקות' לא נחשב למידה. ניסינו. 💻"
+                        "תירוץ אמין להיום: 'איחרתי כי נתקעתי בפקק מנטלי עצום בין המיטה שלי לדלת של החדר'. 🚌",
+                        "אזהרת בולשיט: מורים אומרים 'החומר הזה ילווה אתכם לכל החיים'. במציאות אנחנו צריכים רק גוגל ווייז. 🗺️📱",
+                        "כישורי למידה: לחפש ביוטיוב 'איך ללמוד לבגרות באזרחות ב-3 דקות' לא באמת נחשב למידה. ניסינו. 💻",
+                        "דיאטת בגרויות: התזונה מבוססת כרגע על פריכיות, שוקולד וחוסר שעות שינה. 🍫😵‍💫"
                     ],
                     close: [
-                        "מוטיבציה פירומנית: לחשוב על המדורה שבה תשרפו את כל הסיכומים בסוף הבגרות. זה מה שמשאיר אותנו בחיים. 🔥📚",
-                        "האמת הכואבת: אין בגידה נוראית יותר ממורה שמבטיחה 'לשחרר מוקדם' ובסוף שומרת אתכם עד לצלצול. 😤🔔",
-                        "טיפ לקראת הסוף: אל תבכו על שיעורים שלא עשיתם, תשמחו על אלו שלא תצטרכו לעשות חודשיים שלמים! 📝🚫",
-                        "הסחת דעת: להעביר מרקר צהוב סתם על משפטים אקראיים בספר כדי שהמורה תחשוב שאתם לומדים בשיא הריכוז. 🖍️😎"
+                        "מוטיבציה פירומנית: לחשוב על המדורה שבה תשרפו את כל הסיכומים ברגע שתסתיים הבגרות. 🔥📚",
+                        "האמת הכואבת: אין בגידה נוראית יותר ממורה שמבטיחה 'לשחרר מוקדם' ובסוף משאירה אתכם עד הצלצול. 😤🔔",
+                        "טיפ לקראת הסוף: אל תבכו על שיעורי בית שלא עשיתם, תשמחו על אלו שלא תצטרכו לעשות חודשיים שלמים! 📝🚫",
+                        "הסחת דעת: להעביר מרקר צהוב סתם על משפטים אקראיים בספר כדי שהמורה תחשוב שאתם לומדים בשיא הריכוז. 🖍️😎",
+                        "נוהל שעת אפס: כולם נראים במסדרון כמו ניצבים בסדרת זומבים. אין מה לדאוג, התרופה (החופש) בדרך. 🧟‍♂️💊"
                     ],
                     veryClose: [
-                        "מבט לאחור: הדמעות, הייאוש, הפחיות אקסל הריקות... הכל היה שווה את הרגע שבו נועלים את הדלת ובורחים לים. 🎥👏",
-                        "עדכון ציוד מקיף: התיק נשאר נטוש בבית. מגיעים לבגרות האחרונה עם עט כחול, תעודת זהות ואנרגיה של פנסיונר. 🛍️",
-                        "הכרזת עצמאות: מחקו את המשוואות, מחקו את הסיכומים בטלפון - החופש הגדול מתחיל עכ-שיו! 🌊🎉",
-                        "הכנה סופית: ודאו שיש לכם מספיק קרם הגנה ותוכניות לא לעשות כלום בחודשיים הקרובים. 🧴🏖️"
+                        "מבט לאחור: הדמעות, הייאוש, הפחיות הריקות... הכל היה שווה את הרגע שבו סוגרים ת'דלת ובורחים לים. 🎥👏",
+                        "עדכון ציוד מקיף: התיק נשאר נטוש בבית. מגיעים לבגרות האחרונה עם עט, תעודת זהות ואנרגיה של פנסיונר. 🛍️",
+                        "הכרזת עצמאות: מחקו את המשוואות, תעיפו את צילומי המסך של הסיכומים בטלפון - החופש הגדול מתחיל! 🌊🎉",
+                        "הכנה סופית: ודאו שיש לכם מספיק קרם הגנה ותוכניות לא לעשות כלום בחודשיים הקרובים. אתם משוחררים! 🧴🏖️"
                     ]
                 }
             }
@@ -905,7 +946,26 @@
             });
         }
 
-        /* פֿונקציע פֿאַר ינסטאַלירן דעם אַפּפּ צו דעם מסך הבית */
+        /* פונקציית עזר לזיהוי אם האייפוניסט נמצא בדפדפן "כלוא" כמו גוגל/כרום */
+        function detectIOSBrowser() {
+            const ua = window.navigator.userAgent;
+            const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+            if (!isIOS) return 'not-ios';
+
+            // זיהוי דפדפנים שאינם ספארי באייפון
+            const isChrome = /CriOS/.test(ua);
+            const isFirefox = /FxiOS/.test(ua);
+            const isGoogleApp = /GSA/.test(ua);
+            const isInstagram = /Instagram/.test(ua);
+            const isFacebook = /FBAV|FBAN/.test(ua);
+
+            if (isChrome || isFirefox || isGoogleApp || isInstagram || isFacebook) {
+                return 'ios-non-safari';
+            }
+            return 'ios-safari';
+        }
+
+        /* פונקציה חכמה לפתיחת חלון ההתקנה בהתאם לסוג הדפדפן */
         function handleA2HS() {
             if (deferredPrompt) {
                 trackEvent('click_install_pwa');
@@ -915,8 +975,49 @@
                 });
             } else {
                 trackEvent('open_ios_install_modal');
+                
+                // בדיקת סוג הדפדפן
+                const iosBrowserType = detectIOSBrowser();
+                
+                // איפוס תצוגות
+                document.getElementById('modal-safari-content').style.display = 'none';
+                document.getElementById('modal-nonsafari-content').style.display = 'none';
+                document.getElementById('modal-android-content').style.display = 'none';
+
+                // הצגת החלונית הרלוונטית
+                if (iosBrowserType === 'not-ios') {
+                    document.getElementById('modal-android-content').style.display = 'block'; // מציג הוראות אנדרואיד
+                } else if (iosBrowserType === 'ios-non-safari') {
+                    document.getElementById('modal-nonsafari-content').style.display = 'block';
+                    trackEvent('showed_nonsafari_warning'); // מעקב אחרי בעיית גוגל
+                } else {
+                    document.getElementById('modal-safari-content').style.display = 'block'; // הוראות ספארי
+                }
+                
                 document.getElementById('ios-modal').style.display = 'flex';
             }
+        }
+
+        /* העתקת כתובת האתר למשתמשי גוגל/כרום באייפון */
+        function copySiteUrlForSafari(btn) {
+            const copyText = document.getElementById("site-url-input");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* תמיכה למובייל */
+            document.execCommand("copy");
+            
+            trackEvent('copied_url_for_safari');
+            
+            btn.innerHTML = "הועתק! ✅";
+            btn.style.background = "#dcfce7";
+            btn.style.color = "#166534";
+            btn.style.borderColor = "#86efac";
+            
+            setTimeout(() => {
+                btn.innerHTML = "העתק";
+                btn.style.background = "#fef08a";
+                btn.style.color = "#854d0e";
+                btn.style.borderColor = "#fde047";
+            }, 3000);
         }
 
         function closeIosModal() {
@@ -940,11 +1041,12 @@
             
             const copyBtn = document.getElementById('dedicated-copy-btn');
             if (copyBtn) {
-                copyBtn.innerHTML = "העתק מספר";
+                copyBtn.innerHTML = "העתק 📋";
                 copyBtn.style.background = "#fef08a";
                 copyBtn.style.color = "#854d0e";
                 copyBtn.style.borderColor = "#fde047";
                 copyBtn.classList.remove('copied'); // הפעלת האנימציה מחדש
+                copyBtn.classList.remove('video-ended-highlight'); // איפוס האנימציה הבולטת
             }
             
             // טעינה עצלה לסרטון (מתחיל להיטען רק עכשיו כשהחלון נפתח!)
@@ -974,9 +1076,18 @@
             if (!vid) return;
             
             if (vid.paused) {
-                vid.play();
+                // הוספת catch מונעת קריסות שקטות אם המשתמש לוחץ מהר מדי
+                vid.play().catch(e => console.log('Video play prevented by browser interaction logic', e));
             } else {
                 vid.pause();
+            }
+        }
+
+        // מדליקה את האנימציה הבולטת כשהסרטון מסתיים
+        function highlightCopyButton() {
+            const copyBtn = document.getElementById('dedicated-copy-btn');
+            if (copyBtn && !copyBtn.classList.contains('copied')) {
+                copyBtn.classList.add('video-ended-highlight');
             }
         }
 
@@ -992,7 +1103,8 @@
             hasCopiedNumber = true; // סימון שהמשתמש ביצע את המשימה
             trackEvent('copied_number_via_btn'); // דיווח לאנליטיקס: הועתק דרך הכפתור
             
-            // שינוי עיצוב הכפתור כדי לתת פידבק הצלחה נקי (כולל אימוג'י הפעם)
+            // שינוי עיצוב הכפתור כדי לתת פידבק הצלחה נקי
+            btnElement.classList.remove('video-ended-highlight'); // כיבוי הפעימה
             btnElement.classList.add('copied'); // עוצר את האנימציה
             btnElement.innerHTML = "הועתק! ✅";
             btnElement.style.background = "#dcfce7";
@@ -1016,6 +1128,7 @@
                     
                     const btnElement = document.getElementById('dedicated-copy-btn');
                     if (btnElement) {
+                        btnElement.classList.remove('video-ended-highlight'); // כיבוי הפעימה
                         btnElement.classList.add('copied'); // עוצר את האנימציה
                         btnElement.innerHTML = "הועתק! ✅";
                         btnElement.style.background = "#dcfce7";
@@ -1210,10 +1323,7 @@
         window.onload = () => {
             initPWA();
             setupManualCopyListener(); // הפעלת מעקב העתקה ידנית
-            const saved = localStorage.getItem('holiday_calc_ultimate_local_ai_v6');
-            if (saved) { 
-                try { userConfig = JSON.parse(saved); showMainScreen(); } catch(e) {}
-            }
+            // מחקנו את מנגנון השמירה - עכשיו המסך תמיד יבקש לבחור כיתה מחדש בעליית האתר
         };
 
         function initApp() {
@@ -1223,12 +1333,15 @@
             userConfig.schoolType = choice.value;
             userConfig.studyFriday = document.getElementById('friday-toggle').checked;
             userConfig.activeTargetId = userConfig.schoolType === 'elem' ? 'summerElem' : 'summerHigh';
-            localStorage.setItem('holiday_calc_ultimate_local_ai_v6', JSON.stringify(userConfig));
             
-            trackEvent('start_countdown', {
-                'school_type': userConfig.schoolType,
-                'study_friday': userConfig.studyFriday
-            });
+            // --- דיווח נפרד וברור לאנליטיקס לפי בחירה ---
+            if (userConfig.schoolType === 'elem') trackEvent('started_with_elementary');
+            if (userConfig.schoolType === 'middle') trackEvent('started_with_middle');
+            if (userConfig.schoolType === 'high') trackEvent('started_with_high');
+            
+            // דיווח ברור לגבי שישי
+            if (userConfig.studyFriday) trackEvent('started_study_friday_yes');
+            else trackEvent('started_study_friday_no');
             
             showMainScreen();
         }
@@ -1236,7 +1349,6 @@
         function resetApp() {
             window.scrollTo(0, 0);
             trackEvent('click_change_settings');
-            localStorage.removeItem('holiday_calc_ultimate_local_ai_v6');
             if (timerInterval) clearInterval(timerInterval);
             userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' };
             confettiFired = false;
@@ -1251,7 +1363,11 @@
         }
 
         function updateSchoolSelection(radio) {
-            trackEvent('select_school_type', { 'type': radio.value });
+            // --- דיווח נפרד לאנליטיקס בעת לחיצה על הכפתורים ---
+            if (radio.value === 'elem') trackEvent('clicked_elementary_btn');
+            if (radio.value === 'middle') trackEvent('clicked_middle_btn');
+            if (radio.value === 'high') trackEvent('clicked_high_btn');
+
             document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
             radio.parentElement.classList.add('selected');
             const hint = document.getElementById('school-hint-text');
