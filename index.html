@@ -1323,7 +1323,22 @@
         window.onload = () => {
             initPWA();
             setupManualCopyListener(); // הפעלת מעקב העתקה ידנית
-            // מחקנו את מנגנון השמירה - עכשיו המסך תמיד יבקש לבחור כיתה מחדש בעליית האתר
+            
+            // מנגנון פתיחה אוטומטית של חלון ההתקנה כשעוברים מ-Google לספארי!
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('install') === '1') {
+                // מנקה את ה-URL בשקט כדי שהחלון לא יקפוץ שוב ברענון עתידי
+                window.history.replaceState({}, document.title, window.location.pathname);
+                
+                // ממתין חצי שנייה לטעינת הדף ופותח **ישירות** את מסך ההדרכה של ספארי
+                setTimeout(() => {
+                    trackEvent('opened_from_auto_safari');
+                    document.getElementById('modal-safari-content').style.display = 'block';
+                    document.getElementById('modal-nonsafari-content').style.display = 'none';
+                    document.getElementById('modal-android-content').style.display = 'none';
+                    document.getElementById('ios-modal').style.display = 'flex';
+                }, 500);
+            }
         };
 
         function initApp() {
