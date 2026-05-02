@@ -621,6 +621,7 @@
                     
                     <!-- מסך פתיחה שחור עם הנחיה - נעלם כשמתחיל לנגן -->
                     <div id="video-click-hint" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; pointer-events: none; transition: opacity 0.3s;">
+                        <div style="color: white; font-weight: 900; font-size: 16px; margin-bottom: 15px; letter-spacing: 0.5px;">לגילאי 14+</div>
                         <div style="font-size: 50px; margin-bottom: 15px; animation: subtle-jump 2s infinite;">▶️</div>
                         <div style="color: white; font-weight: 900; font-size: 18px; letter-spacing: 0.5px;">הקליקו לתחילת הסרטון</div>
                     </div>
@@ -955,6 +956,18 @@
             // עצירת הסרטון הפנימי ברגע שסוגרים את החלון
             const vid = document.getElementById('promo-video');
             if (vid && typeof vid.pause === 'function') {
+                vid.pause();
+            }
+        }
+
+        // פונקציית פליי/פאוס חכמה שמופעלת על ידי השכבה השקופה
+        function togglePromoVideo() {
+            const vid = document.getElementById('promo-video');
+            if (!vid) return;
+            
+            if (vid.paused) {
+                vid.play();
+            } else {
                 vid.pause();
             }
         }
