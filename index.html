@@ -20,7 +20,7 @@
     <!-- SEO - כותרת ותיאור -->
     <title>מתי החופש הגדול? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש</title>
     
-    <!-- Favicon (הסמל שיופיע מעל שם האתר בחיפוש גוגל) וסמלילים למסך הבית -->
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E☀️%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='white'/%3E%3Ctext x='50' y='54' dominant-baseline='central' text-anchor='middle' font-size='75'%3E☀️%3C/text%3E%3C/svg%3E">
     
@@ -59,6 +59,7 @@
             --whatsapp-hover: #22c35e;
             --text-main: #1e293b; 
             --text-muted: #64748b;
+            --text-scale: 1; /* משתנה חכם ששולט על גודל כל הטקסטים באתר */
         }
 
         * { 
@@ -68,6 +69,10 @@
             font-family: 'Rubik', sans-serif; 
             -webkit-tap-highlight-color: transparent;
         }
+
+        /* --- התאמות נגישות גלובליות --- */
+        html { transition: font-size 0.3s ease; }
+        *:focus-visible { outline: 3px solid var(--accent) !important; outline-offset: 2px !important; }
         
         body { 
             background: #ffffff;
@@ -78,7 +83,6 @@
             min-height: 100vh; 
             padding: 20px; 
             overflow-x: hidden;
-            /* מניעת סימון והעתקת טקסט */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -112,7 +116,7 @@
         }
 
         .setup-header .icon { 
-            font-size: 64px; 
+            font-size: calc(64px * var(--text-scale, 1)); 
             margin-bottom: 10px; 
             animation: float-main 3s infinite ease-in-out; 
             display: inline-block; 
@@ -124,22 +128,10 @@
             50% { transform: translate3d(0, -8px, 0); }
         }
         
-        .setup-header h1 { 
-            color: var(--primary); 
-            font-size: 34px; 
-            font-weight: 900; 
-            letter-spacing: -1.5px; 
-            line-height: 1; 
-        }
-        .setup-header h1 span { 
-            display: block; 
-            font-size: 58px; 
-            margin-bottom: 8px; 
-            letter-spacing: -3px;
-        }
-        .setup-header p { color: var(--text-muted); font-size: 17px; font-weight: 700; margin-top: 14px; }
-
-        .setup-step h3 { font-size: 18px; color: var(--text-main); margin-bottom: 14px; font-weight: 700; text-align: center;}
+        .setup-header h1 { color: var(--primary); font-size: calc(34px * var(--text-scale, 1)); font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
+        .setup-header h1 span { display: block; font-size: calc(58px * var(--text-scale, 1)); margin-bottom: 8px; letter-spacing: -3px; }
+        .setup-header p { color: var(--text-muted); font-size: calc(17px * var(--text-scale, 1)); font-weight: 700; margin-top: 14px; }
+        .setup-step h3 { font-size: calc(18px * var(--text-scale, 1)); color: var(--text-main); margin-bottom: 14px; font-weight: 700; text-align: center;}
 
         .school-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 
@@ -155,13 +147,12 @@
         .option-card input { display: none; }
         .option-card.selected { border-color: var(--primary); background: #fefce8; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(234, 179, 8, 0.15); }
 
-        .option-emoji { font-size: 28px; }
-        .option-title { font-weight: 900; font-size: 16px; }
+        .option-emoji { font-size: calc(28px * var(--text-scale, 1)); }
+        .option-title { font-weight: 900; font-size: calc(16px * var(--text-scale, 1)); }
         
         .school-hint {
-            text-align: center; margin-top: 5px; font-size: 13px; color: var(--primary-hover);
-            font-weight: 700; background: #fefce8; padding: 10px; border-radius: 16px;
-            border: 2px solid #fef08a;
+            text-align: center; margin-top: 5px; font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover);
+            font-weight: 700; background: #fefce8; padding: 10px; border-radius: 16px; border: 2px solid #fef08a;
         }
 
         .toggle-container {
@@ -170,8 +161,8 @@
             border: 2px solid #f1f5f9; cursor: pointer;
         }
 
-        .toggle-title { font-size: 17px; font-weight: 800; color: var(--text-main); margin-bottom: 2px; text-align: center; }
-        .toggle-hint { font-size: 14px; color: var(--text-muted); font-weight: 600; text-align: center; }
+        .toggle-title { font-size: calc(17px * var(--text-scale, 1)); font-weight: 800; color: var(--text-main); margin-bottom: 2px; text-align: center; }
+        .toggle-hint { font-size: calc(14px * var(--text-scale, 1)); color: var(--text-muted); font-weight: 600; text-align: center; }
         
         .smiley-switch {
             position: relative; display: inline-block; width: 56px; height: 30px;
@@ -180,271 +171,86 @@
         .smiley-switch input { opacity: 0; width: 0; height: 0; }
         .smiley-handle {
             position: absolute; top: 1px; left: 1px; width: 24px; height: 24px; background-color: white;
-            border-radius: 50%; transition: 0.4s; display: flex; align-items: center; justify-content: center; font-size: 14px;
+            border-radius: 50%; transition: 0.4s; display: flex; align-items: center; justify-content: center; font-size: calc(14px * var(--text-scale, 1));
         }
         .smiley-handle::after { content: "😊"; }
         input:checked + .smiley-handle { transform: translateX(24px); }
         input:checked + .smiley-handle::after { content: "☹️"; }
 
         .btn-start { 
-            background: var(--primary); color: #1e293b; font-weight: 900; font-size: 21px; 
+            background: var(--primary); color: #1e293b; font-weight: 900; font-size: calc(21px * var(--text-scale, 1)); 
             padding: 16px; border: none; border-radius: 20px; cursor: pointer; 
-            transition: all 0.4s; width: 100%; margin-top: -5px;
-            box-shadow: 0 10px 20px rgba(234, 179, 8, 0.2);
+            transition: all 0.4s; width: 100%; margin-top: -5px; box-shadow: 0 10px 20px rgba(234, 179, 8, 0.2);
         }
 
         #main-screen { display: none; flex-direction: column; gap: 20px; animation: fadeIn 0.5s ease-out; }
         
         .main-timer-card { 
             padding: 30px 20px; border-radius: 28px; text-align: center; position: relative; overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06); background: #ffffff;
-            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06); background: #ffffff; border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .net-days { font-size: 85px; font-weight: 900; line-height: 1; margin: 10px 0; letter-spacing: -2px; }
-        .absolute-timer { 
-            display: flex; justify-content: center; gap: 12px; background: rgba(0,0,0,0.04); 
-            padding: 16px; border-radius: 22px; margin-top: 18px;
-        }
+        .net-days { font-size: calc(85px * var(--text-scale, 1)); font-weight: 900; line-height: 1; margin: 10px 0; letter-spacing: -2px; }
+        .absolute-timer { display: flex; justify-content: center; gap: 12px; background: rgba(0,0,0,0.04); padding: 16px; border-radius: 22px; margin-top: 18px; }
         .time-box { text-align: center; min-width: 45px; }
-        .time-val { font-size: 26px; font-weight: 800; }
-        .time-lbl { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+        .time-val { font-size: calc(26px * var(--text-scale, 1)); font-weight: 800; }
+        .time-lbl { font-size: calc(12px * var(--text-scale, 1)); font-weight: 600; color: var(--text-muted); }
 
         .ai-btn {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            color: var(--text-muted);
-            padding: 16px; 
-            border-radius: 20px; 
-            font-size: 15px; 
-            font-weight: 900; 
-            cursor: pointer;
-            width: 100%; 
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px;
-            margin-top: 20px; 
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-            line-height: 1.5;
-            text-align: center;
+            background: #f8fafc; border: 1px solid #e2e8f0; color: var(--text-muted);
+            padding: 16px; border-radius: 20px; font-size: calc(15px * var(--text-scale, 1)); font-weight: 900; cursor: pointer;
+            width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            gap: 8px; margin-top: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02); line-height: 1.5; text-align: center;
         }
-        .ai-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-            color: var(--text-main);
-        }
-        .ai-btn.has-tip {
-            background: #ffffff;
-            border-color: var(--primary);
-            box-shadow: 0 5px 15px rgba(234, 179, 8, 0.1);
-        }
-        .ai-btn:disabled {
-            cursor: default;
-        }
+        .ai-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08); color: var(--text-main); }
+        .ai-btn.has-tip { background: #ffffff; border-color: var(--primary); box-shadow: 0 5px 15px rgba(234, 179, 8, 0.1); }
+        .ai-btn:disabled { cursor: default; }
 
-        /* --- עיצוב משודרג ויוקרתי לחסות הטיפ היומי --- */
         .ai-sponsor {
-            background: linear-gradient(135deg, #ffffff, #fefce8);
-            border: 2px solid #fef08a;
-            border-radius: 20px;
-            padding: 14px 16px;
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center; /* הוספנו מרכוז אופקי לכל התוכן */
-            gap: 8px; /* הקטנתי קצת את הרווח כדי שיישב יפה באמצע */
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-align: center; /* מרכוז הטקסט */
+            background: linear-gradient(135deg, #ffffff, #fefce8); border: 2px solid #fef08a;
+            border-radius: 20px; padding: 14px 16px; margin-top: 15px; display: flex;
+            align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center;
             box-shadow: 0 6px 15px rgba(234, 179, 8, 0.1);
         }
-        .ai-sponsor:hover {
-            background: linear-gradient(135deg, #fefce8, #fffbeb);
-            border-color: #fde047;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(234, 179, 8, 0.2);
-        }
-        .sponsor-badge {
-            background: linear-gradient(135deg, #fef08a, #fde047);
-            color: #854d0e;
-            font-size: 11px;
-            font-weight: 900;
-            padding: 6px 10px;
-            border-radius: 10px;
-            flex-shrink: 0;
-            box-shadow: 0 2px 5px rgba(253, 224, 71, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .sponsor-text {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-main);
-            line-height: 1.4;
-            /* הסרתי את flex-grow: 1 כדי שהטקסט לא ידחוף את החץ הצידה, אלא יישב יחד איתו באמצע */
-        }
-        .sponsor-text b {
-            color: #0ea5e9;
-            font-weight: 800;
-        }
-        .sponsor-arrow {
-            color: #ca8a04;
-            font-size: 18px;
-            font-weight: 900;
-            animation: slide-left-sponsor 1.5s infinite ease-in-out;
-        }
+        .ai-sponsor:hover { background: linear-gradient(135deg, #fefce8, #fffbeb); border-color: #fde047; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(234, 179, 8, 0.2); }
+        .sponsor-text { font-size: calc(14px * var(--text-scale, 1)); font-weight: 600; color: var(--text-main); line-height: 1.4; }
+        .sponsor-text b { color: #0ea5e9; font-weight: 800; }
+        .sponsor-arrow { color: #ca8a04; font-size: calc(18px * var(--text-scale, 1)); font-weight: 900; animation: slide-left-sponsor 1.5s infinite ease-in-out; }
 
-        @keyframes slide-left-sponsor {
-            right: 20px;
-            background: #ef4444;
-            color: white;
-            font-size: 13px;
-            font-weight: 900;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid white;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-            animation: pulse-red 2s infinite;
-            z-index: 2;
-        }
+        @keyframes slide-left-sponsor { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-5px); } }
 
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        /* --- כפתור הכסף - זהב בוהק ומטאלי --- */
         .vip-funnel-btn {
             background: linear-gradient(to right, #eab308 0%, #fef08a 25%, #eab308 50%, #fef08a 75%, #eab308 100%);
-            background-size: 200% auto;
-            color: #422006;
-            font-weight: 900;
-            font-size: 19px;
-            padding: 16px;
-            border: 2px solid #fef08a;
-            border-radius: 20px;
-            cursor: pointer;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 8px 25px rgba(234, 179, 8, 0.5);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background-size: 200% auto; color: #422006; font-weight: 900; font-size: calc(19px * var(--text-scale, 1));
+            padding: 16px; border: 2px solid #fef08a; border-radius: 20px; cursor: pointer; width: 100%;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 8px 25px rgba(234, 179, 8, 0.5); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             animation: shine-gold 3s linear infinite, pulse-vip-gold 2s infinite;
         }
-        .vip-funnel-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 12px 30px rgba(234, 179, 8, 0.6);
-        }
-        
-        @keyframes shine-gold {
-            to { background-position: -200% center; }
-        }
-        
-        @keyframes pulse-vip-gold {
-            0% { box-shadow: 0 0 0 0 rgba(254, 240, 138, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(254, 240, 138, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(254, 240, 138, 0); }
-        }
+        .vip-funnel-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 30px rgba(234, 179, 8, 0.6); }
+        @keyframes shine-gold { to { background-position: -200% center; } }
+        @keyframes pulse-vip-gold { 0% { box-shadow: 0 0 0 0 rgba(254, 240, 138, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(254, 240, 138, 0); } 100% { box-shadow: 0 0 0 0 rgba(254, 240, 138, 0); } }
 
-        /* מעטפת דביקה (Sticky) לכפתור ה-VIP בתחתית המסך */
         .sticky-vip-wrapper {
-            position: fixed;
-            bottom: 0; /* צמוד לחלוטין לתחתית המסך */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 480px; /* תואם לרוחב האפליקציה */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 900;
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%;
+            max-width: 480px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 900;
         }
-        
-        .sticky-vip-wrapper .vip-funnel-btn {
-            margin: 0;
-            width: 100%;
-            max-width: 100%;
-            border-radius: 0; /* מרובע לחלוטין - נצמד לצדדים */
-            padding-top: 18px;
-            padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); /* תמיכה בפס השחור של אייפון בתחתית */
-            box-shadow: 0 -3px 10px rgba(234, 179, 8, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-        }
+        .sticky-vip-wrapper .vip-funnel-btn { margin: 0; width: 100%; max-width: 100%; border-radius: 0; padding-top: 18px; padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); box-shadow: 0 -3px 10px rgba(234, 179, 8, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4); }
 
-        .copy-data-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #ffffff;
-            padding: 12px 15px;
-            border-radius: 14px;
-            margin-bottom: 12px;
-            border: 2px solid #fef08a;
-            transition: all 0.2s;
-            gap: 10px; /* מרווח בטוח בין הטקסט לכפתור */
-        }
+        .copy-data-row { display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 12px 15px; border-radius: 14px; margin-bottom: 12px; border: 2px solid #fef08a; transition: all 0.2s; gap: 10px; }
         .copy-data-row:hover { border-color: #f59e0b; background: #fffbeb; }
 
-        .copy-btn-small {
-            background: #fef08a;
-            color: #854d0e;
-            border: 1px solid #fde047;
-            padding: 0 16px;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.2s;
-            white-space: nowrap; /* מונע מהטקסט להישבר לשתי שורות */
-            flex-shrink: 0; /* מונע מהדפדפן למעוך את הכפתור */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 38px; /* גובה קבוע כדי שלא יהיה עבה מדי */
-        }
-        
-        /* האנימציה המוקדמת נמחקה לחלוטין - הכפתור קפוא בזמן הצפייה */
-        
-        /* אנימציה בולטת שמופעלת *רק* כשהסרטון מסתיים */
-        @keyframes video-ended-pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(234, 179, 8, 0); }
-            50% { transform: scale(1.08); box-shadow: 0 0 12px rgba(234, 179, 8, 0.6); background-color: #fde047; }
-        }
-
-        .video-ended-highlight {
-            animation: video-ended-pulse 1.2s infinite !important; /* פועם עד שלוחצים */
-        }
-        
+        .copy-btn-small { background: #fef08a; color: #854d0e; border: 1px solid #fde047; padding: 0 16px; border-radius: 10px; font-weight: 800; font-size: calc(14px * var(--text-scale, 1)); cursor: pointer; transition: 0.2s; white-space: nowrap; flex-shrink: 0; display: flex; align-items: center; justify-content: center; height: 38px; }
+        @keyframes video-ended-pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(234, 179, 8, 0); } 50% { transform: scale(1.08); box-shadow: 0 0 12px rgba(234, 179, 8, 0.6); background-color: #fde047; } }
+        .video-ended-highlight { animation: video-ended-pulse 1.2s infinite !important; }
         .copy-btn-small:active { transform: scale(0.95); }
         .copy-btn-small.copied { background: #dcfce7; color: #166534; border-color: #86efac; animation: none !important; transform: scale(1); }
 
-        @keyframes tipUpdateAnim {
-            0% { transform: scale(0.95); background-color: #fefce8; }
-            50% { transform: scale(1.02); background-color: #ffffff; }
-            100% { transform: scale(1); background-color: #ffffff; }
-        }
-
-        .vacation-length-box {
-            color: var(--text-muted);
-            font-size: 15px; font-weight: 600;
-            display: inline-block; margin-top: 4px; animation: fadeIn 0.4s;
-        }
-        .vacation-length-box b { 
-            font-weight: 800; 
-            color: var(--text-main); 
-            font-size: 16px; 
-        }
+        @keyframes tipUpdateAnim { 0% { transform: scale(0.95); background-color: #fefce8; } 50% { transform: scale(1.02); background-color: #ffffff; } 100% { transform: scale(1); background-color: #ffffff; } }
+        .vacation-length-box { color: var(--text-muted); font-size: calc(15px * var(--text-scale, 1)); font-weight: 600; display: inline-block; margin-top: 4px; animation: fadeIn 0.4s; }
+        .vacation-length-box b { font-weight: 800; color: var(--text-main); font-size: calc(16px * var(--text-scale, 1)); }
 
         .loader { width: 18px; height: 18px; border: 3px solid rgba(0,0,0,0.1); border-top: 3px solid #000000; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -453,61 +259,69 @@
         .holiday-card { background: #ffffff; border: 1px solid #f1f5f9; border-right: 5px solid #cbd5e1; padding: 16px 20px; border-radius: 18px; display: flex; justify-content: flex-start; align-items: center; text-align: right; cursor: pointer; transition: 0.2s; }
         .holiday-card.active { border-right-color: var(--primary); background: #fefce8; border-color: #fef08a; }
 
-        @keyframes subtle-jump {
-            0%, 100% { transform: translateY(0); }
-            10% { transform: translateY(-6px); }
-            20% { transform: translateY(0); }
-            30% { transform: translateY(-3px); }
-            40%, 100% { transform: translateY(0); }
-        }
+        @keyframes subtle-jump { 0%, 100% { transform: translateY(0); } 10% { transform: translateY(-6px); } 20% { transform: translateY(0); } 30% { transform: translateY(-3px); } 40%, 100% { transform: translateY(0); } }
 
-        /* נײַע סטילן פֿאַר די אַקציע קנעפּלעך */
-        .action-buttons-row {
-            display: flex; gap: 10px; margin-top: 18px; margin-bottom: 5px; width: 100%;
-            direction: rtl;
-        }
-        .btn-action {
-            flex: 1; padding: 14px 4px; border-radius: 18px; font-weight: 800; font-size: 14px;
-            display: flex; justify-content: center; align-items: center; gap: 6px;
-            text-decoration: none; cursor: pointer; transition: all 0.3s; border: none;
-            direction: rtl;
-        }
-        .btn-share-half {
-            background: var(--whatsapp-green); color: white;
-            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.2); animation: subtle-jump 4s infinite;
-        }
+        .action-buttons-row { display: flex; gap: 10px; margin-top: 18px; margin-bottom: 5px; width: 100%; direction: rtl; }
+        .btn-action { flex: 1; padding: 14px 4px; border-radius: 18px; font-weight: 800; font-size: calc(14px * var(--text-scale, 1)); display: flex; justify-content: center; align-items: center; gap: 6px; text-decoration: none; cursor: pointer; transition: all 0.3s; border: none; direction: rtl; }
+        .btn-share-half { background: var(--whatsapp-green); color: white; box-shadow: 0 6px 15px rgba(37, 211, 102, 0.2); animation: subtle-jump 4s infinite; }
         .btn-share-half:hover { background: var(--whatsapp-hover); transform: translateY(-2px); animation-play-state: paused; }
         .btn-a2hs-half { background: #0f172a; color: white; box-shadow: 0 6px 15px rgba(15, 23, 42, 0.2); }
         .btn-a2hs-half:hover { background: #1e293b; transform: translateY(-2px); }
 
-        .reset-btn { background: none; border: none; color: var(--text-muted); text-decoration: underline; cursor: pointer; padding: 8px; font-size: 13px; margin-top: 10px; }
+        .reset-btn { background: none; border: none; color: var(--text-muted); text-decoration: underline; cursor: pointer; padding: 8px; font-size: calc(13px * var(--text-scale, 1)); margin-top: 10px; }
 
-        .seo-footer {
-            margin-top: 40px; padding: 30px 10px; border-top: 1px solid #f1f5f9; 
-            font-size: 14px; color: var(--text-muted); text-align: right; line-height: 1.7;
-        }
-        .seo-footer h2 { font-size: 18px; margin-bottom: 12px; color: var(--text-main); font-weight: 800; }
-        .seo-footer h3 { font-size: 16px; margin-top: 15px; margin-bottom: 8px; color: var(--text-main); font-weight: 700; }
-        .contact-area { margin-top: 25px; padding-top: 15px; border-top: 1px dashed #e2e8f0; font-size: 13px; font-weight: 600; }
+        .seo-footer { margin-top: 40px; padding: 30px 10px; border-top: 1px solid #f1f5f9; font-size: calc(14px * var(--text-scale, 1)); color: var(--text-muted); text-align: right; line-height: 1.7; }
+        .seo-footer h2 { font-size: calc(18px * var(--text-scale, 1)); margin-bottom: 12px; color: var(--text-main); font-weight: 800; }
+        .seo-footer h3 { font-size: calc(16px * var(--text-scale, 1)); margin-top: 15px; margin-bottom: 8px; color: var(--text-main); font-weight: 700; }
+        .contact-area { margin-top: 25px; padding-top: 15px; border-top: 1px dashed #e2e8f0; font-size: calc(13px * var(--text-scale, 1)); font-weight: 600; }
         .contact-link { color: var(--accent); text-decoration: none; }
 
-        /* עיצוב חלונית ההדרכה לאייפון */
-        .ios-modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5);
-            display: none; justify-content: center; align-items: flex-end; z-index: 1000; padding: 20px;
-            animation: fadeIn 0.3s ease-out; backdrop-filter: blur(2px);
+        .ios-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; animation: fadeIn 0.3s ease-out; backdrop-filter: blur(5px); }
+        .ios-modal-content { background: #ffffff; width: 100%; max-width: 380px; padding: 32px 24px; border-radius: 32px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.8); margin: auto; }
+        .ios-modal-close { background: #f1f5f9; color: var(--text-main); border: none; padding: 14px 30px; font-weight: 800; border-radius: 16px; font-size: calc(16px * var(--text-scale, 1)); cursor: pointer; width: 100%; transition: background 0.2s; }
+        .ios-modal-close:hover { background: #e2e8f0; }
+
+        /* --- עיצוב רשתות חברתיות --- */
+        .social-banner-container { background: transparent; padding: 10px; margin-top: 10px; text-align: center; }
+        .social-banner-title { font-size: calc(14px * var(--text-scale, 1)); font-weight: 800; color: var(--text-muted); margin-bottom: 22px; } /* כאן הגדלתי את הרווח מ-12 ל-22 */
+        .social-icons-row { display: flex; justify-content: center; gap: 20px; }
+        .social-icon-btn { display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; text-decoration: none; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .social-icon-btn:hover { transform: translateY(-5px) scale(1.1); box-shadow: 0 8px 18px rgba(0,0,0,0.12); }
+        .icon-tiktok { background: #000000; color: white; }
+        .icon-insta { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; }
+        .icon-youtube { background: #ff0000; color: white; }
+
+        /* --- עיצוב תפריט הנגישות (Accessibility Widget) --- */
+        /* הערה: תפריט הנגישות עצמו מקבל פיקסלים קבועים כדי שההגדלה לא תוציא אותו מחוץ למסך */
+        .a11y-btn-float {
+            position: fixed; bottom: 80px; left: 20px; width: 50px; height: 50px;
+            background: #0ea5e9; color: white; border-radius: 50%; display: flex;
+            justify-content: center; align-items: center; font-size: 26px; cursor: pointer;
+            z-index: 800; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4); border: 2px solid white;
+            transition: 0.3s ease;
         }
-        .ios-modal-content {
-            background: white; width: 100%; max-width: 400px; padding: 24px; border-radius: 24px;
-            text-align: center; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); margin-bottom: 20px;
+        .a11y-btn-float:hover { transform: scale(1.1); }
+        
+        .a11y-menu-card {
+            position: fixed; bottom: 140px; left: 20px; background: white; width: 280px;
+            border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 10001;
+            display: none; flex-direction: column; padding: 20px; border: 1px solid #e2e8f0;
+            direction: rtl; animation: fadeIn 0.2s ease-out;
         }
-        .ios-modal-title { font-size: 19px; font-weight: 900; margin-bottom: 12px; color: var(--text-main); }
-        .ios-modal-text { font-size: 15.5px; color: var(--text-main); font-weight: 600; line-height: 1.8; margin-bottom: 20px; }
-        .ios-icon { display: inline-block; background: #f1f5f9; padding: 4px 8px; border-radius: 8px; font-size: 18px; margin: 0 4px; border: 1px solid #e2e8f0;}
-        .ios-modal-close {
-            background: var(--primary); color: #1e293b; border: none; padding: 14px 30px; font-weight: 900;
-            border-radius: 18px; font-size: 17px; cursor: pointer; width: 100%;
-        }
+        .a11y-menu-card h3 { margin-bottom: 15px; font-size: 18px; color: #1e293b; text-align: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;}
+        .a11y-option { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f5f9; font-weight: 600; font-size: 14px;}
+        .a11y-action-btn { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; color: #1e293b; }
+        .a11y-action-btn:hover { background: #e2e8f0; }
+        .a11y-close-menu { margin-top: 15px; background: #ef4444; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+
+        /* מצב ניגודיות גבוהה - נגישות */
+        body.high-contrast { background: #000 !important; color: #fff !important; }
+        body.high-contrast * { background-color: #000 !important; color: #ff0 !important; border-color: #ff0 !important; box-shadow: none !important; }
+        body.high-contrast .sun-background { display: none !important; }
+        
+        /* מצב הדגשת קישורים - נגישות */
+        body.highlight-links a, body.highlight-links button { text-decoration: underline !important; text-decoration-color: #0ea5e9 !important; text-decoration-thickness: 3px !important; }
+        body.high-contrast.highlight-links a, body.high-contrast.highlight-links button { text-decoration-color: #ff0 !important; }
     </style>
 </head>
 <body>
@@ -515,7 +329,7 @@
     <main class="app-container">
         <div id="setup-screen">
             <div class="setup-header">
-                <span class="icon">☀️</span>
+                <span class="icon" aria-hidden="true">☀️</span>
                 <h1><span>נטו</span>מתי באמת החופש הגדול</h1>
                 <p>ספירה לאחור - בלי שבתות, שישי וחגים</p>
             </div>
@@ -524,100 +338,147 @@
             <div class="setup-step">
                 <h3>איפה אתם לומדים?</h3>
                 <div class="school-grid">
-                    <label class="option-card">
+                    <label class="option-card" aria-label="יסודי">
                         <input type="radio" name="schoolType" value="elem" onchange="updateSchoolSelection(this)"> 
                         <span class="option-title">יסודי</span>
-                        <span class="option-emoji">🎨</span>
+                        <span class="option-emoji" aria-hidden="true">🎨</span>
                     </label>
-                    <label class="option-card">
+                    <label class="option-card" aria-label="חטיבה">
                         <input type="radio" name="schoolType" value="middle" onchange="updateSchoolSelection(this)"> 
                         <span class="option-title">חטיבה</span>
-                        <span class="option-emoji">🎒</span>
+                        <span class="option-emoji" aria-hidden="true">🎒</span>
                     </label>
-                    <label class="option-card">
+                    <label class="option-card" aria-label="תיכון">
                         <input type="radio" name="schoolType" value="high" onchange="updateSchoolSelection(this)"> 
                         <span class="option-title">תיכון</span>
-                        <span class="option-emoji">🎓</span>
+                        <span class="option-emoji" aria-hidden="true">🎓</span>
                     </label>
                 </div>
-                <div id="school-hint-text" class="school-hint" style="visibility: hidden;"></div>
+                <div id="school-hint-text" class="school-hint" style="visibility: hidden;" aria-live="polite"></div>
             </div>
 
             <!-- שלב 2: לומדים בשישי? -->
             <div class="setup-step">
-                <div class="toggle-container" onclick="document.getElementById('friday-toggle').click();">
+                <div class="toggle-container" onclick="document.getElementById('friday-toggle').click();" role="button" tabindex="0" onkeypress="if(event.key==='Enter') document.getElementById('friday-toggle').click();">
                     <div class="toggle-text-area">
                         <div class="toggle-title">לומדים בשישי?</div>
-                        <div id="friday-hint-text" class="toggle-hint">לא, אצלנו שישי זה חופש 😊</div>
+                        <div id="friday-hint-text" class="toggle-hint" aria-live="polite">לא, אצלנו שישי זה חופש 😊</div>
                     </div>
                     <label class="smiley-switch" onclick="event.stopPropagation();">
-                        <input type="checkbox" id="friday-toggle" onchange="updateFridayToggle()">
+                        <input type="checkbox" id="friday-toggle" onchange="updateFridayToggle()" aria-label="האם לומדים בשישי">
                         <span class="smiley-handle"></span>
                     </label>
                 </div>
             </div>
 
-            <div id="error-message" style="color: #ef4444; font-weight: 900; text-align: center; display: none; background: #fee2e2; padding: 12px; border-radius: 16px;">רגע! לא סימנתם איפה אתם לומדים 🎒</div>
+            <div id="error-message" style="color: #ef4444; font-weight: 900; text-align: center; display: none; background: #fee2e2; padding: 12px; border-radius: 16px;" aria-live="assertive">רגע! לא סימנתם איפה אתם לומדים 🎒</div>
         <button class="btn-start" onclick="initApp()">התחל ספירה לאחור! 🚀</button>
     </div>
 
     <div id="main-screen">
         <div id="main-timer-bg" class="main-timer-card">
-            <div id="main-target-title" style="font-weight: 800; font-size: 20px; margin-bottom: 10px;"></div>
-            <div class="net-days-container">
+            <h2 id="main-target-title" style="font-weight: 800; font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 10px;"></h2>
+            <div class="net-days-container" aria-live="polite">
                 <div style="font-weight: 800; color: var(--text-muted);">נשארו רק:</div>
                 <div id="main-net-days" class="net-days">-</div>
                 <div style="font-weight: 800; color: var(--text-muted);">ימי לימוד נטו!</div>
-                <div id="excluding-label" style="font-size: 14px; font-weight: 600; color: var(--text-muted); margin-top: 8px;"></div>
+                <div id="excluding-label" style="font-size: calc(14px * var(--text-scale, 1)); font-weight: 600; color: var(--text-muted); margin-top: 8px;"></div>
             </div>
 
-            <div class="absolute-timer" dir="ltr">
+            <div class="absolute-timer" dir="ltr" aria-hidden="true">
                 <div class="time-box"><div id="abs-days" class="time-val">-</div><div class="time-lbl">ימים</div></div>
                 <div class="time-box"><div id="abs-hours" class="time-val">-</div><div class="time-lbl">שעות</div></div>
                 <div class="time-box"><div id="abs-mins" class="time-val">-</div><div class="time-lbl">דקות</div></div>
                 <div class="time-box"><div id="abs-secs" class="time-val">-</div><div class="time-lbl">שניות</div></div>
             </div>
 
-            <div class="total-days-label" style="margin-top: 8px;">סך הכל</div>
+            <div class="total-days-label" style="margin-top: 8px;" aria-hidden="true">סך הכל</div>
 
             <div style="text-align: center;">
-                <div id="vacation-length-box" class="vacation-length-box">
+                <div id="vacation-length-box" class="vacation-length-box" aria-live="polite">
                     <span id="vacation-days-count"></span>
                 </div>
             </div>
 
             <div class="ai-tools">
-                <button class="ai-btn" id="main-ai-btn" onclick="handleAiTip()">
+                <button class="ai-btn" id="main-ai-btn" onclick="handleAiTip()" aria-label="קבלת טיפ יומי">
                     <span id="ai-btn-loader" class="loader"></span>
                     <span id="ai-btn-text">לחצו לטיפ אופטימיות יומי ✨</span>
                 </button>
                 
-                <!-- המלצת הטיפ היומי - עיצוב נקי ללא תגית מילים -->
-                <div class="ai-sponsor" id="tip-sponsor-banner" onclick="trackEvent('click_sponsor_banner'); openVipModal();" style="display: none;">
-                    <div class="sponsor-text" style="font-size: 15px;">🌟 רוצים להרוויח כסף מסקרים וטעימות? <b>לחצו כאן</b></div>
-                    <div class="sponsor-arrow">👈</div>
+                <div class="ai-sponsor" id="tip-sponsor-banner" onclick="trackEvent('click_sponsor_banner'); openVipModal();" style="display: none;" role="button" tabindex="0">
+                    <div class="sponsor-text" style="font-size: calc(15px * var(--text-scale, 1));"><span aria-hidden="true">🌟</span> רוצים להרוויח כסף מסקרים וטעימות? <b>לחצו כאן</b></div>
+                    <div class="sponsor-arrow" aria-hidden="true">👈</div>
+                </div>
+
+                <!-- סאָציאַלע נעצן (פֿאַר עלעמענטאַר שולע) -->
+                <div id="social-elem-banner" class="social-banner-container" style="display: none;" aria-label="סאָציאַלע נעצן">
+                    <div class="social-banner-title">פֿאָלגט מיך פֿאַר מער איבערראַשונגען ✌️</div>
+                    <div class="social-icons-row">
+                        <a href="https://www.tiktok.com/@yonatop2?_r=1&_t=ZS-963skgq9MdF" target="_blank" class="social-icon-btn icon-tiktok" aria-label="TikTok">
+                            <svg viewBox="0 0 448 512" width="22" height="22" fill="currentColor"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/reel/DX4k_b_tqNj/?igsh=cmd4YWY3dTl4bmg5" target="_blank" class="social-icon-btn icon-insta" aria-label="Instagram">
+                            <svg viewBox="0 0 448 512" width="22" height="22" fill="currentColor"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+                        </a>
+                        <a href="https://www.youtube.com/@yonatop2" target="_blank" class="social-icon-btn icon-youtube" aria-label="YouTube">
+                            <svg viewBox="0 0 576 512" width="22" height="22" fill="currentColor"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="action-buttons-row" style="margin-top: 5px; margin-bottom: 5px; direction: rtl;">
-                <a href="#" id="share-btn" class="btn-action btn-share-half" onclick="shareWhatsApp(event)">
-                    <span style="order: 2;">📢</span>
-                    <span style="order: 1;">שתפו לכיתה</span>
+            <a href="#" id="share-btn" class="btn-action btn-share-half" onclick="shareWhatsApp(event)" aria-label="שיתוף בוואטסאפ">
+                <span style="order: 2;" aria-hidden="true">📢</span>
+                <span style="order: 1;">שתפו לכיתה</span>
+            </a>
+            <button id="a2hs-btn" class="btn-action btn-a2hs-half" onclick="handleA2HS()" aria-label="התקנה כאפליקציה">
+                <span style="order: 2;" aria-hidden="true">📱</span>
+                <span style="order: 1;">הוסיפו כאפליקציה</span>
+            </button>
+        </div>
+
+        <h2 style="font-size: calc(18px * var(--text-scale, 1)); margin-top: 15px; margin-bottom: 8px; text-align: center;">בחרו יעד לספירה:</h2>
+        <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation" aria-label="בחירת חגים"></div>
+        <center><button class="reset-btn" onclick="resetApp()">שינוי הגדרות</button></center>
+            
+        <!-- רשתות חברתיות ליסודי (מופיע בתחתית העמוד) -->
+        <div id="social-elem-banner" class="social-banner-container" style="display: none; margin-top: 15px; margin-bottom: 40px;" aria-label="רשתות חברתיות">
+            <div class="social-banner-title">רשתות יוצר האתר</div>
+            <div class="social-icons-row">
+                <a href="https://www.tiktok.com/@yonatop2?_r=1&_t=ZS-963skgq9MdF" target="_blank" class="social-icon-btn icon-tiktok" aria-label="TikTok">
+                    <svg viewBox="0 0 448 512" width="22" height="22" fill="currentColor"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg>
                 </a>
-                <button id="a2hs-btn" class="btn-action btn-a2hs-half" onclick="handleA2HS()">
-                    <span style="order: 2;">📱</span>
-                    <span style="order: 1;">הוסיפו כאפליקציה</span>
-                </button>
+                <a href="https://www.instagram.com/reel/DX4k_b_tqNj/?igsh=cmd4YWY3dTl4bmg5" target="_blank" class="social-icon-btn icon-insta" aria-label="Instagram">
+                    <svg viewBox="0 0 448 512" width="22" height="22" fill="currentColor"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+                </a>
+                <a href="https://www.youtube.com/@yonatop/shorts" target="_blank" class="social-icon-btn icon-youtube" aria-label="YouTube">
+                    <svg viewBox="0 0 576 512" width="22" height="22" fill="currentColor"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg>
+                </a>
             </div>
-            
-            <h2 style="font-size: 18px; margin-top: 15px; margin-bottom: 8px; text-align: center;">בחרו יעד לספירה:</h2>
-            <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;"></div>
-            <center><button class="reset-btn" onclick="resetApp()">שינוי הגדרות</button></center>
-            
-            <!-- מעטפת הכפתור הדביק בתחתית המסך -->
-            <div class="sticky-vip-wrapper">
-                <button id="vip-community-btn" class="vip-funnel-btn" onclick="openVipModal()">
+        </div>
+
+        <!-- רשתות חברתיות לחטיבה ותיכון (מופיע בתחתית לפני הכפתור הדביק) -->
+        <div id="social-high-banner" class="social-banner-container" style="display: none; margin-bottom: 90px;" aria-label="רשתות חברתיות">
+            <div class="social-banner-title">רשתות יוצר האתר</div>
+            <div class="social-icons-row">
+                <a href="https://www.tiktok.com/@yonatop2?_r=1&_t=ZS-963skgq9MdF" target="_blank" class="social-icon-btn icon-tiktok" aria-label="TikTok">
+                    <svg viewBox="0 0 448 512" width="22" height="22" fill="currentColor"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/reel/DX4k_b_tqNj/?igsh=cmd4YWY3dTl4bmg5" target="_blank" class="social-icon-btn icon-insta" aria-label="Instagram">
+                    <svg viewBox="0 0 448 512" width="22" height="22" fill="currentColor"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+                </a>
+                <a href="https://www.youtube.com/@yonatop/shorts" target="_blank" class="social-icon-btn icon-youtube" aria-label="YouTube">
+                    <svg viewBox="0 0 576 512" width="22" height="22" fill="currentColor"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- מעטפת הכפתור הדביק בתחתית המסך -->
+        <div class="sticky-vip-wrapper">
+                <button id="vip-community-btn" class="vip-funnel-btn" onclick="openVipModal()" aria-label="מעבר לקהילת הכסף">
                     כפתור הכסף 💸
                 </button>
             </div>
@@ -628,29 +489,74 @@
             <p>שואלים את עצמכם <strong>עוד כמה זמן החופש הגדול לא כולל שבתות וחגים</strong>? או <strong>כמה ימים עד לחופש הגדול</strong>? הגעתם למקום הנכון! האתר "נטו חופש" הוא המחשבון המדויק ביותר שיענה לכם על השאלה <strong>כמה ימי לימודים עד החופש הגדול</strong> נשארו באמת.</p>
             <h3>מתי מסתיימים הלימודים?</h3>
             <p>רבים שואלים <strong>עוד כמה ימים יתחיל החופש הגדול לחטיבות הביניים</strong>, ליסודי או לתיכונים. לפי לוח חופשות משרד החינוך, תאריך הסיום משתנה: יסודי ב-30 ביוני, וחטיבות/תיכונים ב-18 או ב-19 ביוני. רוצים לדעת בדיוק <strong>עוד כמה ימים יש חופש גדול</strong> ו-<strong>עוד כמה זמן החופש הגדול</strong> מתחיל אצלכם? פשוט בחרו את השכבה שלכם במחשבון ותקבלו ספירה לאחור מדויקת שמראה <strong>מתי מסתיימים הלימודים</strong>!</p>
+            
+            <!-- הבהרה משפטית -->
+            <p style="font-size: calc(12px * var(--text-scale, 1)); border-top: 1px solid #eee; margin-top: 15px; padding-top: 10px; color: #94a3b8;">
+                * הנתונים באתר מבוססים על פרסומי משרד החינוך אך הם בגדר הערכה והמלצה בלבד. השימוש באתר ובקישורים החיצוניים המופיעים בו הוא על אחריות המשתמש בלבד.
+            </p>
+
             <div class="contact-area">
-                ליצירת קשר, שיתופי פעולה או דיווח על תקלות: 
+                ליצירת קשר, שיתופי פעולה או דיווח על תקלות נגישות: 
                 <a href="mailto:levanov.yonatan@gmail.com" class="contact-link">levanov.yonatan@gmail.com</a>
+            </div>
+            
+            <!-- קישורים משפטיים ונגישות - מיושרים לימין -->
+            <div style="display: flex; justify-content: flex-start; flex-wrap: wrap; gap: 15px; margin-top: 20px; font-size: calc(12px * var(--text-scale, 1)); font-weight: 700;">
+                <a href="javascript:void(0)" onclick="openLegalModal('terms')" style="color: #64748b; text-decoration: underline;">תנאי שימוש</a>
+                <a href="javascript:void(0)" onclick="openLegalModal('privacy')" style="color: #64748b; text-decoration: underline;">מדיניות פרטיות</a>
+                <a href="javascript:void(0)" onclick="openLegalModal('accessibility')" style="color: #0ea5e9; text-decoration: underline;">הצהרת נגישות (חוק)</a>
             </div>
         </footer>
 
-        <footer style="text-align: center; font-size: 12px; color: #888; padding: 20px; margin-top: 40px; direction: rtl;">
+        <footer style="text-align: right; font-size: calc(11px * var(--text-scale, 1)); color: #94a3b8; padding: 20px 20px 140px 10px; direction: rtl;">
           <p style="margin-bottom: 5px;"><strong>© 2026 נטו חופש - כל הזכויות שמורות.</strong></p>
-          <p style="margin-bottom: 5px;">האתר משתמש בקובצי עוגיות (Cookies) לשיפור חוויית הגלישה.</p>
+          <p>האתר משתמש ב-Google Analytics ובקובצי עוגיות לשיפור חווית המשתמש.</p>
         </footer>
 
-        <div id="ios-modal" class="ios-modal-overlay">
+        <!-- כפתור ותפריט נגישות (Accessibility Widget) -->
+        <button class="a11y-btn-float" aria-label="פתח תפריט נגישות" onclick="toggleA11yMenu()">♿</button>
+        <div id="a11y-menu" class="a11y-menu-card" role="dialog" aria-modal="true" aria-label="תפריט נגישות">
+            <h3>תפריט נגישות ♿</h3>
+            <div class="a11y-option">
+                גודל טקסט:
+                <div>
+                    <button class="a11y-action-btn" aria-label="הגדל טקסט" onclick="changeFontSize(1)">A+</button>
+                    <button class="a11y-action-btn" aria-label="הקטן טקסט" onclick="changeFontSize(-1)">A-</button>
+                </div>
+            </div>
+            <div class="a11y-option">
+                ניגודיות צבעים:
+                <button class="a11y-action-btn" onclick="toggleHighContrast()">הדלק/כבה</button>
+            </div>
+            <div class="a11y-option">
+                הדגשת קישורים:
+                <button class="a11y-action-btn" onclick="toggleLinkHighlight()">הדלק/כבה</button>
+            </div>
+            <button class="a11y-close-menu" onclick="toggleA11yMenu()">סגור תפריט</button>
+        </div>
+
+        <!-- חלונית משפטית (אוניברסלית לכל הדפים) -->
+        <div id="legal-modal" class="ios-modal-overlay" style="align-items: center; z-index: 10000;" role="dialog" aria-modal="true" aria-label="מידע משפטי">
+            <div class="ios-modal-content" style="max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: right; padding: 30px;">
+                <button onclick="closeLegalModal()" aria-label="סגור" style="position: absolute; top: 15px; left: 15px; background: none; border: none; font-size: calc(20px * var(--text-scale, 1)); color: #94a3b8; cursor: pointer;">✖</button>
+                <div id="legal-content"></div>
+                <button class="ios-modal-close" style="margin-top: 20px;" onclick="closeLegalModal()">סגור מודל</button>
+            </div>
+        </div>
+
+        <!-- חלון התקנה IOS -->
+        <div id="ios-modal" class="ios-modal-overlay" role="dialog" aria-modal="true" aria-label="הוראות התקנה">
             <!-- מצב 1: למשתמשים שכבר נמצאים בספארי -->
             <div id="modal-safari-content" class="ios-modal-content" style="display: none;">
-                <div style="font-size: 44px; margin-bottom: 12px; animation: float-main 3s infinite ease-in-out;">☀️</div>
-                <h3 style="font-size: 24px; font-weight: 900; margin-bottom: 16px; color: var(--text-main); letter-spacing: -0.5px;">התקנת "נטו"</h3>
-                <div style="font-size: 16px; font-weight: 600; color: var(--text-main); line-height: 1.6; text-align: right; background: #f8fafc; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
+                <div style="font-size: calc(44px * var(--text-scale, 1)); margin-bottom: 12px; animation: float-main 3s infinite ease-in-out;" aria-hidden="true">☀️</div>
+                <h3 style="font-size: calc(24px * var(--text-scale, 1)); font-weight: 900; margin-bottom: 16px; color: var(--text-main); letter-spacing: -0.5px;">התקנת "נטו"</h3>
+                <div style="font-size: calc(16px * var(--text-scale, 1)); font-weight: 600; color: var(--text-main); line-height: 1.6; text-align: right; background: #f8fafc; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
                     <p style="margin-bottom: 14px; display: flex; align-items: flex-start; gap: 10px;">
-                        <span style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex-shrink: 0; margin-top: 2px;">1</span>
-                        <span>בתחתית המסך (בדפדפן ספארי), לחצו על <b>כפתור השיתוף</b> (מרובע עם חץ <span style="font-size:18px;">⍐</span>).</span>
+                        <span style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: calc(14px * var(--text-scale, 1)); font-weight: 900; flex-shrink: 0; margin-top: 2px;">1</span>
+                        <span>בתחתית המסך (בדפדפן ספארי), לחצו על <b>כפתור השיתוף</b> (מרובע עם חץ <span style="font-size:calc(18px * var(--text-scale, 1));" aria-hidden="true">⍐</span>).</span>
                     </p>
                     <p style="display: flex; align-items: flex-start; gap: 10px;">
-                        <span style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex-shrink: 0; margin-top: 2px;">2</span>
+                        <span style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: calc(14px * var(--text-scale, 1)); font-weight: 900; flex-shrink: 0; margin-top: 2px;">2</span>
                         <span>בתפריט שייפתח, גללו קצת למטה ולחצו על <b>"הוסף למסך הבית"</b> (Add to Home Screen ➕).</span>
                     </p>
                 </div>
@@ -659,24 +565,21 @@
 
             <!-- מצב 2: למשתמשים שנתקעו באפליקציית גוגל / כרום באייפון -->
             <div id="modal-nonsafari-content" class="ios-modal-content" style="display: none;">
-                <div style="font-size: 44px; margin-bottom: 10px; animation: subtle-jump 2s infinite;">🧭</div>
-                <h3 style="font-size: 24px; font-weight: 900; margin-bottom: 12px; color: var(--text-main); letter-spacing: -0.5px;">עברו ל-Safari</h3>
-                <p style="font-size: 16px; font-weight: 600; color: var(--text-muted); line-height: 1.5; margin-bottom: 24px;">
+                <div style="font-size: calc(44px * var(--text-scale, 1)); margin-bottom: 10px; animation: subtle-jump 2s infinite;" aria-hidden="true">🧭</div>
+                <h3 style="font-size: calc(24px * var(--text-scale, 1)); font-weight: 900; margin-bottom: 12px; color: var(--text-main); letter-spacing: -0.5px;">עברו ל-Safari</h3>
+                <p style="font-size: calc(16px * var(--text-scale, 1)); font-weight: 600; color: var(--text-muted); line-height: 1.5; margin-bottom: 24px;">
                     כדי להתקין את האפליקציה, חובה לפתוח את האתר דרך דפדפן ה-Safari המקורי של האייפון.
                 </p>
                 
-                <!-- כפתור קסם לפתיחה ישירה בספארי (עם פרמטר שפותח אוטומטית את חלון ההתקנה) -->
-                <a href="x-safari-https://neto-hofesh.co.il/?install=1" onclick="trackEvent('click_auto_safari_link')" style="display: flex; justify-content: center; align-items: center; gap: 8px; background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; text-decoration: none; font-weight: 900; font-size: 18px; padding: 18px; border-radius: 18px; margin-bottom: 24px; box-shadow: 0 8px 20px rgba(14, 165, 233, 0.25); transition: transform 0.2s;">
+                <a href="x-safari-https://neto-hofesh.co.il/?install=1" onclick="trackEvent('click_auto_safari_link')" style="display: flex; justify-content: center; align-items: center; gap: 8px; background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; text-decoration: none; font-weight: 900; font-size: calc(18px * var(--text-scale, 1)); padding: 18px; border-radius: 18px; margin-bottom: 24px; box-shadow: 0 8px 20px rgba(14, 165, 233, 0.25); transition: transform 0.2s;">
                     🚀 פתיחה אוטומטית ב-Safari
                 </a>
 
                 <div style="background: #f8fafc; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0; margin-bottom: 16px; width: 100%;">
-                    <p style="text-align: center; font-size: 14px; color: var(--text-muted); font-weight: 700; margin-bottom: 14px;">(הכפתור לא עובד? העתיקו והדביקו):</p>
-                    
-                    <!-- הפתרון לגלישה (נמצאים אחד מתחת לשני, אין סיכוי שיגלוש יותר לעולם) -->
+                    <p style="text-align: center; font-size: calc(14px * var(--text-scale, 1)); color: var(--text-muted); font-weight: 700; margin-bottom: 14px;">(הכפתור לא עובד? העתיקו והדביקו):</p>
                     <div style="display: flex; flex-direction: column; gap: 12px; width: 100%;">
-                        <input type="text" id="site-url-input" value="neto-hofesh.co.il" readonly style="width: 100%; padding: 14px; border-radius: 14px; border: 2px solid #cbd5e1; font-size: 18px; text-align: center; background: #fff; color: #334155; font-weight: 800; outline: none; margin: 0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);" dir="ltr">
-                        <button onclick="copySiteUrlForSafari(this)" style="width: 100%; background: #fef08a; color: #854d0e; border: 1px solid #fde047; padding: 14px; border-radius: 14px; font-weight: 900; font-size: 17px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(253, 224, 71, 0.25); margin: 0;">העתק קישור 📋</button>
+                        <input type="text" id="site-url-input" value="neto-hofesh.co.il" aria-label="כתובת האתר להעתקה" readonly style="width: 100%; padding: 14px; border-radius: 14px; border: 2px solid #cbd5e1; font-size: calc(18px * var(--text-scale, 1)); text-align: center; background: #fff; color: #334155; font-weight: 800; outline: none; margin: 0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);" dir="ltr">
+                        <button onclick="copySiteUrlForSafari(this)" style="width: 100%; background: #fef08a; color: #854d0e; border: 1px solid #fde047; padding: 14px; border-radius: 14px; font-weight: 900; font-size: calc(17px * var(--text-scale, 1)); cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(253, 224, 71, 0.25); margin: 0;">העתק קישור 📋</button>
                     </div>
                 </div>
                 <button class="ios-modal-close" style="background: transparent; color: var(--text-muted); border: 2px solid #e2e8f0; box-shadow: none; padding: 14px;" onclick="closeIosModal()">אנסה מאוחר יותר</button>
@@ -684,9 +587,9 @@
 
             <!-- מצב 3: חלופת גיבוי לאנדרואיד -->
             <div id="modal-android-content" class="ios-modal-content" style="display: none;">
-                <div style="font-size: 44px; margin-bottom: 12px; animation: float-main 3s infinite ease-in-out;">☀️</div>
-                <h3 style="font-size: 24px; font-weight: 900; margin-bottom: 16px; color: var(--text-main); letter-spacing: -0.5px;">התקנת "נטו"</h3>
-                <div style="font-size: 16px; font-weight: 600; color: var(--text-main); line-height: 1.6; text-align: right; background: #f8fafc; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
+                <div style="font-size: calc(44px * var(--text-scale, 1)); margin-bottom: 12px; animation: float-main 3s infinite ease-in-out;" aria-hidden="true">☀️</div>
+                <h3 style="font-size: calc(24px * var(--text-scale, 1)); font-weight: 900; margin-bottom: 16px; color: var(--text-main); letter-spacing: -0.5px;">התקנת "נטו"</h3>
+                <div style="font-size: calc(16px * var(--text-scale, 1)); font-weight: 600; color: var(--text-main); line-height: 1.6; text-align: right; background: #f8fafc; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
                     <p>לחצו על תפריט הדפדפן (שלוש הנקודות למעלה <b>⋮</b>) ובחרו בשורה <b>"הוספה למסך הבית"</b> (Add to Home Screen / Install App).</p>
                 </div>
                 <button class="ios-modal-close" style="background: #fef08a; color: #854d0e; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.15);" onclick="closeIosModal()">הבנתי, תודה!</button>
@@ -694,72 +597,60 @@
         </div>
 
         <!-- מודל ה-VIP (מותאם לסרטון מ-Google Drive) -->
-        <div id="vip-modal" class="ios-modal-overlay" style="align-items: center; z-index: 9999;">
+        <div id="vip-modal" class="ios-modal-overlay" style="align-items: center; z-index: 9999;" role="dialog" aria-modal="true" aria-label="הרשמה להרוויח כסף">
             <div class="ios-modal-content" style="max-width: 400px; max-height: 95vh; overflow-y: auto; position: relative; text-align: right; padding: 35px 25px;">
-                <button onclick="closeVipModal()" style="position: absolute; top: 15px; left: 15px; background: none; border: none; font-size: 24px; color: #cbd5e1; cursor: pointer; padding: 5px; line-height: 1;">✖</button>
+                <button onclick="closeVipModal()" aria-label="סגור חלון" style="position: absolute; top: 15px; left: 15px; background: none; border: none; font-size: calc(24px * var(--text-scale, 1)); color: #cbd5e1; cursor: pointer; padding: 5px; line-height: 1;">✖</button>
 
-                <h3 style="font-size: 22px; font-weight: 900; color: #1e293b; margin-bottom: 25px; line-height: 1.3;">רוצים להרוויח כסף וחוויות? 💵</h3>
+                <h3 style="font-size: calc(22px * var(--text-scale, 1)); font-weight: 900; color: #1e293b; margin-bottom: 25px; line-height: 1.3;">רוצים להרוויח כסף וחוויות? 💵</h3>
                 
-                <!-- מעטפת הסרטון -->
                 <div style="position: relative; width: 80%; max-width: 240px; margin: 0 auto 15px auto;">
-                    
-                    <!-- אזור סרטון אנכי (טוען מ-Cloudinary) -->
                     <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 2px solid #fde047; background: #000; position: relative; aspect-ratio: 9/16;">
-                        
-                        <!-- שכבת זכוכית שקופה שלוכדת לחיצות ועושה פליי/פאוס, ומשאירה כ-55 פיקסלים פנויים למטה לסרגל המובנה -->
-                        <div onclick="togglePromoVideo()" style="position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 55px); z-index: 5; cursor: pointer;"></div>
+                        <div onclick="togglePromoVideo()" style="position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 55px); z-index: 5; cursor: pointer;" aria-label="נגן או עצור סרטון" role="button"></div>
 
-                        <!-- מסך פתיחה שחור עם הנחיה - נעלם כשמתחיל לנגן -->
-                        <div id="video-click-hint" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; pointer-events: none; transition: opacity 0.3s;">
-                            <div style="color: white; font-weight: 800; font-size: 15px; margin-bottom: 4px;">יוצר האתר ממליץ</div>
-                            <div style="color: white; font-weight: 900; font-size: 16px; margin-bottom: 15px; letter-spacing: 0.5px;">לגילאי 14+</div>
-                            <div style="font-size: 50px; margin-bottom: 15px; animation: subtle-jump 2s infinite;">▶️</div>
-                            <div style="color: white; font-weight: 900; font-size: 18px; letter-spacing: 0.5px;">הקליקו לתחילת הסרטון</div>
+                        <div id="video-click-hint" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; pointer-events: none; transition: opacity 0.3s;" aria-hidden="true">
+                            <div style="color: white; font-weight: 800; font-size: calc(15px * var(--text-scale, 1)); margin-bottom: 4px;">יוצר האתר ממליץ</div>
+                            <div style="color: white; font-weight: 900; font-size: calc(16px * var(--text-scale, 1)); margin-bottom: 15px; letter-spacing: 0.5px;">לגילאי 14+</div>
+                            <div style="font-size: calc(50px * var(--text-scale, 1)); margin-bottom: 15px; animation: subtle-jump 2s infinite;">▶️</div>
+                            <div style="color: white; font-weight: 900; font-size: calc(18px * var(--text-scale, 1)); letter-spacing: 0.5px;">הקליקו לתחילת הסרטון</div>
                         </div>
 
-                        <!-- הסרטון (הוספנו onended שמדליק את האנימציה) -->
-                        <video id="promo-video" width="100%" height="100%" controls playsinline preload="metadata" style="display: block; object-fit: cover; width: 100%; height: 100%;" onplay="document.getElementById('video-click-hint').style.display='none';" onended="highlightCopyButton()">
+                        <video id="promo-video" aria-label="סרטון הסבר על הרשמה לטינק" width="100%" height="100%" controls playsinline preload="metadata" style="display: block; object-fit: cover; width: 100%; height: 100%;" onplay="document.getElementById('video-click-hint').style.display='none';" onended="highlightCopyButton()">
                             <source id="promo-source" src="https://res.cloudinary.com/dxqmlklfc/video/upload/8mb.video-uwo-wvgmRfFE_l79qtf.mp4" type="video/mp4">
                             הדפדפן שלך לא תומך בהצגת סרטונים.
                         </video>
                     </div>
                 </div>
                 
-                <p style="font-weight: 500; font-size: 15px; color: #475569; margin-bottom: 12px; line-height: 1.5;">
+                <p style="font-weight: 500; font-size: calc(15px * var(--text-scale, 1)); color: #475569; margin-bottom: 12px; line-height: 1.5;">
                     כדי להירשם ולהרוויח כסף, <span style="color: #ca8a04; font-weight: 800;">בבקשה</span> מלאו בטופס את שני הפרטים הבאים (בשאלה "הגעתם דרך חבר?"):
                 </p>
 
-                <!-- אזור הפרטים (שני השדות בולטים וברורים) -->
                 <div style="background: #fffdf0; padding: 12px; border-radius: 16px; border: 2px solid #fcd34d; margin-bottom: 15px;">
-                    
                     <div class="copy-data-row" style="margin-bottom: 10px; border-color: #fde047; box-shadow: none; padding: 10px 12px;">
                         <div>
-                            <div style="font-size: 12px; color: #b45309; margin-bottom: 2px; font-weight: 700;">1. שם החבר:</div>
-                            <div style="font-weight: 900; font-size: 19px; color: #0f172a;">חופש</div>
+                            <div style="font-size: calc(12px * var(--text-scale, 1)); color: #b45309; margin-bottom: 2px; font-weight: 700;">1. שם החבר:</div>
+                            <div style="font-weight: 900; font-size: calc(19px * var(--text-scale, 1)); color: #0f172a;">חופש</div>
                         </div>
                     </div>
 
                     <div class="copy-data-row" style="margin-bottom: 0; border-color: #fde047; box-shadow: none; padding: 10px 12px;">
                         <div>
-                            <div style="font-size: 12px; color: #b45309; margin-bottom: 2px; font-weight: 700;">2. טלפון החבר:</div>
-                            <div id="phone-number-text" style="font-weight: 900; font-size: 19px; color: #0f172a; user-select: text; -webkit-user-select: text;" dir="ltr">0542633610</div>
+                            <div style="font-size: calc(12px * var(--text-scale, 1)); color: #b45309; margin-bottom: 2px; font-weight: 700;">2. טלפון החבר:</div>
+                            <div id="phone-number-text" style="font-weight: 900; font-size: calc(19px * var(--text-scale, 1)); color: #0f172a; user-select: text; -webkit-user-select: text;" dir="ltr">0542633610</div>
                         </div>
-                        <!-- קיצור הטקסט כך שייכנס מושלם גם במסכים צרים -->
-                        <button id="dedicated-copy-btn" class="copy-btn-small" onclick="copyPhoneNumber(this)">העתק 📋</button>
+                        <button id="dedicated-copy-btn" class="copy-btn-small" aria-label="העתק מספר טלפון" onclick="copyPhoneNumber(this)">העתק 📋</button>
                     </div>
                 </div>
 
-                <!-- הודעה קופצת - מוסתרת מראש ותקפוץ רק אם ינסו לעבור בלי להעתיק -->
-                <div id="small-request-alert" style="display: none; background: #f0fdfa; border: 2px solid #5eead4; border-radius: 16px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(94, 234, 212, 0.15); animation: fadeIn 0.4s ease-out;">
-                    <div style="font-weight: 900; font-size: 16px; color: #0f766e; margin-bottom: 8px;">רגע, בקשה קטנה ממני 🙏</div>
-                    <p style="font-size: 14px; color: #115e59; line-height: 1.5; font-weight: 500; margin-bottom: 0;">
+                <div id="small-request-alert" style="display: none; background: #f0fdfa; border: 2px solid #5eead4; border-radius: 16px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(94, 234, 212, 0.15); animation: fadeIn 0.4s ease-out;" aria-live="assertive">
+                    <div style="font-weight: 900; font-size: calc(16px * var(--text-scale, 1)); color: #0f766e; margin-bottom: 8px;">רגע, בקשה קטנה ממני 🙏</div>
+                    <p style="font-size: calc(14px * var(--text-scale, 1)); color: #115e59; line-height: 1.5; font-weight: 500; margin-bottom: 0;">
                         האתר פועל בחינם, ואשמח ממש אם תפרגנו ותעזרו לאתר להמשיך לעבוד! 
                         <br><b>אנא הקפידו לרשום "חופש" ולהעתיק את המספר</b>. זה לא עולה לכם כלום, ולי זה עוזר המון. תודה! ❤️
                     </p>
                 </div>
 
-                <!-- כפתור מעבר סופי -->
-                <button class="vip-funnel-btn no-flicker" style="margin-top: 0; padding: 18px; font-size: 16.5px; box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);" onclick="attemptRegistration()">
+                <button class="vip-funnel-btn no-flicker" style="margin-top: 0; padding: 18px; font-size: calc(16.5px * var(--text-scale, 1)); box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);" onclick="attemptRegistration()">
                     מעבר להרשמה >>
                 </button>
             </div>
@@ -769,159 +660,38 @@
     <script>
         const smartTipsDb = {
             atzmaut: {
-                far: [
-                    "טיפ למנגל: לנפנף על המנגל שורף בדיוק את אותן קלוריות כמו להצביע בשיעור מתמטיקה. 🥩",
-                    "תזכורת: ביום העצמאות כולנו פתאום מפתחים כושר ריצה של אלוף אולימפי, רק כדי לברוח מילד עם ספריי שלג. 🏃‍♂️💨",
-                    "משימת היום: תתחילו להתאמן על התירוץ 'נשאר לי ספריי שלג בעין מיום העצמאות' כדי לאחר לשיעור. 👁️❄️",
-                    "טיפ אסטרטגי: לקנות פטיש פלסטיק עכשיו, לפני שהמחירים עולים ליותר מהדמי כיס שלכם. 🔨💸",
-                    "עובדה מדעית: אי אפשר לעשות שיעורי בית כשברקע יש מוזיקה של פסטיגל בפול ווליום מהרחוב. אל תנסו. 🎶"
-                ],
-                close: [
-                    "הכנה מנטלית: בעוד כמה ימים השיער שלכם הולך להפוך לגוש דביק של קצף חוטים. תהנו! 🕸️💇‍♂️",
-                    "טיפ: אם המורה שואלת למה לא הכנתם שיעורים, תגידו שהייתם עסוקים בלבנות חומה נגד מתקפות ספריי שלג. 🏰❄️",
-                    "דילמה: האם מכה מפטיש פלסטיק לראש נחשבת פציעת ספורט שמשחררת משיעור חינוך גופני? 🔨🤔",
-                    "טיפ כלכלי: אל תקנו ספריי שלג בתוך הפארק ב-50 שקל, תביאו מהסטוק בבית. 💰❄️",
-                    "משימה: לנסות לא לאבד את החברים שלכם בתוך כל העשן של המנגלים. 🥩👀"
-                ],
-                tomorrow: [
-                    "הוראת היום: מחר מצטיידים בנשק חם (ספריי שלג) ויוצאים לקרב! אין שיעורי בית, יש רק הישרדות. ❄️🛡️",
-                    "טיפ למחר: תאכלו כמה שיותר פיתות עם חומוס. זה הדלק שלכם לברוח מילדים עם פטישים. 🥙🏃‍♀️",
-                    "הכנה למחר: תדאגו לנעלי ריצה טובות. תצטרכו אותן כדי לחמוק מהמטחים של הספריי שלג. 👟❄️"
-                ]
+                far: ["טיפ למנגל: לנפנף על המנגל שורף בדיוק את אותן קלוריות כמו להצביע בשיעור מתמטיקה. 🥩", "תזכורת: ביום העצמאות כולנו פתאום מפתחים כושר ריצה של אלוף אולימפי, רק כדי לברוח מילד עם ספריי שלג. 🏃‍♂️💨", "משימת היום: תתחילו להתאמן על התירוץ 'נשאר לי ספריי שלג בעין מיום העצמאות' כדי לאחר לשיעור. 👁️❄️"],
+                close: ["הכנה מנטלית: בעוד כמה ימים השיער שלכם הולך להפוך לגוש דביק של קצף חוטים. תהנו! 🕸️💇‍♂️", "טיפ: אם המורה שואלת למה לא הכנתם שיעורים, תגידו שהייתם עסוקים בלבנות חומה נגד מתקפות ספריי שלג. 🏰❄️", "דילמה: האם מכה מפטיש פלסטיק לראש נחשבת פציעת ספורט שמשחררת משיעור חינוך גופני? 🔨🤔"],
+                tomorrow: ["הוראת היום: מחר מצטיידים בנשק חם (ספריי שלג) ויוצאים לקרב! אין שיעורי בית, יש רק הישרדות. ❄️🛡️", "טיפ למחר: תאכלו כמה שיותר פיתות עם חומוס. זה הדלק שלכם לברוח מילדים עם פטישים. 🥙🏃‍♀️"]
             },
             lagbaomer: {
-                far: [
-                    "משימת היום: תתחילו לסמן אילו מחברות של איזה מקצוע הולכות להיות חומר בערה בל\"ג בעומר. 🔥📖",
-                    "אסטרטגיה: זה הזמן להציע למורה לאסוף את דפי העבודה הישנים 'למחזור'. (לפח המיחזור של המדורה). ♻️🔥",
-                    "טיפ איסוף קרשים: כל כיסא שבור בבית הספר פתאום נראה כמו אוצר פוטנציאלי. אל תתפתו! 🪑👀",
-                    "עובדה: 'הכלב אכל לי את שיעורי הבית' - אאוט. 'השיעורים נפלו לי בטעות למדורה' - אין! 🔥🐶"
-                ],
-                close: [
-                    "הכנה למקלחת: בעוד כמה ימים כולנו הולכים להריח כמו קרטון שרוף ומרשמלו. תכינו את השמפו! 🚿🔥",
-                    "טיפ ארגון: אל תשכחו להביא תפוחי אדמה. אף אחד לא באמת אוכל אותם, אבל זה קריטי לאווירה. 🥔",
-                    "אזהרה: אל תזרקו למדורה את המחברת של מדעים אם יש שם עדיין חומר למבחן. בדקנו, זה פחות משתלם. 📉🔥",
-                    "היערכות לוגיסטית: ודאו שיש מספיק מרשמלו. תפוחי אדמה זה יפה, אבל מרשמלו זה החיים. 🍢🔥",
-                    "זיהוי סכנות: תתרחקו מהילד שמחזיק את הבקבוק שמן, הוא לוקח את המדורה ברצינות מדי. 🛢️🏃‍♂️"
-                ],
-                tomorrow: [
-                    "חוק פיזיקלי למדורה מחר: לא משנה איפה תשבו, העשן תמיד יעקוב אחריכם. תמיד. 💨👀",
-                    "טיפ למחר: אם תפוח האדמה שחור מבחוץ וקפוא מבפנים - ברכות, עשיתם את זה נכון! 🥔🔥",
-                    "אזהרה למחר: אם אתם הולכים להביא גיטרה למדורה, תוודאו שאתם יודעים לנגן יותר משיר אחד. 🎸🔥"
-                ]
+                far: ["משימת היום: תתחילו לסמן אילו מחברות של איזה מקצוע הולכות להיות חומר בערה בל\"ג בעומר. 🔥📖", "אסטרטגיה: זה הזמן להציע למורה לאסוף את דפי העבודה הישנים 'למחזור'. (לפח המיחזור של המדורה). ♻️🔥", "עובדה: 'הכלב אכל לי את שיעורי הבית' - אאוט. 'השיעורים נפלו לי בטעות למדורה' - אין! 🔥🐶"],
+                close: ["הכנה למקלחת: בעוד כמה ימים כולנו הולכים להריח כמו קרטון שרוף ומרשמלו. תכינו את השמפו! 🚿🔥", "טיפ ארגון: אל תשכחו להביא תפוחי אדמה. אף אחד לא באמת אוכל אותם, אבל זה קריטי לאווירה. 🥔", "אזהרה: אל תזרקו למדורה את המחברת של מדעים אם יש שם עדיין חומר למבחן. בדקנו, זה פחות משתלם. 📉🔥"],
+                tomorrow: ["חוק פיזיקלי למדורה מחר: לא משנה איפה תשבו, העשן תמיד יעקוב אחריכם. תמיד. 💨👀", "טיפ למחר: אם תפוח האדמה שחור מבחוץ וקפוא מבפנים - ברכות, עשיתם את זה נכון! 🥔🔥"]
             },
             shavuot: {
-                far: [
-                    "משימת היום: תתחילו להתאמן על זריקת בלון מים מטווח רחוק. גם בפיזיקה זה נחשב לניסוי. 🎈📐",
-                    "הכנת הקיבה: החג שבו פשטידה זה לגיטימי לגמרי בדרך. תכינו מקום בבטן. 🥧",
-                    "דילמה: איך לובשים לבן לבית הספר מבלי לחזור הביתה עם כתם של שוקו מהקפיטריה? בלתי אפשרי. 🥛👕",
-                    "טיפ תזונתי: הגיע הזמן לפתוח דיאטה מראש לקראת כמות הפחמימות והגבינות של החג. 🧀📈",
-                    "נקודת אור: החופש של שבועות בדרך! עוד קצת ואפשר לישון עד מאוחר בתירוץ של חג. 🛌"
-                ],
-                close: [
-                    "טיפ: זה הזמן לוודא שיש לכם חולצה לבנה בארון שלא אכפת לכם שהיא תהפוך לשקופה ממלחמת מים. 👕💦",
-                    "אזהרת חלב: הכינו את הבטן לכמויות של גבינה שיגרמו לכם לישון יומיים ברצף. 🧀😴",
-                    "הכנה מנטלית: תכינו את עצמכם לריח של חמוץ-מתוק שישתלט על השכונה. זה רק טנא, לא לדאוג. 🧺🌿",
-                    "משימה יומית: זה הזמן להתחיל לחפש תירוצים ללמה לא תכינו עבודות בחג. 🤔",
-                    "אזהרת בטיחות: מלחמת מים במסדרון של בית הספר נראית כמו רעיון טוב, עד שהמנהלת מחליקה. 🏃‍♂️💦"
-                ],
-                tomorrow: [
-                    "הוראת היום: מחר חופש! מותר להירטב מכף רגל ועד ראש, לאכול עוגת גבינה ולשכוח שמערכת השעות קיימת. 🍰💦",
-                    "האתגר של מחר: לסיים את הארוחה הלבנה בלי להכתים את החולצה. המשימה תיכשל כנראה. 👕🧀",
-                    "חזון מחר: תקומו בצהריים, תאכלו פשטידה, ותחזרו לישון. מעגל החיים של שבועות. 🛌🥧",
-                    "טיפ למחר: תאכלו הרבה גבינות, שיהיה לכם כוח לברוח מאלה עם דליי המים ברחוב! 🧀🏃‍♀️"
-                ]
+                far: ["משימת היום: תתחילו להתאמן על זריקת בלון מים מטווח רחוק. גם בפיזיקה זה נחשב לניסוי. 🎈📐", "דילמה: איך לובשים לבן לבית הספר מבלי לחזור הביתה עם כתם של שוקו מהקפיטריה? בלתי אפשרי. 🥛👕", "טיפ תזונתי: הגיע הזמן לפתוח דיאטה מראש לקראת כמות הפחמימות והגבינות של החג. 🧀📈"],
+                close: ["טיפ: זה הזמן לוודא שיש לכם חולצה לבנה בארון שלא אכפת לכם שהיא תהפוך לשקופה ממלחמת מים. 👕💦", "אזהרת חלב: הכינו את הבטן לכמויות של גבינה שיגרמו לכם לישון יומיים ברצף. 🧀😴", "משימה יומית: זה הזמן להתחיל לחפש תירוצים ללמה לא תכינו עבודות בחג. 🤔"],
+                tomorrow: ["הוראת היום: מחר חופש! מותר להירטב מכף רגל ועד ראש, לאכול עוגת גבינה ולשכוח שמערכת השעות קיימת. 🍰💦", "האתגר של מחר: לסיים את הארוחה הלבנה בלי להכתים את החולצה. המשימה תיכשל כנראה. 👕🧀"]
             },
             summer: {
                 elem: {
-                    far: [
-                        "טיפ יומי: זה השלב בשנה שבו התיק מתחיל לשקול פחות, כי הפסקנו להביא ספרים ומביאים רק קלפים ופופ-איט. 🎒⚽",
-                        "עובדה: אם תשאירו סנדוויץ' בתיק מעכשיו ועד ספטמבר, יש סיכוי שהוא יתחיל לעשות שיעורי בית במקומכם. 🥪🧟‍♂️",
-                        "הבנת המציאות: כשהמורה אומרת 'אני אחכה שיהיה שקט', פשוט תחשבו בלב 'סבבה, אנחנו נחכה לחופש הגדול'. 🤫⏳",
-                        "תכנון: במקום לפתור תרגילים בחשבון, הגיע הזמן לחשב כמה שעות נשארו עד שמותר לישון עד 11:00 בבוקר. 🧮🛌",
-                        "יצירה: המחברת של מולדת הפכה רשמית למפעל לייצור מטוסי נייר כיתתי. ✈️📄",
-                        "הידעתם? המחק שלכם קטן לא כי השתמשתם בו, אלא כי הוא מנסה לברוח מהקלמר מרוב שעמום. ✏️🏃",
-                        "משימה: נסו לספור כמה פעמים ביום המורה אומרת 'הצלצול הוא בשבילי'. המנצח זוכה בארטיק. 🔔🍦"
-                    ],
-                    mid: [
-                        "זיהוי קיץ: אפשר כבר להריח את הכלור של הבריכה מתוך הכיתה. אל תתייאשו! 🏊‍♂️",
-                        "הצעת ייעול: הגיע הזמן להתחיל 'לאבד' ציוד בקלמר כדי שלא תצטרכו לעשות שיעורי בית. 'המורה, נגמרה לי העופרת!' ✏️🤷‍♂️",
-                        "מחשבה יומית: צלצול לסוף שיעור הוא לא סתם רעש, הוא מוזיקת מלאכים שמקרבת אותנו לחופש הגדול. 🔔👼",
-                        "אזהרת מסע: אם תחפשו טוב בתחתית התיק, תמצאו שם דף קשר מקומט, עיפרון שבור ותקווה לקיץ. 🎒🕵️",
-                        "טיפ: זה הזמן ללמוד איך מקפלים פתק קטן שיכול לעבור 4 שולחנות בלי שהמורה תשים לב. 📝🥷"
-                    ],
-                    close: [
-                        "עדכון שטח: משחקי התופסת בהפסקה הפכו לאימון רשמי של הימלטות מבית הספר ביום האחרון ללימודים. 🏃‍♂️💨",
-                        "הוראת ציוד: מעכשיו מותר להביא לכיתה רק טאקי, קלפי כדורגל וחלומות על ארטיק רמזור. 🎨🃏",
-                        "טיפ סטיילינג: כפכפים לבית הספר זה לא זלזול, זו הצהרת כוונות על כך שהקיץ כבר כאן. 🩴☀️",
-                        "הצהרה: הקלמר שלכם נראה כרגע כמו זירת פשע של טושים פתוחים בלי פקק. לא נורא, סוף השנה! 🖍️🚔",
-                        "הישג: הגעתם לשלב שבו להביא יומן לבית ספר זו המלצה בלבד. גם ככה אף אחד לא רושם שם כלום. 📓🤷‍♂️"
-                    ],
-                    veryClose: [
-                        "הנחיה למחר: מחר היום האחרון!! תכינו את בגדי הים, סיימנו עם שעורי הבית לשנה הקרובה! 🏖️🍉",
-                        "מחר תעודות: לוקחים אותן, אומרים יפה תודה, מכניסים עמוק למגירה ורצים לים! 📜🏃‍♂️",
-                        "הכנות לבוקר: מחר אין צלצול, אין תיק כבד ואין 'להוציא מחברות'. הגיע הזמן לחגוג! 🎉🍉"
-                    ]
+                    far: ["טיפ יומי: זה השלב בשנה שבו התיק מתחיל לשקול פחות, כי הפסקנו להביא ספרים ומביאים רק קלפים ופופ-איט. 🎒⚽", "עובדה: אם תשאירו סנדוויץ' בתיק מעכשיו ועד ספטמבר, יש סיכוי שהוא יתחיל לעשות שיעורי בית במקומכם. 🥪🧟‍♂️", "הבנת המציאות: כשהמורה אומרת 'אני אחכה שיהיה שקט', פשוט תחשבו בלב 'סבבה, אנחנו נחכה לחופש הגדול'. 🤫⏳"],
+                    mid: ["זיהוי קיץ: אפשר כבר להריח את הכלור של הבריכה מתוך הכיתה. אל תתייאשו! 🏊‍♂️", "הצעת ייעול: הגיע הזמן להתחיל 'לאבד' ציוד בקלמר כדי שלא תצטרכו לעשות שיעורי בית. 'המורה, נגמרה לי העופרת!' ✏️🤷‍♂️", "מחשבה יומית: צלצול לסוף שיעור הוא לא סתם רעש, הוא מוזיקת מלאכים שמקרבת אותנו לחופש הגדול. 🔔👼"],
+                    close: ["עדכון שטח: משחקי התופסת בהפסקה הפכו לאימון רשמי של הימלטות מבית הספר ביום האחרון ללימודים. 🏃‍♂️💨", "הוראת ציוד: מעכשיו מותר להביא לכיתה רק טאקי, קלפי כדורגל וחלומות על ארטיק רמזור. 🎨🃏", "טיפ סטיילינג: כפכפים לבית הספר זה לא זלזול, זו הצהרת כוונות על כך שהקיץ כבר כאן. 🩴☀️"],
+                    veryClose: ["הנחיה למחר: מחר היום האחרון!! תכינו את בגדי הים, סיימנו עם שעורי הבית לשנה הקרובה! 🏖️🍉", "מחר תעודות: לוקחים אותן, אומרים יפה תודה, מכניסים עמוק למגירה ורצים לים! 📜🏃‍♂️"]
                 },
                 middle: {
-                    far: [
-                        "עובדת חיים: לקום ב-7 בבוקר זה פשע. החופש מתקרב, תחזיקו מעמד רק עוד קצת עם העיניים פקוחות. 😴✊",
-                        "טיפ למידה: לצאת לשירותים באמצע שיעור מתמטיקה זה לא צורך פיזי, זה נטו צורך נפשי להשתחרר. 🚽🏃‍♂️",
-                        "תירוץ אומנותי: 'המורה, אני לא מקשקש במחברת, אני מסכם את החומר חזותית בצורת מפלצת'. 🎨🎓",
-                        "אם היה ציון על 'הסוואת טלפון ואוזניות מתחת לקפוצ'ון', כולנו היינו במחוננים עכשיו. 📱🥷",
-                        "טיפ כלכלי: תפסיקו לקנות אוכל בקיוסק. תחסכו את הכסף לקניית אבטיח וקרטיבים בחופש! 💳🍉",
-                        "הגדרת 'למידה' ביוני: לבהות במאוורר התקרה ולספור כמה סיבובים הוא עושה בדקה. 🌀👀",
-                        "מילון חטיבה: 'שכחתי את המחברת' = לא עשיתי שיעורי בית ואני מקווה שלא תבקשי לראות. 📓😬"
-                    ],
-                    mid: [
-                        "פילוסופיה: הזמן שלוקח למורה להפעיל את המקרן בשיעור, מרגיש לפעמים ארוך יותר מכל החופש הגדול. 📽️🤦‍♂️",
-                        "תופעת טבע: לצאת עכשיו לשירותים אומר לפגוש את כל השכבה במסדרון עושה בדיוק את אותו הדבר. 🚶‍♂️🚽",
-                        "הישרדות: המזגן בכיתה מכוון או על כבשן או על סיביר. תמיד תביאו סוודר, גם אם בחוץ 30 מעלות. ❄️🔥",
-                        "דילמה: המורה אומרת שזה חומר למבחן. המוח שלכם עסוק בלשחזר את הפרק האחרון שראיתם בנטפליקס. 📺🧠",
-                        "טיפ יומי: קשר עין עם המורה זה מלכודת. תסתכלו על המחברת במבט חושב ותהנהנו מדי פעם. 🤓✍️"
-                    ],
-                    close: [
-                        "אסטרטגיה: לבהות בנקודה בקיר ולדמיין שאתם כרגע ביוון הכל כלול. זה מעביר יופי את שעת אפס. 🇬🇷💭",
-                        "הבנת המציאות: בשלב הזה מגיעים לבית ספר רק בשביל המזגן ובשביל לצחוק עם חברים. הלימודים הם רק בונוס. ❄️😂",
-                        "הישג אקדמי: התיק נשאר בבית, מגיעים רק עם טלפון, מטען ושקית ניילון מהסופר. הניצחון קרוב! 🛍️🏆",
-                        "סקר נוכחות: מי שעוד יושב בכיתה עכשיו הם רק אלה שהגיעו לגבול חיסורי האחוזים. גיבורים בעל כורחכם! 🚷",
-                        "זיהוי עייפות: לנסות למחוק טעות במחברת עם האצבע כאילו זה מסך מגע. הגיע הזמן לישון. 🖐️📓"
-                    ],
-                    veryClose: [
-                        "סריקת מלאי: נשארתם בקלמר עם עט אחד שמצאתם על הרצפה, והוא בכלל כותב בירוק. זה מספיק לשבוע האחרון. 🖊️✨",
-                        "הצהרה: נלחמתם, שרדתם, שמעתם חפירות. עכשיו מותר לכם לאבד ריכוז לחלוטין ולחשוב רק על הים. 🔥🏆",
-                        "הכנה אחרונה: מחר תגלו מחדש איך נראה אור שמש ב-10 בבוקר, במקום אור הפלורסנט המרצד. ☀️🏄‍♂️",
-                        "זהו, נגמר! לא נשאר לכם שום תירוץ להישאר ערים עד מאוחר חוץ מזה שפשוט... מותר לכם. 🌃🎮"
-                    ]
+                    far: ["עובדת חיים: לקום ב-7 בבוקר זה פשע. החופש מתקרב, תחזיקו מעמד רק עוד קצת עם העיניים פקוחות. 😴✊", "טיפ למידה: לצאת לשירותים באמצע שיעור מתמטיקה זה לא צורך פיזי, זה נטו צורך נפשי להשתחרר. 🚽🏃‍♂️", "תירוץ אומנותי: 'המורה, אני לא מקשקש במחברת, אני מסכם את החומר חזותית בצורת מפלצת'. 🎨🎓"],
+                    mid: ["פילוסופיה: הזמן שלוקח למורה להפעיל את המקרן בשיעור, מרגיש לפעמים ארוך יותר מכל החופש הגדול. 📽️🤦‍♂️", "תופעת טבע: לצאת עכשיו לשירותים אומר לפגוש את כל השכבה במסדרון עושה בדיוק את אותו הדבר. 🚶‍♂️🚽", "הישרדות: המזגן בכיתה מכוון או על כבשן או על סיביר. תמיד תביאו סוודר, גם אם בחוץ 30 מעלות. ❄️🔥"],
+                    close: ["אסטרטגיה: לבהות בנקודה בקיר ולדמיין שאתם כרגע ביוון הכל כלול. זה מעביר יופי את שעת אפס. 🇬🇷💭", "הבנת המציאות: בשלב הזה מגיעים לבית ספר רק בשביל המזגן ובשביל לצחוק עם חברים. הלימודים הם רק בונוס. ❄️😂", "הישג אקדמי: התיק נשאר בבית, מגיעים רק עם טלפון, מטען ושקית ניילון מהסופר. הניצחון קרוב! 🛍️🏆"],
+                    veryClose: ["סריקת מלאי: נשארתם בקלמר עם עט אחד שמצאתם על הרצפה, והוא בכלל כותב בירוק. זה מספיק לשבוע האחרון. 🖊️✨", "הצהרה: נלחמתם, שרדתם, שמעתם חפירות. עכשיו מותר לכם לאבד ריכוז לחלוטין ולחשוב רק על הים. 🔥🏆"]
                 },
                 high: {
-                    far: [
-                        "טיפ אסטרטגי: למה ללמוד חודש מראש לבגרות, כשאפשר להיזכר ללמוד לילה לפני עם המון פאניקה וקפה? ☕😱",
-                        "זמן מחצית החיים של חומר לבגרות במוח: בדיוק 4 דקות אחרי שמגישים את המבחן לבוחנת. 🧠🗑️",
-                        "עובדה: תלמידי תיכון בתקופה הזאת מורכבים מ-90% אקסל, 5% ייאוש ו-5% רצון להיות בים. 🔋🌊",
-                        "טיפ לשיעור ספורט: בשעה השביעית זה לא שיעור, זו המלצה חמה למצוא את החור הקרוב בגדר ולחתוך הביתה. 🏃‍♀️💨",
-                        "תכנון: זמן מעולה לשבת בשיעור ולחשב בדיוק כמה אחוזים צריך במגן כדי לעבור את הבגרות ב-55. 🧮🤔",
-                        "טיפ לבגרות: 'תהליכים היסטוריים מורכבים ושינויים תרבותיים' זו תשובה שנשמעת נכון ל-90% מהשאלות. 📝😎",
-                        "מילון תיכון: 'אני בדרך' = הרגע פקחתי עיניים ואני שוקל אם תעודת בגרות זה באמת חובה להמשך החיים. 🛌"
-                    ],
-                    mid: [
-                        "תירוץ אמין להיום: 'איחרתי כי נתקעתי בפקק מנטלי עצום בין המיטה שלי לדלת של החדר'. 🚌",
-                        "אזהרת בולשיט: מורים אומרים 'החומר הזה ילווה אתכם לכל החיים'. במציאות אנחנו צריכים רק גוגל ווייז. 🗺️📱",
-                        "כישורי למידה: לחפש ביוטיוב 'איך ללמוד לבגרות באזרחות ב-3 דקות' לא באמת נחשב למידה. ניסינו. 💻",
-                        "דיאטת בגרויות: התזונה מבוססת כרגע על פריכיות, שוקולד וחוסר שעות שינה. 🍫😵‍💫"
-                    ],
-                    close: [
-                        "מוטיבציה פירומנית: לחשוב על המדורה שבה תשרפו את כל הסיכומים ברגע שתסתיים הבגרות. 🔥📚",
-                        "האמת הכואבת: אין בגידה נוראית יותר ממורה שמבטיחה 'לשחרר מוקדם' ובסוף משאירה אתכם עד הצלצול. 😤🔔",
-                        "טיפ לקראת הסוף: אל תבכו על שיעורי בית שלא עשיתם, תשמחו על אלו שלא תצטרכו לעשות חודשיים שלמים! 📝🚫",
-                        "הסחת דעת: להעביר מרקר צהוב סתם על משפטים אקראיים בספר כדי שהמורה תחשוב שאתם לומדים בשיא הריכוז. 🖍️😎",
-                        "נוהל שעת אפס: כולם נראים במסדרון כמו ניצבים בסדרת זומבים. אין מה לדאוג, התרופה (החופש) בדרך. 🧟‍♂️💊"
-                    ],
-                    veryClose: [
-                        "מבט לאחור: הדמעות, הייאוש, הפחיות הריקות... הכל היה שווה את הרגע שבו סוגרים ת'דלת ובורחים לים. 🎥👏",
-                        "עדכון ציוד מקיף: התיק נשאר נטוש בבית. מגיעים לבגרות האחרונה עם עט, תעודת זהות ואנרגיה של פנסיונר. 🛍️",
-                        "הכרזת עצמאות: מחקו את המשוואות, תעיפו את צילומי המסך של הסיכומים בטלפון - החופש הגדול מתחיל! 🌊🎉",
-                        "הכנה סופית: ודאו שיש לכם מספיק קרם הגנה ותוכניות לא לעשות כלום בחודשיים הקרובים. אתם משוחררים! 🧴🏖️"
-                    ]
+                    far: ["טיפ אסטרטגי: למה ללמוד חודש מראש לבגרות, כשאפשר להיזכר ללמוד לילה לפני עם המון פאניקה וקפה? ☕😱", "זמן מחצית החיים של חומר לבגרות במוח: בדיוק 4 דקות אחרי שמגישים את המבחן לבוחנת. 🧠🗑️", "טיפ לשיעור ספורט: בשעה השביעית זה לא שיעור, זו המלצה חמה למצוא את החור הקרוב בגדר ולחתוך הביתה. 🏃‍♀️💨"],
+                    mid: ["תירוץ אמין להיום: 'איחרתי כי נתקעתי בפקק מנטלי עצום בין המיטה שלי לדלת של החדר'. 🚌", "אזהרת בולשיט: מורים אומרים 'החומר הזה ילווה אתכם לכל החיים'. במציאות אנחנו צריכים רק גוגל ווייז. 🗺️📱", "דיאטת בגרויות: התזונה מבוססת כרגע על פריכיות, שוקולד וחוסר שעות שינה. 🍫😵‍💫"],
+                    close: ["מוטיבציה פירומנית: לחשוב על המדורה שבה תשרפו את כל הסיכומים ברגע שתסתיים הבגרות. 🔥📚", "האמת הכואבת: אין בגידה נוראית יותר ממורה שמבטיחה 'לשחרר מוקדם' ובסוף משאירה אתכם עד הצלצול. 😤🔔", "טיפ לקראת הסוף: אל תבכו על שיעורי בית שלא עשיתם, תשמחו על אלו שלא תצטרכו לעשות חודשיים שלמים! 📝🚫"],
+                    veryClose: ["מבט לאחור: הדמעות, הייאוש, הפחיות הריקות... הכל היה שווה את הרגע שבו סוגרים ת'דלת ובורחים לים. 🎥👏", "עדכון ציוד מקיף: התיק נשאר נטוש בבית. מגיעים לבגרות האחרונה עם עט, תעודת זהות ואנרגיה של פנסיונר. 🛍️"]
                 }
             }
         };
@@ -932,13 +702,10 @@
         let timerInterval = null;
         let dailyTipsState = { date: '', targets: {} };
         let confettiFired = false;
-        let deferredPrompt = null; /* גלאבאלע וואַריאַבל פֿאַר ינסטאַלירונג */
-
-        // משתנים לאנימציית המספרים
+        let deferredPrompt = null; 
         let isAnimatingNetDays = false;
         let netDaysAnimationId = null;
 
-        // פונקציית עזר לשליחת אירועים לגוגל אנליטיקס
         function trackEvent(eventName, params = {}) {
             if (typeof gtag === 'function') {
                 gtag('event', eventName, params);
@@ -954,21 +721,11 @@
             { id: 'summerElem', name: 'החופש הגדול', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'elem', icon: '🍉', bg: '#fefce8' }
         ];
 
-        // מנגנון הוספה למסך הבית (PWA)
         function initPWA() {
             const manifestData = {
-                "name": "נטו | מתי החופש הגדול",
-                "short_name": "נטו",
-                "start_url": window.location.href,
-                "display": "standalone",
-                "background_color": "#ffffff",
-                "theme_color": "#ffffff",
-                "icons": [{
-                    "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='white'/%3E%3Ctext x='50' y='54' dominant-baseline='central' text-anchor='middle' font-size='75'%3E☀️%3C/text%3E%3C/svg%3E",
-                    "sizes": "192x192 512x512",
-                    "type": "image/svg+xml",
-                    "purpose": "any maskable"
-                }]
+                "name": "נטו | מתי החופש הגדול", "short_name": "נטו", "start_url": window.location.href, "display": "standalone",
+                "background_color": "#ffffff", "theme_color": "#ffffff",
+                "icons": [{"src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='white'/%3E%3Ctext x='50' y='54' dominant-baseline='central' text-anchor='middle' font-size='75'%3E☀️%3C/text%3E%3C/svg%3E", "sizes": "192x192 512x512", "type": "image/svg+xml", "purpose": "any maskable"}]
             };
             const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
             document.getElementById('manifest-link').setAttribute('href', URL.createObjectURL(manifestBlob));
@@ -981,170 +738,106 @@
 
             const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
 
-            /* באַהאַלטן דעם קנעפּל אויב דער אַפּפּ איז שוין אינסטאַלירט */
             if (isInStandaloneMode()) {
                 const a2hsBtn = document.getElementById('a2hs-btn');
                 if (a2hsBtn) a2hsBtn.style.display = 'none';
             }
 
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-            });
-
-            window.addEventListener('appinstalled', () => {
-                const a2hsBtn = document.getElementById('a2hs-btn');
-                if (a2hsBtn) a2hsBtn.style.display = 'none';
-                deferredPrompt = null;
-            });
+            window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+            window.addEventListener('appinstalled', () => { const a2hsBtn = document.getElementById('a2hs-btn'); if (a2hsBtn) a2hsBtn.style.display = 'none'; deferredPrompt = null; });
         }
 
-        /* פונקציית עזר לזיהוי אם האייפוניסט נמצא בדפדפן "כלוא" כמו גוגל/כרום */
         function detectIOSBrowser() {
             const ua = window.navigator.userAgent;
             const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
             if (!isIOS) return 'not-ios';
-
-            // זיהוי דפדפנים שאינם ספארי באייפון
             const isChrome = /CriOS/.test(ua);
             const isFirefox = /FxiOS/.test(ua);
             const isGoogleApp = /GSA/.test(ua);
             const isInstagram = /Instagram/.test(ua);
             const isFacebook = /FBAV|FBAN/.test(ua);
-
-            if (isChrome || isFirefox || isGoogleApp || isInstagram || isFacebook) {
-                return 'ios-non-safari';
-            }
+            if (isChrome || isFirefox || isGoogleApp || isInstagram || isFacebook) return 'ios-non-safari';
             return 'ios-safari';
         }
 
-        /* פונקציה חכמה לפתיחת חלון ההתקנה בהתאם לסוג הדפדפן */
         function handleA2HS() {
             if (deferredPrompt) {
                 trackEvent('click_install_pwa');
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(() => {
-                    deferredPrompt = null;
-                });
+                deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
             } else {
                 trackEvent('open_ios_install_modal');
-                
-                // בדיקת סוג הדפדפן
                 const iosBrowserType = detectIOSBrowser();
-                
-                // איפוס תצוגות
                 document.getElementById('modal-safari-content').style.display = 'none';
                 document.getElementById('modal-nonsafari-content').style.display = 'none';
                 document.getElementById('modal-android-content').style.display = 'none';
 
-                // הצגת החלונית הרלוונטית
-                if (iosBrowserType === 'not-ios') {
-                    document.getElementById('modal-android-content').style.display = 'block'; // מציג הוראות אנדרואיד
-                } else if (iosBrowserType === 'ios-non-safari') {
-                    document.getElementById('modal-nonsafari-content').style.display = 'block';
-                    trackEvent('showed_nonsafari_warning'); // מעקב אחרי בעיית גוגל
-                } else {
-                    document.getElementById('modal-safari-content').style.display = 'block'; // הוראות ספארי
-                }
+                if (iosBrowserType === 'not-ios') document.getElementById('modal-android-content').style.display = 'block';
+                else if (iosBrowserType === 'ios-non-safari') { document.getElementById('modal-nonsafari-content').style.display = 'block'; trackEvent('showed_nonsafari_warning'); }
+                else document.getElementById('modal-safari-content').style.display = 'block';
                 
                 document.getElementById('ios-modal').style.display = 'flex';
+                document.getElementById('ios-modal').focus();
             }
         }
 
-        /* העתקת כתובת האתר למשתמשי גוגל/כרום באייפון */
         function copySiteUrlForSafari(btn) {
             const copyText = document.getElementById("site-url-input");
             copyText.select();
-            copyText.setSelectionRange(0, 99999); /* תמיכה למובייל */
+            copyText.setSelectionRange(0, 99999);
             document.execCommand("copy");
-            
             trackEvent('copied_url_for_safari');
-            
             btn.innerHTML = "הועתק! ✅";
-            btn.style.background = "#dcfce7";
-            btn.style.color = "#166534";
-            btn.style.borderColor = "#86efac";
-            
-            setTimeout(() => {
-                btn.innerHTML = "העתק";
-                btn.style.background = "#fef08a";
-                btn.style.color = "#854d0e";
-                btn.style.borderColor = "#fde047";
-            }, 3000);
+            btn.style.background = "#dcfce7"; btn.style.color = "#166534"; btn.style.borderColor = "#86efac";
+            setTimeout(() => { btn.innerHTML = "העתק קישור 📋"; btn.style.background = "#fef08a"; btn.style.color = "#854d0e"; btn.style.borderColor = "#fde047"; }, 3000);
         }
 
-        function closeIosModal() {
-            trackEvent('close_ios_install_modal');
-            document.getElementById('ios-modal').style.display = 'none';
-        }
+        function closeIosModal() { trackEvent('close_ios_install_modal'); document.getElementById('ios-modal').style.display = 'none'; }
 
-        // --- פונקציות משפך המרות (VIP) ומנגנון העתקה חכם ---
         let hasCopiedNumber = false;
-        let hasSeenWarning = false; // משתנה חדש שזוכר אם הם כבר ראו את האזהרה
+        let hasSeenWarning = false;
 
         function openVipModal() {
-            // איפוס המשתנים בכל פתיחה מחדש של החלון
             hasCopiedNumber = false;
             hasSeenWarning = false;
             document.getElementById('small-request-alert').style.display = 'none';
-            
-            // מחזיר את המסך השחור אם פתחו את החלון מחדש
             const hint = document.getElementById('video-click-hint');
             if(hint) hint.style.display = 'flex';
             
             const copyBtn = document.getElementById('dedicated-copy-btn');
             if (copyBtn) {
                 copyBtn.innerHTML = "העתק 📋";
-                copyBtn.style.background = "#fef08a";
-                copyBtn.style.color = "#854d0e";
-                copyBtn.style.borderColor = "#fde047";
-                copyBtn.classList.remove('copied'); // הפעלת האנימציה מחדש
-                copyBtn.classList.remove('video-ended-highlight'); // איפוס האנימציה הבולטת
+                copyBtn.style.background = "#fef08a"; copyBtn.style.color = "#854d0e"; copyBtn.style.borderColor = "#fde047";
+                copyBtn.classList.remove('copied'); copyBtn.classList.remove('video-ended-highlight');
             }
             
-            // טעינה עצלה לסרטון (מתחיל להיטען רק עכשיו כשהחלון נפתח!)
             const vidSource = document.getElementById('promo-source');
             const vidElement = document.getElementById('promo-video');
-            if (vidSource && !vidSource.src) {
-                vidSource.src = vidSource.getAttribute('data-src');
-                vidElement.load();
-            }
+            if (vidSource && !vidSource.src) { vidSource.src = vidSource.getAttribute('data-src'); vidElement.load(); }
             
             trackEvent('open_vip_funnel');
             document.getElementById('vip-modal').style.display = 'flex';
+            document.getElementById('vip-modal').focus();
         }
 
         function closeVipModal() {
             document.getElementById('vip-modal').style.display = 'none';
-            // עצירת הסרטון הפנימי ברגע שסוגרים את החלון
             const vid = document.getElementById('promo-video');
-            if (vid && typeof vid.pause === 'function') {
-                vid.pause();
-            }
+            if (vid && typeof vid.pause === 'function') vid.pause();
         }
 
-        // פונקציית פליי/פאוס חכמה שמופעלת על ידי השכבה השקופה
         function togglePromoVideo() {
             const vid = document.getElementById('promo-video');
             if (!vid) return;
-            
-            if (vid.paused) {
-                // הוספת catch מונעת קריסות שקטות אם המשתמש לוחץ מהר מדי
-                vid.play().catch(e => console.log('Video play prevented by browser interaction logic', e));
-            } else {
-                vid.pause();
-            }
+            if (vid.paused) vid.play().catch(e => console.log('Video play prevented', e));
+            else vid.pause();
         }
 
-        // מדליקה את האנימציה הבולטת כשהסרטון מסתיים
         function highlightCopyButton() {
             const copyBtn = document.getElementById('dedicated-copy-btn');
-            if (copyBtn && !copyBtn.classList.contains('copied')) {
-                copyBtn.classList.add('video-ended-highlight');
-            }
+            if (copyBtn && !copyBtn.classList.contains('copied')) copyBtn.classList.add('video-ended-highlight');
         }
 
-        // פונקציית העתקת המספר בלבד
         function copyPhoneNumber(btnElement) {
             const tempInput = document.createElement("input");
             tempInput.value = '0542633610';
@@ -1153,77 +846,41 @@
             document.execCommand("copy");
             document.body.removeChild(tempInput);
             
-            hasCopiedNumber = true; // סימון שהמשתמש ביצע את המשימה
-            trackEvent('copied_number_via_btn'); // דיווח לאנליטיקס: הועתק דרך הכפתור
+            hasCopiedNumber = true; trackEvent('copied_number_via_btn');
             
-            // שינוי עיצוב הכפתור כדי לתת פידבק הצלחה נקי
-            btnElement.classList.remove('video-ended-highlight'); // כיבוי הפעימה
-            btnElement.classList.add('copied'); // עוצר את האנימציה
-            btnElement.innerHTML = "הועתק! ✅";
-            btnElement.style.background = "#dcfce7";
-            btnElement.style.color = "#166534";
-            btnElement.style.borderColor = "#86efac";
+            btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied');
+            btnElement.innerHTML = "הועתק! ✅"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac";
             
-            // אם הבקשה הקטנה הייתה פתוחה כי הוא טעה מקודם - נשנה אותה לתודה
             const alertBox = document.getElementById('small-request-alert');
-            if(alertBox.style.display === 'block') {
-                 alertBox.innerHTML = "<div style='font-weight: 900; color: #0f766e; text-align: center;'>תודה רבה! ❤️ עכשיו אפשר לעבור להרשמה.</div>";
-            }
+            if(alertBox.style.display === 'block') alertBox.innerHTML = "<div style='font-weight: 900; color: #0f766e; text-align: center;'>תודה רבה! ❤️ עכשיו אפשר לעבור להרשמה.</div>";
         }
 
-        // זיהוי העתקה ידנית (לחיצה ארוכה בטלפון והעתקה)
         function setupManualCopyListener() {
             const phoneTextElement = document.getElementById('phone-number-text');
             if (phoneTextElement) {
                 phoneTextElement.addEventListener('copy', function() {
-                    hasCopiedNumber = true;
-                    trackEvent('copied_number_manually'); // דיווח לאנליטיקס: הועתק ידנית בטלפון
-                    
+                    hasCopiedNumber = true; trackEvent('copied_number_manually');
                     const btnElement = document.getElementById('dedicated-copy-btn');
-                    if (btnElement) {
-                        btnElement.classList.remove('video-ended-highlight'); // כיבוי הפעימה
-                        btnElement.classList.add('copied'); // עוצר את האנימציה
-                        btnElement.innerHTML = "הועתק! ✅";
-                        btnElement.style.background = "#dcfce7";
-                        btnElement.style.color = "#166534";
-                        btnElement.style.borderColor = "#86efac";
-                    }
-                    
+                    if (btnElement) { btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied'); btnElement.innerHTML = "הועתק! ✅"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac"; }
                     const alertBox = document.getElementById('small-request-alert');
-                    if(alertBox && alertBox.style.display === 'block') {
-                         alertBox.innerHTML = "<div style='font-weight: 900; color: #0f766e; text-align: center;'>תודה רבה! ❤️ עכשיו אפשר לעבור להרשמה.</div>";
-                    }
+                    if(alertBox && alertBox.style.display === 'block') alertBox.innerHTML = "<div style='font-weight: 900; color: #0f766e; text-align: center;'>תודה רבה! ❤️ עכשיו אפשר לעבור להרשמה.</div>";
                 });
             }
         }
 
-        // פונקציית המעבר (בודקת אם העתיקו קודם, ואם לא - נותנת להם צ'אנס שני)
         function attemptRegistration() {
             const registrationLink = "https://teenk.co.il/teenkerz/"; 
-
             if (hasCopiedNumber) {
-                // העתיק? מעולה, מעבירים אותו מיד
-                trackEvent('success_reg_with_copy'); // דיווח לאנליטיקס: מעבר תקין
-                window.open(registrationLink, '_blank');
+                trackEvent('success_reg_with_copy'); window.open(registrationLink, '_blank');
             } else if (!hasSeenWarning) {
-                // לא העתיק ועוד לא ראה את האזהרה? עוצרים אותו, פותחים את הבקשה הקטנה
-                hasSeenWarning = true; // מסמנים שהוא ראה את האזהרה עכשיו
-                trackEvent('error_tried_reg_without_copy'); // דיווח לאנליטיקס: נחסם כי לא העתיק
+                hasSeenWarning = true; trackEvent('error_tried_reg_without_copy');
                 const alertBox = document.getElementById('small-request-alert');
                 alertBox.style.display = 'block';
-                
-                // אפקט קפיצה קטן לכפתור ההעתקה כדי למשוך את העין
                 const copyBtn = document.getElementById('dedicated-copy-btn');
-                copyBtn.style.transition = 'none';
-                copyBtn.style.transform = 'scale(1.08)';
-                setTimeout(() => {
-                    copyBtn.style.transition = 'all 0.3s';
-                    copyBtn.style.transform = 'scale(1)';
-                }, 200);
+                copyBtn.style.transition = 'none'; copyBtn.style.transform = 'scale(1.08)';
+                setTimeout(() => { copyBtn.style.transition = 'all 0.3s'; copyBtn.style.transform = 'scale(1)'; }, 200);
             } else {
-                 // לא העתיק, אבל כבר ראה את האזהרה? מאפשרים לו לעבור בפעם השנייה
-                 trackEvent('success_reg_ignored_warning'); // דיווח לאנליטיקס: עבר בלי להעתיק בכלל
-                 window.open(registrationLink, '_blank');
+                 trackEvent('success_reg_ignored_warning'); window.open(registrationLink, '_blank');
             }
         }
 
@@ -1231,12 +888,7 @@
             const now = new Date();
             const todayStr = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
             const saved = localStorage.getItem('holiday_calc_daily_tips_v2');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    if (parsed.date === todayStr) { dailyTipsState = parsed; return; }
-                } catch (e) {}
-            }
+            if (saved) { try { const parsed = JSON.parse(saved); if (parsed.date === todayStr) { dailyTipsState = parsed; return; } } catch (e) {} }
             dailyTipsState = { date: todayStr, targets: {} };
         }
 
@@ -1244,7 +896,6 @@
 
         function renderTipBox(targetId, isNewlyClicked = false) {
             let currentState = dailyTipsState.targets[targetId];
-            // תמיכה בגרסאות קודמות ששמרו רק מספר
             if (typeof currentState === 'number') currentState = { clicks: currentState, texts: [] };
             if (!currentState) currentState = { clicks: 0, texts: [] };
 
@@ -1252,158 +903,87 @@
             const btnText = document.getElementById('ai-btn-text');
             const sponsorBanner = document.getElementById('tip-sponsor-banner');
 
-            // אם כבר יש טיפים שנוצרו היום, מציגים את האחרון שבהם בתוך הכפתור!
             if (currentState.clicks > 0 && currentState.texts && currentState.texts.length > 0) {
                 const latestTip = currentState.texts[currentState.texts.length - 1];
                 const title = currentState.clicks === 1 ? "הטיפ היומי" : "טיפ נוסף";
-                
-                let extraHTML = currentState.clicks === 1 
-                    ? `<span style="font-size: 13px; color: var(--primary-hover); margin-top: 8px; display: block;">לחצו לטיפ נוסף ✨</span>`
-                    : `<span style="font-size: 13px; color: var(--text-muted); margin-top: 8px; display: block;">טיפ חדש יופיע מחר ✨</span>`;
-
-                btnText.innerHTML = `<b style="color: var(--text-main); font-size: 16px;">${title} ✨</b><br><span style="color: var(--text-main); font-weight: 600;">${latestTip}</span>${extraHTML}`;
-                
+                let extraHTML = currentState.clicks === 1 ? `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover); margin-top: 8px; display: block;">לחצו לטיפ נוסף ✨</span>` : `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--text-muted); margin-top: 8px; display: block;">טיפ חדש יופיע מחר ✨</span>`;
+                btnText.innerHTML = `<b style="color: var(--text-main); font-size: calc(16px * var(--text-scale, 1));">${title} ✨</b><br><span style="color: var(--text-main); font-weight: 600;">${latestTip}</span>${extraHTML}`;
                 btn.classList.add('has-tip');
 
                 if (isNewlyClicked) {
-                    // מנקה את העמעום מהטעינה ומפעיל אנימציית "קפיצה"
-                    btn.style.transition = 'none';
-                    btn.style.animation = 'none';
-                    void btn.offsetWidth; // מאפס את האנימציה
+                    btn.style.transition = 'none'; btn.style.animation = 'none'; void btn.offsetWidth;
                     btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-                    
-                    // מחזיר את הגדרות המעבר כדי שהאנימציית ריחוף (Hover) תעבוד מחדש
                     setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
-
-                    // מציג את החסות *רק* ברגע שלוחצים על הטיפ, ו*אך ורק* לחטיבה ותיכון!
-                    if (sponsorBanner && userConfig.schoolType !== 'elem') {
-                        sponsorBanner.style.display = 'flex';
-                        sponsorBanner.style.animation = 'none';
-                        void sponsorBanner.offsetWidth;
-                        sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+                    
+                    if (userConfig.schoolType !== 'elem') {
+                        if (sponsorBanner) {
+                            sponsorBanner.style.display = 'flex'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
+                            sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+                        }
                     }
-                } else {
-                    // ברענון עמוד או בחירת יעד חדש, החסות מוסתרת כדי לא להציק
-                    if (sponsorBanner) {
-                        sponsorBanner.style.display = 'none';
-                    }
+                } else { 
+                    if (sponsorBanner) sponsorBanner.style.display = 'none'; 
                 }
 
-                if (currentState.clicks >= 2) {
-                    btn.disabled = true;
-                    btn.style.pointerEvents = 'none';
-                } else {
-                    btn.disabled = false;
-                    btn.style.pointerEvents = 'auto';
-                }
+                if (currentState.clicks >= 2) { btn.disabled = true; btn.style.pointerEvents = 'none'; btn.setAttribute('aria-disabled', 'true'); } 
+                else { btn.disabled = false; btn.style.pointerEvents = 'auto'; btn.removeAttribute('aria-disabled'); }
             } else {
-                btnText.innerHTML = "לחצו לטיפ אופטימיות יומי ✨";
-                btn.classList.remove('has-tip');
-                btn.disabled = false;
-                btn.style.pointerEvents = 'auto';
-                if (sponsorBanner) {
-                    sponsorBanner.style.display = 'none';
-                }
+                btnText.innerHTML = "לחצו לטיפ אופטימיות יומי ✨"; btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
+                if (sponsorBanner) sponsorBanner.style.display = 'none';
             }
         }
 
         function getSmartTip(targetId, schoolType, daysLeft) {
-            let pool = [];
-            let poolKey = '';
-            const cat = targetId.startsWith('summer') ? (schoolType || 'high') : null;
+            let pool = []; let poolKey = ''; const cat = targetId.startsWith('summer') ? (schoolType || 'high') : null;
             if (targetId.startsWith('summer')) {
                 let timeFrame = daysLeft > 40 ? 'far' : (daysLeft > 20 ? 'mid' : (daysLeft > 5 ? 'close' : 'veryClose'));
-                pool = smartTipsDb.summer[cat][timeFrame] || smartTipsDb.summer[cat]['far'];
-                poolKey = `summer_${cat}_${timeFrame}`;
+                pool = smartTipsDb.summer[cat][timeFrame] || smartTipsDb.summer[cat]['far']; poolKey = `summer_${cat}_${timeFrame}`;
             } else {
                 const holidayKey = smartTipsDb[targetId] ? targetId : 'shavuot';
                 let timeFrame = daysLeft > 10 ? 'far' : (daysLeft > 1 ? 'close' : 'tomorrow');
-                pool = smartTipsDb[holidayKey][timeFrame];
-                poolKey = `${holidayKey}_${timeFrame}`;
+                pool = smartTipsDb[holidayKey][timeFrame]; poolKey = `${holidayKey}_${timeFrame}`;
             }
-
-            // מנגנון חכם למניעת חזרות (שומר את הטיפים שכבר הוצגו)
             let tipHistory = JSON.parse(localStorage.getItem('holiday_calc_tip_history') || '{}');
             if (!tipHistory[poolKey]) tipHistory[poolKey] = [];
-
-            // מסנן את כל הטיפים שעוד לא הוצגו בסבב הנוכחי
             let availableIndices = pool.map((_, i) => i).filter(i => !tipHistory[poolKey].includes(i));
-
-            // אם כל הטיפים בקטגוריה כבר הוצגו, מאפסים את ההיסטוריה כדי להתחיל סבב חדש
-            if (availableIndices.length === 0) {
-                tipHistory[poolKey] = [];
-                availableIndices = pool.map((_, i) => i);
-            }
-
-            // בוחרים טיפ אקראי מתוך אלו שעוד לא הוצגו
+            if (availableIndices.length === 0) { tipHistory[poolKey] = []; availableIndices = pool.map((_, i) => i); }
             const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
-            
-            // מוסיפים את הטיפ הנבחר להיסטוריה ושומרים
-            tipHistory[poolKey].push(randomIndex);
-            localStorage.setItem('holiday_calc_tip_history', JSON.stringify(tipHistory));
-
+            tipHistory[poolKey].push(randomIndex); localStorage.setItem('holiday_calc_tip_history', JSON.stringify(tipHistory));
             return pool[randomIndex];
         }
 
         function handleAiTip() {
             loadDailyState();
             const targetId = userConfig.activeTargetId;
-            
             let currentState = dailyTipsState.targets[targetId];
             if (typeof currentState === 'number') currentState = { clicks: currentState, texts: [] };
             if (!currentState) currentState = { clicks: 0, texts: [] };
-            
             if (currentState.clicks >= 2) return;
 
-            const btn = document.getElementById('main-ai-btn');
-            const btnText = document.getElementById('ai-btn-text');
-            const loader = document.getElementById('ai-btn-loader');
-            
-            // אפקט טעינה ישירות על הכפתור עצמו
-            btn.style.opacity = '0.7';
-            btn.style.pointerEvents = 'none';
-            btn.style.transform = 'scale(0.98)';
-            loader.style.display = 'inline-block';
-            btnText.innerHTML = loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
+            const btn = document.getElementById('main-ai-btn'); const btnText = document.getElementById('ai-btn-text'); const loader = document.getElementById('ai-btn-loader');
+            btn.style.opacity = '0.7'; btn.style.pointerEvents = 'none'; btn.style.transform = 'scale(0.98)';
+            loader.style.display = 'inline-block'; btnText.innerHTML = loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
             
             const target = activeEventsList.find(e => e.id === targetId);
             const netDays = calculateNetDays(target.date);
-            
-            // שליחת אירוע ל-Google Analytics
-            trackEvent('click_ai_tip', {
-                'target_holiday': target.name
-            });
+            trackEvent('click_ai_tip', { 'target_holiday': target.name });
             
             setTimeout(() => {
                 const selectedTip = getSmartTip(target.id, userConfig.schoolType, netDays);
+                currentState.clicks++; if (!currentState.texts) currentState.texts = [];
+                currentState.texts.push(selectedTip); dailyTipsState.targets[targetId] = currentState; saveDailyState();
                 
-                // שומר את הטיפ כדי שיישאר גם אם מרעננים
-                currentState.clicks++;
-                if (!currentState.texts) currentState.texts = [];
-                currentState.texts.push(selectedTip);
-                dailyTipsState.targets[targetId] = currentState;
-                saveDailyState();
-                
-                btn.style.opacity = '1';
-                btn.style.transform = 'scale(1)';
-                loader.style.display = 'none'; 
-
-                // מפעיל את הטיפ ומעביר לו "true" כדי שיידע שהמשתמש הרגע לחץ ושצריך להציג את החסות
+                btn.style.opacity = '1'; btn.style.transform = 'scale(1)'; loader.style.display = 'none'; 
                 renderTipBox(targetId, true);
             }, 800);
         }
 
         window.onload = () => {
             initPWA();
-            setupManualCopyListener(); // הפעלת מעקב העתקה ידנית
-            
-            // מנגנון פתיחה אוטומטית של חלון ההתקנה כשעוברים מ-Google לספארי!
+            setupManualCopyListener();
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('install') === '1') {
-                // מנקה את ה-URL בשקט כדי שהחלון לא יקפוץ שוב ברענון עתידי
                 window.history.replaceState({}, document.title, window.location.pathname);
-                
-                // ממתין חצי שנייה לטעינת הדף ופותח **ישירות** את מסך ההדרכה של ספארי
                 setTimeout(() => {
                     trackEvent('opened_from_auto_safari');
                     document.getElementById('modal-safari-content').style.display = 'block';
@@ -1412,82 +992,68 @@
                     document.getElementById('ios-modal').style.display = 'flex';
                 }, 500);
             }
+            
+            // תמיכה במקלדת ונגישות לסגירת חלונות
+            document.addEventListener('keydown', function(event) {
+                if (event.key === "Escape") {
+                    closeIosModal();
+                    closeVipModal();
+                    closeLegalModal();
+                    document.getElementById('a11y-menu').style.display = 'none';
+                }
+            });
         };
 
         function initApp() {
             const choice = document.querySelector('input[name="schoolType"]:checked');
             if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
             window.scrollTo(0, 0);
-            userConfig.schoolType = choice.value;
-            userConfig.studyFriday = document.getElementById('friday-toggle').checked;
+            userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
             userConfig.activeTargetId = userConfig.schoolType === 'elem' ? 'summerElem' : 'summerHigh';
-            
-            // --- דיווח נפרד וברור לאנליטיקס לפי בחירה ---
             if (userConfig.schoolType === 'elem') trackEvent('started_with_elementary');
             if (userConfig.schoolType === 'middle') trackEvent('started_with_middle');
             if (userConfig.schoolType === 'high') trackEvent('started_with_high');
-            
-            // דיווח ברור לגבי שישי
-            if (userConfig.studyFriday) trackEvent('started_study_friday_yes');
-            else trackEvent('started_study_friday_no');
-            
+            if (userConfig.studyFriday) trackEvent('started_study_friday_yes'); else trackEvent('started_study_friday_no');
             showMainScreen();
         }
 
         function resetApp() {
-            window.scrollTo(0, 0);
-            trackEvent('click_change_settings');
+            window.scrollTo(0, 0); trackEvent('click_change_settings');
             if (timerInterval) clearInterval(timerInterval);
-            userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' };
-            confettiFired = false;
-            document.getElementById('main-screen').style.display = 'none';
-            document.getElementById('setup-screen').style.display = 'flex';
+            userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' }; confettiFired = false;
+            document.getElementById('main-screen').style.display = 'none'; document.getElementById('setup-screen').style.display = 'flex';
             
-            const btn = document.getElementById('main-ai-btn');
-            document.getElementById('ai-btn-text').innerHTML = "לחצו לטיפ אופטימיות יומי ✨";
-            btn.classList.remove('has-tip');
-            btn.disabled = false;
-            btn.style.pointerEvents = 'auto';
-
-            // מסתיר מחדש את החסות בעת איפוס המסך
-            const sponsorBanner = document.getElementById('tip-sponsor-banner');
-            if(sponsorBanner) sponsorBanner.style.display = 'none';
+            const btn = document.getElementById('main-ai-btn'); document.getElementById('ai-btn-text').innerHTML = "לחצו לטיפ אופטימיות יומי ✨";
+            btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
+            const sponsorBanner = document.getElementById('tip-sponsor-banner'); if(sponsorBanner) sponsorBanner.style.display = 'none';
+            const elemSocial = document.getElementById('social-elem-banner'); if(elemSocial) elemSocial.style.display = 'none';
+            const highSocial = document.getElementById('social-high-banner'); if(highSocial) highSocial.style.display = 'none';
         }
 
         function updateSchoolSelection(radio) {
-            // --- דיווח נפרד לאנליטיקס בעת לחיצה על הכפתורים ---
             if (radio.value === 'elem') trackEvent('clicked_elementary_btn');
             if (radio.value === 'middle') trackEvent('clicked_middle_btn');
             if (radio.value === 'high') trackEvent('clicked_high_btn');
 
             document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
             radio.parentElement.classList.add('selected');
-            const hint = document.getElementById('school-hint-text');
-            const isFridayOff = !document.getElementById('friday-toggle').checked;
+            const hint = document.getElementById('school-hint-text'); const isFridayOff = !document.getElementById('friday-toggle').checked;
             hint.style.visibility = 'visible';
-            if (radio.value === 'elem') {
-                hint.textContent = 'לומדים עד ה-30 ביוני 🍉';
-            } else {
-                hint.textContent = isFridayOff ? 'יוצאים לחופש ב-18 ביוני 🏖️' : 'יוצאים לחופש ב-19 ביוני 🏖️';
-            }
+            if (radio.value === 'elem') hint.textContent = 'לומדים עד ה-30 ביוני 🍉';
+            else hint.textContent = isFridayOff ? 'יוצאים לחופש ב-18 ביוני 🏖️' : 'יוצאים לחופש ב-19 ביוני 🏖️';
         }
 
         function updateFridayToggle() {
-            const toggle = document.getElementById('friday-toggle');
-            trackEvent('toggle_friday', { 'study_friday': toggle.checked });
+            const toggle = document.getElementById('friday-toggle'); trackEvent('toggle_friday', { 'study_friday': toggle.checked });
             const hint = document.getElementById('friday-hint-text');
             hint.textContent = toggle.checked ? 'כן, יש לנו לימודים בשישי ☹️' : 'לא, אצלנו שישי זה חופש 😊';
             hint.style.color = toggle.checked ? '#ef4444' : 'var(--text-muted)';
-            
             const checkedSchool = document.querySelector('input[name="schoolType"]:checked');
-            if (checkedSchool) {
-                updateSchoolSelection(checkedSchool);
-            }
+            if (checkedSchool) updateSchoolSelection(checkedSchool);
         }
 
         function calculateNetDays(targetDate) {
-            const now = new Date();
-            let count = 0, current = new Date(now);
+            const now = new Date(); let count = 0, current = new Date(now);
             if (now.getHours() > 8 || (now.getHours() === 8 && now.getMinutes() >= 15)) current.setDate(current.getDate() + 1);
             current.setHours(0,0,0,0);
             while (current < targetDate) {
@@ -1498,100 +1064,65 @@
             return count;
         }
 
-        // פונקציית אנימציה לספירת המספרים למטה
         function animateNetDays(finalValue) {
-            if (netDaysAnimationId) {
-                cancelAnimationFrame(netDaysAnimationId);
-                netDaysAnimationId = null;
-            }
-
-            if (typeof finalValue !== 'number' || finalValue <= 0) {
-                document.getElementById('main-net-days').textContent = finalValue <= 0 ? "הגיע!" : finalValue;
-                isAnimatingNetDays = false;
-                return;
-            }
+            if (netDaysAnimationId) { cancelAnimationFrame(netDaysAnimationId); netDaysAnimationId = null; }
+            if (typeof finalValue !== 'number' || finalValue <= 0) { document.getElementById('main-net-days').textContent = finalValue <= 0 ? "הגיע!" : finalValue; isAnimatingNetDays = false; return; }
             
-            isAnimatingNetDays = true;
-            const obj = document.getElementById('main-net-days');
-            const startValue = finalValue + 75; // מתחיל 75 ימים מעל
-            const duration = 1500; // אורך האנימציה - שנייה וחצי
-            let startTimestamp = null;
+            isAnimatingNetDays = true; const obj = document.getElementById('main-net-days');
+            const startValue = finalValue + 75; const duration = 1500; let startTimestamp = null;
 
             const step = (timestamp) => {
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                
-                // אפקט האטה טבעי (easeOutCubic)
                 const easeProgress = 1 - Math.pow(1 - progress, 3);
                 const currentVal = Math.floor(startValue - (startValue - finalValue) * easeProgress);
-                
                 obj.textContent = currentVal;
                 
-                if (progress < 1) {
-                    netDaysAnimationId = window.requestAnimationFrame(step);
-                } else {
-                    obj.textContent = finalValue;
-                    isAnimatingNetDays = false;
-                    netDaysAnimationId = null;
-                }
+                if (progress < 1) netDaysAnimationId = window.requestAnimationFrame(step);
+                else { obj.textContent = finalValue; isAnimatingNetDays = false; netDaysAnimationId = null; }
             };
             netDaysAnimationId = window.requestAnimationFrame(step);
         }
 
         function showMainScreen() {
-            document.getElementById('setup-screen').style.display = 'none';
-            document.getElementById('main-screen').style.display = 'flex';
+            document.getElementById('setup-screen').style.display = 'none'; document.getElementById('main-screen').style.display = 'flex';
             document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
             
-            // הסתרת כפתור הקהילה (VIP) לתלמידי יסודי
             const vipBtn = document.getElementById('vip-community-btn');
-            if (vipBtn) {
-                if (userConfig.schoolType === 'elem') {
-                    vipBtn.style.display = 'none'; // מסתיר ביסודי
-                } else {
-                    vipBtn.style.display = 'flex'; // מציג בחטיבה ותיכון
-                }
+            const highSocial = document.getElementById('social-high-banner');
+
+            if (userConfig.schoolType === 'elem') {
+                if (vipBtn) vipBtn.style.display = 'none';
+                if (highSocial) highSocial.style.display = 'none';
+            } else {
+                if (vipBtn) vipBtn.style.display = 'flex';
+                if (highSocial) highSocial.style.display = 'block';
             }
 
             const summerHighObj = allTargets.find(t => t.id === 'summerHigh');
-            if (summerHighObj) {
-                if (!userConfig.studyFriday) {
-                    summerHighObj.date = new Date('2026-06-18T08:15:00');
-                } else {
-                    summerHighObj.date = new Date('2026-06-19T08:15:00');
-                }
-            }
+            if (summerHighObj) { if (!userConfig.studyFriday) summerHighObj.date = new Date('2026-06-18T08:15:00'); else summerHighObj.date = new Date('2026-06-19T08:15:00'); }
 
-            const now = Date.now();
-            activeEventsList = allTargets.filter(e => e.date.getTime() > now && (!e.isSummer || e.type === (userConfig.schoolType === 'elem' ? 'elem' : 'high')));
-            activeEventsList.sort((a,b) => a.date - b.date);
-            renderHolidays();
-            selectTarget(userConfig.activeTargetId || activeEventsList[0].id);
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(updateDashboard, 1000);
+            const now = Date.now(); activeEventsList = allTargets.filter(e => e.date.getTime() > now && (!e.isSummer || e.type === (userConfig.schoolType === 'elem' ? 'elem' : 'high')));
+            activeEventsList.sort((a,b) => a.date - b.date); renderHolidays(); selectTarget(userConfig.activeTargetId || activeEventsList[0].id);
+            if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
         }
 
         function renderHolidays() {
-            const container = document.getElementById('holidays-container');
-            container.innerHTML = '';
+            const container = document.getElementById('holidays-container'); container.innerHTML = '';
             activeEventsList.forEach(ev => {
-                const card = document.createElement('div');
+                const card = document.createElement('button');
                 card.className = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
                 card.onclick = () => selectTarget(ev.id);
-                card.innerHTML = `<div><b>${ev.name} ${ev.icon}</b><br><small>ב-${ev.date.toLocaleDateString('he-IL')}</small></div>`;
+                card.innerHTML = `<div><b>${ev.name} <span aria-hidden="true">${ev.icon}</span></b><br><small>ב-${ev.date.toLocaleDateString('he-IL')}</small></div>`;
+                card.setAttribute('aria-label', `ספירה לחג ${ev.name}`);
                 container.appendChild(card);
             });
         }
 
         function selectTarget(id) {
-            if (userConfig.activeTargetId !== id && userConfig.activeTargetId !== '') {
-                trackEvent('select_target_holiday', { 'holiday_id': id });
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            userConfig.activeTargetId = id;
-            confettiFired = false;
-            const target = activeEventsList.find(e => e.id === id);
-            if (!target) return;
+            if (userConfig.activeTargetId !== id && userConfig.activeTargetId !== '') trackEvent('select_target_holiday', { 'holiday_id': id });
+            window.scrollTo({ top: 0, behavior: 'smooth' }); userConfig.activeTargetId = id; confettiFired = false;
+            const target = activeEventsList.find(e => e.id === id); if (!target) return;
             document.getElementById('main-timer-bg').style.background = target.bg;
             document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
             
@@ -1599,40 +1130,21 @@
             if (vacationBox) {
                 let lengthText = '';
                 if (target.isSummer) {
-                    const endOfSchool = new Date(target.date);
-                    endOfSchool.setHours(0,0,0,0);
-                    const startOfSchool = new Date(target.date.getFullYear(), 8, 1);
-                    const diffDays = Math.round((startOfSchool - endOfSchool) / 86400000);
-                    lengthText = `${diffDays} ימים`;
-                } else {
-                    lengthText = target.lengthText;
-                }
+                    const endOfSchool = new Date(target.date); endOfSchool.setHours(0,0,0,0); const startOfSchool = new Date(target.date.getFullYear(), 8, 1);
+                    lengthText = `${Math.round((startOfSchool - endOfSchool) / 86400000)} ימים`;
+                } else lengthText = target.lengthText;
                 document.getElementById('vacation-days-count').innerHTML = `החופש שלכם יימשך <b>${lengthText}</b>!`;
                 vacationBox.style.display = 'inline-block';
             }
 
-            loadDailyState();
-            renderTipBox(id);
-            renderHolidays();
-            
-            // מפעיל את אנימציית הספירה למטה
-            const netDays = calculateNetDays(target.date);
-            animateNetDays(netDays);
-            
-            updateDashboard();
+            loadDailyState(); renderTipBox(id); renderHolidays();
+            const netDays = calculateNetDays(target.date); animateNetDays(netDays); updateDashboard();
         }
 
         function updateDashboard() {
-            const event = activeEventsList.find(e => e.id === userConfig.activeTargetId);
-            if (!event) return;
-            
-            // מנגנון "חצות" - מוודא שהטיפ מתאפס כל יום מחדש, גם אם האתר הושאר פתוח ברקע
-            const nowTime = new Date();
-            const todayStr = `${nowTime.getFullYear()}-${nowTime.getMonth()+1}-${nowTime.getDate()}`;
-            if (dailyTipsState.date && dailyTipsState.date !== todayStr) {
-                loadDailyState();
-                renderTipBox(userConfig.activeTargetId);
-            }
+            const event = activeEventsList.find(e => e.id === userConfig.activeTargetId); if (!event) return;
+            const nowTime = new Date(); const todayStr = `${nowTime.getFullYear()}-${nowTime.getMonth()+1}-${nowTime.getDate()}`;
+            if (dailyTipsState.date && dailyTipsState.date !== todayStr) { loadDailyState(); renderTipBox(userConfig.activeTargetId); }
 
             const diff = event.date.getTime() - Date.now();
             if (diff <= 0) {
@@ -1643,50 +1155,98 @@
                 document.getElementById('abs-hours').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
                 document.getElementById('abs-mins').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
                 document.getElementById('abs-secs').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
-                
-                // מעדכן את המספר הרגיל רק אם אין כרגע אנימציה שרצה עליו
-                if (!isAnimatingNetDays) {
-                    document.getElementById('main-net-days').textContent = calculateNetDays(event.date);
-                }
+                if (!isAnimatingNetDays) document.getElementById('main-net-days').textContent = calculateNetDays(event.date);
             }
         }
 
         function shareWhatsApp(event) {
-            event.preventDefault();
-            trackEvent('share_whatsapp_click');
+            event.preventDefault(); trackEvent('share_whatsapp_click');
             const text = `מצאתי אתר שמראה כמה ימי לימוד נטו נשאר עד החופש! 🏖️😱\nכנסו לבדוק >> http://neto-hofesh.co.il/`;
             window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
         }
 
-        // --- הגנות למניעת גניבת קוד והעתקה ---
+        // --- סקריפט נגישות חכם (מעודכן) ---
+        let textScaleLevel = 1;
         
-        // 1. חסימת קליק ימני
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
+        function toggleA11yMenu() {
+            const menu = document.getElementById('a11y-menu');
+            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+        }
 
-        // 2. חסימת קיצורי מקלדת של מפתחים (F12, Ctrl+U, Ctrl+Shift+I)
+        function changeFontSize(direction) {
+            // הוספה או הפחתה של 10% בכל לחיצה
+            textScaleLevel += (direction * 0.1);
+            
+            // הגבלת הגודל (עד 150% המקסימום, והכי קטן 90%)
+            if (textScaleLevel > 1.5) textScaleLevel = 1.5;
+            if (textScaleLevel < 0.9) textScaleLevel = 0.9;
+            
+            // עדכון המשתנה ששולט ב-CSS של כל האתר
+            document.documentElement.style.setProperty('--text-scale', textScaleLevel);
+        }
+
+        function toggleHighContrast() {
+            document.body.classList.toggle('high-contrast');
+        }
+
+        function toggleLinkHighlight() {
+            document.body.classList.toggle('highlight-links');
+        }
+
+        // --- מנגנון חלוניות משפטיות והצהרת נגישות תקנית ---
+        function openLegalModal(type) {
+            const content = document.getElementById('legal-content');
+            let html = '';
+            
+            if (type === 'terms') {
+                html = `<h2 style="font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 15px; color: #1e293b;">תנאי שימוש והגבלת אחריות</h2>
+                    <div style="font-size: calc(14px * var(--text-scale, 1)); color: #475569; line-height: 1.6;">
+                        <p>ברוכים הבאים לאתר "נטו חופש". השימוש באתר מותנה בהסכמתכם לתנאים אלו:</p>
+                        <p>1. <b>ייעוד האתר:</b> האתר מספק ספירה לאחור הערכתית למועדי חופשות. הנתונים אינם רשמיים ואינם מהווים אסמכתא. האתר מסופק לשימוש "כמות שהוא" (AS IS).</p>
+                        <p>2. <b>פטור מאחריות פרסומים:</b> <u>האתר מציג המלצות, קישורים ממומנים ותוכן צד ג' (כגון הרשמה לפאנל סקרים / מפרסמים). האתר ו/או מפעיליו אינם אחראים בשום צורה לתוכן זה, לטיבו, למהימנותו או לנגישותו. כל התקשרות בין המשתמש לצד ג' הינה על אחריות המשתמש בלבד.</u></p>
+                        <p>3. <b>אחריות טכנית:</b> בעל האתר לא יישא באחריות לכל תקלה, שיבוש או נזק (ישיר או עקיף) הנובעים מהשימוש באתר.</p>
+                    </div>`;
+            } else if (type === 'privacy') {
+                html = `<h2 style="font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 15px; color: #1e293b;">מדיניות פרטיות</h2>
+                    <div style="font-size: calc(14px * var(--text-scale, 1)); color: #475569; line-height: 1.6;">
+                        <p>1. <b>איסוף נתונים אנונימיים:</b> האתר משתמש ב-Google Analytics לשם איסוף נתונים סטטיסטיים אנונימיים (כגון סוג דפדפן, דפים נצפים). איננו אוספים מידע אישי מזהה.</p>
+                        <p>2. <b>Cookies (קובצי עוגיות):</b> האתר משתמש בקובצי עוגיות כדי לשמור את העדפות המשתמש (למשל, סוג בית הספר והטיפים שכבר נקראו) כדי לשפר את חווית הגלישה.</p>
+                        <p>3. <b>צדדים שלישיים:</b> מידע סטטיסטי עשוי להיות מעובד על ידי שרתי גוגל בכפוף למדיניות הפרטיות שלהם.</p>
+                    </div>`;
+            } else if (type === 'accessibility') {
+                html = `<h2 style="font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 15px; color: #1e293b;">הצהרת נגישות משפטית</h2>
+                    <div style="font-size: calc(14px * var(--text-scale, 1)); color: #475569; line-height: 1.6;">
+                        <p>מפעיל האתר רואה חשיבות עליונה בהנגשת האתר לאנשים עם מוגבלויות, בהתאם להוראות חוק שוויון זכויות לאנשים עם מוגבלות ותקן ישראלי 5568 (ברמת AA).</p>
+                        <p><b>התאמות שבוצעו באתר:</b><br>
+                        ✔ כפתור נגישות ייעודי להגדלת פונט, ניגודיות גבוהה והדגשת קישורים.<br>
+                        ✔ תמיכה מלאה בניווט מקלדת (מקש Tab ומקש Escape לסגירת חלונות).<br>
+                        ✔ התאמה לקוראי מסך (הסתרת אלמנטים גרפיים עם aria-hidden והוספת aria-labels).<br>
+                        ✔ עיצוב רספונסיבי המותאם לכל סוגי המסכים.</p>
+                        <p><b>הגבלת אחריות לתוכן צד שלישי:</b><br>
+                        יודגש כי האתר כולל הפניות, המלצות ופרסומות של צדדים שלישיים (כגון אתרי סקרים ומועדוני צרכנות). תכנים אלו מופעלים על ידי גורמים חיצוניים, <b>ונגישותם הינה באחריות המפרסמים בלבד</b>. מפעיל האתר אינו אחראי לנגישות של אתרים חיצוניים אלו.</p>
+                        <p><b>דיווח על תקלות:</b><br>
+                        אם נתקלתם בבעיית נגישות כלשהי באתר עצמו, נשמח אם תפנו אלינו כדי שנוכל לתקן זאת בהקדם. ניתן לפנות לרכז הנגישות, יונתן לבנוב, בדוא"ל: <a href="mailto:levanov.yonatan@gmail.com" style="color:#0ea5e9;">levanov.yonatan@gmail.com</a>.</p>
+                        <p><small>תאריך עדכון אחרון: מאי 2026</small></p>
+                    </div>`;
+            }
+            
+            content.innerHTML = html;
+            document.getElementById('legal-modal').style.display = 'flex';
+            document.getElementById('legal-modal').focus();
+            trackEvent('view_legal_' + type);
+        }
+
+        function closeLegalModal() {
+            document.getElementById('legal-modal').style.display = 'none';
+        }
+
+        // חסימת מקשים (למניעת העתקה)
+        document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', function(e) {
-            // חסימת F12
-            if (e.key === 'F12' || e.keyCode === 123) {
-                e.preventDefault();
-                return false;
-            }
-            // חסימת Ctrl+Shift+I / Ctrl+Shift+J (כלים למפתחים)
-            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.keyCode === 73 || e.keyCode === 74)) {
-                e.preventDefault();
-                return false;
-            }
-            // חסימת Ctrl+U (הצגת מקור הדף)
-            if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) {
-                e.preventDefault();
-                return false;
-            }
-            // חסימת Ctrl+S (שמירת האתר)
-            if (e.ctrlKey && (e.key === 'S' || e.key === 's' || e.keyCode === 83)) {
-                e.preventDefault();
-                return false;
-            }
+            if (e.key === 'F12' || e.keyCode === 123) return e.preventDefault(), false;
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) return e.preventDefault(), false;
+            if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) return e.preventDefault(), false;
+            if (e.ctrlKey && (e.key === 'S' || e.key === 's')) return e.preventDefault(), false;
         });
     </script>
 </body>
