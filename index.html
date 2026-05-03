@@ -245,60 +245,60 @@
             cursor: default;
         }
 
-        /* --- עיצוב כפתור ה-VIP (פס תחתון רגוע ומשתלב) --- */
-        .vip-funnel-btn {
-            background: linear-gradient(135deg, #fde047 0%, #eab308 100%); /* צבע מעודן יותר */
-            color: #422006; 
-            padding: 16px;
-            font-size: 16.5px;
-            font-weight: 900;
-            cursor: pointer;
-            width: 100%;
+        /* --- עיצוב משודרג ויוקרתי לחסות הטיפ היומי --- */
+        .ai-sponsor {
+            background: linear-gradient(135deg, #ffffff, #fefce8);
+            border: 2px solid #fef08a;
+            border-radius: 20px;
+            padding: 14px 16px;
+            margin-top: 15px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            border: none;
-            box-shadow: 0 4px 10px rgba(234, 179, 8, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.4);
+            justify-content: center; /* הוספנו מרכוז אופקי לכל התוכן */
+            gap: 8px; /* הקטנתי קצת את הרווח כדי שיישב יפה באמצע */
+            cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden; /* חובה בשביל אפקט הברק */
+            text-align: center; /* מרכוז הטקסט */
+            box-shadow: 0 6px 15px rgba(234, 179, 8, 0.1);
         }
-        
-        .vip-funnel-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 15px rgba(234, 179, 8, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.5);
+        .ai-sponsor:hover {
+            background: linear-gradient(135deg, #fefce8, #fffbeb);
+            border-color: #fde047;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(234, 179, 8, 0.2);
+        }
+        .sponsor-badge {
+            background: linear-gradient(135deg, #fef08a, #fde047);
+            color: #854d0e;
+            font-size: 11px;
+            font-weight: 900;
+            padding: 6px 10px;
+            border-radius: 10px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(253, 224, 71, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .sponsor-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.4;
+            /* הסרתי את flex-grow: 1 כדי שהטקסט לא ידחוף את החץ הצידה, אלא יישב יחד איתו באמצע */
+        }
+        .sponsor-text b {
+            color: #0ea5e9;
+            font-weight: 800;
+        }
+        .sponsor-arrow {
+            color: #ca8a04;
+            font-size: 18px;
+            font-weight: 900;
+            animation: slide-left-sponsor 1.5s infinite ease-in-out;
         }
 
-        /* אפקט ברק (Shine) שרץ על הכפתור למשיכת עין חלקה */
-        .vip-funnel-btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            animation: shine-glare 3.5s infinite;
-        }
-        
-        @keyframes shine-glare {
-            0%, 60% { left: -100%; }
-            100% { left: 200%; }
-        }
-
-        /* ביטול הריצוד (אפקט הברק) לכפתור המעבר להרשמה */
-        .no-flicker::after { display: none !important; }
-
-        /* אנימציות למשיכת תשומת לב */
-        @keyframes point-down {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(6px); }
-        }
-        
-        .notification-badge {
-            position: absolute;
-            top: -10px;
+        @keyframes slide-left-sponsor {
             right: 20px;
             background: #ef4444;
             color: white;
@@ -320,6 +320,41 @@
             0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* --- כפתור הכסף - זהב בוהק ומטאלי --- */
+        .vip-funnel-btn {
+            background: linear-gradient(to right, #eab308 0%, #fef08a 25%, #eab308 50%, #fef08a 75%, #eab308 100%);
+            background-size: 200% auto;
+            color: #422006;
+            font-weight: 900;
+            font-size: 19px;
+            padding: 16px;
+            border: 2px solid #fef08a;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(234, 179, 8, 0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: shine-gold 3s linear infinite, pulse-vip-gold 2s infinite;
+        }
+        .vip-funnel-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(234, 179, 8, 0.6);
+        }
+        
+        @keyframes shine-gold {
+            to { background-position: -200% center; }
+        }
+        
+        @keyframes pulse-vip-gold {
+            0% { box-shadow: 0 0 0 0 rgba(254, 240, 138, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(254, 240, 138, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(254, 240, 138, 0); }
         }
 
         /* מעטפת דביקה (Sticky) לכפתור ה-VIP בתחתית המסך */
@@ -556,6 +591,12 @@
                     <span id="ai-btn-loader" class="loader"></span>
                     <span id="ai-btn-text">לחצו לטיפ אופטימיות יומי ✨</span>
                 </button>
+                
+                <!-- המלצת הטיפ היומי - עיצוב נקי ללא תגית מילים -->
+                <div class="ai-sponsor" id="tip-sponsor-banner" onclick="trackEvent('click_sponsor_banner'); openVipModal();" style="display: none;">
+                    <div class="sponsor-text" style="font-size: 15px;">🌟 רוצים להרוויח כסף מסקרים וטעימות? <b>לחצו כאן</b></div>
+                    <div class="sponsor-arrow">👈</div>
+                </div>
             </div>
         </div>
         
@@ -1201,7 +1242,7 @@
 
         function saveDailyState() { localStorage.setItem('holiday_calc_daily_tips_v2', JSON.stringify(dailyTipsState)); }
 
-        function renderTipBox(targetId) {
+        function renderTipBox(targetId, isNewlyClicked = false) {
             let currentState = dailyTipsState.targets[targetId];
             // תמיכה בגרסאות קודמות ששמרו רק מספר
             if (typeof currentState === 'number') currentState = { clicks: currentState, texts: [] };
@@ -1209,6 +1250,7 @@
 
             const btn = document.getElementById('main-ai-btn');
             const btnText = document.getElementById('ai-btn-text');
+            const sponsorBanner = document.getElementById('tip-sponsor-banner');
 
             // אם כבר יש טיפים שנוצרו היום, מציגים את האחרון שבהם בתוך הכפתור!
             if (currentState.clicks > 0 && currentState.texts && currentState.texts.length > 0) {
@@ -1223,14 +1265,29 @@
                 
                 btn.classList.add('has-tip');
 
-                // מנקה את העמעום מהטעינה ומפעיל אנימציית "קפיצה"
-                btn.style.transition = 'none';
-                btn.style.animation = 'none';
-                void btn.offsetWidth; // מאפס את האנימציה
-                btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-                
-                // מחזיר את הגדרות המעבר כדי שהאנימציית ריחוף (Hover) תעבוד מחדש
-                setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
+                if (isNewlyClicked) {
+                    // מנקה את העמעום מהטעינה ומפעיל אנימציית "קפיצה"
+                    btn.style.transition = 'none';
+                    btn.style.animation = 'none';
+                    void btn.offsetWidth; // מאפס את האנימציה
+                    btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+                    
+                    // מחזיר את הגדרות המעבר כדי שהאנימציית ריחוף (Hover) תעבוד מחדש
+                    setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
+
+                    // מציג את החסות *רק* ברגע שלוחצים על הטיפ, ו*אך ורק* לחטיבה ותיכון!
+                    if (sponsorBanner && userConfig.schoolType !== 'elem') {
+                        sponsorBanner.style.display = 'flex';
+                        sponsorBanner.style.animation = 'none';
+                        void sponsorBanner.offsetWidth;
+                        sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+                    }
+                } else {
+                    // ברענון עמוד או בחירת יעד חדש, החסות מוסתרת כדי לא להציק
+                    if (sponsorBanner) {
+                        sponsorBanner.style.display = 'none';
+                    }
+                }
 
                 if (currentState.clicks >= 2) {
                     btn.disabled = true;
@@ -1244,6 +1301,9 @@
                 btn.classList.remove('has-tip');
                 btn.disabled = false;
                 btn.style.pointerEvents = 'auto';
+                if (sponsorBanner) {
+                    sponsorBanner.style.display = 'none';
+                }
             }
         }
 
@@ -1328,7 +1388,8 @@
                 btn.style.transform = 'scale(1)';
                 loader.style.display = 'none'; 
 
-                renderTipBox(targetId);
+                // מפעיל את הטיפ ומעביר לו "true" כדי שיידע שהמשתמש הרגע לחץ ושצריך להציג את החסות
+                renderTipBox(targetId, true);
             }, 800);
         }
 
@@ -1387,6 +1448,10 @@
             btn.classList.remove('has-tip');
             btn.disabled = false;
             btn.style.pointerEvents = 'auto';
+
+            // מסתיר מחדש את החסות בעת איפוס המסך
+            const sponsorBanner = document.getElementById('tip-sponsor-banner');
+            if(sponsorBanner) sponsorBanner.style.display = 'none';
         }
 
         function updateSchoolSelection(radio) {
