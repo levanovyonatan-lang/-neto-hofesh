@@ -425,10 +425,12 @@
         </div>
 
         <h2 style="font-size: calc(18px * var(--text-scale, 1)); margin-top: 15px; margin-bottom: 8px; text-align: center;">בחרו יעד לספירה:</h2>
+        <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation" aria-label="בחירת חגים"></div>
+        <center><button class="reset-btn" onclick="resetApp()">שינוי הגדרות</button></center>
         
-        <!-- רשתות חברתיות לכל השכבות (מופיע ממש מתחת לכותרת 'בחרו יעד לספירה') -->
-        <div class="social-banner-container" style="margin-top: 5px; margin-bottom: 15px;" aria-label="רשתות חברתיות">
-            <div class="social-banner-title">רשתות יוצר האתר</div>
+        <!-- רשתות חברתיות לכל השכבות (מופיע מתחת לבחירת החגים) -->
+        <div class="social-banner-container" style="margin-top: 15px; margin-bottom: 30px;" aria-label="רשתות חברתיות">
+            <div class="social-banner-title">חכו להפתעות מיוצר האתר</div>
             <div class="social-icons-row">
                 <a href="https://www.tiktok.com/@yonatop2?_r=1&_t=ZS-963skgq9MdF" target="_blank" class="social-icon-btn icon-tiktok" aria-label="TikTok">
                     <svg viewBox="0 0 448 512" width="22" height="22" fill="currentColor"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg>
@@ -441,9 +443,6 @@
                 </a>
             </div>
         </div>
-
-        <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation" aria-label="בחירת חגים"></div>
-        <center><button class="reset-btn" onclick="resetApp()">שינוי הגדרות</button></center>
             
         <div class="sticky-vip-wrapper">
             <button id="vip-community-btn" class="vip-funnel-btn" onclick="openVipModal()" aria-label="מעבר לקהילת הכסף">
@@ -468,11 +467,11 @@
                 <a href="mailto:levanov.yonatan@gmail.com" class="contact-link">levanov.yonatan@gmail.com</a>
             </div>
             
-            <!-- קישורים משפטיים ונגישות - מיושרים לימין -->
-            <div style="display: flex; justify-content: flex-start; flex-wrap: wrap; gap: 15px; margin-top: 20px; font-size: calc(12px * var(--text-scale, 1)); font-weight: 700;">
+            <!-- קישורים משפטיים ונגישות - מיושרים לימין אחד מתחת לשני -->
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 20px; font-size: calc(12px * var(--text-scale, 1)); font-weight: 700;">
                 <a href="javascript:void(0)" onclick="openLegalModal('terms')" style="color: #64748b; text-decoration: underline;">תנאי שימוש</a>
                 <a href="javascript:void(0)" onclick="openLegalModal('privacy')" style="color: #64748b; text-decoration: underline;">מדיניות פרטיות</a>
-                <a href="javascript:void(0)" onclick="openLegalModal('accessibility')" style="color: #0ea5e9; text-decoration: underline;">הצהרת נגישות (חוק)</a>
+                <a href="javascript:void(0)" onclick="openLegalModal('accessibility')" style="color: #64748b; text-decoration: underline;">הצהרת נגישות</a>
             </div>
         </footer>
 
@@ -755,12 +754,10 @@
 
         function closeIosModal() { trackEvent('close_ios_install_modal'); document.getElementById('ios-modal').style.display = 'none'; }
 
-        let hasCopiedNumber = false;
-        let hasSeenWarning = false;
+        let hasCopiedPromoCode = false;
 
         function openVipModal() {
-            hasCopiedNumber = false;
-            hasSeenWarning = false;
+            hasCopiedPromoCode = false;
             document.getElementById('small-request-alert').style.display = 'none';
             const hint = document.getElementById('video-click-hint');
             if(hint) hint.style.display = 'flex';
@@ -799,50 +796,40 @@
             if (copyBtn && !copyBtn.classList.contains('copied')) copyBtn.classList.add('video-ended-highlight');
         }
 
-        function copyPhoneNumber(btnElement) {
+        function copyPromoCode(btnElement) {
             const tempInput = document.createElement("input");
-            tempInput.value = '0542633610';
+            tempInput.value = 'חופש';
             document.body.appendChild(tempInput);
             tempInput.select();
             document.execCommand("copy");
             document.body.removeChild(tempInput);
             
-            hasCopiedNumber = true; trackEvent('copied_number_via_btn');
+            hasCopiedPromoCode = true; trackEvent('copied_promo_code_via_btn');
             
             btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied');
             btnElement.innerHTML = "הועתק! ✅"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac";
-            
-            const alertBox = document.getElementById('small-request-alert');
-            if(alertBox.style.display === 'block') alertBox.innerHTML = "<div style='font-weight: 900; color: #0f766e; text-align: center;'>תודה רבה! ❤️ עכשיו אפשר לעבור להרשמה.</div>";
         }
 
         function setupManualCopyListener() {
-            const phoneTextElement = document.getElementById('phone-number-text');
-            if (phoneTextElement) {
-                phoneTextElement.addEventListener('copy', function() {
-                    hasCopiedNumber = true; trackEvent('copied_number_manually');
+            const promoTextElement = document.getElementById('promo-code-text');
+            if (promoTextElement) {
+                promoTextElement.addEventListener('copy', function() {
+                    hasCopiedPromoCode = true; trackEvent('copied_promo_code_manually');
                     const btnElement = document.getElementById('dedicated-copy-btn');
                     if (btnElement) { btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied'); btnElement.innerHTML = "הועתק! ✅"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac"; }
-                    const alertBox = document.getElementById('small-request-alert');
-                    if(alertBox && alertBox.style.display === 'block') alertBox.innerHTML = "<div style='font-weight: 900; color: #0f766e; text-align: center;'>תודה רבה! ❤️ עכשיו אפשר לעבור להרשמה.</div>";
                 });
             }
         }
 
         function attemptRegistration() {
             const registrationLink = "https://teenk.co.il/teenkerz/"; 
-            if (hasCopiedNumber) {
-                trackEvent('success_reg_with_copy'); window.open(registrationLink, '_blank');
-            } else if (!hasSeenWarning) {
-                hasSeenWarning = true; trackEvent('error_tried_reg_without_copy');
-                const alertBox = document.getElementById('small-request-alert');
-                alertBox.style.display = 'block';
-                const copyBtn = document.getElementById('dedicated-copy-btn');
-                copyBtn.style.transition = 'none'; copyBtn.style.transform = 'scale(1.08)';
-                setTimeout(() => { copyBtn.style.transition = 'all 0.3s'; copyBtn.style.transform = 'scale(1)'; }, 200);
+            if (hasCopiedPromoCode) {
+                trackEvent('success_reg_with_copy'); 
             } else {
-                 trackEvent('success_reg_ignored_warning'); window.open(registrationLink, '_blank');
+                trackEvent('success_reg_without_copy'); 
             }
+            // הקישור נפתח מיד בכל מצב
+            window.open(registrationLink, '_blank');
         }
 
         function loadDailyState() {
