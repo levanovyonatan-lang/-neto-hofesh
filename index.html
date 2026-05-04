@@ -590,23 +590,16 @@
                 </div>
                 
                 <p style="font-weight: 500; font-size: calc(15px * var(--text-scale, 1)); color: #475569; margin-bottom: 12px; line-height: 1.5;">
-                    כדי להירשם ולהרוויח כסף, <span style="color: #ca8a04; font-weight: 800;">בבקשה</span> מלאו בטופס את שני הפרטים הבאים (בשאלה "הגעתם דרך חבר?"):
+                    כדי להירשם ולהרוויח כסף, <span style="color: #ca8a04; font-weight: 800;">בבקשה</span> מלאו בטופס בשאלה "חבר מביא חבר" את המילה:
                 </p>
 
                 <div style="background: #fffdf0; padding: 12px; border-radius: 16px; border: 2px solid #fcd34d; margin-bottom: 15px;">
-                    <div class="copy-data-row" style="margin-bottom: 10px; border-color: #fde047; box-shadow: none; padding: 10px 12px;">
-                        <div>
-                            <div style="font-size: calc(12px * var(--text-scale, 1)); color: #b45309; margin-bottom: 2px; font-weight: 700;">1. שם החבר:</div>
-                            <div style="font-weight: 900; font-size: calc(19px * var(--text-scale, 1)); color: #0f172a;">חופש</div>
-                        </div>
-                    </div>
-
                     <div class="copy-data-row" style="margin-bottom: 0; border-color: #fde047; box-shadow: none; padding: 10px 12px;">
                         <div>
-                            <div style="font-size: calc(12px * var(--text-scale, 1)); color: #b45309; margin-bottom: 2px; font-weight: 700;">2. טלפון החבר:</div>
-                            <div id="phone-number-text" style="font-weight: 900; font-size: calc(19px * var(--text-scale, 1)); color: #0f172a; user-select: text; -webkit-user-select: text;" dir="ltr">0542633610</div>
+                            <div style="font-size: calc(12px * var(--text-scale, 1)); color: #b45309; margin-bottom: 2px; font-weight: 700;">שם החבר:</div>
+                            <div id="promo-code-text" style="font-weight: 900; font-size: calc(22px * var(--text-scale, 1)); color: #0f172a; user-select: text; -webkit-user-select: text;" dir="rtl">חופש</div>
                         </div>
-                        <button id="dedicated-copy-btn" class="copy-btn-small" aria-label="העתק מספר טלפון" onclick="copyPhoneNumber(this)">העתק 📋</button>
+                        <button id="dedicated-copy-btn" class="copy-btn-small" aria-label="העתק מילה" onclick="copyPromoCode(this)">העתק 📋</button>
                     </div>
                 </div>
 
@@ -614,7 +607,7 @@
                     <div style="font-weight: 900; font-size: calc(16px * var(--text-scale, 1)); color: #0f766e; margin-bottom: 8px;">רגע, בקשה קטנה ממני 🙏</div>
                     <p style="font-size: calc(14px * var(--text-scale, 1)); color: #115e59; line-height: 1.5; font-weight: 500; margin-bottom: 0;">
                         האתר פועל בחינם, ואשמח ממש אם תפרגנו ותעזרו לאתר להמשיך לעבוד! 
-                        <br><b>אנא הקפידו לרשום "חופש" ולהעתיק את המספר</b>. זה לא עולה לכם כלום, ולי זה עוזר המון. תודה! ❤️
+                        <br><b>אנא הקפידו להעתיק ולרשום "חופש"</b>. זה לא עולה לכם כלום, ולי זה עוזר המון. תודה! ❤️
                     </p>
                 </div>
 
@@ -762,11 +755,11 @@
 
         function closeIosModal() { trackEvent('close_ios_install_modal'); document.getElementById('ios-modal').style.display = 'none'; }
 
-        let hasCopiedPromoCode = false;
+        let hasCopiedNumber = false;
         let hasSeenWarning = false;
 
         function openVipModal() {
-            hasCopiedPromoCode = false;
+            hasCopiedNumber = false;
             hasSeenWarning = false;
             document.getElementById('small-request-alert').style.display = 'none';
             const hint = document.getElementById('video-click-hint');
@@ -806,15 +799,15 @@
             if (copyBtn && !copyBtn.classList.contains('copied')) copyBtn.classList.add('video-ended-highlight');
         }
 
-        function copyPromoCode(btnElement) {
+        function copyPhoneNumber(btnElement) {
             const tempInput = document.createElement("input");
-            tempInput.value = 'חופש';
+            tempInput.value = '0542633610';
             document.body.appendChild(tempInput);
             tempInput.select();
             document.execCommand("copy");
             document.body.removeChild(tempInput);
             
-            hasCopiedPromoCode = true; trackEvent('copied_promo_code_via_btn');
+            hasCopiedNumber = true; trackEvent('copied_number_via_btn');
             
             btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied');
             btnElement.innerHTML = "הועתק! ✅"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac";
@@ -824,10 +817,10 @@
         }
 
         function setupManualCopyListener() {
-            const promoTextElement = document.getElementById('promo-code-text');
-            if (promoTextElement) {
-                promoTextElement.addEventListener('copy', function() {
-                    hasCopiedPromoCode = true; trackEvent('copied_promo_code_manually');
+            const phoneTextElement = document.getElementById('phone-number-text');
+            if (phoneTextElement) {
+                phoneTextElement.addEventListener('copy', function() {
+                    hasCopiedNumber = true; trackEvent('copied_number_manually');
                     const btnElement = document.getElementById('dedicated-copy-btn');
                     if (btnElement) { btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied'); btnElement.innerHTML = "הועתק! ✅"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac"; }
                     const alertBox = document.getElementById('small-request-alert');
@@ -838,7 +831,7 @@
 
         function attemptRegistration() {
             const registrationLink = "https://teenk.co.il/teenkerz/"; 
-            if (hasCopiedPromoCode) {
+            if (hasCopiedNumber) {
                 trackEvent('success_reg_with_copy'); window.open(registrationLink, '_blank');
             } else if (!hasSeenWarning) {
                 hasSeenWarning = true; trackEvent('error_tried_reg_without_copy');
