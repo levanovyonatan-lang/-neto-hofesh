@@ -577,33 +577,7 @@ function shareWhatsApp(event) {
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 }
 
-// --- סקריפט נגישות חכם (מעודכן) ---
-let textScaleLevel = 1;
 
-function toggleA11yMenu() {
-    const menu = document.getElementById('a11y-menu');
-    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-}
-
-function changeFontSize(direction) {
-    // הוספה או הפחתה של 10% בכל לחיצה
-    textScaleLevel += (direction * 0.1);
-    
-    // הגבלת הגודל (עד 150% המקסימום, והכי קטן 90%)
-    if (textScaleLevel > 1.5) textScaleLevel = 1.5;
-    if (textScaleLevel < 0.9) textScaleLevel = 0.9;
-    
-    // עדכון המשתנה ששולט ב-CSS של כל האתר
-    document.documentElement.style.setProperty('--text-scale', textScaleLevel);
-}
-
-function toggleHighContrast() {
-    document.body.classList.toggle('high-contrast');
-}
-
-function toggleLinkHighlight() {
-    document.body.classList.toggle('highlight-links');
-}
 
 // --- מנגנון חלוניות משפטיות והצהרת נגישות תקנית ---
 function openLegalModal(type) {
@@ -630,7 +604,7 @@ function openLegalModal(type) {
             <div style="font-size: calc(14px * var(--text-scale, 1)); color: #475569; line-height: 1.6;">
                 <p>מפעיל האתר רואה חשיבות עליונה בהנגשת האתר לאנשים עם מוגבלויות, בהתאם להוראות חוק שוויון זכויות לאנשים עם מוגבלות ותקן ישראלי 5568 (ברמת AA).</p>
                 <p><b>התאמות שבוצעו באתר:</b><br>
-                ✔ כפתור נגישות ייעודי להגדלת פונט, ניגודיות גבוהה והדגשת קישורים.<br>
+                ✔ האתר תומך בזום (הגדלת טקסט) טבעי דרך הדפדפן להקלה על קריאה.<br>
                 ✔ תמיכה מלאה בניווט מקלדת (מקש Tab ומקש Escape לסגירת חלונות).<br>
                 ✔ התאמה לקוראי מסך (הסתרת אלמנטים גרפיים עם aria-hidden והוספת aria-labels).<br>
                 ✔ עיצוב רספונסיבי המותאם לכל סוגי המסכים.</p>
