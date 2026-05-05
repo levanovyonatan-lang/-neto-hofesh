@@ -282,17 +282,30 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 .hw-crosshair-mode { cursor: crosshair !important; }
 .hw-crosshair-mode * { cursor: crosshair !important; }
 
+.hw-arena-mode {
+    border: 3px solid #ef4444 !important;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.3), inset 0 0 60px rgba(239, 68, 68, 0.05) !important;
+    transition: all 0.3s ease;
+}
+.hw-arena-title {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-size: 20px; font-weight: 900; color: #ef4444; z-index: 49;
+    opacity: 0.2; pointer-events: none; white-space: nowrap;
+    font-family: 'Rubik', sans-serif;
+}
+
 .hw-paper {
-    position: absolute; top: -60px; z-index: 50;
-    background: #fffef5; border: 2px solid #fde68a; border-radius: 12px;
-    padding: 10px 14px; display: flex; align-items: center; gap: 6px;
+    position: absolute; top: -70px; z-index: 50;
+    background: #fffef5; border: 2px solid #fde68a; border-radius: 14px;
+    padding: 14px 18px; display: flex; align-items: center; gap: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: crosshair !important;
     animation: hw-float linear forwards; pointer-events: auto;
-    transition: transform 0.1s;
+    transition: transform 0.1s; min-width: 90px; user-select: none; -webkit-user-select: none;
 }
-.hw-paper:hover { transform: scale(1.1); border-color: #ef4444; }
-.hw-paper-emoji { font-size: 22px; }
-.hw-paper-text { font-size: 15px; font-weight: 800; color: #1e293b; font-family: 'Rubik', sans-serif; }
+.hw-paper:hover { transform: scale(1.15); border-color: #ef4444; box-shadow: 0 4px 20px rgba(239,68,68,0.3); }
+.hw-paper:active { transform: scale(0.9); }
+.hw-paper-emoji { font-size: 26px; }
+.hw-paper-text { font-size: 17px; font-weight: 800; color: #1e293b; font-family: 'Rubik', sans-serif; }
 
 @keyframes hw-float {
     0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }

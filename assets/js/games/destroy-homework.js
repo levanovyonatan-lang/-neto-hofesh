@@ -50,12 +50,33 @@
         gameContainer.style.position = 'relative';
         gameContainer.style.overflow = 'hidden';
         gameContainer.classList.add('hw-crosshair-mode');
+        gameContainer.classList.add('hw-arena-mode');
+
+        // החבא את הטיפ וחסום לחיצות על כל האלמנטים המקוריים
+        const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor');
+        hiddenEls.forEach(el => { el.dataset.hwPrevDisplay = el.style.display; el.style.display = 'none'; });
+        // חסום לחיצות על כל הילדים המקוריים
+        Array.from(gameContainer.children).forEach(el => {
+            if (!el.classList.contains('hw-paper') && !el.classList.contains('hw-score-display') && !el.classList.contains('hw-explosion') && el.id !== 'hw-arena-title') {
+                el.style.pointerEvents = 'none';
+            }
+        });
+
+        // מנע zoom בנייד
+        document.body.style.touchAction = 'none';
 
         // תצוגת ניקוד בתוך הכרטיסייה
         scoreDisplay = document.createElement('div');
         scoreDisplay.className = 'hw-score-display';
         scoreDisplay.innerHTML = '💥 <span id="hw-score-val">0</span>';
         gameContainer.appendChild(scoreDisplay);
+
+        // כותרת "השמידו את שיעורי הבית!"
+        const title = document.createElement('div');
+        title.className = 'hw-arena-title';
+        title.id = 'hw-arena-title';
+        title.textContent = '💣 השמידו את שיעורי הבית!';
+        gameContainer.appendChild(title);
 
         // התחל להוציא דפים
         spawnInterval = setInterval(spawnHomework, SPAWN_INTERVAL_MS);
@@ -81,17 +102,18 @@
         // נדנוד מצומצם לרוחב הכרטיסייה
         const swayAmount = (Math.random() - 0.5) * 80;
         hw.style.setProperty('--hw-sway', swayAmount + 'px');
-        hw.style.animationDuration = (Math.random() * 0.8 + 1.2) + 's';
+        hw.style.animationDuration = (Math.random() * 1 + 2) + 's';
 
         hw.addEventListener('click', (e) => {
             e.stopPropagation();
+            e.preventDefault();
             destroyHomework(hw);
         });
         gameContainer.appendChild(hw);
 
         // ניקוי אוטומטי כשנגמרת האנימציה
         hw.addEventListener('animationend', () => hw.remove());
-        setTimeout(() => { if (hw.parentNode) hw.remove(); }, 3000);
+        setTimeout(() => { if (hw.parentNode) hw.remove(); }, 4000);
     }
 
     function destroyHomework(hw) {
@@ -125,9 +147,23 @@
 
         if (gameContainer) {
             gameContainer.classList.remove('hw-crosshair-mode');
+            gameContainer.classList.remove('hw-arena-mode');
+
             // נקה דפים שנשארו
             gameContainer.querySelectorAll('.hw-paper').forEach(p => p.remove());
+
+            // הסר כותרת זירה
+            const title = document.getElementById('hw-arena-title');
+            if (title) title.remove();
+
+            // החזר אלמנטים מוחבאים והחזר לחיצות
+            const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
+            hiddenEls.forEach(el => { el.style.display = el.dataset.hwPrevDisplay || ''; delete el.dataset.hwPrevDisplay; });
+            Array.from(gameContainer.children).forEach(el => { el.style.pointerEvents = ''; });
         }
+
+        // החזר zoom
+        document.body.style.touchAction = '';
 
         // הצג תוצאה
         if (scoreDisplay) {
