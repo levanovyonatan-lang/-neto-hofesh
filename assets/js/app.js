@@ -578,7 +578,6 @@ function shareWhatsApp(event) {
 }
 
 
-
 // --- מנגנון חלוניות משפטיות והצהרת נגישות תקנית ---
 function openLegalModal(type) {
     const content = document.getElementById('legal-content');
@@ -604,7 +603,7 @@ function openLegalModal(type) {
             <div style="font-size: calc(14px * var(--text-scale, 1)); color: #475569; line-height: 1.6;">
                 <p>מפעיל האתר רואה חשיבות עליונה בהנגשת האתר לאנשים עם מוגבלויות, בהתאם להוראות חוק שוויון זכויות לאנשים עם מוגבלות ותקן ישראלי 5568 (ברמת AA).</p>
                 <p><b>התאמות שבוצעו באתר:</b><br>
-                ✔ האתר תומך בזום (הגדלת טקסט) טבעי דרך הדפדפן להקלה על קריאה.<br>
+                ✔ כפתור נגישות ייעודי להגדלת פונט, ניגודיות גבוהה והדגשת קישורים.<br>
                 ✔ תמיכה מלאה בניווט מקלדת (מקש Tab ומקש Escape לסגירת חלונות).<br>
                 ✔ התאמה לקוראי מסך (הסתרת אלמנטים גרפיים עם aria-hidden והוספת aria-labels).<br>
                 ✔ עיצוב רספונסיבי המותאם לכל סוגי המסכים.</p>
@@ -633,21 +632,4 @@ document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) return e.preventDefault(), false;
     if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) return e.preventDefault(), false;
     if (e.ctrlKey && (e.key === 'S' || e.key === 's')) return e.preventDefault(), false;
-});
-
-// Easter Egg - Monster
-document.addEventListener('DOMContentLoaded', () => {
-    const netDaysEl = document.getElementById('main-net-days');
-    const monsterEl = document.getElementById('easter-egg-monster');
-    if (netDaysEl && monsterEl) {
-        netDaysEl.addEventListener('click', () => {
-            if (!monsterEl.classList.contains('peek')) {
-                trackEvent('easter_egg_monster_click');
-                monsterEl.classList.add('peek');
-                setTimeout(() => {
-                    monsterEl.classList.remove('peek');
-                }, 2000);
-            }
-        });
-    }
 });
