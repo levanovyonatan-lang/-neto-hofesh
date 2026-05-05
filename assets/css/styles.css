@@ -241,7 +241,7 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 /* --- עיצוב תפריט הנגישות (Accessibility Widget) --- */
 /* הערה: תפריט הנגישות עצמו מקבל פיקסלים קבועים כדי שההגדלה לא תוציא אותו מחוץ למסך */
 .a11y-btn-float {
-    position: fixed; bottom: 115px; left: 15px; width: 42px; height: 42px;
+    position: fixed; top: 15px; left: 15px; width: 42px; height: 42px;
     background: #ffffff; color: #475569; border-radius: 50%; display: flex;
     justify-content: center; align-items: center; font-size: 20px; cursor: pointer;
     z-index: 800; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); border: 1px solid #cbd5e1;
@@ -250,7 +250,7 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 .a11y-btn-float:hover { transform: scale(1.05); opacity: 1; color: #0ea5e9; border-color: #0ea5e9; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2); }
 
 .a11y-menu-card {
-    position: fixed; bottom: 170px; left: 15px; background: white; width: 280px;
+    position: fixed; top: 65px; left: 15px; background: white; width: 280px;
     border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 10001;
     display: none; flex-direction: column; padding: 20px; border: 1px solid #e2e8f0;
     direction: rtl; animation: fadeIn 0.2s ease-out;
