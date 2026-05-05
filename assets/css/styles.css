@@ -261,3 +261,66 @@ input:checked + .smiley-handle::after { content: "☹️"; }
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.15) rotate(-3deg); }
 }
+
+/* --- Destroy the Homework Mini-Game --- */
+#homework-trigger {
+    position: fixed; bottom: 70px; right: 15px; width: 44px; height: 44px;
+    font-size: 24px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 500; border-radius: 50%;
+    background: rgba(255,255,255,0.8); border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); opacity: 0.7;
+    transition: all 0.3s ease; animation: hw-peek 4s ease-in-out infinite;
+}
+#homework-trigger:hover { opacity: 1; transform: scale(1.15); box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+@keyframes hw-peek {
+    0%, 85%, 100% { transform: translateY(0); }
+    90% { transform: translateY(-6px); }
+    95% { transform: translateY(0); }
+}
+
+body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important; }
+
+.hw-paper {
+    position: fixed; top: -80px; z-index: 9998;
+    background: #fffef5; border: 2px solid #fde68a; border-radius: 12px;
+    padding: 10px 14px; display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: crosshair !important;
+    animation: hw-float linear forwards; pointer-events: auto;
+    transition: transform 0.1s;
+}
+.hw-paper:hover { transform: scale(1.1); border-color: #ef4444; }
+.hw-paper-emoji { font-size: 22px; }
+.hw-paper-text { font-size: 15px; font-weight: 800; color: #1e293b; font-family: 'Rubik', sans-serif; }
+
+@keyframes hw-float {
+    0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+    5% { opacity: 1; }
+    100% { transform: translateY(calc(100vh + 100px)) translateX(var(--hw-sway, 0px)) rotate(25deg); opacity: 0.3; }
+}
+
+.hw-explosion {
+    position: fixed; font-size: 50px; z-index: 9999; pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: hw-boom 0.5s ease-out forwards;
+}
+@keyframes hw-boom {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+}
+
+.hw-score-display {
+    position: fixed; top: 15px; right: 15px; z-index: 10000;
+    background: rgba(239, 68, 68, 0.9); color: white; font-weight: 900;
+    font-size: 22px; padding: 10px 18px; border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3); font-family: 'Rubik', sans-serif;
+    animation: fadeIn 0.3s ease-out; display: flex; align-items: center; gap: 8px;
+}
+.hw-score-final {
+    text-align: center; flex-direction: column; gap: 4px;
+    animation: hw-score-pop 0.4s ease-out;
+}
+@keyframes hw-score-pop {
+    0% { transform: scale(0.8); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
