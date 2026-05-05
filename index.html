@@ -209,27 +209,7 @@
           <p>האתר משתמש ב-Google Analytics ובקובצי עוגיות לשיפור חווית המשתמש.</p>
         </footer>
 
-        <!-- כפתור ותפריט נגישות (Accessibility Widget) -->
-        <button class="a11y-btn-float" aria-label="פתח תפריט נגישות" onclick="toggleA11yMenu()">♿</button>
-        <div id="a11y-menu" class="a11y-menu-card" role="dialog" aria-modal="true" aria-label="תפריט נגישות">
-            <h3>תפריט נגישות ♿</h3>
-            <div class="a11y-option">
-                גודל טקסט:
-                <div>
-                    <button class="a11y-action-btn" aria-label="הגדל טקסט" onclick="changeFontSize(1)">A+</button>
-                    <button class="a11y-action-btn" aria-label="הקטן טקסט" onclick="changeFontSize(-1)">A-</button>
-                </div>
-            </div>
-            <div class="a11y-option">
-                ניגודיות צבעים:
-                <button class="a11y-action-btn" onclick="toggleHighContrast()">הדלק/כבה</button>
-            </div>
-            <div class="a11y-option">
-                הדגשת קישורים:
-                <button class="a11y-action-btn" onclick="toggleLinkHighlight()">הדלק/כבה</button>
-            </div>
-            <button class="a11y-close-menu" onclick="toggleA11yMenu()">סגור תפריט</button>
-        </div>
+
 
         <!-- חלונית משפטית (אוניברסלית לכל הדפים) -->
         <div id="legal-modal" class="ios-modal-overlay" style="align-items: center; z-index: 10000;" role="dialog" aria-modal="true" aria-label="מידע משפטי">
