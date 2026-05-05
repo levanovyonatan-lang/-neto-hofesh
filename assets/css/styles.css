@@ -264,11 +264,11 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 
 /* --- Destroy the Homework Mini-Game --- */
 #homework-trigger {
-    position: fixed; bottom: 70px; right: 15px; width: 44px; height: 44px;
-    font-size: 24px; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; z-index: 500; border-radius: 50%;
-    background: rgba(255,255,255,0.8); border: 1px solid #e2e8f0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06); opacity: 0.7;
+    position: absolute; top: 10px; left: 10px; width: 38px; height: 38px;
+    font-size: 20px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 50; border-radius: 50%;
+    background: rgba(255,255,255,0.85); border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); opacity: 0.6;
     transition: all 0.3s ease; animation: hw-peek 4s ease-in-out infinite;
 }
 #homework-trigger:hover { opacity: 1; transform: scale(1.15); box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
@@ -279,9 +279,11 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 }
 
 body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important; }
+.hw-crosshair-mode { cursor: crosshair !important; }
+.hw-crosshair-mode * { cursor: crosshair !important; }
 
 .hw-paper {
-    position: fixed; top: -80px; z-index: 9998;
+    position: absolute; top: -60px; z-index: 50;
     background: #fffef5; border: 2px solid #fde68a; border-radius: 12px;
     padding: 10px 14px; display: flex; align-items: center; gap: 6px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: crosshair !important;
@@ -295,11 +297,11 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 @keyframes hw-float {
     0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
     5% { opacity: 1; }
-    100% { transform: translateY(calc(100vh + 100px)) translateX(var(--hw-sway, 0px)) rotate(25deg); opacity: 0.3; }
+    100% { transform: translateY(600px) translateX(var(--hw-sway, 0px)) rotate(15deg); opacity: 1; }
 }
 
 .hw-explosion {
-    position: fixed; font-size: 50px; z-index: 9999; pointer-events: none;
+    position: absolute; font-size: 50px; z-index: 51; pointer-events: none;
     transform: translate(-50%, -50%);
     animation: hw-boom 0.5s ease-out forwards;
 }
@@ -309,7 +311,7 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 }
 
 .hw-score-display {
-    position: fixed; top: 15px; right: 15px; z-index: 10000;
+    position: absolute; top: 10px; right: 10px; z-index: 52;
     background: rgba(239, 68, 68, 0.9); color: white; font-weight: 900;
     font-size: 22px; padding: 10px 18px; border-radius: 16px;
     box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3); font-family: 'Rubik', sans-serif;
