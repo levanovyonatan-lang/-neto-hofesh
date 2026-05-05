@@ -634,3 +634,20 @@ document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) return e.preventDefault(), false;
     if (e.ctrlKey && (e.key === 'S' || e.key === 's')) return e.preventDefault(), false;
 });
+
+// Easter Egg - Monster
+document.addEventListener('DOMContentLoaded', () => {
+    const netDaysEl = document.getElementById('main-net-days');
+    const monsterEl = document.getElementById('easter-egg-monster');
+    if (netDaysEl && monsterEl) {
+        netDaysEl.addEventListener('click', () => {
+            if (!monsterEl.classList.contains('peek')) {
+                trackEvent('easter_egg_monster_click');
+                monsterEl.classList.add('peek');
+                setTimeout(() => {
+                    monsterEl.classList.remove('peek');
+                }, 2000);
+            }
+        });
+    }
+});
