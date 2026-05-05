@@ -34,7 +34,7 @@
     <!-- Confetti Script -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-    <!-- קובץ הטיפים החיצוני -->
+    <!-- קובץ הטיפים החיצוני - קריטי שיעבוד מהשרת -->
     <script src="tips.js"></script>
     
     <meta name="description" content="בודקים עוד כמה ימים יש חופש גדול? אתר נטו חופש מציג מחשבון ספירה לאחור המראה כמה ימי לימודים עד החופש הגדול 2026, לא כולל שבתות וחגים! כנסו לבדוק מתי מסתיימים הלימודים.">
@@ -566,7 +566,7 @@
             </div>
         </div>
 
-        <!-- מודל ה-VIP (מותאם לסרטון מ-Google Drive) -->
+        <!-- מודל ה-VIP -->
         <div id="vip-modal" class="ios-modal-overlay" style="align-items: center; z-index: 9999;" role="dialog" aria-modal="true" aria-label="הרשמה להרוויח כסף">
             <div class="ios-modal-content" style="max-width: 400px; max-height: 95vh; overflow-y: auto; position: relative; text-align: right; padding: 35px 25px;">
                 <button onclick="closeVipModal()" aria-label="סגור חלון" style="position: absolute; top: 15px; left: 15px; background: none; border: none; font-size: calc(24px * var(--text-scale, 1)); color: #cbd5e1; cursor: pointer; padding: 5px; line-height: 1;">✖</button>
@@ -574,20 +574,14 @@
                 <h3 style="font-size: calc(22px * var(--text-scale, 1)); font-weight: 900; color: #1e293b; margin-bottom: 25px; line-height: 1.3;">רוצים להרוויח כסף וחוויות? 💵</h3>
                 
                 <div style="position: relative; width: 80%; max-width: 240px; margin: 0 auto 15px auto;">
-                    <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 2px solid #fde047; background: #000; position: relative; aspect-ratio: 9/16;">
-                        <div onclick="togglePromoVideo()" style="position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 55px); z-index: 5; cursor: pointer;" aria-label="נגן או עצור סרטון" role="button"></div>
-
-                        <div id="video-click-hint" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; pointer-events: none; transition: opacity 0.3s;" aria-hidden="true">
+                    <!-- הפתרון המושלם: פתיחה בטאב חדש שואב אוטומטית את תמונת הסרטון מהיוטיוב -->
+                    <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 2px solid #fde047; background: #000 url('https://img.youtube.com/vi/FALoYH6R__I/hqdefault.jpg') center/cover no-repeat; position: relative; aspect-ratio: 9/16; cursor: pointer;" onclick="playPromoVideo()">
+                        <div id="video-click-hint" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; transition: opacity 0.3s;" aria-hidden="true">
                             <div style="color: white; font-weight: 800; font-size: calc(15px * var(--text-scale, 1)); margin-bottom: 4px;">יוצר האתר ממליץ</div>
                             <div style="color: white; font-weight: 900; font-size: calc(16px * var(--text-scale, 1)); margin-bottom: 15px; letter-spacing: 0.5px;">לגילאי 14+</div>
-                            <div style="font-size: calc(50px * var(--text-scale, 1)); margin-bottom: 15px; animation: subtle-jump 2s infinite;">▶️</div>
-                            <div style="color: white; font-weight: 900; font-size: calc(18px * var(--text-scale, 1)); letter-spacing: 0.5px;">הקליקו לתחילת הסרטון</div>
+                            <div style="font-size: calc(50px * var(--text-scale, 1)); margin-bottom: 15px; animation: subtle-jump 2s infinite; text-shadow: 0 4px 10px rgba(0,0,0,0.5);">▶️</div>
+                            <div style="color: white; font-weight: 900; font-size: calc(18px * var(--text-scale, 1)); letter-spacing: 0.5px; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">צפייה ביוטיוב</div>
                         </div>
-
-                        <video id="promo-video" aria-label="סרטון הסבר על הרשמה לטינק" width="100%" height="100%" controls playsinline preload="metadata" style="display: block; object-fit: cover; width: 100%; height: 100%;" onplay="document.getElementById('video-click-hint').style.display='none';" onended="highlightCopyButton()">
-                            <source id="promo-source" src="https://res.cloudinary.com/dxqmlklfc/video/upload/v1777904570/WhatsApp_Video_2026-05-04_at_17.17.03_1_h3xkhr.mp4" type="video/mp4">
-                            הדפדפן שלך לא תומך בהצגת סרטונים.
-                        </video>
                     </div>
                 </div>
                 
@@ -737,19 +731,13 @@
         function openVipModal() {
             hasCopiedPromoCode = false;
             document.getElementById('small-request-alert').style.display = 'none';
-            const hint = document.getElementById('video-click-hint');
-            if(hint) hint.style.display = 'flex';
             
             const copyBtn = document.getElementById('dedicated-copy-btn');
             if (copyBtn) {
-                copyBtn.innerHTML = "העתק 📋";
+                copyBtn.innerHTML = "העתק 📋"; 
                 copyBtn.style.background = "#fef08a"; copyBtn.style.color = "#854d0e"; copyBtn.style.borderColor = "#fde047";
                 copyBtn.classList.remove('copied'); copyBtn.classList.remove('video-ended-highlight');
             }
-            
-            const vidSource = document.getElementById('promo-source');
-            const vidElement = document.getElementById('promo-video');
-            if (vidSource && !vidSource.src) { vidSource.src = vidSource.getAttribute('data-src'); vidElement.load(); }
             
             trackEvent('open_vip_funnel');
             document.getElementById('vip-modal').style.display = 'flex';
@@ -758,15 +746,12 @@
 
         function closeVipModal() {
             document.getElementById('vip-modal').style.display = 'none';
-            const vid = document.getElementById('promo-video');
-            if (vid && typeof vid.pause === 'function') vid.pause();
         }
 
-        function togglePromoVideo() {
-            const vid = document.getElementById('promo-video');
-            if (!vid) return;
-            if (vid.paused) vid.play().catch(e => console.log('Video play prevented', e));
-            else vid.pause();
+        function playPromoVideo() {
+            window.open('https://www.youtube.com/shorts/FALoYH6R__I', '_blank');
+            setTimeout(highlightCopyButton, 2000);
+            trackEvent('clicked_youtube_promo');
         }
 
         function highlightCopyButton() {
@@ -861,50 +846,47 @@
 
         function getSmartTip(targetId, schoolType, daysLeft, clickIndex = 0) {
             // התממשקות לקובץ tips.js החיצוני עבור שבועות והחופש הגדול
-            if (typeof tipsDatabase !== 'undefined' && (targetId === 'shavuot' || targetId.startsWith('summer'))) {
-                let categoryName = '';
-                if (targetId === 'shavuot') categoryName = 'shavuot';
-                else if (targetId.startsWith('summer')) {
-                    categoryName = schoolType === 'elem' ? 'elementary' : 'highschool';
-                }
+            if (targetId === 'shavuot' || targetId.startsWith('summer')) {
+                if (typeof tipsDatabase !== 'undefined') {
+                    let categoryName = '';
+                    if (targetId === 'shavuot') categoryName = 'shavuot';
+                    else if (targetId.startsWith('summer')) {
+                        categoryName = schoolType === 'elem' ? 'elementary' : 'highschool';
+                    }
 
-                if (categoryName && tipsDatabase[categoryName]) {
-                    const tipsArray = tipsDatabase[categoryName];
-                    
-                    // חישוב האינדקס לפי היום הנוכחי (הטיפים יתחלפו כל 24 שעות)
-                    const todayIndex = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
-                    
-                    // שימוש בשארית חלוקה (modulo) כדי לחזור על הטיפים בלופ אם חלפו 10 ימים
-                    const currentDayPairIndex = todayIndex % tipsArray.length;
-                    
-                    // שליפת מערך הטיפים של היום (המכיל שני טיפים)
-                    const tipsForToday = tipsArray[currentDayPairIndex];
-                    
-                    // הצגת הטיפ הראשון או השני לפי מספר הלחיצות ביום (0 או 1)
-                    // אם מסיבה כלשהי clickIndex גדול מ-1, נציג את הטיפ השני (אינדקס 1)
-                    const tipToDisplay = clickIndex > 1 ? 1 : clickIndex;
-                    
-                    // למקרה שהמערך היומי קצר מ-2 (לא אמור לקרות לפי ה-tips.js שלך, אבל ליתר ביטחון)
-                    if(tipsForToday && tipsForToday[tipToDisplay]) {
-                        return tipsForToday[tipToDisplay];
-                    } else if (tipsForToday && tipsForToday[0]) {
-                        return tipsForToday[0];
+                    if (categoryName && tipsDatabase[categoryName]) {
+                        const tipsArray = tipsDatabase[categoryName];
+                        
+                        // חישוב האינדקס לפי היום הנוכחי (הטיפים יתחלפו כל 24 שעות)
+                        const todayIndex = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+                        
+                        // שימוש בשארית חלוקה (modulo) כדי לחזור על הטיפים בלופ אם חלפו הימים
+                        const currentDayPairIndex = todayIndex % tipsArray.length;
+                        
+                        // שליפת מערך הטיפים של היום (המכיל שני טיפים)
+                        const tipsForToday = tipsArray[currentDayPairIndex];
+                        
+                        // הצגת הטיפ הראשון או השני לפי מספר הלחיצות ביום (0 או 1)
+                        const tipToDisplay = clickIndex > 1 ? 1 : clickIndex;
+                        
+                        if(tipsForToday && tipsForToday[tipToDisplay]) {
+                            return tipsForToday[tipToDisplay];
+                        } else if (tipsForToday && tipsForToday[0]) {
+                            return tipsForToday[0];
+                        }
                     }
                 }
+                // במידה והקובץ tips.js לא נטען או שהיה שגיאה במשיכת המידע, נחזיר הודעת ברירת מחדל
+                return "מחשב מסלול מחדש... נא לוודא שקובץ tips.js מחובר לשרת! 🚀";
             }
 
-            // פולבק (Fallback) במקרה ש-tipsDatabase לא נטען או עבור חגים ישנים (עצמאות/ל"ג בעומר)
+            // פולבק (Fallback) במקרה של חגים ישנים (עצמאות/ל"ג בעומר) שנשארו במאגר הישן
             let pool = []; let poolKey = ''; const cat = targetId.startsWith('summer') ? (schoolType || 'high') : null;
-            if (targetId.startsWith('summer')) {
-                let timeFrame = daysLeft > 40 ? 'far' : (daysLeft > 20 ? 'mid' : (daysLeft > 5 ? 'close' : 'veryClose'));
-                // פולבק למקרה שאין את המאגר הישן
-                return "החופש מתקרב! תהנו מהזמן שנשאר! ✨";
-            } else {
-                const holidayKey = smartTipsDb[targetId] ? targetId : 'shavuot';
-                let timeFrame = daysLeft > 10 ? 'far' : (daysLeft > 1 ? 'close' : 'tomorrow');
-                if(!smartTipsDb[holidayKey]) return "חג שמח מתקרב! 🎉";
-                pool = smartTipsDb[holidayKey][timeFrame]; poolKey = `${holidayKey}_${timeFrame}`;
-            }
+            const holidayKey = smartTipsDb[targetId] ? targetId : 'shavuot';
+            let timeFrame = daysLeft > 10 ? 'far' : (daysLeft > 1 ? 'close' : 'tomorrow');
+            if(!smartTipsDb[holidayKey]) return "חג שמח מתקרב! 🎉";
+            pool = smartTipsDb[holidayKey][timeFrame]; poolKey = `${holidayKey}_${timeFrame}`;
+            
             let tipHistory = JSON.parse(localStorage.getItem('holiday_calc_tip_history') || '{}');
             if (!tipHistory[poolKey]) tipHistory[poolKey] = [];
             let availableIndices = pool.map((_, i) => i).filter(i => !tipHistory[poolKey].includes(i));
