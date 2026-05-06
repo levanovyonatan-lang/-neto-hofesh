@@ -127,6 +127,7 @@ function openVipModal() {
 }
 
 function closeVipModal() {
+    trackEvent('close_vip_funnel');
     document.getElementById('vip-modal').style.display = 'none';
     const vid = document.getElementById('promo-video');
     if (vid && typeof vid.pause === 'function') vid.pause();
@@ -135,8 +136,8 @@ function closeVipModal() {
 function togglePromoVideo() {
     const vid = document.getElementById('promo-video');
     if (!vid) return;
-    if (vid.paused) vid.play().catch(e => console.log('Video play prevented', e));
-    else vid.pause();
+    if (vid.paused) { vid.play().catch(e => console.log('Video play prevented', e)); trackEvent('play_promo_video'); }
+    else { vid.pause(); trackEvent('pause_promo_video'); }
 }
 
 function highlightCopyButton() {
