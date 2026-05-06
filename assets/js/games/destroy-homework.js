@@ -186,14 +186,13 @@
         }, 3500);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const observer = new MutationObserver(() => {
-            const mainScreen = document.getElementById('main-screen');
-            if (mainScreen && mainScreen.style.display !== 'none') {
-                createTriggerButton();
-                observer.disconnect();
-            }
-        });
-        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
-    });
+    function initHomework() {
+        createTriggerButton();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHomework);
+    } else {
+        initHomework();
+    }
 })();
