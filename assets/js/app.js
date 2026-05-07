@@ -369,8 +369,8 @@ function handleAiTip() {
     const schoolNames = { 'elem': 'יסודי', 'middle': 'חטיבה', 'high': 'תיכון' };
     const schoolName = schoolNames[userConfig.schoolType] || userConfig.schoolType;
     
-    // שליחת אירוע עם שם ייחודי כדי שיופיע ישירות ברשימת האירועים הראשית
-    const descriptiveEventName = `tip_click_${userConfig.schoolType}_${currentState.clicks + 1}`;
+    // שליחת אירוע עם שם ייחודי בעברית בדיוק כפי שביקש המשתמש
+    const descriptiveEventName = `טיפ_${currentState.clicks + 1}_${schoolName}`;
     trackEvent(descriptiveEventName, { 
         'target_holiday': target.name,
         'school_type': schoolName,
