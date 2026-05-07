@@ -368,11 +368,20 @@ function handleAiTip() {
     }
     const schoolNames = { 'elem': 'יסודי', 'middle': 'חטיבה', 'high': 'תיכון' };
     const schoolName = schoolNames[userConfig.schoolType] || userConfig.schoolType;
-    trackEvent('click_ai_tip', { 
+    
+    // שליחת אירוע עם שם ייחודי כדי שיופיע ישירות ברשימת האירועים הראשית
+    const descriptiveEventName = `tip_click_${userConfig.schoolType}_${currentState.clicks + 1}`;
+    trackEvent(descriptiveEventName, { 
         'target_holiday': target.name,
         'school_type': schoolName,
         'tip_number': currentState.clicks + 1,
         'tip_label': `טיפ ${currentState.clicks + 1} ${schoolName}`
+    });
+    
+    // גיבוי עם השם הכללי
+    trackEvent('click_ai_tip', { 
+        'school_type': schoolName,
+        'tip_number': currentState.clicks + 1
     });
     
     setTimeout(async () => {
@@ -424,9 +433,9 @@ function initApp() {
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
     userConfig.activeTargetId = userConfig.schoolType === 'elem' ? 'summerElem' : 'summerHigh';
-    if (userConfig.schoolType === 'elem') trackEvent('started_with_elementary');
-    if (userConfig.schoolType === 'middle') trackEvent('started_with_middle');
-    if (userConfig.schoolType === 'high') trackEvent('started_with_high');
+    if (userConfig.schoolType === 'elem') trackEvent('start_יסודי');
+    if (userConfig.schoolType === 'middle') trackEvent('start_חטיבה');
+    if (userConfig.schoolType === 'high') trackEvent('start_תיכון');
     
     const schoolNames = { 'elem': 'יסודי', 'middle': 'חטיבה', 'high': 'תיכון' };
     const schoolName = schoolNames[userConfig.schoolType] || userConfig.schoolType;
