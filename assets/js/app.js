@@ -334,24 +334,21 @@ function renderTipBox(targetId, isNewlyClicked = false) {
     }
 }
 
-async function getSmartTip(targetId, schoolType) {
+async function getSmartTip(targetId, schoolType, tipNumber) {
     const tipsDb = await loadTipsDatabase();
-    const { pool, poolKey } = resolveTipPool(tipsDb, targetId, schoolType);
+    const { pool } = resolveTipPool(tipsDb, targetId, schoolType);
     if (!pool.length) throw new Error('No tips are available for the selected context');
 
-    let tipHistory = {};
-    try {
-        tipHistory = JSON.parse(localStorage.getItem(tipHistoryStorageKey) || '{}');
-    } catch (e) {
-        tipHistory = {};
-    }
-
-    if (!tipHistory[poolKey]) tipHistory[poolKey] = [];
-    let availableIndices = pool.map((_, i) => i).filter(i => !tipHistory[poolKey].includes(i));
-    if (availableIndices.length === 0) { tipHistory[poolKey] = []; availableIndices = pool.map((_, i) => i); }
-    const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
-    tipHistory[poolKey].push(randomIndex); localStorage.setItem(tipHistoryStorageKey, JSON.stringify(tipHistory));
-    return pool[randomIndex];
+    // יצירת אינדקס דטרמיניסטי לפי התאריך (מאז 1 בינואר 2024)
+    const now = new Date();
+    const start = new Date('2024-01-01');
+    const dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+    
+    // בחירת אינדקס בצורה עוקבת כדי למנוע חזרות ככל הניתן
+    // כל יום "מתקדמים" ב-2 טיפים בתוך המאגר
+    const finalIndex = (dayIndex * 2 + (tipNumber - 1)) % pool.length;
+    
+    return pool[finalIndex];
 }
 
 function handleAiTip() {
@@ -369,11 +366,18 @@ function handleAiTip() {
         btn.style.opacity = '1'; btn.style.transform = 'scale(1)'; loader.style.display = 'none'; btn.style.pointerEvents = 'auto';
         return;
     }
-    trackEvent('click_ai_tip', { 'target_holiday': target.name });
+    const schoolNames = { 'elem': 'יסודי', 'middle': 'חטיבה', 'high': 'תיכון' };
+    const schoolName = schoolNames[userConfig.schoolType] || userConfig.schoolType;
+    trackEvent('click_ai_tip', { 
+        'target_holiday': target.name,
+        'school_type': schoolName,
+        'tip_number': currentState.clicks + 1,
+        'tip_label': `טיפ ${currentState.clicks + 1} ${schoolName}`
+    });
     
     setTimeout(async () => {
         try {
-            const selectedTip = await getSmartTip(target.id, userConfig.schoolType);
+            const selectedTip = await getSmartTip(target.id, userConfig.schoolType, currentState.clicks + 1);
             currentState.clicks++; if (!currentState.texts) currentState.texts = [];
             currentState.texts.push(selectedTip); setDailyTipState(targetId, currentState); saveDailyState();
             renderTipBox(targetId, true);
@@ -423,6 +427,16 @@ function initApp() {
     if (userConfig.schoolType === 'elem') trackEvent('started_with_elementary');
     if (userConfig.schoolType === 'middle') trackEvent('started_with_middle');
     if (userConfig.schoolType === 'high') trackEvent('started_with_high');
+    
+    const schoolNames = { 'elem': 'יסודי', 'middle': 'חטיבה', 'high': 'תיכון' };
+    const schoolName = schoolNames[userConfig.schoolType] || userConfig.schoolType;
+    
+    // אירוע כללי עם פרמטרים לניתוח קל יותר
+    trackEvent('app_start', { 
+        'school_type': schoolName, 
+        'study_friday': userConfig.studyFriday ? 'כן' : 'לא'
+    });
+
     if (userConfig.studyFriday) trackEvent('started_study_friday_yes'); else trackEvent('started_study_friday_no');
     showMainScreen();
 }
