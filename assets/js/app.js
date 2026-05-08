@@ -33,7 +33,7 @@ function initPWA() {
     const manifestData = {
         "name": "נטו | מתי החופש הגדול", "short_name": "נטו", "start_url": window.location.href, "display": "standalone",
         "background_color": "#ffffff", "theme_color": "#ffffff",
-        "icons": [{"src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='white'/%3E%3Ctext x='50' y='54' dominant-baseline='central' text-anchor='middle' font-size='75'%3E☀️%3C/text%3E%3C/svg%3E", "sizes": "192x192 512x512", "type": "image/svg+xml", "purpose": "any maskable"}]
+        "icons": [{"src": "favicon.png", "sizes": "192x192 512x512", "type": "image/png", "purpose": "any maskable"}]
     };
     const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
     document.getElementById('manifest-link').setAttribute('href', URL.createObjectURL(manifestBlob));
