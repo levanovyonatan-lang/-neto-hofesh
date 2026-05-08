@@ -366,16 +366,16 @@ function handleAiTip() {
         btn.style.opacity = '1'; btn.style.transform = 'scale(1)'; loader.style.display = 'none'; btn.style.pointerEvents = 'auto';
         return;
     }
-    const schoolNamesHeb = { 'elem': 'יסודי', 'middle': 'חטיבה', 'high': 'תיכון' };
-    const schoolNameHeb = schoolNamesHeb[userConfig.schoolType] || userConfig.schoolType;
+    const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
+    const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
     
-    // שליחת אירוע עם שם ייחודי בעברית כפי שביקש המשתמש בדוגמה
-    const descriptiveEventName = `טיפ_${currentState.clicks + 1}_${schoolNameHeb}`;
+    // שליחת אירוע עם שם ייחודי באנגלית
+    const descriptiveEventName = `tip_${currentState.clicks + 1}_${schoolNameEng}`;
     trackEvent(descriptiveEventName, { 
         'target_holiday': target.name,
         'school_type': userConfig.schoolType,
         'tip_number': currentState.clicks + 1,
-        'tip_label': `טיפ ${currentState.clicks + 1} ${schoolNameHeb}`
+        'tip_label': `Tip ${currentState.clicks + 1} ${schoolNameEng}`
     });
     
     // גיבוי עם השם הכללי
