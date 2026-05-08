@@ -433,17 +433,17 @@ function initApp() {
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
     userConfig.activeTargetId = userConfig.schoolType === 'elem' ? 'summerElem' : 'summerHigh';
-    if (userConfig.schoolType === 'elem') trackEvent('start_יסודי');
-    if (userConfig.schoolType === 'middle') trackEvent('start_חטיבה');
-    if (userConfig.schoolType === 'high') trackEvent('start_תיכון');
+    if (userConfig.schoolType === 'elem') trackEvent('start_elementary');
+    if (userConfig.schoolType === 'middle') trackEvent('start_middle');
+    if (userConfig.schoolType === 'high') trackEvent('start_high');
     
-    const schoolNames = { 'elem': 'יסודי', 'middle': 'חטיבה', 'high': 'תיכון' };
-    const schoolName = schoolNames[userConfig.schoolType] || userConfig.schoolType;
+    const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
+    const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
     
     // אירוע כללי עם פרמטרים לניתוח קל יותר
     trackEvent('app_start', { 
-        'school_type': schoolName, 
-        'study_friday': userConfig.studyFriday ? 'כן' : 'לא'
+        'school_type': schoolNameEng, 
+        'study_friday': userConfig.studyFriday ? 'yes' : 'no'
     });
 
     if (userConfig.studyFriday) trackEvent('started_study_friday_yes'); else trackEvent('started_study_friday_no');
@@ -464,10 +464,6 @@ function resetApp() {
 }
 
 function updateSchoolSelection(radio) {
-    if (radio.value === 'elem') trackEvent('clicked_elementary_btn');
-    if (radio.value === 'middle') trackEvent('clicked_middle_btn');
-    if (radio.value === 'high') trackEvent('clicked_high_btn');
-
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
     radio.parentElement.classList.add('selected');
     const hint = document.getElementById('school-hint-text'); const isFridayOff = !document.getElementById('friday-toggle').checked;
