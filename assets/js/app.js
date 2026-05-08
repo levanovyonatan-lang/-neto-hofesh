@@ -31,7 +31,7 @@ const allTargets = [
 
 function initPWA() {
     const manifestData = {
-        "name": "נטו | מתי החופש הגדול", "short_name": "נטו", "start_url": window.location.href, "display": "standalone",
+        "name": "נטו חופש | מתי החופש הגדול", "short_name": "נטו חופש", "start_url": window.location.href, "display": "standalone",
         "background_color": "#ffffff", "theme_color": "#ffffff",
         "icons": [{"src": "favicon.png", "sizes": "192x192 512x512", "type": "image/png", "purpose": "any maskable"}]
     };
