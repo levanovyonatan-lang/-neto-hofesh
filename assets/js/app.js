@@ -33,7 +33,7 @@ function initPWA() {
     const manifestData = {
         "name": "נטו חופש | מתי החופש הגדול", "short_name": "נטו חופש", "start_url": window.location.href, "display": "standalone",
         "background_color": "#ffffff", "theme_color": "#ffffff",
-        "icons": [{"src": "neto-logo.png?v=3", "sizes": "192x192 512x512", "type": "image/png", "purpose": "any maskable"}]
+        "icons": [{"src": "official-sun-neto.png?v=100", "sizes": "192x192 512x512", "type": "image/png", "purpose": "any maskable"}]
     };
     const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
     document.getElementById('manifest-link').setAttribute('href', URL.createObjectURL(manifestBlob));
