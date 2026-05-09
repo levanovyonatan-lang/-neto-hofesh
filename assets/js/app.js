@@ -150,6 +150,8 @@ function togglePromoVideo() {
         const player = new Vimeo.Player(vid);
         player.getPaused().then(paused => {
             if (paused) {
+                player.setVolume(1).catch(() => {});
+                player.setMuted(false).catch(() => {});
                 player.play().catch(() => {});
                 document.getElementById('video-click-hint').style.display = 'none';
                 trackEvent('play_promo_video_vimeo');
