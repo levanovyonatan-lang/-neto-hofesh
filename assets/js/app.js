@@ -481,6 +481,9 @@ function initApp() {
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
     const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
     
+    // שליחת אירוע ספציפי לסוג בית הספר (באנגלית)
+    trackEvent('start_' + schoolNameEng);
+    
     // אירוע כללי עם פרמטרים לניתוח קל יותר
     trackEvent('app_start', { 
         'school_type': schoolNameEng, 
