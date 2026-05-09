@@ -35,8 +35,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="נטו חופש">
     
-    <!-- Confetti Script -->
+    <!-- Confetti & Video Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="https://player.vimeo.com/api/player.js"></script>
     
     <meta name="description" content="בודקים עוד כמה ימים יש חופש גדול? אתר נטו חופש מציג מחשבון ספירה לאחור המראה כמה ימי לימודים עד החופש הגדול 2026, לא כולל שבתות וחגים! כנסו לבדוק מתי מסתיימים הלימודים.">
     <meta name="keywords" content="נטו חופש, מתי החופש הגדול, כמה ימים עד לחופש הגדול, עוד כמה ימים יתחיל החופש הגדול לחטיבות הביניים, מתי מסתיימים הלימודים, עוד כמה זמן החופש הגדול, עוד כמה זמן החופש הגדול לא כולל שבתות וחגים, ימי לימודים עד החופש הגדול, עוד כמה ימים יש חופש גדול, החופש הגדול 2026">
@@ -293,10 +294,7 @@
                             <div style="color: white; font-weight: 900; font-size: calc(18px * var(--text-scale, 1)); letter-spacing: 0.5px;">הקליקו לתחילת הסרטון</div>
                         </div>
 
-                        <video id="promo-video" aria-label="סרטון הסבר על הרשמה לטינק" width="100%" height="100%" controls playsinline preload="metadata" style="display: block; object-fit: cover; width: 100%; height: 100%;" onplay="document.getElementById('video-click-hint').style.display='none';" onended="highlightCopyButton()">
-                            <source id="promo-source" src="https://res.cloudinary.com/dxqmlklfc/video/upload/v1777904570/WhatsApp_Video_2026-05-04_at_17.17.03_1_h3xkhr.mp4" type="video/mp4">
-                            הדפדפן שלך לא תומך בהצגת סרטונים.
-                        </video>
+                        <iframe id="promo-video" src="https://player.vimeo.com/video/1190695601?badge=0&autopause=0&player_id=0&app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" style="display: block; width: 100%; height: 100%;" title="הסבר על טינק"></iframe>
                     </div>
                 </div>
                 
@@ -333,4 +331,3 @@
     <script src="assets/js/games/emoji-rain.js" defer></script>
 </body>
 </html>
-
