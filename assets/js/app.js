@@ -174,13 +174,10 @@ function togglePromoVideo() {
         vimeoPlayerInstance.play().then(() => {
             vimeoPlayerInstance.setMuted(false).catch(() => {});
             vimeoPlayerInstance.setVolume(1).catch(() => {});
-            trackEvent('play_promo_video_vimeo_success');
         }).catch(err => {
             console.error('Vimeo play error:', err);
             if (spinner) spinner.style.display = 'none';
         });
-        
-        trackEvent('play_promo_video_vimeo_attempt');
     }
 }
 
@@ -490,7 +487,6 @@ function initApp() {
         'study_friday': userConfig.studyFriday ? 'yes' : 'no'
     });
 
-    if (userConfig.studyFriday) trackEvent('started_study_friday_yes'); else trackEvent('started_study_friday_no');
     showMainScreen();
 }
 
