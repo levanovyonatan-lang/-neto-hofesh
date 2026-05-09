@@ -118,17 +118,6 @@ function openVipModal() {
         copyBtn.classList.remove('copied'); copyBtn.classList.remove('video-ended-highlight');
     }
     
-    const vidSource = document.getElementById('promo-source');
-    const vidElement = document.getElementById('promo-video');
-    if (vidElement && vidElement.tagName === 'IFRAME' && typeof Vimeo !== 'undefined' && !vimeoPlayerInstance) {
-        vimeoPlayerInstance = new Vimeo.Player(vidElement);
-        vimeoPlayerInstance.on('ended', () => { highlightCopyButton(); trackEvent('ended_promo_video_vimeo'); });
-        vimeoPlayerInstance.on('play', () => {
-            const hint = document.getElementById('video-click-hint');
-            if (hint) hint.style.display = 'none';
-        });
-    }
-    
     const spinner = document.getElementById('video-loading-spinner');
     if (spinner) spinner.style.display = 'none';
     
@@ -707,4 +696,24 @@ document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) return e.preventDefault(), false;
     if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) return e.preventDefault(), false;
     if (e.ctrlKey && (e.key === 'S' || e.key === 's')) return e.preventDefault(), false;
+});
+
+// אתחול מראש של נגן ה-Vimeo לביצועים מהירים
+document.addEventListener('DOMContentLoaded', () => {
+    const vidElement = document.getElementById('promo-video');
+    if (vidElement && vidElement.tagName === 'IFRAME' && typeof Vimeo !== 'undefined' && !vimeoPlayerInstance) {
+        vimeoPlayerInstance = new Vimeo.Player(vidElement);
+        vimeoPlayerInstance.on('ended', () => { highlightCopyButton(); trackEvent('ended_promo_video_vimeo'); });
+        vimeoPlayerInstance.on('play', () => {
+            const hint = document.getElementById('video-click-hint');
+            if (hint) hint.style.display = 'none';
+            // Final attempt to ensure sound after play starts
+            setTimeout(() => {
+                if (vimeoPlayerInstance) {
+                    vimeoPlayerInstance.setMuted(false).catch(() => {});
+                    vimeoPlayerInstance.setVolume(1).catch(() => {});
+                }
+            }, 100);
+        });
+    }
 });
