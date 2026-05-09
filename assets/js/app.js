@@ -416,7 +416,7 @@ function handleAiTip() {
     // שליחת אירוע עם שם ייחודי באנגלית
     const descriptiveEventName = `tip_${currentState.clicks + 1}_${schoolNameEng}`;
     trackEvent(descriptiveEventName, { 
-        'target_holiday': target.name,
+        'target_id': target.id,
         'school_type': userConfig.schoolType,
         'tip_number': currentState.clicks + 1,
         'tip_label': `Tip ${currentState.clicks + 1} ${schoolNameEng}`
@@ -424,7 +424,7 @@ function handleAiTip() {
     
     // גיבוי עם השם הכללי
     trackEvent('click_ai_tip', { 
-        'school_type': schoolName,
+        'school_type': schoolNameEng,
         'tip_number': currentState.clicks + 1
     });
     
@@ -436,7 +436,7 @@ function handleAiTip() {
             renderTipBox(targetId, true);
         } catch (error) {
             console.error(error);
-            trackEvent('tip_load_failed', { 'target_holiday': target.name });
+            trackEvent('tip_load_failed', { 'target_id': target.id });
             btnText.innerHTML = "לא הצלחנו לטעון טיפ כרגע. נסו שוב עוד רגע ✨";
             btn.disabled = false; btn.style.pointerEvents = 'auto'; btn.removeAttribute('aria-disabled');
         } finally {
@@ -477,9 +477,6 @@ function initApp() {
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
     userConfig.activeTargetId = userConfig.schoolType === 'elem' ? 'summerElem' : 'summerHigh';
-    if (userConfig.schoolType === 'elem') trackEvent('start_elementary');
-    if (userConfig.schoolType === 'middle') trackEvent('start_middle');
-    if (userConfig.schoolType === 'high') trackEvent('start_high');
     
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
     const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
