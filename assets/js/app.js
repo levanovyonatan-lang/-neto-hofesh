@@ -13,6 +13,7 @@ let confettiFired = false;
 let deferredPrompt = null; 
 let isAnimatingNetDays = false;
 let netDaysAnimationId = null;
+let vimeoPlayerInstance = null;
 
 function trackEvent(eventName, params = {}) {
     if (typeof gtag === 'function') {
@@ -136,8 +137,6 @@ function openVipModal() {
     document.getElementById('vip-modal').focus();
 }
 
-let vimeoPlayerInstance = null;
-
 function closeVipModal() {
     trackEvent('close_vip_funnel');
     document.getElementById('vip-modal').style.display = 'none';
@@ -164,20 +163,35 @@ function togglePromoVideo() {
             vimeoPlayerInstance.on('play', () => {
                 const hint = document.getElementById('video-click-hint');
                 if (hint) hint.style.display = 'none';
+                // Final attempt to ensure sound after play starts
+                setTimeout(() => {
+                    if (vimeoPlayerInstance) {
+                        vimeoPlayerInstance.setMuted(false).catch(() => {});
+                        vimeoPlayerInstance.setVolume(1).catch(() => {});
+                    }
+                }, 100);
             });
         }
         
-        // Call play() IMMEDIATELY to preserve user gesture context for sound
+        // Show loading spinner
         const spinner = document.getElementById('video-loading-spinner');
         if (spinner) spinner.style.display = 'block';
-        
+
+        // Chain the audio commands and play call
+        // We do them both before and after play for maximum compatibility
         vimeoPlayerInstance.setVolume(1).catch(() => {});
         vimeoPlayerInstance.setMuted(false).catch(() => {});
-        vimeoPlayerInstance.play().catch(err => {
+        
+        vimeoPlayerInstance.play().then(() => {
+            vimeoPlayerInstance.setMuted(false).catch(() => {});
+            vimeoPlayerInstance.setVolume(1).catch(() => {});
+            trackEvent('play_promo_video_vimeo_success');
+        }).catch(err => {
             console.error('Vimeo play error:', err);
             if (spinner) spinner.style.display = 'none';
         });
-        trackEvent('play_promo_video_vimeo_direct');
+        
+        trackEvent('play_promo_video_vimeo_attempt');
     }
 }
 
