@@ -126,15 +126,16 @@ function openVipModal() {
     document.getElementById('vip-modal').focus();
 }
 
+let vimeoPlayerInstance = null;
+
 function closeVipModal() {
     trackEvent('close_vip_funnel');
     document.getElementById('vip-modal').style.display = 'none';
     const vid = document.getElementById('promo-video');
     if (vid) {
         if (vid.tagName === 'VIDEO' && typeof vid.pause === 'function') vid.pause();
-        else if (vid.tagName === 'IFRAME' && typeof Vimeo !== 'undefined') {
-            const player = new Vimeo.Player(vid);
-            player.pause().catch(() => {});
+        else if (vid.tagName === 'IFRAME' && vimeoPlayerInstance) {
+            vimeoPlayerInstance.pause().catch(() => {});
         }
     }
 }
@@ -147,18 +148,26 @@ function togglePromoVideo() {
         if (vid.paused) { vid.play().catch(e => console.log('Video play prevented', e)); trackEvent('play_promo_video'); }
         else { vid.pause(); trackEvent('pause_promo_video'); }
     } else if (vid.tagName === 'IFRAME' && typeof Vimeo !== 'undefined') {
-        const player = new Vimeo.Player(vid);
-        player.getPaused().then(paused => {
+        if (!vimeoPlayerInstance) {
+            vimeoPlayerInstance = new Vimeo.Player(vid);
+            vimeoPlayerInstance.on('ended', () => { highlightCopyButton(); trackEvent('ended_promo_video_vimeo'); });
+        }
+        
+        vimeoPlayerInstance.getPaused().then(paused => {
             if (paused) {
-                player.setVolume(1).catch(() => {});
-                player.setMuted(false).catch(() => {});
-                player.play().catch(() => {});
+                // Try multiple ways to ensure sound
+                vimeoPlayerInstance.setVolume(1).catch(() => {});
+                vimeoPlayerInstance.setMuted(false).catch(() => {});
+                vimeoPlayerInstance.play().then(() => {
+                    // Try again after play starts
+                    vimeoPlayerInstance.setMuted(false).catch(() => {});
+                    vimeoPlayerInstance.setVolume(1).catch(() => {});
+                }).catch(() => {});
+                
                 document.getElementById('video-click-hint').style.display = 'none';
                 trackEvent('play_promo_video_vimeo');
-                // Set up ended listener if not already there
-                player.on('ended', () => { highlightCopyButton(); trackEvent('ended_promo_video_vimeo'); });
             } else {
-                player.pause();
+                vimeoPlayerInstance.pause();
                 trackEvent('pause_promo_video_vimeo');
             }
         });
