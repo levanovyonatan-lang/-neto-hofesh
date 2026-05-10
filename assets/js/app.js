@@ -23,9 +23,9 @@ function trackEvent(eventName, params = {}) {
 
 const holidays2026 = ['2026-04-22', '2026-05-05', '2026-05-21', '2026-05-22'];
 const allTargets = [
-    { id: 'atzmaut', name: 'יום העצמאות', date: new Date('2026-04-22T08:15:00'), icon: '🇮🇱', bg: '#f0f9ff', lengthText: 'יום אחד' },
-    { id: 'lagbaomer', name: 'ל"ג בעומר', date: new Date('2026-05-05T08:15:00'), icon: '🔥', bg: '#fff7ed', lengthText: 'יום אחד' },
-    { id: 'shavuot', name: 'שבועות', date: new Date('2026-05-21T08:15:00'), icon: '🧀', bg: '#f0fdf4', lengthText: '3 ימים' },
+    { id: 'atzmaut', name: 'יום העצמאות', date: new Date('2026-04-22T08:15:00'), icon: '🇮🇱', bg: '#f0f9ff', lengthText: '<b>יום אחד</b>' },
+    { id: 'lagbaomer', name: 'ל"ג בעומר', date: new Date('2026-05-05T08:15:00'), icon: '🔥', bg: '#fff7ed', lengthText: '<b>יום אחד</b>' },
+    { id: 'shavuot', name: 'שבועות', date: new Date('2026-05-21T08:15:00'), icon: '🧀', bg: '#f0fdf4', lengthText: '<b>שלושה ימים</b> - כולל שישי ושבת' },
     { id: 'summerHigh', name: 'החופש הגדול', date: new Date('2026-06-19T08:15:00'), isSummer: true, type: 'high', icon: '🏖️', bg: '#fefce8' },
     { id: 'summerElem', name: 'החופש הגדול', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'elem', icon: '🍉', bg: '#fefce8' }
 ];
@@ -523,7 +523,7 @@ function updateFridayToggle() {
 
 function calculateNetDays(targetDate) {
     const now = new Date(); let count = 0, current = new Date(now);
-    if (now.getHours() > 8 || (now.getHours() === 8 && now.getMinutes() >= 15)) current.setDate(current.getDate() + 1);
+    if (now.getHours() >= 15) current.setDate(current.getDate() + 1);
     current.setHours(0,0,0,0);
     while (current < targetDate) {
         const dStr = current.getFullYear() + '-' + String(current.getMonth() + 1).padStart(2, '0') + '-' + String(current.getDate()).padStart(2, '0');
@@ -603,9 +603,9 @@ function selectTarget(id) {
         let lengthText = '';
         if (target.isSummer) {
             const endOfSchool = new Date(target.date); endOfSchool.setHours(0,0,0,0); const startOfSchool = new Date(target.date.getFullYear(), 8, 1);
-            lengthText = `${Math.round((startOfSchool - endOfSchool) / 86400000)} ימים`;
+            lengthText = `<b>${Math.round((startOfSchool - endOfSchool) / 86400000)} ימים</b>`;
         } else lengthText = target.lengthText;
-        document.getElementById('vacation-days-count').innerHTML = `החופש שלכם יימשך <b>${lengthText}</b>!`;
+        document.getElementById('vacation-days-count').innerHTML = `החופש שלכם יימשך ${lengthText}!`;
         vacationBox.style.display = 'inline-block';
     }
 
