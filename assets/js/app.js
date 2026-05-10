@@ -523,9 +523,15 @@ function updateFridayToggle() {
 
 function calculateNetDays(targetDate) {
     const now = new Date(); let count = 0, current = new Date(now);
+    // אם השעה 15:00 ומעלה, היום הנוכחי כבר לא נחשב כיום לימודים (התלמידים סיימו)
     if (now.getHours() >= 15) current.setDate(current.getDate() + 1);
     current.setHours(0,0,0,0);
-    while (current < targetDate) {
+    
+    // מנרמלים גם את תאריך היעד לחצות כדי שלא יספור את יום החופש עצמו כיום לימודים
+    const targetMidnight = new Date(targetDate);
+    targetMidnight.setHours(0,0,0,0);
+    
+    while (current < targetMidnight) {
         const dStr = current.getFullYear() + '-' + String(current.getMonth() + 1).padStart(2, '0') + '-' + String(current.getDate()).padStart(2, '0');
         if (current.getDay() !== 6 && (current.getDay() !== 5 || userConfig.studyFriday) && !holidays2026.includes(dStr)) count++;
         current.setDate(current.getDate() + 1);
