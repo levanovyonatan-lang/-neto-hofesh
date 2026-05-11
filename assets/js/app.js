@@ -17,7 +17,7 @@ let vimeoPlayerInstance = null;
 
 // שמירת ה-Prompt להתקנה אוטומטית באנדרואיד
 window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
+    // הסרנו את e.preventDefault() כדי לאפשר לדפדפן להקפיץ את הפס הלבן האוטומטי בתחתית המסך
     deferredPrompt = e;
 });
 
