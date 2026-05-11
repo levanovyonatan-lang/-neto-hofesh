@@ -43,25 +43,8 @@ const allTargets = [
 ];
 
 function initPWA() {
-    const manifestData = {
-        "name": "נטו חופש | מתי החופש הגדול",
-        "short_name": "נטו חופש",
-        "start_url": window.location.href,
-        "display": "standalone",
-        "background_color": "#ffffff",
-        "theme_color": "#ffffff",
-        "icons": [
-            { "src": "official-sun-neto-white.png?v=102", "sizes": "192x192", "type": "image/png" },
-            { "src": "official-sun-neto-white.png?v=102", "sizes": "512x512", "type": "image/png" }
-        ]
-    };
-    const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
-    document.getElementById('manifest-link').setAttribute('href', URL.createObjectURL(manifestBlob));
-
     if ('serviceWorker' in navigator) {
-        const swCode = `self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => self.clients.claim()); self.addEventListener('fetch', e => {}); /* v1.1 */`;
-        const swBlob = new Blob([swCode], { type: 'application/javascript' });
-        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=102').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
