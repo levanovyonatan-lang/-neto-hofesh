@@ -10,10 +10,22 @@ let activeEventsList = [];
 let timerInterval = null;
 let dailyTipsState = { date: '', targets: {} };
 let confettiFired = false;
-let deferredPrompt = null; 
+let deferredPrompt = null;
 let isAnimatingNetDays = false;
 let netDaysAnimationId = null;
 let vimeoPlayerInstance = null;
+
+// שמירת ה-Prompt להתקנה אוטומטית באנדרואיד
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+});
+
+window.addEventListener('appinstalled', () => {
+    const a2hsBtn = document.getElementById('a2hs-btn');
+    if (a2hsBtn) a2hsBtn.style.display = 'none';
+    deferredPrompt = null;
+});
 
 function trackEvent(eventName, params = {}) {
     if (typeof gtag === 'function') {
@@ -32,17 +44,24 @@ const allTargets = [
 
 function initPWA() {
     const manifestData = {
-        "name": "נטו חופש | מתי החופש הגדול", "short_name": "נטו חופש", "start_url": window.location.href, "display": "standalone",
-        "background_color": "#ffffff", "theme_color": "#ffffff",
-        "icons": [{"src": "official-sun-neto-white.png?v=101", "sizes": "192x192 512x512", "type": "image/png", "purpose": "any maskable"}]
+        "name": "נטו חופש | מתי החופש הגדול",
+        "short_name": "נטו חופש",
+        "start_url": window.location.href,
+        "display": "standalone",
+        "background_color": "#ffffff",
+        "theme_color": "#ffffff",
+        "icons": [
+            { "src": "official-sun-neto-white.png?v=101", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+            { "src": "official-sun-neto-white.png?v=101", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+        ]
     };
-    const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
+    const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
     document.getElementById('manifest-link').setAttribute('href', URL.createObjectURL(manifestBlob));
 
     if ('serviceWorker' in navigator) {
         const swCode = `self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => self.clients.claim()); self.addEventListener('fetch', e => {});`;
-        const swBlob = new Blob([swCode], {type: 'application/javascript'});
-        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+        const swBlob = new Blob([swCode], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -51,9 +70,6 @@ function initPWA() {
         const a2hsBtn = document.getElementById('a2hs-btn');
         if (a2hsBtn) a2hsBtn.style.display = 'none';
     }
-
-    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
-    window.addEventListener('appinstalled', () => { const a2hsBtn = document.getElementById('a2hs-btn'); if (a2hsBtn) a2hsBtn.style.display = 'none'; deferredPrompt = null; });
 }
 
 function detectIOSBrowser() {
@@ -84,7 +100,7 @@ function handleA2HS() {
         if (iosBrowserType === 'not-ios') document.getElementById('modal-android-content').style.display = 'block';
         else if (iosBrowserType === 'ios-non-safari') { document.getElementById('modal-nonsafari-content').style.display = 'block'; trackEvent('showed_nonsafari_warning'); }
         else document.getElementById('modal-safari-content').style.display = 'block';
-        
+
         document.getElementById('ios-modal').style.display = 'flex';
         document.getElementById('ios-modal').focus();
     }
@@ -109,18 +125,18 @@ function openVipModal() {
     hasCopiedPromoCode = false;
     document.getElementById('small-request-alert').style.display = 'none';
     const hint = document.getElementById('video-click-hint');
-    if(hint) hint.style.display = 'flex';
-    
+    if (hint) hint.style.display = 'flex';
+
     const copyBtn = document.getElementById('dedicated-copy-btn');
     if (copyBtn) {
         copyBtn.innerHTML = "העתק 📋";
         copyBtn.style.background = "#fef08a"; copyBtn.style.color = "#854d0e"; copyBtn.style.borderColor = "#fde047";
         copyBtn.classList.remove('copied'); copyBtn.classList.remove('video-ended-highlight');
     }
-    
+
     const spinner = document.getElementById('video-loading-spinner');
     if (spinner) spinner.style.display = 'none';
-    
+
     trackEvent('open_vip_funnel');
     document.getElementById('vip-modal').style.display = 'flex';
     document.getElementById('vip-modal').focus();
@@ -133,7 +149,7 @@ function closeVipModal() {
     if (vid) {
         if (vid.tagName === 'VIDEO' && typeof vid.pause === 'function') vid.pause();
         else if (vid.tagName === 'IFRAME' && vimeoPlayerInstance) {
-            vimeoPlayerInstance.pause().catch(() => {});
+            vimeoPlayerInstance.pause().catch(() => { });
         }
     }
 }
@@ -155,25 +171,25 @@ function togglePromoVideo() {
                 // Final attempt to ensure sound after play starts
                 setTimeout(() => {
                     if (vimeoPlayerInstance) {
-                        vimeoPlayerInstance.setMuted(false).catch(() => {});
-                        vimeoPlayerInstance.setVolume(1).catch(() => {});
+                        vimeoPlayerInstance.setMuted(false).catch(() => { });
+                        vimeoPlayerInstance.setVolume(1).catch(() => { });
                     }
                 }, 100);
             });
         }
-        
+
         // Show loading spinner
         const spinner = document.getElementById('video-loading-spinner');
         if (spinner) spinner.style.display = 'block';
 
         // Chain the audio commands and play call
         // We do them both before and after play for maximum compatibility
-        vimeoPlayerInstance.setVolume(1).catch(() => {});
-        vimeoPlayerInstance.setMuted(false).catch(() => {});
-        
+        vimeoPlayerInstance.setVolume(1).catch(() => { });
+        vimeoPlayerInstance.setMuted(false).catch(() => { });
+
         vimeoPlayerInstance.play().then(() => {
-            vimeoPlayerInstance.setMuted(false).catch(() => {});
-            vimeoPlayerInstance.setVolume(1).catch(() => {});
+            vimeoPlayerInstance.setMuted(false).catch(() => { });
+            vimeoPlayerInstance.setVolume(1).catch(() => { });
         }).catch(err => {
             console.error('Vimeo play error:', err);
             if (spinner) spinner.style.display = 'none';
@@ -193,9 +209,9 @@ function copyPromoCode(btnElement) {
     tempInput.select();
     document.execCommand("copy");
     document.body.removeChild(tempInput);
-    
+
     hasCopiedPromoCode = true; trackEvent('copied_promo_code_via_btn');
-    
+
     btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied');
     btnElement.innerHTML = "הועתק! ✅"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac";
 }
@@ -203,7 +219,7 @@ function copyPromoCode(btnElement) {
 function setupManualCopyListener() {
     const promoTextElement = document.getElementById('promo-code-text');
     if (promoTextElement) {
-        promoTextElement.addEventListener('copy', function() {
+        promoTextElement.addEventListener('copy', function () {
             hasCopiedPromoCode = true; trackEvent('copied_promo_code_manually');
             const btnElement = document.getElementById('dedicated-copy-btn');
             if (btnElement) { btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied'); btnElement.innerHTML = "הועתק! ✅"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac"; }
@@ -212,11 +228,11 @@ function setupManualCopyListener() {
 }
 
 function attemptRegistration() {
-    const registrationLink = "https://teenk.co.il/teenkerz/"; 
+    const registrationLink = "https://teenk.co.il/teenkerz/";
     if (hasCopiedPromoCode) {
-        trackEvent('success_reg_with_copy'); 
+        trackEvent('success_reg_with_copy');
     } else {
-        trackEvent('success_reg_without_copy'); 
+        trackEvent('success_reg_without_copy');
     }
     // הקישור נפתח מיד בכל מצב
     window.open(registrationLink, '_blank');
@@ -330,9 +346,9 @@ function setDailyTipState(targetId, state) {
 
 function loadDailyState() {
     const now = new Date();
-    const todayStr = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+    const todayStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
     const saved = localStorage.getItem(dailyTipsStorageKey);
-    if (saved) { try { const parsed = JSON.parse(saved); if (parsed.date === todayStr) { dailyTipsState = parsed; return; } } catch (e) {} }
+    if (saved) { try { const parsed = JSON.parse(saved); if (parsed.date === todayStr) { dailyTipsState = parsed; return; } } catch (e) { } }
     dailyTipsState = { date: todayStr, targets: {} };
 }
 
@@ -356,18 +372,18 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             btn.style.transition = 'none'; btn.style.animation = 'none'; void btn.offsetWidth;
             btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
-            
+
             if (userConfig.schoolType !== 'elem') {
                 if (sponsorBanner) {
                     sponsorBanner.style.display = 'flex'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
                     sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
                 }
             }
-        } else { 
-            if (sponsorBanner) sponsorBanner.style.display = 'none'; 
+        } else {
+            if (sponsorBanner) sponsorBanner.style.display = 'none';
         }
 
-        if (currentState.clicks >= 2) { btn.disabled = true; btn.style.pointerEvents = 'none'; btn.setAttribute('aria-disabled', 'true'); } 
+        if (currentState.clicks >= 2) { btn.disabled = true; btn.style.pointerEvents = 'none'; btn.setAttribute('aria-disabled', 'true'); }
         else { btn.disabled = false; btn.style.pointerEvents = 'auto'; btn.removeAttribute('aria-disabled'); }
     } else {
         btnText.innerHTML = "לחצו לטיפ אופטימיות יומי ✨"; btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
@@ -384,11 +400,11 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     const now = new Date();
     const start = new Date('2024-01-01');
     const dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-    
+
     // בחירת אינדקס בצורה עוקבת כדי למנוע חזרות ככל הניתן
     // כל יום "מתקדמים" ב-2 טיפים בתוך המאגר
     const finalIndex = (dayIndex * 2 + (tipNumber - 1)) % pool.length;
-    
+
     return pool[finalIndex];
 }
 
@@ -401,7 +417,7 @@ function handleAiTip() {
     const btn = document.getElementById('main-ai-btn'); const btnText = document.getElementById('ai-btn-text'); const loader = document.getElementById('ai-btn-loader');
     btn.style.opacity = '0.7'; btn.style.pointerEvents = 'none'; btn.style.transform = 'scale(0.98)';
     loader.style.display = 'inline-block'; btnText.innerHTML = loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
-    
+
     const target = activeEventsList.find(e => e.id === targetId);
     if (!target) {
         btn.style.opacity = '1'; btn.style.transform = 'scale(1)'; loader.style.display = 'none'; btn.style.pointerEvents = 'auto';
@@ -409,22 +425,22 @@ function handleAiTip() {
     }
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
     const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
-    
+
     // שליחת אירוע עם שם ייחודי באנגלית
     const descriptiveEventName = `tip_${currentState.clicks + 1}_${schoolNameEng}`;
-    trackEvent(descriptiveEventName, { 
+    trackEvent(descriptiveEventName, {
         'target_id': target.id,
         'school_type': userConfig.schoolType,
         'tip_number': currentState.clicks + 1,
         'tip_label': `Tip ${currentState.clicks + 1} ${schoolNameEng}`
     });
-    
+
     // גיבוי עם השם הכללי
-    trackEvent('click_ai_tip', { 
+    trackEvent('click_ai_tip', {
         'school_type': schoolNameEng,
         'tip_number': currentState.clicks + 1
     });
-    
+
     setTimeout(async () => {
         try {
             const selectedTip = await getSmartTip(target.id, userConfig.schoolType, currentState.clicks + 1);
@@ -437,7 +453,7 @@ function handleAiTip() {
             btnText.innerHTML = "לא הצלחנו לטעון טיפ כרגע. נסו שוב עוד רגע ✨";
             btn.disabled = false; btn.style.pointerEvents = 'auto'; btn.removeAttribute('aria-disabled');
         } finally {
-            btn.style.opacity = '1'; btn.style.transform = 'scale(1)'; loader.style.display = 'none'; 
+            btn.style.opacity = '1'; btn.style.transform = 'scale(1)'; loader.style.display = 'none';
         }
     }, 800);
 }
@@ -456,9 +472,9 @@ window.onload = () => {
             document.getElementById('ios-modal').style.display = 'flex';
         }, 500);
     }
-    
+
     // תמיכה במקלדת ונגישות לסגירת חלונות
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.key === "Escape") {
             closeIosModal();
             closeVipModal();
@@ -474,16 +490,16 @@ function initApp() {
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
     userConfig.activeTargetId = userConfig.schoolType === 'elem' ? 'summerElem' : 'summerHigh';
-    
+
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
     const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
-    
+
     // שליחת אירוע ספציפי לסוג בית הספר (באנגלית)
     trackEvent('start_' + schoolNameEng);
-    
+
     // אירוע כללי עם פרמטרים לניתוח קל יותר
-    trackEvent('app_start', { 
-        'school_type': schoolNameEng, 
+    trackEvent('app_start', {
+        'school_type': schoolNameEng,
         'study_friday': userConfig.studyFriday ? 'yes' : 'no'
     });
 
@@ -495,12 +511,12 @@ function resetApp() {
     if (timerInterval) clearInterval(timerInterval);
     userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' }; confettiFired = false;
     document.getElementById('main-screen').style.display = 'none'; document.getElementById('setup-screen').style.display = 'flex';
-    
+
     const btn = document.getElementById('main-ai-btn'); document.getElementById('ai-btn-text').innerHTML = "לחצו לטיפ אופטימיות יומי ✨";
     btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
-    const sponsorBanner = document.getElementById('tip-sponsor-banner'); if(sponsorBanner) sponsorBanner.style.display = 'none';
-    const elemSocial = document.getElementById('social-elem-banner'); if(elemSocial) elemSocial.style.display = 'none';
-    const highSocial = document.getElementById('social-high-banner'); if(highSocial) highSocial.style.display = 'none';
+    const sponsorBanner = document.getElementById('tip-sponsor-banner'); if (sponsorBanner) sponsorBanner.style.display = 'none';
+    const elemSocial = document.getElementById('social-elem-banner'); if (elemSocial) elemSocial.style.display = 'none';
+    const highSocial = document.getElementById('social-high-banner'); if (highSocial) highSocial.style.display = 'none';
 }
 
 function updateSchoolSelection(radio) {
@@ -525,13 +541,8 @@ function calculateNetDays(targetDate) {
     const now = new Date(); let count = 0, current = new Date(now);
     // אם השעה 15:00 ומעלה, היום הנוכחי כבר לא נחשב כיום לימודים (התלמידים סיימו)
     if (now.getHours() >= 15) current.setDate(current.getDate() + 1);
-    current.setHours(0,0,0,0);
-    
-    // מנרמלים גם את תאריך היעד לחצות כדי שלא יספור את יום החופש עצמו כיום לימודים
-    const targetMidnight = new Date(targetDate);
-    targetMidnight.setHours(0,0,0,0);
-    
-    while (current < targetMidnight) {
+    current.setHours(0, 0, 0, 0);
+    while (current < targetDate) {
         const dStr = current.getFullYear() + '-' + String(current.getMonth() + 1).padStart(2, '0') + '-' + String(current.getDate()).padStart(2, '0');
         if (current.getDay() !== 6 && (current.getDay() !== 5 || userConfig.studyFriday) && !holidays2026.includes(dStr)) count++;
         current.setDate(current.getDate() + 1);
@@ -542,7 +553,7 @@ function calculateNetDays(targetDate) {
 function animateNetDays(finalValue) {
     if (netDaysAnimationId) { cancelAnimationFrame(netDaysAnimationId); netDaysAnimationId = null; }
     if (typeof finalValue !== 'number' || finalValue <= 0) { document.getElementById('main-net-days').textContent = finalValue <= 0 ? "הגיע!" : finalValue; isAnimatingNetDays = false; return; }
-    
+
     isAnimatingNetDays = true; const obj = document.getElementById('main-net-days');
     const startValue = finalValue + 75; const duration = 1500; let startTimestamp = null;
 
@@ -552,7 +563,7 @@ function animateNetDays(finalValue) {
         const easeProgress = 1 - Math.pow(1 - progress, 3);
         const currentVal = Math.floor(startValue - (startValue - finalValue) * easeProgress);
         obj.textContent = currentVal;
-        
+
         if (progress < 1) netDaysAnimationId = window.requestAnimationFrame(step);
         else { obj.textContent = finalValue; isAnimatingNetDays = false; netDaysAnimationId = null; }
     };
@@ -562,7 +573,7 @@ function animateNetDays(finalValue) {
 function showMainScreen() {
     document.getElementById('setup-screen').style.display = 'none'; document.getElementById('main-screen').style.display = 'flex';
     document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
-    
+
     const vipBtn = document.getElementById('vip-community-btn');
     const highSocial = document.getElementById('social-high-banner');
     const elemSocial = document.getElementById('social-elem-banner');
@@ -581,7 +592,7 @@ function showMainScreen() {
     if (summerHighObj) { if (!userConfig.studyFriday) summerHighObj.date = new Date('2026-06-18T08:15:00'); else summerHighObj.date = new Date('2026-06-19T08:15:00'); }
 
     const now = Date.now(); activeEventsList = allTargets.filter(e => e.date.getTime() > now && (!e.isSummer || e.type === (userConfig.schoolType === 'elem' ? 'elem' : 'high')));
-    activeEventsList.sort((a,b) => a.date - b.date); renderHolidays(); selectTarget(userConfig.activeTargetId || activeEventsList[0].id);
+    activeEventsList.sort((a, b) => a.date - b.date); renderHolidays(); selectTarget(userConfig.activeTargetId || activeEventsList[0].id);
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
 }
 
@@ -603,12 +614,12 @@ function selectTarget(id) {
     const target = activeEventsList.find(e => e.id === id); if (!target) return;
     document.getElementById('main-timer-bg').style.background = target.bg;
     document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
-    
+
     const vacationBox = document.getElementById('vacation-length-box');
     if (vacationBox) {
         let lengthText = '';
         if (target.isSummer) {
-            const endOfSchool = new Date(target.date); endOfSchool.setHours(0,0,0,0); const startOfSchool = new Date(target.date.getFullYear(), 8, 1);
+            const endOfSchool = new Date(target.date); endOfSchool.setHours(0, 0, 0, 0); const startOfSchool = new Date(target.date.getFullYear(), 8, 1);
             lengthText = `<b>${Math.round((startOfSchool - endOfSchool) / 86400000)} ימים</b>`;
         } else lengthText = target.lengthText;
         document.getElementById('vacation-days-count').innerHTML = `החופש יימשך ${lengthText}`;
@@ -621,7 +632,7 @@ function selectTarget(id) {
 
 function updateDashboard() {
     const event = activeEventsList.find(e => e.id === userConfig.activeTargetId); if (!event) return;
-    const nowTime = new Date(); const todayStr = `${nowTime.getFullYear()}-${nowTime.getMonth()+1}-${nowTime.getDate()}`;
+    const nowTime = new Date(); const todayStr = `${nowTime.getFullYear()}-${nowTime.getMonth() + 1}-${nowTime.getDate()}`;
     if (dailyTipsState.date && dailyTipsState.date !== todayStr) { loadDailyState(); renderTipBox(userConfig.activeTargetId); }
 
     const diff = event.date.getTime() - Date.now();
@@ -629,10 +640,10 @@ function updateDashboard() {
         document.getElementById('main-net-days').textContent = "הגיע!";
         if (!confettiFired) { confettiFired = true; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
     } else {
-        document.getElementById('abs-days').textContent = Math.floor(diff/86400000);
-        document.getElementById('abs-hours').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
-        document.getElementById('abs-mins').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
-        document.getElementById('abs-secs').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+        document.getElementById('abs-days').textContent = Math.floor(diff / 86400000);
+        document.getElementById('abs-hours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+        document.getElementById('abs-mins').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+        document.getElementById('abs-secs').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
         if (!isAnimatingNetDays) document.getElementById('main-net-days').textContent = calculateNetDays(event.date);
     }
 }
@@ -648,7 +659,7 @@ function shareWhatsApp(event) {
 function openLegalModal(type) {
     const content = document.getElementById('legal-content');
     let html = '';
-    
+
     if (type === 'terms') {
         html = `<h2 style="font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 15px; color: #1e293b;">תנאי שימוש והגבלת אחריות</h2>
             <div style="font-size: calc(14px * var(--text-scale, 1)); color: #475569; line-height: 1.6;">
@@ -680,7 +691,7 @@ function openLegalModal(type) {
                 <p><small>תאריך עדכון אחרון: מאי 2026</small></p>
             </div>`;
     }
-    
+
     content.innerHTML = html;
     document.getElementById('legal-modal').style.display = 'flex';
     document.getElementById('legal-modal').focus();
@@ -693,7 +704,7 @@ function closeLegalModal() {
 
 // חסימת מקשים (למניעת העתקה)
 document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     if (e.key === 'F12' || e.keyCode === 123) return e.preventDefault(), false;
     if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) return e.preventDefault(), false;
     if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) return e.preventDefault(), false;
@@ -712,8 +723,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Final attempt to ensure sound after play starts
             setTimeout(() => {
                 if (vimeoPlayerInstance) {
-                    vimeoPlayerInstance.setMuted(false).catch(() => {});
-                    vimeoPlayerInstance.setVolume(1).catch(() => {});
+                    vimeoPlayerInstance.setMuted(false).catch(() => { });
+                    vimeoPlayerInstance.setVolume(1).catch(() => { });
                 }
             }, 100);
         });
