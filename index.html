@@ -232,17 +232,12 @@
                 <h3 style="font-size: calc(24px * var(--text-scale, 1)); font-weight: 900; margin-bottom: 16px; color: var(--text-main); letter-spacing: -0.5px;">התקנת "נטו"</h3>
                 
                 <!-- סרטון הסבר -->
-                <div style="border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid #f1f5f9; background: #000; margin-bottom: 20px; aspect-ratio: 9/16; width: 100%; max-width: 240px; margin-left: auto; margin-right: auto;">
-                    <video autoplay loop muted playsinline style="width: 100%; height: 100%; display: block; object-fit: cover;">
+                <div id="video-instruction-container" style="border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid #f1f5f9; background: #000; margin-bottom: 20px; width: 100%; max-width: 240px; margin-left: auto; margin-right: auto;">
+                    <video autoplay loop muted playsinline style="width: 100%; height: auto; display: block;">
                         <source src="assets/videos/install-ios.mp4" type="video/mp4">
                         הדפדפן שלך לא תומך בסרטון.
                     </video>
                 </div>
-
-                <!-- כפתור הסבר כתוב -->
-                <button id="toggle-written-instructions" style="background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: calc(14px * var(--text-scale, 1)); cursor: pointer; margin-bottom: 15px; transition: 0.2s;" onclick="toggleWrittenInstructions()">
-                    הסבר כתוב 📝
-                </button>
 
                 <!-- הסבר מילולי (מוסתר בהתחלה) -->
                 <div id="written-instructions" style="display: none; font-size: calc(16px * var(--text-scale, 1)); font-weight: 600; color: var(--text-main); line-height: 1.6; text-align: right; background: #f8fafc; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0; margin-bottom: 24px; animation: fadeIn 0.3s ease-out;">
@@ -255,6 +250,11 @@
                         <span>בתפריט שייפתח, גללו קצת למטה ולחצו על <b>"הוסף למסך הבית"</b> (Add to Home Screen ➕).</span>
                     </p>
                 </div>
+
+                <!-- כפתור החלפה -->
+                <button id="toggle-instruction-mode" style="background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: calc(14px * var(--text-scale, 1)); cursor: pointer; margin-bottom: 15px; transition: 0.2s; width: 100%;" onclick="toggleInstructionMode()">
+                    הסבר כתוב 📝
+                </button>
 
                 <button class="ios-modal-close" style="background: #fef08a; color: #854d0e; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.15);" onclick="closeIosModal()">הבנתי, תודה!</button>
             </div>

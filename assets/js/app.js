@@ -80,17 +80,20 @@ function handleA2HS() {
         document.getElementById('modal-nonsafari-content').style.display = 'none';
         document.getElementById('modal-android-content').style.display = 'none';
 
-        // Reset written instructions
+        // Reset to video mode by default
+        const videoContainer = document.getElementById('video-instruction-container');
         const writtenContent = document.getElementById('written-instructions');
+        const toggleBtn = document.getElementById('toggle-instruction-mode');
+        
+        if (videoContainer) videoContainer.style.display = 'block';
         if (writtenContent) writtenContent.style.display = 'none';
-        const toggleBtn = document.getElementById('toggle-written-instructions');
         if (toggleBtn) toggleBtn.innerHTML = 'הסבר כתוב 📝';
 
         if (iosBrowserType === 'not-ios') document.getElementById('modal-android-content').style.display = 'block';
         else if (iosBrowserType === 'ios-non-safari') { document.getElementById('modal-nonsafari-content').style.display = 'block'; trackEvent('showed_nonsafari_warning'); }
         else {
             document.getElementById('modal-safari-content').style.display = 'block';
-            const video = document.querySelector('#modal-safari-content video');
+            const video = videoContainer ? videoContainer.querySelector('video') : null;
             if (video) {
                 video.currentTime = 0;
                 video.play().catch(() => { });
@@ -120,17 +123,29 @@ function closeIosModal() {
     if (video) video.pause();
 }
 
-function toggleWrittenInstructions() {
-    const content = document.getElementById('written-instructions');
-    const btn = document.getElementById('toggle-written-instructions');
-    if (content.style.display === 'none') {
-        content.style.display = 'block';
-        btn.innerHTML = 'הסתר הסבר ☝️';
-        trackEvent('show_written_instructions');
+function toggleInstructionMode() {
+    const videoContainer = document.getElementById('video-instruction-container');
+    const writtenInstructions = document.getElementById('written-instructions');
+    const toggleBtn = document.getElementById('toggle-instruction-mode');
+    const video = videoContainer ? videoContainer.querySelector('video') : null;
+
+    if (writtenInstructions.style.display === 'none') {
+        // Switch to written
+        videoContainer.style.display = 'none';
+        writtenInstructions.style.display = 'block';
+        toggleBtn.innerHTML = 'סרטון הסבר 🎬';
+        if (video) video.pause();
+        trackEvent('switch_to_written_instructions');
     } else {
-        content.style.display = 'none';
-        btn.innerHTML = 'הסבר כתוב 📝';
-        trackEvent('hide_written_instructions');
+        // Switch to video
+        videoContainer.style.display = 'block';
+        writtenInstructions.style.display = 'none';
+        toggleBtn.innerHTML = 'הסבר כתוב 📝';
+        if (video) {
+            video.currentTime = 0;
+            video.play().catch(() => {});
+        }
+        trackEvent('switch_to_video_instructions');
     }
 }
 
