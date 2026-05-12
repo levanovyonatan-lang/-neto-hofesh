@@ -80,9 +80,22 @@ function handleA2HS() {
         document.getElementById('modal-nonsafari-content').style.display = 'none';
         document.getElementById('modal-android-content').style.display = 'none';
 
+        // Reset written instructions
+        const writtenContent = document.getElementById('written-instructions');
+        if (writtenContent) writtenContent.style.display = 'none';
+        const toggleBtn = document.getElementById('toggle-written-instructions');
+        if (toggleBtn) toggleBtn.innerHTML = 'הסבר כתוב 📝';
+
         if (iosBrowserType === 'not-ios') document.getElementById('modal-android-content').style.display = 'block';
         else if (iosBrowserType === 'ios-non-safari') { document.getElementById('modal-nonsafari-content').style.display = 'block'; trackEvent('showed_nonsafari_warning'); }
-        else document.getElementById('modal-safari-content').style.display = 'block';
+        else {
+            document.getElementById('modal-safari-content').style.display = 'block';
+            const video = document.querySelector('#modal-safari-content video');
+            if (video) {
+                video.currentTime = 0;
+                video.play().catch(() => { });
+            }
+        }
 
         document.getElementById('ios-modal').style.display = 'flex';
         document.getElementById('ios-modal').focus();
@@ -100,7 +113,26 @@ function copySiteUrlForSafari(btn) {
     setTimeout(() => { btn.innerHTML = "העתק קישור 📋"; btn.style.background = "#fef08a"; btn.style.color = "#854d0e"; btn.style.borderColor = "#fde047"; }, 3000);
 }
 
-function closeIosModal() { trackEvent('close_ios_install_modal'); document.getElementById('ios-modal').style.display = 'none'; }
+function closeIosModal() {
+    trackEvent('close_ios_install_modal');
+    document.getElementById('ios-modal').style.display = 'none';
+    const video = document.querySelector('#modal-safari-content video');
+    if (video) video.pause();
+}
+
+function toggleWrittenInstructions() {
+    const content = document.getElementById('written-instructions');
+    const btn = document.getElementById('toggle-written-instructions');
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        btn.innerHTML = 'הסתר הסבר ☝️';
+        trackEvent('show_written_instructions');
+    } else {
+        content.style.display = 'none';
+        btn.innerHTML = 'הסבר כתוב 📝';
+        trackEvent('hide_written_instructions');
+    }
+}
 
 let hasCopiedPromoCode = false;
 
