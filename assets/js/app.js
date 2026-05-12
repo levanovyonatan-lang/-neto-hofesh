@@ -22,6 +22,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 window.addEventListener('appinstalled', () => {
+    trackEvent('android_pwa_installed');
     const a2hsBtn = document.getElementById('a2hs-btn');
     if (a2hsBtn) a2hsBtn.style.display = 'none';
     deferredPrompt = null;
@@ -52,6 +53,18 @@ function initPWA() {
     if (isInStandaloneMode()) {
         const a2hsBtn = document.getElementById('a2hs-btn');
         if (a2hsBtn) a2hsBtn.style.display = 'none';
+
+        // מעקב התקנה ופתיחה ב-IOS
+        const isIOS = /iPad|iPhone|iPod/.test(window.navigator.userAgent) && !window.MSStream;
+        if (isIOS) {
+            if (!localStorage.getItem('ios_pwa_installed_tracked')) {
+                trackEvent('ios_pwa_installed');
+                localStorage.setItem('ios_pwa_installed_tracked', 'true');
+            }
+            trackEvent('ios_pwa_open');
+        } else {
+            trackEvent('pwa_open_standalone');
+        }
     }
 }
 
@@ -84,13 +97,13 @@ function handleA2HS() {
         const videoContainer = document.getElementById('video-instruction-container');
         const writtenContent = document.getElementById('written-instructions');
         const toggleBtn = document.getElementById('toggle-instruction-mode');
-        
+
         if (videoContainer) videoContainer.style.display = 'block';
         if (writtenContent) writtenContent.style.display = 'none';
         if (toggleBtn) toggleBtn.innerHTML = 'הסבר כתוב 📝';
 
         if (iosBrowserType === 'not-ios') document.getElementById('modal-android-content').style.display = 'block';
-        else if (iosBrowserType === 'ios-non-safari') { 
+        else if (iosBrowserType === 'ios-non-safari') {
             trackEvent('attempt_auto_safari_redirect');
             // נסיון פתיחה אוטומטית בספארי
             window.location.href = `x-safari-https://${window.location.hostname}${window.location.pathname}?install=1`;
@@ -98,10 +111,11 @@ function handleA2HS() {
             // אם המשתמש נשאר בדף אחרי השהייה, נציג את המודל כגיבוי
             setTimeout(() => {
                 if (document.getElementById('ios-modal').style.display !== 'flex') {
-                    document.getElementById('modal-nonsafari-content').style.display = 'block'; 
+                    document.getElementById('modal-nonsafari-content').style.display = 'block';
                     document.getElementById('ios-modal').style.display = 'flex';
                     document.getElementById('ios-modal').focus();
-                    trackEvent('showed_nonsafari_warning'); 
+                    trackEvent('showed_nonsafari_warning');
+                    trackEvent('ios_auto_safari_failed');
                 }
             }, 1200);
             return; // עוצרים כאן כדי לא להציג את המודל הריק או לבצע לוגיקה של ספארי
@@ -158,7 +172,7 @@ function toggleInstructionMode() {
         toggleBtn.innerHTML = 'הסבר כתוב 📝';
         if (video) {
             video.currentTime = 0;
-            video.play().catch(() => {});
+            video.play().catch(() => { });
         }
         trackEvent('switch_to_video_instructions');
     }
