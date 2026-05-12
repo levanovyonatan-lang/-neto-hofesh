@@ -90,7 +90,22 @@ function handleA2HS() {
         if (toggleBtn) toggleBtn.innerHTML = 'הסבר כתוב 📝';
 
         if (iosBrowserType === 'not-ios') document.getElementById('modal-android-content').style.display = 'block';
-        else if (iosBrowserType === 'ios-non-safari') { document.getElementById('modal-nonsafari-content').style.display = 'block'; trackEvent('showed_nonsafari_warning'); }
+        else if (iosBrowserType === 'ios-non-safari') { 
+            trackEvent('attempt_auto_safari_redirect');
+            // נסיון פתיחה אוטומטית בספארי
+            window.location.href = `x-safari-https://${window.location.hostname}${window.location.pathname}?install=1`;
+
+            // אם המשתמש נשאר בדף אחרי השהייה, נציג את המודל כגיבוי
+            setTimeout(() => {
+                if (document.getElementById('ios-modal').style.display !== 'flex') {
+                    document.getElementById('modal-nonsafari-content').style.display = 'block'; 
+                    document.getElementById('ios-modal').style.display = 'flex';
+                    document.getElementById('ios-modal').focus();
+                    trackEvent('showed_nonsafari_warning'); 
+                }
+            }, 1200);
+            return; // עוצרים כאן כדי לא להציג את המודל הריק או לבצע לוגיקה של ספארי
+        }
         else {
             document.getElementById('modal-safari-content').style.display = 'block';
             const video = videoContainer ? videoContainer.querySelector('video') : null;
