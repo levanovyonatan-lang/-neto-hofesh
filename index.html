@@ -256,8 +256,9 @@
                 @media (min-width: 768px) {
                     .sticky-banner-container {
                         height: 85px;
-                        background: transparent;
-                        box-shadow: none;
+                        background: transparent !important;
+                        background-image: none !important;
+                        box-shadow: none !important;
                     }
                 }
                 .sticky-banner-container img {
@@ -266,7 +267,7 @@
                     max-width: 100%;
                     object-fit: contain;
                     display: block;
-                    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1)); /* הוספת צל לתמונה עצמה כשהיא "מרחפת" במחשב */
+                    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15)); /* הוספת צל לתמונה עצמה כשהיא "מרחפת" במחשב */
                 }
             </style>
         </div>
