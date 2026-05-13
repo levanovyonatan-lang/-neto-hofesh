@@ -188,10 +188,12 @@ input:checked + .smiley-handle::after { content: "☹️"; }
     margin: 0; 
     width: 100%; 
     max-width: 100%; 
+    height: 50px; 
+    box-sizing: content-box; /* מבטיח שהגובה יהיה 50 פלוס ה-padding של ה-safe area */
     border-radius: 0; 
-    padding-top: 18px; 
-    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); 
-    font-size: calc(19px * var(--text-scale, 1));
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px); 
+    font-size: calc(17px * var(--text-scale, 1));
     box-shadow: 0 -3px 10px rgba(234, 179, 8, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4); 
 }
 
