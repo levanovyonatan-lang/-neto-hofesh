@@ -25,11 +25,11 @@
     <title>מתי החופש הגדול? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="official-sun-neto-transparent.png?v=114">
-    <link rel="apple-touch-icon" href="official-sun-neto-white.png?v=114">
+    <link rel="icon" type="image/png" href="official-sun-neto-transparent.png?v=116">
+    <link rel="apple-touch-icon" href="official-sun-neto-white.png?v=116">
 
     <!-- PWA -->
-    <link rel="manifest" href="manifest.json?v=114">
+    <link rel="manifest" href="manifest.json?v=116">
     <meta name="theme-color" content="#ffffff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -92,27 +92,21 @@
             transition: all 0.3s ease;
         }
 
-        /* עיצוב למחשב - באנר צף במרכז */
-        @media (min-width: 768px) {
-            .sticky-banner-container {
-                width: 100%;
-                left: 0;
-                transform: none;
-                border-radius: 0;
-                bottom: 0;
-                height: 50px;
-                background: transparent !important;
-                box-shadow: none !important;
-            }
+        /* עיצוב אחיד לכל המכשירים - 100% רוחב */
+        .sticky-banner-container {
+            width: 100%;
+            left: 0;
+            transform: none;
+            border-radius: 0;
+            bottom: 0;
+            height: 50px;
         }
 
         .sticky-banner-container img {
             height: 100%;
-            width: auto;
-            max-width: 100%;
-            object-fit: contain;
+            width: 100%;
+            object-fit: cover;
             display: block;
-            margin: 0 auto;
             filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
         }
     </style>

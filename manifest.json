@@ -8,25 +8,25 @@
   "description": "ספירה לאחור לימי לימוד נטו עד החופש הגדול בלי שבתות וחגים",
   "icons": [
     {
-      "src": "official-sun-neto-white.png?v=114",
+      "src": "official-sun-neto-white.png?v=116",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "official-sun-neto-white.png?v=114",
+      "src": "official-sun-neto-white.png?v=116",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "official-sun-neto-white.png?v=114",
+      "src": "official-sun-neto-white.png?v=116",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "official-sun-neto-white.png?v=114",
+      "src": "official-sun-neto-white.png?v=116",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
