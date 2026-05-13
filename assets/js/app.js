@@ -576,6 +576,7 @@ function resetApp() {
     const sponsorBanner = document.getElementById('tip-sponsor-banner'); if (sponsorBanner) sponsorBanner.style.display = 'none';
     const elemSocial = document.getElementById('social-elem-banner'); if (elemSocial) elemSocial.style.display = 'none';
     const highSocial = document.getElementById('social-high-banner'); if (highSocial) highSocial.style.display = 'none';
+    const demoBanner = document.getElementById('demo-banner'); if (demoBanner) demoBanner.style.display = 'none';
 }
 
 function updateSchoolSelection(radio) {
@@ -634,15 +635,21 @@ function showMainScreen() {
     document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
 
     const vipBtn = document.getElementById('vip-community-btn');
+    const vipWrapper = document.querySelector('.sticky-vip-wrapper');
+    const demoBanner = document.getElementById('demo-banner');
     const highSocial = document.getElementById('social-high-banner');
     const elemSocial = document.getElementById('social-elem-banner');
 
     if (userConfig.schoolType === 'elem') {
         if (vipBtn) vipBtn.style.display = 'none';
+        if (vipWrapper) vipWrapper.style.display = 'none';
+        if (demoBanner) demoBanner.style.display = 'flex';
         if (highSocial) highSocial.style.display = 'none';
         if (elemSocial) elemSocial.style.display = 'block';
     } else {
         if (vipBtn) vipBtn.style.display = 'flex';
+        if (vipWrapper) vipWrapper.style.display = 'block';
+        if (demoBanner) demoBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
     }

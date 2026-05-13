@@ -525,18 +525,7 @@
     </div>
 
     <script src="assets/js/app.js" defer></script>
-    <script>
-        // בדיקת פרמטר ב-URL להצגת באנר הדגמה
-        window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('show_demo')) {
-                const demoBanner = document.getElementById('demo-banner');
-                const vipWrapper = document.querySelector('.sticky-vip-wrapper');
-                if (demoBanner) demoBanner.style.display = 'flex';
-                if (vipWrapper) vipWrapper.style.display = 'none'; // הסתרת הכפתור המקורי בזמן הדגמה
-            }
-        });
-    </script>
+
     <script src="assets/js/games/emoji-rain.js" defer></script>
 </body>
 
