@@ -251,11 +251,13 @@
                     padding-bottom: env(safe-area-inset-bottom, 0px);
                     box-sizing: content-box;
                     overflow: hidden;
-                    transition: height 0.3s ease;
+                    transition: all 0.3s ease;
                 }
                 @media (min-width: 768px) {
                     .sticky-banner-container {
                         height: 85px;
+                        background: transparent;
+                        box-shadow: none;
                     }
                 }
                 .sticky-banner-container img {
@@ -264,6 +266,7 @@
                     max-width: 100%;
                     object-fit: contain;
                     display: block;
+                    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1)); /* הוספת צל לתמונה עצמה כשהיא "מרחפת" במחשב */
                 }
             </style>
         </div>
