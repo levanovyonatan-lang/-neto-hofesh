@@ -25,11 +25,11 @@
     <title>מתי החופש הגדול? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="official-sun-neto-transparent.png?v=125">
-    <link rel="apple-touch-icon" href="official-sun-neto-white.png?v=125">
+    <link rel="icon" type="image/png" href="official-sun-neto-transparent.png?v=128">
+    <link rel="apple-touch-icon" href="official-sun-neto-white.png?v=128">
 
     <!-- PWA -->
-    <link rel="manifest" href="manifest.json?v=125">
+    <link rel="manifest" href="manifest.json?v=128">
     <meta name="theme-color" content="#ffffff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -77,20 +77,10 @@
             box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
             padding-bottom: env(safe-area-inset-bottom, 0px);
             box-sizing: content-box;
-            overflow: hidden;
             transition: all 0.3s ease;
         }
 
-        @media (min-width: 768px) {
-            .sticky-banner-container {
-                height: 85px;
-                background: #ffffff !important;
-                background-color: #ffffff !important;
-                background-image: none !important;
-                box-shadow: 0 -2px 10px rgba(0,0,0,0.05) !important;
-            }
-            transition: all 0.3s ease;
-        }
+
 
         /* עיצוב למחשב - ממורכז עם צדדים שקופים */
         @media (min-width: 768px) {
@@ -100,13 +90,14 @@
                 transform: none !important;
                 border-radius: 0 !important;
                 bottom: 0 !important;
-                height: 60px !important;
+                height: 90px !important;
                 background: transparent !important;
                 box-shadow: none !important;
             }
             .sticky-banner-container img {
                 width: auto !important;
                 max-width: 100% !important;
+                height: 100% !important;
                 object-fit: contain !important;
                 margin: 0 auto !important;
             }
