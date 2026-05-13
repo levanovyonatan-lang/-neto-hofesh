@@ -251,6 +251,12 @@
                     padding-bottom: env(safe-area-inset-bottom, 0px);
                     box-sizing: content-box;
                     overflow: hidden;
+                    transition: height 0.3s ease;
+                }
+                @media (min-width: 768px) {
+                    .sticky-banner-container {
+                        height: 85px;
+                    }
                 }
                 .sticky-banner-container img {
                     height: 100%;
