@@ -25,11 +25,11 @@
     <title>מתי החופש הגדול? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="official-sun-neto-transparent.png?v=116">
-    <link rel="apple-touch-icon" href="official-sun-neto-white.png?v=116">
+    <link rel="icon" type="image/png" href="official-sun-neto-transparent.png?v=120">
+    <link rel="apple-touch-icon" href="official-sun-neto-white.png?v=120">
 
     <!-- PWA -->
-    <link rel="manifest" href="manifest.json?v=116">
+    <link rel="manifest" href="manifest.json?v=120">
     <meta name="theme-color" content="#ffffff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -92,14 +92,22 @@
             transition: all 0.3s ease;
         }
 
-        /* עיצוב אחיד לכל המכשירים - 100% רוחב */
-        .sticky-banner-container {
-            width: 100%;
-            left: 0;
-            transform: none;
-            border-radius: 0;
-            bottom: 0;
-            height: 50px;
+        /* עיצוב למחשב - באנר צף במרכז */
+        @media (min-width: 768px) {
+            .sticky-banner-container {
+                width: 320px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 12px 12px 0 0;
+                bottom: 10px;
+                height: 50px;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+            .sticky-banner-container img {
+                width: auto !important;
+                object-fit: contain !important;
+            }
         }
 
         .sticky-banner-container img {
@@ -108,6 +116,17 @@
             object-fit: cover;
             display: block;
             filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+        }
+
+        .sticky-banner-container::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: inherit;
+            z-index: -1;
         }
     </style>
 </head>
