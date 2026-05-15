@@ -45,7 +45,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=142').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=143').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
