@@ -640,14 +640,20 @@ function showMainScreen() {
     const highSocial = document.getElementById('social-high-banner');
     const elemSocial = document.getElementById('social-elem-banner');
 
+    const isExperimentalSite = window.location.hostname.includes('github.io');
     const urlParams = new URLSearchParams(window.location.search);
     const forceShowBanner = urlParams.get('show_demo') === 'true';
-    const isExperimentalSite = window.location.hostname.includes('github.io');
 
     if (userConfig.schoolType === 'elem') {
         if (vipBtn) vipBtn.style.display = 'none';
         if (vipWrapper) vipWrapper.style.display = 'none';
-        if (demoBanner) demoBanner.style.display = 'none';
+        
+        if (isExperimentalSite || forceShowBanner) {
+            if (demoBanner) demoBanner.style.display = 'flex';
+        } else {
+            if (demoBanner) demoBanner.style.display = 'none';
+        }
+        
         if (highSocial) highSocial.style.display = 'none';
         if (elemSocial) elemSocial.style.display = 'block';
     } else {
