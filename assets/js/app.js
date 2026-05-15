@@ -644,10 +644,10 @@ function showMainScreen() {
     const forceShowBanner = urlParams.get('show_demo') === 'true';
     const isExperimentalSite = window.location.hostname.includes('github.io');
 
-    if (userConfig.schoolType === 'elem' && (forceShowBanner || isExperimentalSite)) {
+    if (userConfig.schoolType === 'elem') {
         if (vipBtn) vipBtn.style.display = 'none';
         if (vipWrapper) vipWrapper.style.display = 'none';
-        if (demoBanner) demoBanner.style.display = 'flex';
+        if (demoBanner) demoBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'none';
         if (elemSocial) elemSocial.style.display = 'block';
     } else {
