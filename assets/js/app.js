@@ -45,7 +45,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=140').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=142').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -640,7 +640,11 @@ function showMainScreen() {
     const highSocial = document.getElementById('social-high-banner');
     const elemSocial = document.getElementById('social-elem-banner');
 
-    if (userConfig.schoolType === 'elem') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const forceShowBanner = urlParams.get('show_demo') === 'true';
+    const isExperimentalSite = window.location.hostname.includes('github.io');
+
+    if (userConfig.schoolType === 'elem' && (forceShowBanner || isExperimentalSite)) {
         if (vipBtn) vipBtn.style.display = 'none';
         if (vipWrapper) vipWrapper.style.display = 'none';
         if (demoBanner) demoBanner.style.display = 'flex';
