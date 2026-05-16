@@ -1,5 +1,5 @@
 const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
-const tipsDataVersion = 'tips-file-v1';
+const tipsDataVersion = 'tips-file-v2';
 const dailyTipsStorageKey = `holiday_calc_daily_tips_${tipsDataVersion}`;
 const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
 const tipsScriptSrc = `tips.js?v=${tipsDataVersion}`;
@@ -455,10 +455,11 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     const { pool } = resolveTipPool(tipsDb, targetId, schoolType);
     if (!pool.length) throw new Error('No tips are available for the selected context');
 
-    // יצירת אינדקס דטרמיניסטי לפי התאריך (מאז 1 בינואר 2024)
+    // יצירת אינדקס דטרמיניסטי לפי התאריך (מאופס מהיום כדי שטיפים חדשים יופיעו קודם)
     const now = new Date();
-    const start = new Date('2024-01-01');
-    const dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+    const start = new Date('2026-05-16');
+    let dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+    if (dayIndex < 0) dayIndex = 0;
 
     // בחירת אינדקס בצורה עוקבת כדי למנוע חזרות ככל הניתן
     // כל יום "מתקדמים" ב-2 טיפים בתוך המאגר
