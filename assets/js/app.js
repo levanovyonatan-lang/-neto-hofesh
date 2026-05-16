@@ -40,9 +40,9 @@ const allTargets = [
     { id: 'lagbaomer', name: 'ל"ג בעומר', date: new Date('2026-05-05T08:15:00'), icon: '🔥', bg: '#fff7ed', lengthText: '<b>יום אחד</b>' },
     { id: 'shavuot', name: 'שבועות', date: new Date('2026-05-21T08:15:00'), icon: '🧀', bg: '#f0fdf4', lengthText: '<b>שלושה ימים</b> כולל שישי-שבת' },
     { id: 'summerHigh', name: 'החופש הגדול', date: new Date('2026-06-19T08:15:00'), isSummer: true, type: 'high', icon: '🏖️', bg: '#fefce8' },
-    { id: 'summerMiddlePrep', name: 'מכינת קיץ (ז\'-ט\')', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'middle', icon: '🤖', bg: '#eff6ff', noFriday: true, description: 'לומדים עד ה-30.6 (לא חובה)' },
-    { id: 'summerElemLow', name: 'ביה"ס של החופש הגדול (א\'-ג\')', date: new Date('2026-07-31T08:15:00'), isSummer: true, type: 'elem', icon: '🎒', bg: '#fdf4ff', description: 'לומדים עד ה-30.7' },
-    { id: 'summerElem', name: 'החופש הגדול (ד\'-ו\')', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'elem', icon: '🍉', bg: '#fefce8', description: 'לומדים עד ה-30.6 (ויש שיעורים פרטיים)' }
+    { id: 'summerMiddlePrep', name: 'מכינת קיץ', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'middle', icon: '🤖', bg: '#eff6ff', noFriday: true, description: 'לומדים עד ה-30.6 (לא חובה)' },
+    { id: 'summerElemLow', name: 'ביה"ס של החופש הגדול', date: new Date('2026-07-31T08:15:00'), isSummer: true, type: 'elem', icon: '🎒', bg: '#fdf4ff', description: 'לומדים עד ה-30.7' },
+    { id: 'summerElem', name: 'החופש הגדול', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'elem', icon: '🍉', bg: '#fefce8' }
 ];
 
 function initPWA() {
