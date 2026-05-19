@@ -555,7 +555,7 @@ function initApp() {
     if (userConfig.schoolType === 'elem') {
         userConfig.activeTargetId = 'summerElem';
     } else if (userConfig.schoolType === 'middle') {
-        userConfig.activeTargetId = 'summerMiddlePrep';
+        userConfig.activeTargetId = 'summerHigh';
     } else {
         userConfig.activeTargetId = 'summerHigh';
     }
@@ -592,11 +592,10 @@ function resetApp() {
 function updateSchoolSelection(radio) {
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
     radio.parentElement.classList.add('selected');
-    const hint = document.getElementById('school-hint-text'); const isFridayOff = !document.getElementById('friday-toggle').checked;
+    const hint = document.getElementById('school-hint-text');
     hint.style.visibility = 'visible';
-    if (radio.value === 'elem') hint.textContent = 'לומדים עד ה-30 ביוני (ויש פלוס ביוני ליסודי) 🍉';
-    else if (radio.value === 'middle') hint.textContent = isFridayOff ? 'יוצאים ב-18 ביוני, אבל יש מכינות ביוני! 🤖' : 'יוצאים ב-19 ביוני, אבל יש מכינות ביוני! 🤖';
-    else hint.textContent = isFridayOff ? 'יוצאים לחופש ב-18 ביוני 🏖️' : 'יוצאים לחופש ב-19 ביוני 🏖️';
+    if (radio.value === 'elem') hint.textContent = 'לומדים עד ה-30 ביוני 🍉';
+    else hint.textContent = 'לומדים עד ה-20 ביוני 🏖️';
 }
 
 function updateFridayToggle() {
