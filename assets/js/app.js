@@ -46,7 +46,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=145').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=146').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -610,7 +610,9 @@ function calculateNetDays(targetDate, forceNoFriday = false) {
     current.setHours(0, 0, 0, 0);
     while (current < targetDate) {
         const dStr = current.getFullYear() + '-' + String(current.getMonth() + 1).padStart(2, '0') + '-' + String(current.getDate()).padStart(2, '0');
-        const isFridayStudy = userConfig.studyFriday && !forceNoFriday;
+        // ימי שישי של בית הספר של החופש הגדול ביולי אינם נלמדים (גם אם לומדים בשישי בשגרת הלימודים)
+        const isJulyOrLater = current.getMonth() >= 6; // 6 = July
+        const isFridayStudy = userConfig.studyFriday && !(forceNoFriday && isJulyOrLater);
         if (current.getDay() !== 6 && (current.getDay() !== 5 || isFridayStudy) && !holidays2026.includes(dStr)) count++;
         current.setDate(current.getDate() + 1);
     }
@@ -712,9 +714,9 @@ function selectTarget(id, shouldScroll = true) {
     document.getElementById('main-timer-bg').style.background = target.bg;
     document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
 
-    // במידה ויש הגדרה קבועה של "אין שישי" ליעד הספציפי
+    // במידה ויש הגדרה קבועה של "אין שישי" ליעד הספציפי (למשל בקייטנת הקיץ ביולי)
     if (target.noFriday) {
-        document.getElementById('excluding-label').textContent = "(בניכוי חגים, שישי ושבת - ללא קשר להגדרות)";
+        document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים, שבתות, וימי שישי של קייטנת הקיץ)" : "(בניכוי חגים, שישי ושבת)";
     } else {
         document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
     }
