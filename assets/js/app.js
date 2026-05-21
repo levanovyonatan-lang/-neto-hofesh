@@ -47,7 +47,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=156').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=157').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -474,7 +474,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                 sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
             }
             setTimeout(() => {
-                window.scrollBy({ top: 150, behavior: 'smooth' });
+                window.scrollBy({ top: 70, behavior: 'smooth' });
             }, 150);
         } else {
             if (sponsorBanner) sponsorBanner.style.display = 'none';
