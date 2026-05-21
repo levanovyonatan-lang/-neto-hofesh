@@ -40,13 +40,14 @@ const allTargets = [
     { id: 'lagbaomer', name: 'ל"ג בעומר', date: new Date('2026-05-05T08:15:00'), icon: '🔥', bg: '#fff7ed', lengthText: '<b>יום אחד</b>' },
     { id: 'shavuot', name: 'שבועות', date: new Date('2026-05-21T08:15:00'), icon: '🧀', bg: '#f0fdf4', lengthText: '<b>שלושה ימים</b> כולל שישי-שבת' },
     { id: 'summerHigh', name: 'החופש הגדול', date: new Date('2026-06-19T08:15:00'), isSummer: true, type: 'high', icon: '🏖️', bg: '#fefce8' },
+    { id: 'summerMiddlePrep', name: 'מכינת קיץ', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'middle', icon: '🤖', bg: '#eff6ff', noFriday: true, description: 'לכיתות ז\'-ט\'. לומדים עד ה-30.6' },
     { id: 'summerElemLow', name: 'ביה"ס של החופש הגדול (א\'-ג\')', date: new Date('2026-07-31T08:15:00'), isSummer: true, type: 'elem', icon: '🎒', bg: '#fdf4ff', description: 'לומדים עד ה-30.7 (לא חובה)', noFriday: true },
     { id: 'summerElem', name: 'החופש הגדול', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'elem', icon: '🍉', bg: '#fefce8' }
 ];
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=147').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=148').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -550,7 +551,14 @@ function initApp() {
     if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
-    userConfig.activeTargetId = userConfig.schoolType === 'elem' ? 'summerElem' : 'summerHigh';
+    
+    if (userConfig.schoolType === 'elem') {
+        userConfig.activeTargetId = 'summerElem';
+    } else if (userConfig.schoolType === 'middle') {
+        userConfig.activeTargetId = 'summerHigh';
+    } else {
+        userConfig.activeTargetId = 'summerHigh';
+    }
 
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
     const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
@@ -591,6 +599,7 @@ function updateSchoolSelection(radio) {
     const hint = document.getElementById('school-hint-text'); const isFridayOff = !document.getElementById('friday-toggle').checked;
     hint.style.visibility = 'visible';
     if (radio.value === 'elem') hint.textContent = 'לומדים עד ה-30 ביוני 🍉';
+    else if (radio.value === 'middle') hint.textContent = isFridayOff ? 'יוצאים ב-18 ביוני, אבל יש מכינות ביוני! 🤖' : 'יוצאים ב-19 ביוני, אבל יש מכינות ביוני! 🤖';
     else hint.textContent = isFridayOff ? 'יוצאים לחופש ב-18 ביוני 🏖️' : 'יוצאים לחופש ב-19 ביוני 🏖️';
 }
 
@@ -685,9 +694,13 @@ function showMainScreen() {
     const isDemo = forceShowBanner || isExperimentalSite;
     activeEventsList = allTargets.filter(e => {
         if (e.date.getTime() <= now) return false;
-        if (e.id === 'summerElemLow' && !isDemo) return false;
+        if ((e.id === 'summerElemLow' || e.id === 'summerMiddlePrep') && !isDemo) return false;
         if (!e.isSummer) return true;
-        return e.type === (userConfig.schoolType === 'elem' ? 'elem' : 'high');
+        
+        if (userConfig.schoolType === 'elem') return e.type === 'elem';
+        if (userConfig.schoolType === 'middle') return e.type === 'middle' || (e.type === 'high' && e.id === 'summerHigh');
+        if (userConfig.schoolType === 'high') return e.type === 'high';
+        return false;
     });
     activeEventsList.sort((a, b) => a.date - b.date); renderHolidays(); selectTarget(userConfig.activeTargetId || activeEventsList[0].id, false);
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
