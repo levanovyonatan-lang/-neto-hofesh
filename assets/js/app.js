@@ -47,7 +47,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=152').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=153').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -450,7 +450,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         const textElement = sponsorBanner.querySelector('.sponsor-text');
         if (textElement) {
             if (userConfig.schoolType === 'elem') {
-                textElement.innerHTML = `<span aria-hidden="true">🌟</span> סופרלנד, קולנוע ופארק מים? <b>הרשמו לקייטנה הכי כיפית בארץ!</b>`;
+                textElement.innerHTML = `<span aria-hidden="true">🌟</span> סופרלנד, קולנוע, מפורסמים ופארק מים? <b>הרשמו לקייטנה הכי כיפית בארץ!</b>`;
             } else {
                 textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים להרוויח כסף מסקרים וטעימות? <b>לחצו כאן</b>`;
             }
