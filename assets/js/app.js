@@ -564,6 +564,10 @@ function initApp() {
     });
 
     showMainScreen();
+    // גלילה קלה למטה כדי שיראו את ה"בחרו יעד ספירה" והבאנר לא יסתיר
+    setTimeout(() => {
+        window.scrollTo({ top: 110, behavior: 'smooth' });
+    }, 100);
 }
 
 function resetApp() {
@@ -669,7 +673,7 @@ function showMainScreen() {
     if (summerHighObj) { if (!userConfig.studyFriday) summerHighObj.date = new Date('2026-06-18T08:15:00'); else summerHighObj.date = new Date('2026-06-19T08:15:00'); }
 
     const now = Date.now(); activeEventsList = allTargets.filter(e => e.date.getTime() > now && (!e.isSummer || e.type === (userConfig.schoolType === 'elem' ? 'elem' : 'high')));
-    activeEventsList.sort((a, b) => a.date - b.date); renderHolidays(); selectTarget(userConfig.activeTargetId || activeEventsList[0].id);
+    activeEventsList.sort((a, b) => a.date - b.date); renderHolidays(); selectTarget(userConfig.activeTargetId || activeEventsList[0].id, false);
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
 }
 
@@ -685,9 +689,12 @@ function renderHolidays() {
     });
 }
 
-function selectTarget(id) {
+function selectTarget(id, shouldScroll = true) {
     if (userConfig.activeTargetId !== id && userConfig.activeTargetId !== '') trackEvent('select_target_holiday', { 'holiday_id': id });
-    window.scrollTo({ top: 0, behavior: 'smooth' }); userConfig.activeTargetId = id; confettiFired = false;
+    if (shouldScroll) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    userConfig.activeTargetId = id; confettiFired = false;
     const target = activeEventsList.find(e => e.id === id); if (!target) return;
     document.getElementById('main-timer-bg').style.background = target.bg;
     document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
