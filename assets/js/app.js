@@ -47,7 +47,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=150').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=151').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -296,7 +296,14 @@ function attemptRegistration() {
         trackEvent('success_reg_without_copy');
     }
     // הקישור נפתח מיד בכל מצב
-    window.open(registrationLink, '_blank');
+    const a = document.createElement('a');
+    a.href = registrationLink;
+    a.target = '_blank';
+    a.rel = 'nofollow noopener';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 function loadTipsDatabase() {
