@@ -46,7 +46,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=146').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=147').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -608,7 +608,12 @@ function calculateNetDays(targetDate, forceNoFriday = false) {
     // אם השעה 15:00 ומעלה, היום הנוכחי כבר לא נחשב כיום לימודים (התלמידים סיימו)
     if (now.getHours() >= 15) current.setDate(current.getDate() + 1);
     current.setHours(0, 0, 0, 0);
-    while (current < targetDate) {
+
+    // מאפסים את שעת יעד הספירה לחצות כדי שיום תחילת החופש עצמו לא ייספר כיום לימודים
+    const targetNormalized = new Date(targetDate);
+    targetNormalized.setHours(0, 0, 0, 0);
+
+    while (current < targetNormalized) {
         const dStr = current.getFullYear() + '-' + String(current.getMonth() + 1).padStart(2, '0') + '-' + String(current.getDate()).padStart(2, '0');
         // ימי שישי של בית הספר של החופש הגדול ביולי אינם נלמדים (גם אם לומדים בשישי בשגרת הלימודים)
         const isJulyOrLater = current.getMonth() >= 6; // 6 = July
