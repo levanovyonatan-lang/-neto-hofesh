@@ -47,7 +47,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=157').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=158').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -307,8 +307,8 @@ function attemptRegistration() {
 }
 
 function handleSponsorClick() {
-    trackEvent('click_sponsor_banner');
     if (userConfig.schoolType === 'elem') {
+        trackEvent('click_ad_summer_wheels_tip');
         const registrationLink = "https://kaytana.co.il/%D7%A7%D7%99%D7%99%D7%98%D7%A0%D7%94-%D7%A2%D7%9C-%D7%92%D7%9C%D7%92%D7%9C%D7%99%D7%9D-2026-%D7%94%D7%A8%D7%A9%D7%9E%D7%94-%D7%9C%D7%A7%D7%99%D7%A5-2026-%D7%A0%D7%A4%D7%AA%D7%97%D7%94-%D7%A9%D7%A8/";
         const a = document.createElement('a');
         a.href = registrationLink;
@@ -319,6 +319,7 @@ function handleSponsorClick() {
         a.click();
         document.body.removeChild(a);
     } else {
+        trackEvent('click_ad_vip_tip');
         openVipModal();
     }
 }
@@ -472,6 +473,11 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             if (sponsorBanner) {
                 sponsorBanner.style.display = 'flex'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
                 sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+                if (userConfig.schoolType === 'elem') {
+                    trackEvent('view_ad_summer_wheels_tip');
+                } else {
+                    trackEvent('view_ad_vip_tip');
+                }
             }
             setTimeout(() => {
                 window.scrollBy({ top: 70, behavior: 'smooth' });
@@ -708,7 +714,10 @@ function showMainScreen() {
         if (vipWrapper) vipWrapper.style.display = 'none';
         
         if (isExperimentalSite || forceShowBanner) {
-            if (demoBanner) demoBanner.style.display = 'flex';
+            if (demoBanner) {
+                demoBanner.style.display = 'flex';
+                trackEvent('view_ad_summer_wheels_sticky');
+            }
         } else {
             if (demoBanner) demoBanner.style.display = 'none';
         }
