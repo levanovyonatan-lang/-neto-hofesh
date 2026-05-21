@@ -566,7 +566,7 @@ function initApp() {
     showMainScreen();
     // גלילה קלה למטה כדי שיראו את ה"בחרו יעד ספירה" והבאנר לא יסתיר
     setTimeout(() => {
-        window.scrollTo({ top: 170, behavior: 'smooth' });
+        window.scrollTo({ top: 50, behavior: 'smooth' });
     }, 100);
 }
 
