@@ -47,7 +47,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=151').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=152').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -306,6 +306,23 @@ function attemptRegistration() {
     document.body.removeChild(a);
 }
 
+function handleSponsorClick() {
+    trackEvent('click_sponsor_banner');
+    if (userConfig.schoolType === 'elem') {
+        const registrationLink = "https://kaytana.co.il/%D7%A7%D7%99%D7%99%D7%98%D7%A0%D7%94-%D7%A2%D7%9C-%D7%92%D7%9C%D7%92%D7%9C%D7%99%D7%9D-2026-%D7%94%D7%A8%D7%A9%D7%9E%D7%94-%D7%9C%D7%A7%D7%99%D7%A5-2026-%D7%A0%D7%A4%D7%AA%D7%97%D7%94-%D7%A9%D7%A8/";
+        const a = document.createElement('a');
+        a.href = registrationLink;
+        a.target = '_blank';
+        a.rel = 'nofollow noopener';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    } else {
+        openVipModal();
+    }
+}
+
 function loadTipsDatabase() {
     if (window.tipsDatabase && typeof window.tipsDatabase === 'object') {
         return Promise.resolve(window.tipsDatabase);
@@ -429,6 +446,17 @@ function renderTipBox(targetId, isNewlyClicked = false) {
     const btnText = document.getElementById('ai-btn-text');
     const sponsorBanner = document.getElementById('tip-sponsor-banner');
 
+    if (sponsorBanner) {
+        const textElement = sponsorBanner.querySelector('.sponsor-text');
+        if (textElement) {
+            if (userConfig.schoolType === 'elem') {
+                textElement.innerHTML = `<span aria-hidden="true">🌟</span> סופרלנד, קולנוע ופארק מים? <b>הרשמו לקייטנה הכי כיפית בארץ!</b>`;
+            } else {
+                textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים להרוויח כסף מסקרים וטעימות? <b>לחצו כאן</b>`;
+            }
+        }
+    }
+
     if (currentState.clicks > 0 && currentState.texts && currentState.texts.length > 0) {
         const latestTip = currentState.texts[currentState.texts.length - 1];
         const title = currentState.clicks === 1 ? "הטיפ היומי" : "טיפ נוסף";
@@ -441,11 +469,9 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
 
-            if (userConfig.schoolType !== 'elem') {
-                if (sponsorBanner) {
-                    sponsorBanner.style.display = 'flex'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
-                    sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-                }
+            if (sponsorBanner) {
+                sponsorBanner.style.display = 'flex'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
+                sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
             }
         } else {
             if (sponsorBanner) sponsorBanner.style.display = 'none';
