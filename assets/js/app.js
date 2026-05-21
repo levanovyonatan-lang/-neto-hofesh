@@ -40,12 +40,13 @@ const allTargets = [
     { id: 'lagbaomer', name: 'ל"ג בעומר', date: new Date('2026-05-05T08:15:00'), icon: '🔥', bg: '#fff7ed', lengthText: '<b>יום אחד</b>' },
     { id: 'shavuot', name: 'שבועות', date: new Date('2026-05-21T08:15:00'), icon: '🧀', bg: '#f0fdf4', lengthText: '<b>שלושה ימים</b> כולל שישי-שבת' },
     { id: 'summerHigh', name: 'החופש הגדול', date: new Date('2026-06-19T08:15:00'), isSummer: true, type: 'high', icon: '🏖️', bg: '#fefce8' },
+    { id: 'summerElemLow', name: 'ביה"ס של החופש הגדול (א\'-ג\')', date: new Date('2026-07-31T08:15:00'), isSummer: true, type: 'elem', icon: '🎒', bg: '#fdf4ff', description: 'לומדים עד ה-30.7 (לא חובה)', noFriday: true },
     { id: 'summerElem', name: 'החופש הגדול', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'elem', icon: '🍉', bg: '#fefce8' }
 ];
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=143').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=145').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -602,14 +603,15 @@ function updateFridayToggle() {
     if (checkedSchool) updateSchoolSelection(checkedSchool);
 }
 
-function calculateNetDays(targetDate) {
+function calculateNetDays(targetDate, forceNoFriday = false) {
     const now = new Date(); let count = 0, current = new Date(now);
     // אם השעה 15:00 ומעלה, היום הנוכחי כבר לא נחשב כיום לימודים (התלמידים סיימו)
     if (now.getHours() >= 15) current.setDate(current.getDate() + 1);
     current.setHours(0, 0, 0, 0);
     while (current < targetDate) {
         const dStr = current.getFullYear() + '-' + String(current.getMonth() + 1).padStart(2, '0') + '-' + String(current.getDate()).padStart(2, '0');
-        if (current.getDay() !== 6 && (current.getDay() !== 5 || userConfig.studyFriday) && !holidays2026.includes(dStr)) count++;
+        const isFridayStudy = userConfig.studyFriday && !forceNoFriday;
+        if (current.getDay() !== 6 && (current.getDay() !== 5 || isFridayStudy) && !holidays2026.includes(dStr)) count++;
         current.setDate(current.getDate() + 1);
     }
     return count;
@@ -672,7 +674,14 @@ function showMainScreen() {
     const summerHighObj = allTargets.find(t => t.id === 'summerHigh');
     if (summerHighObj) { if (!userConfig.studyFriday) summerHighObj.date = new Date('2026-06-18T08:15:00'); else summerHighObj.date = new Date('2026-06-19T08:15:00'); }
 
-    const now = Date.now(); activeEventsList = allTargets.filter(e => e.date.getTime() > now && (!e.isSummer || e.type === (userConfig.schoolType === 'elem' ? 'elem' : 'high')));
+    const now = Date.now();
+    const isDemo = forceShowBanner || isExperimentalSite;
+    activeEventsList = allTargets.filter(e => {
+        if (e.date.getTime() <= now) return false;
+        if (e.id === 'summerElemLow' && !isDemo) return false;
+        if (!e.isSummer) return true;
+        return e.type === (userConfig.schoolType === 'elem' ? 'elem' : 'high');
+    });
     activeEventsList.sort((a, b) => a.date - b.date); renderHolidays(); selectTarget(userConfig.activeTargetId || activeEventsList[0].id, false);
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
 }
@@ -683,7 +692,11 @@ function renderHolidays() {
         const card = document.createElement('button');
         card.className = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
         card.onclick = () => selectTarget(ev.id);
-        card.innerHTML = `<div><b>${ev.name} <span aria-hidden="true">${ev.icon}</span></b><br><small>ב-${ev.date.toLocaleDateString('he-IL')}</small></div>`;
+        
+        let subText = `ב-${ev.date.toLocaleDateString('he-IL')}`;
+        if (ev.description) subText = ev.description;
+        
+        card.innerHTML = `<div><b>${ev.name} <span aria-hidden="true">${ev.icon}</span></b><br><small>${subText}</small></div>`;
         card.setAttribute('aria-label', `ספירה לחג ${ev.name}`);
         container.appendChild(card);
     });
@@ -699,6 +712,13 @@ function selectTarget(id, shouldScroll = true) {
     document.getElementById('main-timer-bg').style.background = target.bg;
     document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
 
+    // במידה ויש הגדרה קבועה של "אין שישי" ליעד הספציפי
+    if (target.noFriday) {
+        document.getElementById('excluding-label').textContent = "(בניכוי חגים, שישי ושבת - ללא קשר להגדרות)";
+    } else {
+        document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
+    }
+
     const vacationBox = document.getElementById('vacation-length-box');
     if (vacationBox) {
         let lengthText = '';
@@ -711,7 +731,7 @@ function selectTarget(id, shouldScroll = true) {
     }
 
     loadDailyState(); renderTipBox(id); renderHolidays();
-    const netDays = calculateNetDays(target.date); animateNetDays(netDays); updateDashboard();
+    const netDays = calculateNetDays(target.date, target.noFriday); animateNetDays(netDays); updateDashboard();
 }
 
 function updateDashboard() {
@@ -728,7 +748,7 @@ function updateDashboard() {
         document.getElementById('abs-hours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
         document.getElementById('abs-mins').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
         document.getElementById('abs-secs').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-        if (!isAnimatingNetDays) document.getElementById('main-net-days').textContent = calculateNetDays(event.date);
+        if (!isAnimatingNetDays) document.getElementById('main-net-days').textContent = calculateNetDays(event.date, event.noFriday);
     }
 }
 
