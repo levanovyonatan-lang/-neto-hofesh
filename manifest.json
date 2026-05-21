@@ -1,7 +1,8 @@
 {
   "name": "נטו חופש | מתי החופש הגדול",
   "short_name": "נטו חופש",
-  "start_url": "./",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
