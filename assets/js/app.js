@@ -451,7 +451,23 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         const textElement = sponsorBanner.querySelector('.sponsor-text');
         if (textElement) {
             if (userConfig.schoolType === 'elem') {
-                textElement.innerHTML = `<span aria-hidden="true">🌟</span> סופרלנד, קולנוע, ופארק מים? <b>פעילויות חדשות כל יום בקייטנה הכי כיפית בארץ!</b>`;
+                const elemSponsorOptions = [
+                    "קולנוע, בריכה ומפורסמים",
+                    "באולינג, פורטנייט, טרמפולינות",
+                    "סופרלנד, קולנוע, ופארק מים",
+                    "לונה פארק, לייזר טאג ומתנפחי ענק",
+                    "פארק מים, סרטי VIP ונינג'ה"
+                ];
+                const now = new Date();
+                const start = new Date('2026-05-16');
+                let dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+                if (dayIndex < 0) dayIndex = 0;
+                
+                const clickNum = currentState.clicks || 1;
+                const finalIndex = (dayIndex * 3 + clickNum) % elemSponsorOptions.length;
+                const chosenOption = elemSponsorOptions[finalIndex];
+                
+                textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}? <b>פעילויות חדשות כל יום בקייטנה הכי כיפית בארץ!</b>`;
             } else {
                 textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים להרוויח כסף מסקרים וטעימות? <b>לחצו כאן</b>`;
             }
