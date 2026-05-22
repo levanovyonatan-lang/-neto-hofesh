@@ -155,16 +155,16 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 .ai-btn:disabled { cursor: default; }
 
 .ai-sponsor {
-    background: linear-gradient(135deg, #fff7ed, #ffedd5); border: 2px solid #fed7aa;
+    background: linear-gradient(135deg, #ffffff, #fff7ed); border: 2px solid #ffedd5;
     border-radius: 20px; padding: 14px 16px; margin-top: 15px; display: flex;
     align-items: center; justify-content: center; gap: 8px; cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center;
-    box-shadow: 0 6px 15px rgba(249, 115, 22, 0.15);
+    box-shadow: 0 6px 15px rgba(249, 115, 22, 0.07);
 }
-.ai-sponsor:hover { background: linear-gradient(135deg, #ffedd5, #fed7aa); border-color: #f97316; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(249, 115, 22, 0.25); }
+.ai-sponsor:hover { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-color: #fed7aa; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15); }
 .sponsor-text { font-size: calc(14px * var(--text-scale, 1)); font-weight: 600; color: var(--text-main); line-height: 1.4; }
-.sponsor-text b { color: #ea580c; font-weight: 800; }
-.sponsor-arrow { color: #ea580c; font-size: calc(18px * var(--text-scale, 1)); font-weight: 900; animation: slide-left-sponsor 1.5s infinite ease-in-out; }
+.sponsor-text b { color: #f97316; font-weight: 800; }
+.sponsor-arrow { color: #f97316; font-size: calc(18px * var(--text-scale, 1)); font-weight: 900; animation: slide-left-sponsor 1.5s infinite ease-in-out; }
 
 @keyframes slide-left-sponsor { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-5px); } }
 
