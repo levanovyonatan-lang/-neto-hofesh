@@ -452,7 +452,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         if (textElement) {
             if (userConfig.schoolType === 'elem') {
                 const elemSponsorOptions = [
-                    "קולנוע, בריכה ומפורסמים",
+                    "קולנוע, יום בריכה ומפורסמים",
                     "באולינג, פורטנייט, טרמפולינות",
                     "סופרלנד, קולנוע, ופארק מים",
                     "לונה פארק, לייזר טאג ומתנפחי ענק",
