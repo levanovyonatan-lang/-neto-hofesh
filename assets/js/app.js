@@ -309,7 +309,7 @@ function attemptRegistration() {
 function handleSponsorClick() {
     if (userConfig.schoolType === 'elem') {
         trackEvent('click_ad_summer_wheels_tip');
-        const registrationLink = "https://kaytana.co.il/%D7%A7%D7%99%D7%99%D7%98%D7%A0%D7%94-%D7%A2%D7%9C-%D7%92%D7%9C%D7%92%D7%9C%D7%99%D7%9D-2026-%D7%94%D7%A8%D7%A9%D7%9E%D7%94-%D7%9C%D7%A7%D7%99%D7%A5-2026-%D7%A0%D7%A4%D7%AA%D7%97%D7%94-%D7%A9%D7%A8/";
+        const registrationLink = "https://www.funkid-k.com/";
         const a = document.createElement('a');
         a.href = registrationLink;
         a.target = '_blank';
