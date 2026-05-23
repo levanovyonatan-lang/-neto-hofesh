@@ -29,8 +29,9 @@ window.addEventListener('appinstalled', () => {
 });
 
 function trackEvent(eventName, params = {}) {
+    console.log("Track Event:", eventName, params);
     if (typeof gtag === 'function') {
-        gtag('event', eventName, params);
+        gtag('event', eventName, { ...params, transport: 'beacon' });
     }
 }
 
