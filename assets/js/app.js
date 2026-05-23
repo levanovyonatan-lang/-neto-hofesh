@@ -721,21 +721,13 @@ function showMainScreen() {
     const highSocial = document.getElementById('social-high-banner');
     const elemSocial = document.getElementById('social-elem-banner');
 
-    const isExperimentalSite = window.location.hostname.includes('github.io');
-    const urlParams = new URLSearchParams(window.location.search);
-    const forceShowBanner = urlParams.get('show_demo') === 'true';
-
     if (userConfig.schoolType === 'elem') {
         if (vipBtn) vipBtn.style.display = 'none';
         if (vipWrapper) vipWrapper.style.display = 'none';
         
-        if (isExperimentalSite || forceShowBanner) {
-            if (demoBanner) {
-                demoBanner.style.display = 'flex';
-                trackEvent('view_ad_summer_wheels_sticky');
-            }
-        } else {
-            if (demoBanner) demoBanner.style.display = 'none';
+        if (demoBanner) {
+            demoBanner.style.display = 'flex';
+            trackEvent('view_ad_summer_wheels_sticky');
         }
         
         if (highSocial) highSocial.style.display = 'none';
@@ -752,10 +744,8 @@ function showMainScreen() {
     if (summerHighObj) { if (!userConfig.studyFriday) summerHighObj.date = new Date('2026-06-18T08:15:00'); else summerHighObj.date = new Date('2026-06-19T08:15:00'); }
 
     const now = Date.now();
-    const isDemo = forceShowBanner || isExperimentalSite;
     activeEventsList = allTargets.filter(e => {
         if (e.date.getTime() <= now) return false;
-        if ((e.id === 'summerElemLow' || e.id === 'summerMiddlePrep') && !isDemo) return false;
         if (!e.isSummer) return true;
         
         if (userConfig.schoolType === 'elem') return e.type === 'elem';
