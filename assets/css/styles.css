@@ -140,7 +140,7 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 .net-days { font-size: calc(85px * var(--text-scale, 1)); font-weight: 900; line-height: 1; margin: 10px 0; letter-spacing: -2px; }
 .absolute-timer {
     display: flex; justify-content: center; gap: 12px; background: rgba(0,0,0,0.04); padding: 16px; border-radius: 22px; margin-top: 18px;
-    position: relative; cursor: pointer; user-select: none; -webkit-user-select: none;
+    position: relative; user-select: none; -webkit-user-select: none;
 }
 .time-box { text-align: center; min-width: 45px; }
 .time-val { font-size: calc(26px * var(--text-scale, 1)); font-weight: 800; }
@@ -474,6 +474,7 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 .net-days-container {
     user-select: none;
     -webkit-user-select: none;
+    cursor: pointer;
 }
 
 .surfer-passenger {
