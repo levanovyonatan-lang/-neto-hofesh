@@ -140,7 +140,7 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 .net-days { font-size: calc(85px * var(--text-scale, 1)); font-weight: 900; line-height: 1; margin: 10px 0; letter-spacing: -2px; }
 .absolute-timer {
     display: flex; justify-content: center; gap: 12px; background: rgba(0,0,0,0.04); padding: 16px; border-radius: 22px; margin-top: 18px;
-    position: relative; overflow: hidden; cursor: pointer; user-select: none; -webkit-user-select: none;
+    position: relative; cursor: pointer; user-select: none; -webkit-user-select: none;
 }
 .time-box { text-align: center; min-width: 45px; }
 .time-val { font-size: calc(26px * var(--text-scale, 1)); font-weight: 800; }
@@ -478,8 +478,8 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 
 .surfer-passenger {
     position: absolute;
-    top: 2px;
-    font-size: 20px;
+    top: -28px;
+    font-size: 24px;
     white-space: nowrap;
     pointer-events: none;
     z-index: 5;
@@ -493,23 +493,32 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 @keyframes surfR2L {
     0% {
         right: -60px;
-        transform: translateY(0) rotate(-5deg) scale(0.85);
+        transform: translateY(0) rotate(-8deg) scale(0.85);
         opacity: 0;
     }
     15% {
         opacity: 1;
-        transform: translateY(-2px) rotate(3deg) scale(1);
+        transform: translateY(-6px) rotate(6deg) scale(1);
     }
-    50% {
-        transform: translateY(2px) rotate(-3deg) scale(1.05);
+    30% {
+        transform: translateY(4px) rotate(-6deg) scale(1.05);
     }
-    85% {
+    45% {
+        transform: translateY(-6px) rotate(6deg) scale(1.05);
+    }
+    60% {
+        transform: translateY(4px) rotate(-6deg) scale(1.05);
+    }
+    75% {
+        transform: translateY(-5px) rotate(5deg) scale(1.05);
+    }
+    90% {
         opacity: 1;
-        transform: translateY(-1px) rotate(2deg) scale(1);
+        transform: translateY(2px) rotate(-3deg) scale(1);
     }
     100% {
         right: 100%;
-        transform: translateY(0) rotate(-5deg) scale(0.85);
+        transform: translateY(0) rotate(-8deg) scale(0.85);
         opacity: 0;
     }
 }
