@@ -735,7 +735,16 @@ function showMainScreen() {
         if (elemSocial) elemSocial.style.display = 'block';
     } else {
         if (vipBtn) vipBtn.style.display = 'flex';
-        if (vipWrapper) vipWrapper.style.display = 'block';
+        if (vipWrapper) {
+            vipWrapper.style.display = 'block';
+            // באתר הניסיוני - הדבק את כפתור הכסף לרוחב מלא כמו באנר קיץ על גלגלים
+            const isDemo = window.location.hostname.includes('github.io') || new URLSearchParams(window.location.search).get('show_demo') === 'true';
+            if (isDemo) {
+                vipWrapper.style.left = '0';
+                vipWrapper.style.transform = 'none';
+                vipWrapper.style.maxWidth = '100%';
+            }
+        }
         if (demoBanner) demoBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
