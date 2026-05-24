@@ -481,33 +481,33 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     white-space: nowrap;
     pointer-events: none;
     z-index: 5;
-    will-change: transform, left;
+    will-change: transform, right;
 }
 
-.surf-left-to-right {
-    animation: surfL2R 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+.surf-right-to-left {
+    animation: surfR2L 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-@keyframes surfL2R {
+@keyframes surfR2L {
     0% {
-        left: -60px;
-        transform: translateY(0) rotate(5deg) scale(0.85);
+        right: -60px;
+        transform: translateY(0) rotate(-5deg) scale(0.85);
         opacity: 0;
     }
     15% {
         opacity: 1;
-        transform: translateY(-2px) rotate(-3deg) scale(1);
+        transform: translateY(-2px) rotate(3deg) scale(1);
     }
     50% {
-        transform: translateY(2px) rotate(3deg) scale(1.05);
+        transform: translateY(2px) rotate(-3deg) scale(1.05);
     }
     85% {
         opacity: 1;
-        transform: translateY(-1px) rotate(-2deg) scale(1);
+        transform: translateY(-1px) rotate(2deg) scale(1);
     }
     100% {
-        left: 100%;
-        transform: translateY(0) rotate(5deg) scale(0.85);
+        right: 100%;
+        transform: translateY(0) rotate(-5deg) scale(0.85);
         opacity: 0;
     }
 }
