@@ -138,7 +138,10 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 }
 
 .net-days { font-size: calc(85px * var(--text-scale, 1)); font-weight: 900; line-height: 1; margin: 10px 0; letter-spacing: -2px; }
-.absolute-timer { display: flex; justify-content: center; gap: 12px; background: rgba(0,0,0,0.04); padding: 16px; border-radius: 22px; margin-top: 18px; }
+.absolute-timer {
+    display: flex; justify-content: center; gap: 12px; background: rgba(0,0,0,0.04); padding: 16px; border-radius: 22px; margin-top: 18px;
+    position: relative; overflow: hidden; cursor: pointer; user-select: none; -webkit-user-select: none;
+}
 .time-box { text-align: center; min-width: 45px; }
 .time-val { font-size: calc(26px * var(--text-scale, 1)); font-weight: 800; }
 .time-lbl { font-size: calc(12px * var(--text-scale, 1)); font-weight: 600; color: var(--text-muted); }
@@ -469,15 +472,14 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 
 /* --- Surfer Easter Egg (Demo Site only) --- */
 .net-days-container {
-    cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
 }
 
 .surfer-passenger {
     position: absolute;
-    top: 5px;
-    font-size: 24px;
+    top: 2px;
+    font-size: 20px;
     white-space: nowrap;
     pointer-events: none;
     z-index: 5;

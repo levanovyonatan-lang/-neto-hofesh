@@ -200,7 +200,7 @@
             <div id="main-timer-bg" class="main-timer-card">
                 <h2 id="main-target-title"
                     style="font-weight: 800; font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 10px;"></h2>
-                <div class="net-days-container" onclick="triggerSurferAnimation()" aria-live="polite">
+                <div class="net-days-container" aria-live="polite">
                     <div style="font-weight: 800; color: var(--text-muted);">נשארו רק:</div>
                     <div id="main-net-days" class="net-days">-</div>
                     <div style="font-weight: 800; color: var(--text-muted);">ימי לימוד נטו!</div>
@@ -209,7 +209,7 @@
                     </div>
                 </div>
 
-                <div class="absolute-timer" dir="ltr" aria-hidden="true">
+                <div class="absolute-timer" onclick="triggerSurferAnimation()" dir="ltr" aria-hidden="true">
                     <div class="time-box">
                         <div id="abs-days" class="time-val">-</div>
                         <div class="time-lbl">ימים</div>

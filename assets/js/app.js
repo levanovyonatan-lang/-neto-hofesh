@@ -919,15 +919,15 @@ function triggerSurferAnimation() {
 
     if (!isDemo) return;
 
-    const card = document.getElementById('main-timer-bg');
-    if (!card) return;
+    const timer = document.querySelector('.absolute-timer');
+    if (!timer) return;
 
-    if (card.querySelector('.surfer-passenger')) return;
+    if (timer.querySelector('.surfer-passenger')) return;
 
     const surfer = document.createElement('div');
     surfer.className = 'surfer-passenger surf-right-to-left';
-    surfer.innerHTML = '🏄‍♂️🌊';
-    card.appendChild(surfer);
+    surfer.innerHTML = '🏄‍♂️';
+    timer.appendChild(surfer);
 
     surfer.addEventListener('animationend', () => {
         surfer.remove();
