@@ -919,15 +919,15 @@ function triggerSurferAnimation() {
 
     if (!isDemo) return;
 
-    const timerCard = document.getElementById('main-timer-bg');
-    if (!timerCard) return;
+    const container = document.querySelector('.net-days-container');
+    if (!container) return;
 
-    if (timerCard.querySelector('.surfer-passenger')) return;
+    if (container.querySelector('.surfer-passenger')) return;
 
     const surfer = document.createElement('div');
     surfer.className = 'surfer-passenger surf-left-to-right';
-    surfer.innerHTML = '🌊🌊🏄‍♂️';
-    timerCard.appendChild(surfer);
+    surfer.innerHTML = '🏄‍♂️';
+    container.appendChild(surfer);
 
     surfer.addEventListener('animationend', () => {
         surfer.remove();

@@ -472,12 +472,14 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
+    position: relative;
+    overflow: hidden;
 }
 
 .surfer-passenger {
     position: absolute;
-    bottom: 15px;
-    font-size: 38px;
+    top: 25px;
+    font-size: 24px;
     white-space: nowrap;
     pointer-events: none;
     z-index: 5;
@@ -490,20 +492,20 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 
 @keyframes surfL2R {
     0% {
-        left: -120px;
+        left: -50px;
         transform: translateY(0) rotate(5deg) scale(0.8);
         opacity: 0;
     }
     15% {
         opacity: 1;
-        transform: translateY(-6px) rotate(-3deg) scale(1);
+        transform: translateY(-3px) rotate(-3deg) scale(1);
     }
     50% {
-        transform: translateY(6px) rotate(4deg) scale(1.15);
+        transform: translateY(3px) rotate(4deg) scale(1.15);
     }
     85% {
         opacity: 1;
-        transform: translateY(-4px) rotate(-2deg) scale(1);
+        transform: translateY(-2px) rotate(-2deg) scale(1);
     }
     100% {
         left: 100%;
