@@ -909,3 +909,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// פונקציית אנימציית גולש עבור האתר הנסיוני בלבד
+function triggerSurferAnimation() {
+    const isExperimentalSite = window.location.hostname.includes('github.io');
+    const urlParams = new URLSearchParams(window.location.search);
+    const forceShowBanner = urlParams.get('show_demo') === 'true';
+    const isDemo = forceShowBanner || isExperimentalSite;
+
+    if (!isDemo) return;
+
+    const timerCard = document.getElementById('main-timer-bg');
+    if (!timerCard) return;
+
+    if (timerCard.querySelector('.surfer-passenger')) return;
+
+    const surfer = document.createElement('div');
+    surfer.className = 'surfer-passenger surf-left-to-right';
+    surfer.innerHTML = '🌊🌊🏄‍♂️';
+    timerCard.appendChild(surfer);
+
+    surfer.addEventListener('animationend', () => {
+        surfer.remove();
+    });
+}
