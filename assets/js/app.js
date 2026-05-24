@@ -919,15 +919,15 @@ function triggerSurferAnimation() {
 
     if (!isDemo) return;
 
-    const container = document.querySelector('.net-days-container');
-    if (!container) return;
+    const netDaysNum = document.getElementById('main-net-days');
+    if (!netDaysNum) return;
 
-    if (container.querySelector('.surfer-passenger')) return;
+    if (netDaysNum.querySelector('.surfer-passenger')) return;
 
     const surfer = document.createElement('div');
     surfer.className = 'surfer-passenger surf-left-to-right';
     surfer.innerHTML = '🏄‍♂️';
-    container.appendChild(surfer);
+    netDaysNum.appendChild(surfer);
 
     surfer.addEventListener('animationend', () => {
         surfer.remove();
