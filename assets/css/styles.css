@@ -528,7 +528,7 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 .airplane-container {
     position: fixed;
     top: 25vh;
-    left: -400px;
+    left: -500px;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -539,11 +539,11 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 }
 
 @keyframes airplaneFly {
-    0% { left: -400px; transform: translateY(0); }
+    0% { left: -500px; transform: translateY(0); }
     25% { transform: translateY(-15px); }
     50% { transform: translateY(10px); }
     75% { transform: translateY(-10px); }
-    100% { left: 100vw; transform: translateY(0); }
+    100% { left: calc(100vw + 500px); transform: translateY(0); }
 }
 
 .airplane-banner {
