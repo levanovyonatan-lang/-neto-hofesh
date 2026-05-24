@@ -926,7 +926,7 @@ function triggerSurferAnimation() {
 
     const surfer = document.createElement('div');
     surfer.className = 'surfer-passenger surf-right-to-left';
-    surfer.innerHTML = '🏄‍♂️';
+    surfer.innerHTML = '🏄‍♂️🌊';
     card.appendChild(surfer);
 
     surfer.addEventListener('animationend', () => {
