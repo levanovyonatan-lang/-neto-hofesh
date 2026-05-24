@@ -658,7 +658,7 @@ function updateSchoolSelection(radio) {
     const hint = document.getElementById('school-hint-text'); const isFridayOff = !document.getElementById('friday-toggle').checked;
     hint.style.visibility = 'visible';
     if (radio.value === 'elem') hint.textContent = 'לומדים עד ה-30 ביוני 🍉';
-    else if (radio.value === 'middle') hint.textContent = isFridayOff ? 'יוצאים ב-18 ביוני, אבל יש מכינות ביוני! 🤖' : 'יוצאים ב-19 ביוני, אבל יש מכינות ביוני! 🤖';
+    else if (radio.value === 'middle') hint.textContent = isFridayOff ? 'יוצאים ב-18 ביוני 🏖️' : 'יוצאים ב-19 ביוני 🏖️';
     else hint.textContent = isFridayOff ? 'יוצאים לחופש ב-18 ביוני 🏖️' : 'יוצאים לחופש ב-19 ביוני 🏖️';
 }
 
