@@ -523,3 +523,55 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
         opacity: 0;
     }
 }
+
+/* --- Airplane Banner Easter Egg --- */
+.airplane-container {
+    position: fixed;
+    top: 25vh;
+    left: -400px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 9999;
+    pointer-events: none;
+    animation: airplaneFly 5s linear forwards;
+    direction: ltr; /* Must be LTR so banner is on left, airplane on right */
+}
+
+@keyframes airplaneFly {
+    0% { left: -400px; transform: translateY(0); }
+    25% { transform: translateY(-15px); }
+    50% { transform: translateY(10px); }
+    75% { transform: translateY(-10px); }
+    100% { left: 100vw; transform: translateY(0); }
+}
+
+.airplane-banner {
+    background: #ffffff;
+    border: 2px dashed #38bdf8;
+    color: #0ea5e9;
+    font-weight: 900;
+    font-size: 22px;
+    padding: 10px 25px;
+    border-radius: 6px;
+    box-shadow: 3px 3px 15px rgba(0,0,0,0.15);
+    position: relative;
+    direction: rtl; /* Text inside should be RTL */
+}
+
+.airplane-banner::after {
+    content: '';
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 2px;
+    background: #64748b;
+}
+
+.airplane-emoji {
+    font-size: 55px;
+    transform: rotate(45deg);
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+}

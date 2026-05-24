@@ -938,6 +938,21 @@ function triggerSurferAnimation() {
                     surfer.remove();
                 });
             }
+        } else if (surferClickCount === 2) {
+            // Airplane Easter Egg
+            if (!document.querySelector('.airplane-container')) {
+                const airplane = document.createElement('div');
+                airplane.className = 'airplane-container';
+                airplane.innerHTML = `
+                    <div class="airplane-banner">עוד קצת וטסים לחופש! ☀️</div>
+                    <div class="airplane-emoji">✈️</div>
+                `;
+                document.body.appendChild(airplane);
+
+                airplane.addEventListener('animationend', () => {
+                    airplane.remove();
+                });
+            }
         }
         surferClickCount = 0;
     }, 300);
