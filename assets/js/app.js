@@ -911,6 +911,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // פונקציית אנימציית גולש עבור האתר הנסיוני בלבד
+let surferClickCount = 0;
+let surferClickTimer = null;
+
 function triggerSurferAnimation() {
     const isExperimentalSite = window.location.hostname.includes('github.io');
     const urlParams = new URLSearchParams(window.location.search);
@@ -919,17 +922,23 @@ function triggerSurferAnimation() {
 
     if (!isDemo) return;
 
-    const timer = document.querySelector('.absolute-timer');
-    if (!timer) return;
+    surferClickCount++;
+    clearTimeout(surferClickTimer);
 
-    if (timer.querySelector('.surfer-passenger')) return;
+    surferClickTimer = setTimeout(() => {
+        if (surferClickCount === 1) {
+            const timer = document.querySelector('.absolute-timer');
+            if (timer && !timer.querySelector('.surfer-passenger')) {
+                const surfer = document.createElement('div');
+                surfer.className = 'surfer-passenger surf-right-to-left';
+                surfer.innerHTML = '🏄‍♂️';
+                timer.appendChild(surfer);
 
-    const surfer = document.createElement('div');
-    surfer.className = 'surfer-passenger surf-right-to-left';
-    surfer.innerHTML = '🏄‍♂️';
-    timer.appendChild(surfer);
-
-    surfer.addEventListener('animationend', () => {
-        surfer.remove();
-    });
+                surfer.addEventListener('animationend', () => {
+                    surfer.remove();
+                });
+            }
+        }
+        surferClickCount = 0;
+    }, 300);
 }
