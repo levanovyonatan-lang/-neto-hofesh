@@ -164,9 +164,7 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 .ai-sponsor:hover { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-color: #fed7aa; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15); }
 .sponsor-text { font-size: calc(14px * var(--text-scale, 1)); font-weight: 600; color: var(--text-main); line-height: 1.4; }
 .sponsor-text b { color: #f97316; font-weight: 800; }
-.sponsor-arrow { color: #f97316; font-size: calc(18px * var(--text-scale, 1)); font-weight: 900; animation: slide-left-sponsor 1.5s infinite ease-in-out; }
 
-@keyframes slide-left-sponsor { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-5px); } }
 
 .vip-funnel-btn {
     background: linear-gradient(to right, #eab308 0%, #fef08a 25%, #eab308 50%, #fef08a 75%, #eab308 100%);
