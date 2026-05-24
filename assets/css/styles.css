@@ -557,6 +557,7 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     box-shadow: 3px 3px 15px rgba(0,0,0,0.15);
     position: relative;
     direction: rtl; /* Text inside should be RTL */
+    white-space: nowrap;
 }
 
 .airplane-banner::after {
