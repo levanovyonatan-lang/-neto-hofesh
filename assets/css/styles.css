@@ -472,17 +472,16 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
-    position: relative;
-    overflow: hidden;
 }
 
 .surfer-passenger {
     position: absolute;
-    font-size: 26px;
+    top: 5px;
+    font-size: 24px;
     white-space: nowrap;
     pointer-events: none;
     z-index: 5;
-    will-change: transform, left, top;
+    will-change: transform, left;
 }
 
 .surf-left-to-right {
@@ -492,30 +491,23 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 @keyframes surfL2R {
     0% {
         left: -60px;
-        top: 60px;
-        transform: rotate(15deg) scale(0.8);
+        transform: translateY(0) rotate(5deg) scale(0.85);
         opacity: 0;
     }
     15% {
         opacity: 1;
-        transform: rotate(10deg) scale(0.9);
+        transform: translateY(-2px) rotate(-3deg) scale(1);
     }
-    45% {
-        top: 15px; /* rides directly on top of the number */
-        transform: rotate(-10deg) scale(1.15);
-    }
-    55% {
-        top: 15px;
-        transform: rotate(5deg) scale(1.15);
+    50% {
+        transform: translateY(2px) rotate(3deg) scale(1.05);
     }
     85% {
         opacity: 1;
-        transform: rotate(-5deg) scale(0.9);
+        transform: translateY(-1px) rotate(-2deg) scale(1);
     }
     100% {
         left: 100%;
-        top: 60px;
-        transform: rotate(-15deg) scale(0.8);
+        transform: translateY(0) rotate(5deg) scale(0.85);
         opacity: 0;
     }
 }
