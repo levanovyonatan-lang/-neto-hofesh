@@ -478,7 +478,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
     if (currentState.clicks > 0 && currentState.texts && currentState.texts.length > 0) {
         const latestTip = currentState.texts[currentState.texts.length - 1];
         const title = currentState.clicks === 1 ? "הטיפ היומי" : "טיפ נוסף";
-        let extraHTML = currentState.clicks === 1 ? `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover); margin-top: 8px; display: block;">לחצו לטיפ נוסף ✨</span>` : `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--text-muted); margin-top: 8px; display: block;">טיפ חדש יופיע מחר ✨</span>`;
+        let extraHTML = currentState.clicks === 1 ? `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover); margin-top: 8px; display: block;">לחצו כאן לטיפ נוסף ✨</span>` : `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--text-muted); margin-top: 8px; display: block;">טיפ חדש יופיע מחר ✨</span>`;
         btnText.innerHTML = `<b style="color: var(--text-main); font-size: calc(16px * var(--text-scale, 1));">${title} ✨</b><br><span style="color: var(--text-main); font-weight: 600;">${latestTip}</span>${extraHTML}`;
         btn.classList.add('has-tip');
 
