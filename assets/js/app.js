@@ -716,16 +716,11 @@ function showMainScreen() {
     document.getElementById('setup-screen').style.display = 'none'; document.getElementById('main-screen').style.display = 'flex';
     document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
 
-    const vipBtn = document.getElementById('vip-community-btn');
-    const vipWrapper = document.querySelector('.sticky-vip-wrapper');
     const demoBanner = document.getElementById('demo-banner');
     const highSocial = document.getElementById('social-high-banner');
     const elemSocial = document.getElementById('social-elem-banner');
 
     if (userConfig.schoolType === 'elem') {
-        if (vipBtn) vipBtn.style.display = 'none';
-        if (vipWrapper) vipWrapper.style.display = 'none';
-        
         if (demoBanner) {
             demoBanner.style.display = 'flex';
             trackEvent('view_ad_summer_wheels_sticky');
@@ -734,17 +729,6 @@ function showMainScreen() {
         if (highSocial) highSocial.style.display = 'none';
         if (elemSocial) elemSocial.style.display = 'block';
     } else {
-        if (vipBtn) vipBtn.style.display = 'flex';
-        if (vipWrapper) {
-            vipWrapper.style.display = 'block';
-            // באתר הניסיוני - הדבק את כפתור הכסף לרוחב מלא כמו באנר קיץ על גלגלים
-            const isDemo = window.location.hostname.includes('github.io') || new URLSearchParams(window.location.search).get('show_demo') === 'true';
-            if (isDemo) {
-                vipWrapper.style.left = '0';
-                vipWrapper.style.transform = 'none';
-                vipWrapper.style.maxWidth = '100%';
-            }
-        }
         if (demoBanner) demoBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
