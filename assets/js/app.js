@@ -319,9 +319,16 @@ function handleSponsorClick() {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-    } else {
-        trackEvent('click_ad_vip_tip');
-        openVipModal();
+    } else if (userConfig.schoolType === 'high') {
+        trackEvent('click_tip_jobs_sponsor');
+        const a = document.createElement('a');
+        a.href = "https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t";
+        a.target = '_blank';
+        a.rel = 'nofollow noopener';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     }
 }
 
@@ -449,28 +456,35 @@ function renderTipBox(targetId, isNewlyClicked = false) {
     const sponsorBanner = document.getElementById('tip-sponsor-banner');
 
     if (sponsorBanner) {
-        const textElement = sponsorBanner.querySelector('.sponsor-text');
-        if (textElement) {
-            if (userConfig.schoolType === 'elem') {
-                const elemSponsorOptions = [
-                    "קולנוע, יום בריכה ומפורסמים",
-                    "באולינג, פורטנייט, טרמפולינות",
-                    "סופרלנד, קולנוע, ופארק מים",
-                    "לונה פארק, לייזר טאג ומתנפחי ענק",
-                    "פארק מים, סרטי VIP ונינג'ה"
-                ];
-                const now = new Date();
-                const start = new Date('2026-05-16');
-                let dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-                if (dayIndex < 0) dayIndex = 0;
+        if (userConfig.schoolType === 'middle') {
+            sponsorBanner.style.display = 'none';
+        } else {
+            sponsorBanner.style.display = 'block';
+            const textElement = sponsorBanner.querySelector('.sponsor-text');
+            if (textElement) {
+                if (userConfig.schoolType === 'elem') {
+                    if (isNewlyClicked) trackEvent('view_tip_sponsor_elem');
+                    const elemSponsorOptions = [
+                        "קולנוע, יום בריכה ומפורסמים",
+                        "באולינג, פורטנייט, טרמפולינות",
+                        "סופרלנד, קולנוע, ופארק מים",
+                        "לונה פארק, לייזר טאג ומתנפחי ענק",
+                        "פארק מים, סרטי VIP ונינג'ה"
+                    ];
+                    const now = new Date();
+                    const start = new Date('2026-05-16');
+                    let dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+                    if (dayIndex < 0) dayIndex = 0;
 
-                const clickNum = currentState.clicks || 1;
-                const finalIndex = (dayIndex * 3 + clickNum) % elemSponsorOptions.length;
-                const chosenOption = elemSponsorOptions[finalIndex];
+                    const clickNum = currentState.clicks || 1;
+                    const finalIndex = (dayIndex * 3 + clickNum) % elemSponsorOptions.length;
+                    const chosenOption = elemSponsorOptions[finalIndex];
 
-                textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}? <b>פעילויות חדשות כל יום בקייטנה הכי כיפית בארץ!</b>`;
-            } else {
-                textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים כסף הרבה כסף בחופש? <b>לחצו כאן</b>`;
+                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}? <b>פעילויות חדשות כל יום בקייטנה הכי כיפית בארץ!</b>`;
+                } else if (userConfig.schoolType === 'high') {
+                    if (isNewlyClicked) trackEvent('view_tip_jobs_sponsor');
+                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים כסף הרבה כסף בחופש? <b>לחצו כאן</b>`;
+                }
             }
         }
     }
