@@ -483,7 +483,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                     textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}? <b>פעילויות חדשות כל יום בקייטנה הכי כיפית בארץ!</b>`;
                 } else if (userConfig.schoolType === 'high') {
                     if (isNewlyClicked) trackEvent('view_tip_jobs_sponsor');
-                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים להרוויח הרבה כסף בחופש? <b>לחצו כאן (16+)</b>`;
+                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים להרוויח הרבה כסף בחופש?<br><b>לחצו כאן (16+)</b>`;
                 }
             }
         }
