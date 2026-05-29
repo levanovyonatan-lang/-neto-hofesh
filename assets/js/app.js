@@ -310,25 +310,10 @@ function attemptRegistration() {
 function handleSponsorClick() {
     if (userConfig.schoolType === 'elem') {
         trackEvent('click_ad_summer_wheels_tip');
-        const registrationLink = "https://www.funkid-k.com/";
-        const a = document.createElement('a');
-        a.href = registrationLink;
-        a.target = '_blank';
-        a.rel = 'nofollow noopener';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        window.location.href = "https://www.funkid-k.com/";
     } else if (userConfig.schoolType === 'high') {
         trackEvent('click_tip_jobs_sponsor');
-        const a = document.createElement('a');
-        a.href = "https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t";
-        a.target = '_blank';
-        a.rel = 'nofollow noopener';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        window.location.href = "https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t";
     }
 }
 
