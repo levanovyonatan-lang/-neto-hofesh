@@ -722,10 +722,14 @@ function showMainScreen() {
     const highSocial = document.getElementById('social-high-banner');
     const elemSocial = document.getElementById('social-elem-banner');
 
+    const isExperimentalSite = window.location.hostname.includes('github.io');
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDemo = urlParams.get('show_demo') === 'true' || isExperimentalSite;
+
     if (userConfig.schoolType === 'elem') {
         if (demoBanner) {
-            demoBanner.style.display = 'flex';
-            trackEvent('view_ad_summer_wheels_sticky');
+            demoBanner.style.display = isDemo ? 'flex' : 'none';
+            if (isDemo) trackEvent('view_ad_summer_wheels_sticky');
         }
         if (jobsBanner) jobsBanner.style.display = 'none';
         
@@ -734,8 +738,8 @@ function showMainScreen() {
     } else if (userConfig.schoolType === 'high') {
         if (demoBanner) demoBanner.style.display = 'none';
         if (jobsBanner) {
-            jobsBanner.style.display = 'flex';
-            trackEvent('view_ad_jobs_sticky');
+            jobsBanner.style.display = isDemo ? 'flex' : 'none';
+            if (isDemo) trackEvent('view_ad_jobs_sticky');
         }
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
