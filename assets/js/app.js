@@ -752,8 +752,8 @@ function showMainScreen() {
     } else if (userConfig.schoolType === 'high') {
         if (demoBanner) demoBanner.style.display = 'none';
         if (jobsBanner) {
-            jobsBanner.style.display = isDemo ? 'flex' : 'none';
-            if (isDemo) trackEvent('view_ad_jobs_sticky');
+            jobsBanner.style.display = 'flex';
+            trackEvent('view_ad_jobs_sticky');
         }
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
