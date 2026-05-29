@@ -650,6 +650,7 @@ function resetApp() {
     const elemSocial = document.getElementById('social-elem-banner'); if (elemSocial) elemSocial.style.display = 'none';
     const highSocial = document.getElementById('social-high-banner'); if (highSocial) highSocial.style.display = 'none';
     const demoBanner = document.getElementById('demo-banner'); if (demoBanner) demoBanner.style.display = 'none';
+    const jobsBanner = document.getElementById('jobs-banner'); if (jobsBanner) jobsBanner.style.display = 'none';
 }
 
 function updateSchoolSelection(radio) {
@@ -717,6 +718,7 @@ function showMainScreen() {
     document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
 
     const demoBanner = document.getElementById('demo-banner');
+    const jobsBanner = document.getElementById('jobs-banner');
     const highSocial = document.getElementById('social-high-banner');
     const elemSocial = document.getElementById('social-elem-banner');
 
@@ -725,11 +727,21 @@ function showMainScreen() {
             demoBanner.style.display = 'flex';
             trackEvent('view_ad_summer_wheels_sticky');
         }
+        if (jobsBanner) jobsBanner.style.display = 'none';
         
         if (highSocial) highSocial.style.display = 'none';
         if (elemSocial) elemSocial.style.display = 'block';
+    } else if (userConfig.schoolType === 'high') {
+        if (demoBanner) demoBanner.style.display = 'none';
+        if (jobsBanner) {
+            jobsBanner.style.display = 'flex';
+            trackEvent('view_ad_jobs_sticky');
+        }
+        if (highSocial) highSocial.style.display = 'block';
+        if (elemSocial) elemSocial.style.display = 'none';
     } else {
         if (demoBanner) demoBanner.style.display = 'none';
+        if (jobsBanner) jobsBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
     }
