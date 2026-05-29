@@ -116,7 +116,19 @@
         #jobs-banner img {
             object-fit: contain;
             object-position: top;
-            background: #fff; /* Optional: if the image doesn't fill the width, white background behind it */
+            background: #0f764c;
+        }
+
+        @media (max-width: 767px) {
+            #jobs-banner {
+                height: auto !important;
+                background: #0f764c !important;
+            }
+            #jobs-banner img {
+                height: auto !important;
+                width: 100% !important;
+                background: #0f764c !important;
+            }
         }
 
         .sticky-banner-container::after {
@@ -568,7 +580,7 @@
     <div id="jobs-banner" class="sticky-banner-container" style="display: none;">
         <a href="https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t" target="_blank" rel="nofollow noopener"
             onclick="trackEvent('click_ad_jobs_sticky');">
-            <img src="assets/images/jobs-banner.jpg?v=2" alt="עבודות לנוער - עבודות מזדמנות">
+            <img src="assets/images/jobs-banner.jpg?v=3" alt="עבודות לנוער - עבודות מזדמנות">
         </a>
     </div>
 
