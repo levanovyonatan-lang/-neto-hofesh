@@ -742,8 +742,8 @@ function showMainScreen() {
 
     if (userConfig.schoolType === 'elem') {
         if (demoBanner) {
-            demoBanner.style.display = isDemo ? 'flex' : 'none';
-            if (isDemo) trackEvent('view_ad_summer_wheels_sticky');
+            demoBanner.style.display = 'flex';
+            trackEvent('view_ad_summer_wheels_sticky');
         }
         if (jobsBanner) jobsBanner.style.display = 'none';
 
