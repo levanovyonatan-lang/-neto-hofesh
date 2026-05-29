@@ -73,7 +73,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
             padding-bottom: env(safe-area-inset-bottom, 0px);
             box-sizing: content-box;
             transform: translate3d(0, 0, 0);
@@ -95,6 +95,7 @@
                 background: transparent !important;
                 box-shadow: none !important;
             }
+
             .sticky-banner-container img {
                 width: auto !important;
                 max-width: 100% !important;
@@ -109,7 +110,12 @@
             width: 100%;
             object-fit: fill;
             display: block;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+        }
+
+        #jobs-banner img {
+            object-fit: contain;
+            background: #fff; /* Optional: if the image doesn't fill the width, white background behind it */
         }
 
         .sticky-banner-container::after {
@@ -242,9 +248,8 @@
                         <span id="ai-btn-text">לחצו לטיפ אופטימיות יומי ✨</span>
                     </button>
 
-                    <div class="ai-sponsor" id="tip-sponsor-banner"
-                        onclick="handleSponsorClick();" style="display: none;"
-                        role="button" tabindex="0">
+                    <div class="ai-sponsor" id="tip-sponsor-banner" onclick="handleSponsorClick();"
+                        style="display: none;" role="button" tabindex="0">
                         <div class="sponsor-text" style="font-size: calc(15px * var(--text-scale, 1));"><span
                                 aria-hidden="true">🌟</span> רוצים להרוויח מסקרים וזומים? <b>לחצו כאן</b></div>
                     </div>
@@ -309,7 +314,8 @@
             <h2>מתי החופש הגדול 2026? ספירה לאחור - נטו חופש</h2>
             <p>שואלים את עצמכם <strong>עוד כמה זמן החופש הגדול לא כולל שבתות וחגים</strong>? או <strong>כמה ימים עד
                     לחופש הגדול</strong>? הגעתם למקום הנכון! האתר "נטו חופש" הוא המחשבון המדויק ביותר שיענה לכם על השאלה
-                <strong>כמה ימי לימודים עד החופש הגדול</strong> נשארו באמת.</p>
+                <strong>כמה ימי לימודים עד החופש הגדול</strong> נשארו באמת.
+            </p>
             <h3>מתי מסתיימים הלימודים?</h3>
             <p>רבים שואלים <strong>עוד כמה ימים יתחיל החופש הגדול לחטיבות הביניים</strong>, ליסודי או לתיכונים. לפי לוח
                 חופשות משרד החינוך, תאריך הסיום משתנה: יסודי ב-30 ביוני, וחטיבות/תיכונים ב-18 או ב-19 ביוני. רוצים לדעת
@@ -551,14 +557,16 @@
 
     <!-- באנר הדגמה לאתר הניסיוני בלבד -->
     <div id="demo-banner" class="sticky-banner-container" style="display: none;">
-        <a href="https://www.funkid-k.com/" target="_blank" rel="nofollow noopener" onclick="trackEvent('click_ad_summer_wheels_sticky');">
+        <a href="https://www.funkid-k.com/" target="_blank" rel="nofollow noopener"
+            onclick="trackEvent('click_ad_summer_wheels_sticky');">
             <img src="assets/images/summer-on-wheels.jpg" alt="קייטנת אקשן על גלגלים">
         </a>
     </div>
 
     <!-- באנר עבודות מזדמנות לתיכוניסטים -->
     <div id="jobs-banner" class="sticky-banner-container" style="display: none;">
-        <a href="https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t" target="_blank" rel="nofollow noopener" onclick="trackEvent('click_ad_jobs_sticky');">
+        <a href="https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t" target="_blank" rel="nofollow noopener"
+            onclick="trackEvent('click_ad_jobs_sticky');">
             <img src="assets/images/jobs-banner.jpg" alt="עבודות לנוער - עבודות מזדמנות">
         </a>
     </div>

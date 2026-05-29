@@ -463,11 +463,11 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                 const start = new Date('2026-05-16');
                 let dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
                 if (dayIndex < 0) dayIndex = 0;
-                
+
                 const clickNum = currentState.clicks || 1;
                 const finalIndex = (dayIndex * 3 + clickNum) % elemSponsorOptions.length;
                 const chosenOption = elemSponsorOptions[finalIndex];
-                
+
                 textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}? <b>פעילויות חדשות כל יום בקייטנה הכי כיפית בארץ!</b>`;
             } else {
                 textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים להרוויח מסקרים וזומים? <b>לחצו כאן</b>`;
@@ -610,7 +610,7 @@ function initApp() {
     if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
-    
+
     if (userConfig.schoolType === 'elem') {
         userConfig.activeTargetId = 'summerElem';
     } else if (userConfig.schoolType === 'middle') {
@@ -732,7 +732,7 @@ function showMainScreen() {
             if (isDemo) trackEvent('view_ad_summer_wheels_sticky');
         }
         if (jobsBanner) jobsBanner.style.display = 'none';
-        
+
         if (highSocial) highSocial.style.display = 'none';
         if (elemSocial) elemSocial.style.display = 'block';
     } else if (userConfig.schoolType === 'high') {
@@ -760,7 +760,7 @@ function showMainScreen() {
     activeEventsList = allTargets.filter(e => {
         if (e.date.getTime() <= now) return false;
         if (!e.isSummer) return true;
-        
+
         if (userConfig.schoolType === 'elem') return e.type === 'elem';
         if (userConfig.schoolType === 'middle') return e.type === 'middle' || (e.type === 'high' && e.id === 'summerHigh');
         if (userConfig.schoolType === 'high') return e.type === 'high';
@@ -776,10 +776,10 @@ function renderHolidays() {
         const card = document.createElement('button');
         card.className = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
         card.onclick = () => selectTarget(ev.id);
-        
+
         let subText = `ב-${ev.date.toLocaleDateString('he-IL')}`;
         if (ev.description) subText = ev.description;
-        
+
         card.innerHTML = `<div><b>${ev.name} <span aria-hidden="true">${ev.icon}</span></b><br><small>${subText}</small></div>`;
         card.setAttribute('aria-label', `ספירה לחג ${ev.name}`);
         container.appendChild(card);
