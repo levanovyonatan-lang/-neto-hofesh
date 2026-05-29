@@ -470,7 +470,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 
                 textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}? <b>פעילויות חדשות כל יום בקייטנה הכי כיפית בארץ!</b>`;
             } else {
-                textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים להרוויח מסקרים וזומים? <b>לחצו כאן</b>`;
+                textElement.innerHTML = `<span aria-hidden="true">🌟</span> לקבוצה עם העבודות הכי שוות בארץ <b>לחצו כאן</b>`;
             }
         }
     }
