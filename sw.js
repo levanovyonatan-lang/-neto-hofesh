@@ -1,3 +1,5 @@
+const CACHE_VERSION = 'v170';
+
 self.addEventListener('install', e => {
   self.skipWaiting();
 });
@@ -7,5 +9,11 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // נדרש עבור PWA אבל כרגע לא מבצע מטמון (Caching)
+  // Force network-first for navigation requests to bypass aggressive iOS Safari PWA caching
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request.url + (e.request.url.includes('?') ? '&' : '?') + 'cb=' + Date.now(), { cache: 'no-store' })
+        .catch(() => fetch(e.request))
+    );
+  }
 });
