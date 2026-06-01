@@ -26,7 +26,12 @@
             font-family: 'Rubik', sans-serif;
             background-color: #0d0118;
             color: var(--text-dark);
+            width: 100%; /* Force full width for Safari flex bug */
+            min-height: 100vh;
+            /* Use -webkit-fill-available to fix iOS Safari 100vh bug */
+            min-height: -webkit-fill-available;
             height: 100vh;
+            height: -webkit-fill-available;
             overflow: hidden; 
             display: flex;
             flex-direction: column;
@@ -122,7 +127,7 @@
             border-top: 1px solid rgba(255,255,255,0.8);
             
             border-radius: 35px 35px 0 0;
-            margin-top: -20px; /* Slight overlap with video */
+            margin: -20px auto 0 auto; /* Ensure centered in Safari */
             box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
             z-index: 10;
             
