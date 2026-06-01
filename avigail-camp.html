@@ -96,9 +96,9 @@
 
         /* Video Hero Section */
         .video-container {
-            width: calc(48vh * (9 / 16));
+            width: calc(56vh * (9 / 16));
             max-width: 90%;
-            height: 48vh; 
+            height: 56vh; 
             background-color: #000;
             position: relative;
             box-shadow: 0 15px 45px rgba(225, 0, 255, 0.3), 0 0 20px rgba(0, 210, 255, 0.2);
@@ -128,13 +128,13 @@
             flex: 1;
             width: 100%;
             max-width: 450px; 
-            padding: 30px 25px 40px;
+            padding: 20px 20px 25px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            gap: 15px;
+            gap: 12px;
             
             /* Glassmorphism Effect */
             background: rgba(255, 255, 255, 0.85);
@@ -260,19 +260,20 @@
         /* Adjustments for very small screens */
         @media (max-height: 650px) {
             .video-container {
-                height: 44vh;
-                width: calc(44vh * (9 / 16));
-                margin-top: 15px;
+                height: 52vh;
+                width: calc(52vh * (9 / 16));
+                margin: 10px auto 0 auto;
             }
             .content-container {
-                padding: 20px 20px 25px;
+                padding: 15px 15px 20px;
+                gap: 8px;
             }
             .fomo-text {
-                font-size: 1.2rem;
+                font-size: 1.15rem;
             }
             .btn {
-                padding: 15px 20px;
-                font-size: 1.1rem;
+                padding: 12px 15px;
+                font-size: 1.05rem;
             }
         }
     </style>
