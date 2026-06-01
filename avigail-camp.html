@@ -165,8 +165,12 @@
             padding: 6px 14px;
             border-radius: 20px;
             box-shadow: 0 4px 10px rgba(255, 0, 122, 0.3);
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            flex-direction: row;
+            direction: rtl;
             margin-bottom: -5px;
+            gap: 6px;
         }
 
         /* FOMO Text */
@@ -197,6 +201,8 @@
             transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
+            direction: rtl;
+            flex-direction: row;
         }
 
         .btn:active {
@@ -234,6 +240,7 @@
             width: 26px;
             height: 26px;
             margin-left: 12px;
+            margin-right: 0;
             fill: currentColor;
         }
 
@@ -290,7 +297,10 @@
     <!-- Content & CTA Actions -->
     <div class="content-container">
         
-        <div class="badge">✨ תרשמו לקייטנה!</div>
+        <div class="badge">
+            <span>✨</span>
+            <span>תרשמו לקייטנה!</span>
+        </div>
 
         <!-- Scarcity / FOMO Text -->
         <div class="fomo-text">
