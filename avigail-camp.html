@@ -75,16 +75,15 @@
 
         /* Video Hero Section */
         .video-container {
-            width: auto;
+            width: calc(48vh * (9 / 16));
             max-width: 90%;
             height: 48vh; 
-            aspect-ratio: 9/16;
             background-color: #000;
             position: relative;
             box-shadow: 0 15px 45px rgba(225, 0, 255, 0.3), 0 0 20px rgba(0, 210, 255, 0.2);
             border-radius: 24px;
             overflow: hidden;
-            margin-top: 25px;
+            margin: 25px auto 0 auto;
             flex-shrink: 0;
             border: 2px solid rgba(255, 255, 255, 0.15);
             animation: dropIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
@@ -234,6 +233,7 @@
         @media (max-height: 650px) {
             .video-container {
                 height: 44vh;
+                width: calc(44vh * (9 / 16));
                 margin-top: 15px;
             }
             .content-container {
