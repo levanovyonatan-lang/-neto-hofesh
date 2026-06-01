@@ -649,6 +649,7 @@ function resetApp() {
     const elemSocial = document.getElementById('social-elem-banner'); if (elemSocial) elemSocial.style.display = 'none';
     const highSocial = document.getElementById('social-high-banner'); if (highSocial) highSocial.style.display = 'none';
     const demoBanner = document.getElementById('demo-banner'); if (demoBanner) demoBanner.style.display = 'none';
+    const avigailBanner = document.getElementById('avigail-banner'); if (avigailBanner) avigailBanner.style.display = 'none';
     const jobsBanner = document.getElementById('jobs-banner'); if (jobsBanner) jobsBanner.style.display = 'none';
 }
 
@@ -717,6 +718,7 @@ function showMainScreen() {
     document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
 
     const demoBanner = document.getElementById('demo-banner');
+    const avigailBanner = document.getElementById('avigail-banner');
     const jobsBanner = document.getElementById('jobs-banner');
     const highSocial = document.getElementById('social-high-banner');
     const elemSocial = document.getElementById('social-elem-banner');
@@ -730,12 +732,21 @@ function showMainScreen() {
             demoBanner.style.display = 'none';
             // trackEvent('view_ad_summer_wheels_sticky');
         }
+        if (avigailBanner) {
+            if (isDemo) {
+                avigailBanner.style.display = 'flex';
+                trackEvent('view_ad_avigail_sticky');
+            } else {
+                avigailBanner.style.display = 'none';
+            }
+        }
         if (jobsBanner) jobsBanner.style.display = 'none';
 
         if (highSocial) highSocial.style.display = 'none';
         if (elemSocial) elemSocial.style.display = 'block';
     } else if (userConfig.schoolType === 'high') {
         if (demoBanner) demoBanner.style.display = 'none';
+        if (avigailBanner) avigailBanner.style.display = 'none';
         if (jobsBanner) {
             jobsBanner.style.display = 'flex';
             trackEvent('view_ad_jobs_sticky');
@@ -744,6 +755,7 @@ function showMainScreen() {
         if (elemSocial) elemSocial.style.display = 'none';
     } else {
         if (demoBanner) demoBanner.style.display = 'none';
+        if (avigailBanner) avigailBanner.style.display = 'none';
         if (jobsBanner) jobsBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
