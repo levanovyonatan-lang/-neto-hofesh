@@ -441,7 +441,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
     const sponsorBanner = document.getElementById('tip-sponsor-banner');
 
     if (sponsorBanner) {
-        if (userConfig.schoolType === 'middle') {
+        if (userConfig.schoolType === 'middle' || userConfig.schoolType === 'elem') {
             sponsorBanner.style.display = 'none';
         } else {
             sponsorBanner.style.display = 'block';
