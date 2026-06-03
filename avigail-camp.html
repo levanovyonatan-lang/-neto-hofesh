@@ -259,6 +259,33 @@
             transform: translateY(-2px);
         }
 
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:active {
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         /* Adjustments for very small screens */
         @media (max-height: 650px) {
             .video-container {
@@ -287,6 +314,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Close Button -->
+    <a href="index.html" class="close-btn" aria-label="חזרה לאתר">✕</a>
 
     <!-- Animated Background Orbs -->
     <div class="bg-container">
@@ -342,7 +372,7 @@
         </div>
 
         <!-- Primary Call-to-Action (WhatsApp) -->
-        <a href="https://wa.me/?text=%D7%9E%D7%A6%D7%90%D7%AA%D7%99%20%D7%90%D7%AA%20%D7%94%D7%A7%D7%99%D7%99%D7%98%D7%A0%D7%94%20%D7%94%D7%9B%D7%99%20%D7%A9%D7%95%D7%95%D7%94%20%D7%9C%D7%A7%D7%99%D7%A5%20-%20%D7%A7%D7%99%D7%99%D7%98%D7%A0%D7%AA%20%D7%90%D7%A7%D7%A9%D7%9F%20%D7%A2%D7%9D%20%D7%90%D7%91%D7%99%D7%92%D7%99%D7%9C.%20%D7%90%D7%A0%D7%99%20%D7%9E%D7%9E%D7%A9%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%9C%D7%9B%D7%AA%2C%20%D7%91%D7%91%D7%A7%D7%A9%D7%94%20%D7%AA%D7%A8%D7%A9%D7%9E%D7%95%20%D7%90%D7%95%D7%AA%D7%99!%0A%D7%94%D7%A0%D7%94%20%D7%94%D7%9C%D7%99%D7%A0%D7%A7%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D%3A%20https%3A%2F%2Fwww.funkid-k.com%2F%D7%A7%D7%99%D7%99%D7%98%D7%A0%D7%AA-%D7%90%D7%A7%D7%A9%D7%9F-%D7%A2%D7%9D-%D7%90%D7%91%D7%99%D7%92%D7%99%D7%9C%2F" 
+        <a href="https://wa.me/?text=מצאתי את הקייטנה הכי שווה לקיץ🤩 %0Aאני ממש רוצה ללכת, בבקשה תרשמו אותי!%0Aהנה הלינק לפרטים: https://www.funkid-k.com/קייטנת-אקשן-עם-אביגיל/" 
            class="btn btn-whatsapp" 
            target="_blank" 
            rel="noopener noreferrer"
