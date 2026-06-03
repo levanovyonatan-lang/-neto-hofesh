@@ -17,6 +17,10 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+a, button, .btn, .glass-card, .event-card, .day-card, .option-card, .smiley-switch, .ai-btn, .ai-sponsor, .vip-funnel-btn, .copy-btn-small, .holiday-card, .btn-action, .reset-btn {
+    touch-action: manipulation;
+}
+
 /* --- התאמות נגישות גלובליות --- */
 html { transition: font-size 0.3s ease; }
 *:focus-visible { outline: 3px solid var(--accent) !important; outline-offset: 2px !important; }

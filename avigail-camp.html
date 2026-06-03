@@ -40,6 +40,10 @@
             padding: 0;
             -webkit-tap-highlight-color: transparent;
         }
+        
+        a, button, .btn, .close-btn, #play-overlay {
+            touch-action: manipulation;
+        }
 
         html {
             overflow-x: hidden;
@@ -216,7 +220,7 @@
             font-size: 1.2rem;
             font-weight: 800;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.1s ease;
             position: relative;
             overflow: hidden;
             direction: rtl;
@@ -225,7 +229,7 @@
         }
 
         .btn:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
         }
 
         /* Primary CTA (WhatsApp) */
@@ -269,7 +273,7 @@
             border: none;
             box-shadow: 0 6px 20px rgba(127, 0, 255, 0.35);
             margin-top: 5px;
-            transition: all 0.3s ease;
+            transition: all 0.1s ease;
         }
 
         .btn-registration:hover {
@@ -296,11 +300,11 @@
             text-decoration: none;
             z-index: 100;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.2s ease;
+            transition: all 0.1s ease;
         }
 
         .close-btn:active {
-            transform: scale(0.9);
+            transform: scale(0.92);
             background: rgba(255, 255, 255, 0.3);
         }
 
