@@ -452,12 +452,12 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                     
                     sponsorBanner.style.background = 'linear-gradient(135deg, #f3e8ff, #e9d5ff)';
                     sponsorBanner.style.borderColor = '#d8b4fe';
-                    sponsorBanner.style.color = '#6b21a8';
+                    sponsorBanner.style.color = '#111827';
                     
                     const elemSponsorOptions = [
-                        "לונה פארק, בריכה ועוד? תצטרפו לקייטנת אקשן עם אביגיל",
-                        "פארק מים, קולנוע ועוד? תרשמו לקייטנת אקשן עם אביגיל!",
-                        "הופעה פרטית, גרביטי פארק ועוד? תרשמו לקייטנת אקשן עם אביגיל!"
+                        "לונה פארק, בריכה ועוד? <span style=\"color: #6b21a8;\">תצטרפו לקייטנת אקשן עם אביגיל</span>",
+                        "פארק מים, קולנוע ועוד? <span style=\"color: #6b21a8;\">תרשמו לקייטנת אקשן עם אביגיל!</span>",
+                        "הופעה פרטית, גרביטי פארק ועוד? <span style=\"color: #6b21a8;\">תרשמו לקייטנת אקשן עם אביגיל!</span>"
                     ];
                     const now = new Date();
                     const start = new Date('2026-05-16');
