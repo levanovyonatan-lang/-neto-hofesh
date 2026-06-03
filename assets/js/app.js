@@ -733,7 +733,7 @@ function showMainScreen() {
 
     const isExperimentalSite = window.location.hostname.includes('github.io');
     const urlParams = new URLSearchParams(window.location.search);
-    const isDemo = urlParams.get('show_demo') === 'true' || isExperimentalSite;
+    // const isDemo = urlParams.get('show_demo') === 'true' || isExperimentalSite;
 
     if (userConfig.schoolType === 'elem') {
         if (demoBanner) {
@@ -741,12 +741,8 @@ function showMainScreen() {
             // trackEvent('view_ad_summer_wheels_sticky');
         }
         if (avigailBanner) {
-            if (isDemo) {
-                avigailBanner.style.display = 'flex';
-                trackEvent('view_ad_avigail_sticky');
-            } else {
-                avigailBanner.style.display = 'none';
-            }
+            avigailBanner.style.display = 'flex';
+            trackEvent('view_ad_avigail_sticky');
         }
         if (jobsBanner) jobsBanner.style.display = 'none';
 
