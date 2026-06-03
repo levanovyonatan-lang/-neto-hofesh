@@ -338,7 +338,7 @@
 <body>
 
     <!-- Close Button -->
-    <a href="index.html" class="close-btn" aria-label="חזרה לאתר">✕</a>
+    <a href="index.html" onclick="if(document.referrer.includes(window.location.hostname) && window.history.length > 1) { window.history.back(); return false; }" class="close-btn" aria-label="חזרה לאתר">✕</a>
 
     <!-- Animated Background Orbs -->
     <div class="bg-container">
