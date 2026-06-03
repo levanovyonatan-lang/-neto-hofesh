@@ -367,10 +367,20 @@
             if(overlay && video) {
                 overlay.addEventListener('click', function() {
                     video.play();
+                    if(window.trackEvent) window.trackEvent('play_avigail_video');
                 });
-
+                
                 video.addEventListener('play', function() {
                     overlay.style.display = 'none';
+                });
+                
+                video.addEventListener('pause', function() {
+                    overlay.style.display = 'flex';
+                });
+
+                // Track when video finishes
+                video.addEventListener('ended', function() {
+                    if(window.trackEvent) window.trackEvent('finish_watch_avigail_video');
                 });
             }
         });
