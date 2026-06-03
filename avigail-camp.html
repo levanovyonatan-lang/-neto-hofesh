@@ -359,7 +359,7 @@
         <div id="play-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.65); z-index: 10; cursor: pointer; backdrop-filter: blur(2px);">
             <div style="color: white; font-weight: 900; font-size: 1.6rem; display: flex; flex-direction: column; align-items: center; gap: 12px; animation: pulse 2.5s infinite; text-shadow: 0 4px 20px rgba(0,0,0,0.9); text-align: center;">
                 <span style="font-size: 3.5rem; filter: drop-shadow(0 0 15px rgba(255,255,255,0.4)); line-height: 1;">▶️</span>
-                <span>לחצו לתחילת הסרטון</span>
+                <span id="play-text">לחצו לתחילת הסרטון</span>
             </div>
         </div>
     </div>
@@ -368,11 +368,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             const video = document.getElementById('avigail-vid');
             const overlay = document.getElementById('play-overlay');
+            const playText = document.getElementById('play-text');
             
             if(overlay && video) {
                 overlay.addEventListener('click', function() {
                     video.play();
-                    if(window.trackEvent) window.trackEvent('play_avigail_video');
+                    if(window.trackEvent && video.currentTime < 1) window.trackEvent('play_avigail_video');
                 });
                 
                 video.addEventListener('play', function() {
@@ -381,11 +382,22 @@
                 
                 video.addEventListener('pause', function() {
                     overlay.style.display = 'flex';
+                    if (playText) {
+                        if (video.ended) {
+                            playText.innerText = "לחצו לצפייה חוזרת";
+                        } else if (video.currentTime > 0) {
+                            playText.innerText = "לחצו להמשך הסרטון";
+                        } else {
+                            playText.innerText = "לחצו לתחילת הסרטון";
+                        }
+                    }
                 });
 
                 // Track when video finishes
                 video.addEventListener('ended', function() {
                     if(window.trackEvent) window.trackEvent('finish_watch_avigail_video');
+                    overlay.style.display = 'flex';
+                    if (playText) playText.innerText = "לחצו לצפייה חוזרת";
                 });
             }
         });
