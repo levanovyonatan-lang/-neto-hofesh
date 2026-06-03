@@ -272,10 +272,16 @@
                 font-size: 1.15rem;
             }
             .btn {
-                padding: 12px 15px;
-                font-size: 1.05rem;
-            }
+            padding: 12px 15px;
+            font-size: 1.05rem;
         }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
     </style>
 </head>
 <body>
@@ -288,12 +294,37 @@
     </div>
 
     <!-- Main Video Hero -->
-    <div class="video-container">
-        <video playsinline loop controls poster="assets/images/avigail-poster-new.jpeg">
+    <div class="video-container" style="position: relative;">
+        <video id="avigail-vid" playsinline loop controls poster="assets/images/avigail-poster-new.jpeg">
             <source src="assets/videos/abigail-video.mp4" type="video/mp4">
             דפדפן זה אינו תומך בווידאו.
         </video>
+        
+        <!-- Play Overlay -->
+        <div id="play-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); z-index: 10; cursor: pointer;">
+            <div style="background: linear-gradient(90deg, #FF007A, #7F00FF); color: white; padding: 14px 28px; border-radius: 50px; font-weight: 900; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; animation: pulse 2s infinite; box-shadow: 0 4px 20px rgba(255,0,122,0.4); text-align: center;">
+                <span>לחצו לתחילת הסרטון</span>
+                <span style="font-size: 1.2rem;">▶️</span>
+            </div>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('avigail-vid');
+            const overlay = document.getElementById('play-overlay');
+            
+            if(overlay && video) {
+                overlay.addEventListener('click', function() {
+                    video.play();
+                });
+
+                video.addEventListener('play', function() {
+                    overlay.style.display = 'none';
+                });
+            }
+        });
+    </script>
 
     <!-- Content & CTA Actions -->
     <div class="content-container">
