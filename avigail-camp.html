@@ -288,60 +288,12 @@
     </div>
 
     <!-- Main Video Hero -->
-    <div class="video-container" id="video-wrapper" style="cursor: pointer;">
-        <video id="avigail-vid" playsinline loop>
+    <div class="video-container">
+        <video playsinline loop controls>
             <source src="assets/videos/abigail-video.mp4" type="video/mp4">
             דפדפן זה אינו תומך בווידאו.
         </video>
-        
-        <!-- Unmute Overlay -->
-        <div id="unmute-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); z-index: 10;">
-            <div style="background: rgba(0,0,0,0.7); color: white; padding: 12px 24px; border-radius: 50px; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; animation: pulse 2s infinite;">
-                לחצו להפעלת סאונד 🔊
-            </div>
-        </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const video = document.getElementById('avigail-vid');
-            const wrapper = document.getElementById('video-wrapper');
-            const overlay = document.getElementById('unmute-overlay');
-            
-            // נסיון אגרסיבי להפעיל עם סאונד מיד
-            video.muted = false;
-            video.volume = 1;
-            
-            const playPromise = video.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // הדפדפן אישר סאונד! מעולה
-                    overlay.style.display = 'none';
-                }).catch(() => {
-                    // הדפדפן חסם סאונד. ננגן מושתק ונציג את כפתור ההפעלה
-                    video.muted = true;
-                    video.play();
-                });
-            }
-
-            wrapper.addEventListener('click', function() {
-                if (video.muted || video.paused) {
-                    video.muted = false;
-                    video.volume = 1;
-                    video.play();
-                    overlay.style.display = 'none';
-                }
-            });
-        });
-    </script>
-    <style>
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-    </style>
 
     <!-- Content & CTA Actions -->
     <div class="content-container">
