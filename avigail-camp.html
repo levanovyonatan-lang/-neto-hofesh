@@ -289,7 +289,7 @@
 
     <!-- Main Video Hero -->
     <div class="video-container" id="video-wrapper" style="cursor: pointer;">
-        <video id="avigail-vid" autoplay muted playsinline loop>
+        <video id="avigail-vid" playsinline loop>
             <source src="assets/videos/abigail-video.mp4" type="video/mp4">
             דפדפן זה אינו תומך בווידאו.
         </video>
@@ -308,25 +308,28 @@
             const wrapper = document.getElementById('video-wrapper');
             const overlay = document.getElementById('unmute-overlay');
             
-            // נסיון להפעיל עם סאונד מיד (יעבוד רק אם הדפדפן מאפשר)
+            // נסיון אגרסיבי להפעיל עם סאונד מיד
+            video.muted = false;
             video.volume = 1;
-            video.play().then(() => {
-                // הצליח לנגן
-                setTimeout(() => {
-                    if (!video.muted) {
-                        overlay.style.display = 'none';
-                    }
-                }, 100);
-            }).catch(() => {
-                // הדפדפן חסם את ההפעלה, ננגן מושתק ונחכה ללחיצה
-                video.muted = true;
-                video.play();
-            });
+            
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // הדפדפן אישר סאונד! מעולה
+                    overlay.style.display = 'none';
+                }).catch(() => {
+                    // הדפדפן חסם סאונד. ננגן מושתק ונציג את כפתור ההפעלה
+                    video.muted = true;
+                    video.play();
+                });
+            }
 
             wrapper.addEventListener('click', function() {
-                if (video.muted) {
+                if (video.muted || video.paused) {
                     video.muted = false;
                     video.volume = 1;
+                    video.play();
                     overlay.style.display = 'none';
                 }
             });
