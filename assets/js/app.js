@@ -309,8 +309,8 @@ function attemptRegistration() {
 
 function handleSponsorClick() {
     if (userConfig.schoolType === 'elem') {
-        trackEvent('click_ad_summer_wheels_tip');
-        window.location.href = "https://www.funkid-k.com/";
+        trackEvent('click_ad_avigail_tip');
+        window.location.href = "avigail-camp.html";
     } else if (userConfig.schoolType === 'high') {
         trackEvent('click_tip_jobs_sponsor');
         window.location.href = "https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t";
@@ -441,7 +441,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
     const sponsorBanner = document.getElementById('tip-sponsor-banner');
 
     if (sponsorBanner) {
-        if (userConfig.schoolType === 'middle' || userConfig.schoolType === 'elem') {
+        if (userConfig.schoolType === 'middle') {
             sponsorBanner.style.display = 'none';
         } else {
             sponsorBanner.style.display = 'block';
@@ -449,12 +449,15 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             if (textElement) {
                 if (userConfig.schoolType === 'elem') {
                     if (isNewlyClicked) trackEvent('view_tip_sponsor_elem');
+                    
+                    sponsorBanner.style.background = 'linear-gradient(135deg, #f3e8ff, #e9d5ff)';
+                    sponsorBanner.style.borderColor = '#d8b4fe';
+                    sponsorBanner.style.color = '#6b21a8';
+                    
                     const elemSponsorOptions = [
-                        "קולנוע, יום בריכה ומפורסמים",
-                        "באולינג, פורטנייט, טרמפולינות",
-                        "סופרלנד, קולנוע, ופארק מים",
-                        "לונה פארק, לייזר טאג ומתנפחי ענק",
-                        "פארק מים, סרטי VIP ונינג'ה"
+                        "לונה פארק, בריכה ועוד? תצטרפו לקייטנת אקשן עם אביגיל",
+                        "פארק מים, קולנוע ועוד? תרשמו לקייטנת אקשן עם אביגיל!",
+                        "הופעה פרטית, גרביטי פארק ועוד? תרשמו לקייטנת אקשן עם אביגיל!"
                     ];
                     const now = new Date();
                     const start = new Date('2026-05-16');
@@ -465,9 +468,14 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                     const finalIndex = (dayIndex * 3 + clickNum) % elemSponsorOptions.length;
                     const chosenOption = elemSponsorOptions[finalIndex];
 
-                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}? <b>פעילויות חדשות כל יום בקייטנה הכי כיפית בארץ!</b>`;
+                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> <b>${chosenOption}</b>`;
                 } else if (userConfig.schoolType === 'high') {
                     if (isNewlyClicked) trackEvent('view_tip_jobs_sponsor');
+                    
+                    sponsorBanner.style.background = '';
+                    sponsorBanner.style.borderColor = '';
+                    sponsorBanner.style.color = '';
+                    
                     textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים להרוויח הרבה כסף בחופש?<br><b>לחצו כאן (16+)</b>`;
                 }
             }
@@ -486,11 +494,11 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
 
-            if (sponsorBanner && userConfig.schoolType === 'high') {
+            if (sponsorBanner && (userConfig.schoolType === 'high' || userConfig.schoolType === 'elem')) {
                 sponsorBanner.style.display = 'flex'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
                 sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
                 if (userConfig.schoolType === 'elem') {
-                    trackEvent('view_ad_summer_wheels_tip');
+                    trackEvent('view_ad_avigail_tip');
                 } else {
                     trackEvent('view_ad_vip_tip');
                 }
