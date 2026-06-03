@@ -452,12 +452,12 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                     
                     sponsorBanner.style.background = 'linear-gradient(135deg, #f3e8ff, #e9d5ff)';
                     sponsorBanner.style.borderColor = '#d8b4fe';
-                    sponsorBanner.style.color = '#111827';
+                    sponsorBanner.style.color = '#000000';
                     
                     const elemSponsorOptions = [
-                        "לונה פארק, בריכה ועוד? <span style=\"color: #ff6600;\">תצטרפו לקייטנת אקשן עם אביגיל</span>",
-                        "פארק מים, קולנוע ועוד? <span style=\"color: #ff6600;\">תרשמו לקייטנת אקשן עם אביגיל!</span>",
-                        "הופעה פרטית, גרביטי פארק ועוד? <span style=\"color: #ff6600;\">תרשמו לקייטנת אקשן עם אביגיל!</span>"
+                        "לונה פארק, בריכה ועוד?<br><b><span style=\"color: #ff6600;\">תצטרפו לקייטנת אקשן עם אביגיל</span></b>",
+                        "פארק מים, קולנוע ועוד?<br><b><span style=\"color: #ff6600;\">תרשמו לקייטנת אקשן עם אביגיל!</span></b>",
+                        "הופעה פרטית, גרביטי פארק ועוד?<br><b><span style=\"color: #ff6600;\">תרשמו לקייטנת אקשן עם אביגיל!</span></b>"
                     ];
                     const now = new Date();
                     const start = new Date('2026-05-16');
@@ -468,7 +468,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                     const finalIndex = (dayIndex * 3 + clickNum) % elemSponsorOptions.length;
                     const chosenOption = elemSponsorOptions[finalIndex];
 
-                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> <b>${chosenOption}</b>`;
+                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}`;
                 } else if (userConfig.schoolType === 'high') {
                     if (isNewlyClicked) trackEvent('view_tip_jobs_sponsor');
                     
