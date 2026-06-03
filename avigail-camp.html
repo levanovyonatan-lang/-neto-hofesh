@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+    <!-- Google Analytics (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6DYJ3S4PW0"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-6DYJ3S4PW0');
+
+        window.trackEvent = function(eventName, params = {}) {
+            if (typeof gtag === 'function') {
+                gtag('event', eventName, Object.assign({}, params, { transport: 'beacon' }));
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', function() {
+            window.trackEvent('view_avigail_camp_page');
+        });
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>קייטנת אקשן עם אביגיל</title>
