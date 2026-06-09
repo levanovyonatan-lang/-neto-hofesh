@@ -15,6 +15,7 @@
     function startEmojiRain() {
         if (isRaining) return;
         isRaining = true;
+        if (typeof trackEvent === 'function') trackEvent('view_easter_egg_emoji_rain');
 
         // רטט קצר בנייד (הפתעה!)
         if (navigator.vibrate) navigator.vibrate([50, 30, 50]);

@@ -946,6 +946,7 @@ function triggerSurferAnimation() {
         if (surferClickCount === 1) {
             const timer = document.querySelector('.absolute-timer');
             if (timer && !timer.querySelector('.surfer-passenger')) {
+                trackEvent('view_easter_egg_surfer');
                 const surfer = document.createElement('div');
                 surfer.className = 'surfer-passenger surf-right-to-left';
                 surfer.innerHTML = '🏄‍♂️';
@@ -958,6 +959,7 @@ function triggerSurferAnimation() {
         } else if (surferClickCount === 2) {
             // Airplane Easter Egg
             if (!document.querySelector('.airplane-container')) {
+                trackEvent('view_easter_egg_airplane');
                 const airplane = document.createElement('div');
                 airplane.className = 'airplane-container';
                 airplane.innerHTML = `
