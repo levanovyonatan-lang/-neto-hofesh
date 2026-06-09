@@ -74,21 +74,6 @@
         setTimeout(() => emoji.remove(), (duration + 0.5) * 1000);
     }
 
-    function popSingleEmoji(emojiChar) {
-        const emoji = document.createElement('div');
-        emoji.className = 'emoji-drop';
-        emoji.textContent = emojiChar;
-        // מיקום באמצע מעל הטיימר
-        emoji.style.left = '50vw';
-        emoji.style.fontSize = '80px';
-        emoji.style.animationDuration = '1.8s';
-        emoji.style.setProperty('--sway', (Math.random() * 40 - 20) + 'px');
-        emoji.style.setProperty('--rotation', (Math.random() * 40 - 20) + 'deg');
-        
-        document.body.appendChild(emoji);
-        setTimeout(() => emoji.remove(), 2000);
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
         const timer = document.getElementById('main-net-days');
         if (!timer) return;
@@ -103,17 +88,12 @@
             timer.style.transform = 'scale(1.08)';
             setTimeout(() => { timer.style.transform = 'scale(1)'; }, 150);
 
-            if (clickCount === 1) {
-                popSingleEmoji('🏄‍♂️');
-            } else if (clickCount === 2) {
-                popSingleEmoji('✈️');
-            } else if (clickCount >= REQUIRED_CLICKS) {
+            if (clickCount >= REQUIRED_CLICKS) {
                 clickCount = 0;
                 startEmojiRain();
-                return;
+            } else {
+                clickTimer = setTimeout(() => { clickCount = 0; }, CLICK_TIMEOUT_MS);
             }
-
-            clickTimer = setTimeout(() => { clickCount = 0; }, CLICK_TIMEOUT_MS);
         });
     });
 })();
