@@ -939,13 +939,6 @@ let surferClickCount = 0;
 let surferClickTimer = null;
 
 function triggerSurferAnimation() {
-    const isExperimentalSite = window.location.hostname.includes('github.io');
-    const urlParams = new URLSearchParams(window.location.search);
-    const forceShowBanner = urlParams.get('show_demo') === 'true';
-    const isDemo = forceShowBanner || isExperimentalSite;
-
-    if (!isDemo) return;
-
     surferClickCount++;
     clearTimeout(surferClickTimer);
 
