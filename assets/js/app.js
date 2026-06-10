@@ -989,14 +989,20 @@ function triggerSurferAnimation() {
     const forceShowBanner = urlParams.get('show_demo') === 'true';
     if (forceShowBanner || isExperimentalSite) {
         window.addEventListener('load', () => {
-            const jobsImg = document.querySelector('#jobs-banner img');
-            if (jobsImg) {
-                jobsImg.src = 'assets/images/jobs-app.png';
+            const jobsBannerLink = document.querySelector('#jobs-banner a');
+            if (jobsBannerLink) {
+                jobsBannerLink.innerHTML = `
+                    <div class="custom-app-banner">
+                        <div class="app-banner-text">
+                            אפליקציית עבודות <span class="app-banner-age">(16+)</span> <span class="app-banner-highlight">ממוצע 50₪ לשעה</span>
+                        </div>
+                    </div>
+                `;
                 const isAndroid = /Android/i.test(navigator.userAgent);
                 if (isAndroid) {
-                    jobsImg.parentElement.href = 'https://play.google.com/store/apps/details?id=com.hagovistim.app';
+                    jobsBannerLink.href = 'https://play.google.com/store/apps/details?id=com.hagovistim.app';
                 } else {
-                    jobsImg.parentElement.href = 'https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t';
+                    jobsBannerLink.href = 'https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t';
                 }
             }
         });
