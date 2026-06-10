@@ -987,7 +987,12 @@ function triggerSurferAnimation() {
             const jobsImg = document.querySelector('#jobs-banner img');
             if (jobsImg) {
                 jobsImg.src = 'assets/images/jobs-app.png';
-                jobsImg.parentElement.href = 'https://jobs.neto-hofesh.co.il/?utm_source=neto_app&utm_medium=banner&utm_campaign=summer24';
+                const isAndroid = /Android/i.test(navigator.userAgent);
+                if (isAndroid) {
+                    jobsImg.parentElement.href = 'https://play.google.com/store/apps/details?id=com.hagovistim.app';
+                } else {
+                    jobsImg.parentElement.href = 'https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t';
+                }
             }
         });
     }
