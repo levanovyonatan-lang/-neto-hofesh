@@ -767,10 +767,10 @@ function showMainScreen() {
             if (jobsLink && jobsImg) {
                 if (isAndroid) {
                     jobsLink.href = "https://play.google.com/store/apps/details?id=com.hagovistim.app";
-                    jobsImg.src = "assets/images/jobs-banner-android.jpeg?v=8";
+                    jobsImg.src = "assets/images/jobs-banner-android.jpeg?v=9";
                 } else {
                     jobsLink.href = "https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t";
-                    jobsImg.src = "assets/images/jobs-banner-iphone.jpg?v=8";
+                    jobsImg.src = "assets/images/jobs-banner-iphone.jpg?v=9";
                 }
             }
         }
