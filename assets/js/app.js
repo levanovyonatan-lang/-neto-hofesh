@@ -313,7 +313,12 @@ function handleSponsorClick() {
         window.location.href = "avigail-camp.html";
     } else if (userConfig.schoolType === 'high') {
         trackEvent('click_tip_jobs_sponsor');
-        window.location.href = "https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t";
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        if (isAndroid) {
+            window.location.href = "https://play.google.com/store/apps/details?id=com.hagovistim.app";
+        } else {
+            window.location.href = "https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t";
+        }
     }
 }
 
