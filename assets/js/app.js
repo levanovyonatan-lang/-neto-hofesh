@@ -759,6 +759,20 @@ function showMainScreen() {
         if (jobsBanner) {
             jobsBanner.style.display = 'flex';
             trackEvent('view_ad_jobs_sticky');
+            
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            const jobsLink = document.getElementById('jobs-banner-link');
+            const jobsImg = document.getElementById('jobs-banner-img');
+            
+            if (jobsLink && jobsImg) {
+                if (isAndroid) {
+                    jobsLink.href = "https://play.google.com/store/apps/details?id=com.hagovistim.app";
+                    jobsImg.src = "assets/images/jobs-banner-android.jpeg?v=4";
+                } else {
+                    jobsLink.href = "https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t";
+                    jobsImg.src = "assets/images/jobs-banner-iphone.jpg?v=4";
+                }
+            }
         }
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
@@ -982,29 +996,4 @@ function triggerSurferAnimation() {
     }, 300);
 }
 
-// Demo Site specific logic
-(function() {
-    const isExperimentalSite = window.location.hostname.includes('github.io');
-    const urlParams = new URLSearchParams(window.location.search);
-    const forceShowBanner = urlParams.get('show_demo') === 'true';
-    if (forceShowBanner || isExperimentalSite) {
-        window.addEventListener('load', () => {
-            const jobsBannerLink = document.querySelector('#jobs-banner a');
-            if (jobsBannerLink) {
-                jobsBannerLink.innerHTML = `
-                    <div class="custom-app-banner">
-                        <div class="app-banner-text">
-                            אפליקציית עבודות <span class="app-banner-age">(16+)</span> <span class="app-banner-highlight">ממוצע 50₪ לשעה</span>
-                        </div>
-                    </div>
-                `;
-                const isAndroid = /Android/i.test(navigator.userAgent);
-                if (isAndroid) {
-                    jobsBannerLink.href = 'https://play.google.com/store/apps/details?id=com.hagovistim.app';
-                } else {
-                    jobsBannerLink.href = 'https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t';
-                }
-            }
-        });
-    }
-})();
+// Demo Site specific logic removed as requested by user.
