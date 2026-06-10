@@ -481,7 +481,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                     sponsorBanner.style.borderColor = '';
                     sponsorBanner.style.color = '';
                     
-                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> רוצים להרוויח הרבה כסף בחופש?<br><b>לחצו כאן (16+)</b>`;
+                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> <b style="font-size: 1.05em; color: #1e293b;">רוצים להרוויח הרבה כסף בחופש?</b><br><b style="font-size: 1.15em; text-decoration: underline;">לחצו כאן (16+)</b>`;
                 }
             }
         }
