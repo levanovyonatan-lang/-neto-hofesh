@@ -101,10 +101,11 @@
             }
 
             .sticky-banner-container img {
-                width: 100% !important;
+                width: auto !important;
+                max-width: 100% !important;
                 height: 100% !important;
-                object-fit: fill !important;
-                margin: 0 !important;
+                object-fit: contain !important;
+                margin: 0 auto !important;
             }
         }
 
@@ -136,9 +137,9 @@
 
         @media (min-width: 768px) {
             .sticky-banner-container a {
-                width: 100% !important;
+                width: fit-content !important;
                 height: 100% !important;
-                margin: 0 !important;
+                margin: 0 auto !important;
             }
         }
     </style>
