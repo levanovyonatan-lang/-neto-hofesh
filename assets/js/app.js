@@ -790,9 +790,6 @@ function showMainScreen() {
     const summerElemLowObj = allTargets.find(t => t.id === 'summerElemLow');
     if (summerElemLowObj) { if (!userConfig.studyFriday) summerElemLowObj.date = new Date('2026-07-30T08:15:00'); else summerElemLowObj.date = new Date('2026-07-31T08:15:00'); }
 
-    const summerHighObj = allTargets.find(t => t.id === 'summerHigh');
-    if (summerHighObj) { if (!userConfig.studyFriday) summerHighObj.date = new Date('2026-06-18T08:15:00'); else summerHighObj.date = new Date('2026-06-19T08:15:00'); }
-
     const now = Date.now();
     activeEventsList = allTargets.filter(e => {
         if (e.date.getTime() <= now) return false;
