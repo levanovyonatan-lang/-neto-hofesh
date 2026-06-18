@@ -317,7 +317,7 @@ function handleSponsorClick() {
         if (isAndroid) {
             window.location.href = "https://play.google.com/store/apps/details?id=com.hagovistim.app";
         } else {
-            window.location.href = "https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t";
+            window.location.href = "https://chat.whatsapp.com/GbuLGylKq5216WxoKKDKWe";
         }
     }
 }
@@ -769,7 +769,7 @@ function showMainScreen() {
                     jobsLink.href = "https://play.google.com/store/apps/details?id=com.hagovistim.app";
                     jobsImg.src = "assets/images/jobs-banner-android.jpeg?v=10";
                 } else {
-                    jobsLink.href = "https://chat.whatsapp.com/K9rO1PVtbeK1RbZq8x6HHy?mode=gi_t";
+                    jobsLink.href = "https://chat.whatsapp.com/GbuLGylKq5216WxoKKDKWe";
                     jobsImg.src = "assets/images/jobs-banner-iphone.jpg?v=10";
                 }
             }
