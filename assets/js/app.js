@@ -313,6 +313,7 @@ function handleSponsorClick() {
         window.location.href = "avigail-camp.html";
     } else if (userConfig.schoolType === 'high') {
         const isAndroid = /Android/i.test(navigator.userAgent);
+        trackEvent('click_tip_jobs_sponsor');
         trackEvent(isAndroid ? 'click_tip_jobs_android' : 'click_tip_jobs_iphone');
         if (isAndroid) {
             window.location.href = "https://play.google.com/store/apps/details?id=com.hagovistim.app";
@@ -768,11 +769,11 @@ function showMainScreen() {
                 if (isAndroid) {
                     jobsLink.href = "https://play.google.com/store/apps/details?id=com.hagovistim.app";
                     jobsImg.src = "assets/images/jobs-banner-android.jpeg?v=10";
-                    jobsLink.onclick = function() { trackEvent('click_ad_jobs_android'); };
+                    jobsLink.onclick = function() { trackEvent('click_ad_jobs_sticky'); trackEvent('click_ad_jobs_android'); };
                 } else {
                     jobsLink.href = "https://chat.whatsapp.com/GbuLGylKq5216WxoKKDKWe";
                     jobsImg.src = "assets/images/jobs-banner-iphone.jpg?v=10";
-                    jobsLink.onclick = function() { trackEvent('click_ad_jobs_iphone'); };
+                    jobsLink.onclick = function() { trackEvent('click_ad_jobs_sticky'); trackEvent('click_ad_jobs_iphone'); };
                 }
             }
         }
