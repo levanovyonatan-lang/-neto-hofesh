@@ -655,15 +655,12 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 .holiday-card.active { background: #eff6ff; border-color: #3b82f6; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15); transform: translateY(-2px); }
 
 .holiday-card.happening-now {
-    background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
-    border-color: #facc15;
-    box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3);
+    background: #fefce8; /* Light yellow */
 }
 .holiday-card.happening-now.active {
-    background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
-    border-color: #eab308;
-    box-shadow: 0 8px 25px rgba(234, 179, 8, 0.4);
-    transform: translateY(-2px);
+    background: #fefce8;
+    border-color: #facc15;
+    box-shadow: 0 8px 25px rgba(250, 204, 21, 0.25);
 }
 
 .app-banner-text {
