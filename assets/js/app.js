@@ -885,6 +885,7 @@ function selectTarget(id, shouldScroll = true) {
     const vacationBox = document.getElementById('vacation-length-box');
     const absoluteTimer = document.getElementById('absolute-timer-container');
     const vacationMessage = document.getElementById('vacation-message');
+    const totalDaysLabel = document.getElementById('total-days-label');
 
     if (target.isHappeningNow) {
         timerBg.classList.add('vacation-mode');
@@ -894,6 +895,7 @@ function selectTarget(id, shouldScroll = true) {
         if (excludingLabel) excludingLabel.style.display = 'none';
         if (vacationBox) vacationBox.style.display = 'none';
         if (absoluteTimer) absoluteTimer.style.display = 'none';
+        if (totalDaysLabel) totalDaysLabel.style.display = 'none';
         if (vacationMessage) vacationMessage.style.display = 'block';
     } else {
         timerBg.classList.remove('vacation-mode');
@@ -918,6 +920,7 @@ function selectTarget(id, shouldScroll = true) {
             vacationBox.style.display = 'inline-block';
         }
         if (absoluteTimer) absoluteTimer.style.display = 'flex';
+        if (totalDaysLabel) totalDaysLabel.style.display = 'block';
         if (vacationMessage) vacationMessage.style.display = 'none';
     }
 
