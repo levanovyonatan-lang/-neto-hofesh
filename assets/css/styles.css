@@ -645,6 +645,26 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     pointer-events: none;
     transform: rotate(30deg);
 }
+.holiday-card { 
+    background: #ffffff; border: 1px solid rgba(0,0,0,0.06); padding: 14px 20px; border-radius: 18px; text-align: center; 
+    cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.02); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px;
+    font-family: inherit; font-size: calc(16px * var(--text-scale, 1)); flex: 0 0 auto;
+}
+.holiday-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); }
+.holiday-card.active { background: #eff6ff; border-color: #3b82f6; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15); transform: translateY(-2px); }
+
+.holiday-card.happening-now {
+    background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
+    border-color: #facc15;
+    box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3);
+}
+.holiday-card.happening-now.active {
+    background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
+    border-color: #eab308;
+    box-shadow: 0 8px 25px rgba(234, 179, 8, 0.4);
+    transform: translateY(-2px);
+}
 
 .app-banner-text {
     position: relative;
