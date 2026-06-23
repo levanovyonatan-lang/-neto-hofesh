@@ -214,7 +214,7 @@
                     </div>
                 </div>
 
-                <div class="absolute-timer" dir="ltr" aria-hidden="true">
+                <div id="absolute-timer-container" class="absolute-timer" dir="ltr" aria-hidden="true">
                     <div class="time-box">
                         <div id="abs-days" class="time-val">-</div>
                         <div class="time-lbl">ימים</div>
@@ -231,6 +231,10 @@
                         <div id="abs-secs" class="time-val">-</div>
                         <div class="time-lbl">שניות</div>
                     </div>
+                </div>
+                
+                <div id="vacation-message" style="display: none; background: rgba(254, 240, 138, 0.3); border: 2px solid #fde047; border-radius: 20px; padding: 16px; font-size: calc(22px * var(--text-scale, 1)); font-weight: 900; color: #b45309; margin-top: 20px; box-shadow: inset 0 2px 10px rgba(255,255,255,0.5);">
+                    תנצלו כל דקה! ⏳
                 </div>
 
                 <div class="total-days-label" style="margin-top: 8px;" aria-hidden="true">סך הכל</div>
@@ -577,7 +581,7 @@
         </a>
     </div>
 
-    <script src="assets/js/app.js?v=185" defer></script>
+    <script src="assets/js/app.js?v=186" defer></script>
 
     <script src="assets/js/games/emoji-rain.js" defer></script>
 </body>

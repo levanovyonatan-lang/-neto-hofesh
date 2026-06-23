@@ -883,6 +883,8 @@ function selectTarget(id, shouldScroll = true) {
     const netDaysSuffix = document.getElementById('net-days-suffix');
     const excludingLabel = document.getElementById('excluding-label');
     const vacationBox = document.getElementById('vacation-length-box');
+    const absoluteTimer = document.getElementById('absolute-timer-container');
+    const vacationMessage = document.getElementById('vacation-message');
 
     if (target.isHappeningNow) {
         timerBg.classList.add('vacation-mode');
@@ -891,6 +893,8 @@ function selectTarget(id, shouldScroll = true) {
         if (netDaysSuffix) netDaysSuffix.textContent = 'ימים עד חזרה ללימודים';
         if (excludingLabel) excludingLabel.style.display = 'none';
         if (vacationBox) vacationBox.style.display = 'none';
+        if (absoluteTimer) absoluteTimer.style.display = 'none';
+        if (vacationMessage) vacationMessage.style.display = 'block';
     } else {
         timerBg.classList.remove('vacation-mode');
         document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
@@ -913,6 +917,8 @@ function selectTarget(id, shouldScroll = true) {
             document.getElementById('vacation-days-count').innerHTML = `החופש יימשך ${lengthText}`;
             vacationBox.style.display = 'inline-block';
         }
+        if (absoluteTimer) absoluteTimer.style.display = 'flex';
+        if (vacationMessage) vacationMessage.style.display = 'none';
     }
 
     loadDailyState(); renderTipBox(id); renderHolidays();
