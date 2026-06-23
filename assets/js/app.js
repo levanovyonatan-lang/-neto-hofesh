@@ -831,7 +831,17 @@ function showMainScreen() {
 
     const now = Date.now();
     activeEventsList = allTargets.filter(e => {
-        if (e.date.getTime() <= now) return false;
+        let isHappeningSummer = false;
+        if (e.isSummer) {
+            const summerEnd = new Date(e.date.getFullYear(), 8, 1);
+            if (e.date.getTime() <= now && now < summerEnd.getTime()) {
+                isHappeningSummer = true;
+                e.isHappeningNow = true;
+                e.endDate = summerEnd;
+            }
+        }
+
+        if (e.date.getTime() <= now && !isHappeningSummer) return false;
         if (!e.isSummer) return true;
 
         if (userConfig.schoolType === 'elem') return e.type === 'elem';
@@ -867,24 +877,39 @@ function selectTarget(id, shouldScroll = true) {
     userConfig.activeTargetId = id; confettiFired = false;
     const target = activeEventsList.find(e => e.id === id); if (!target) return;
     document.getElementById('main-timer-bg').style.background = target.bg;
-    document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
 
-    // במידה ויש הגדרה קבועה של "אין שישי" ליעד הספציפי (למשל בקייטנת הקיץ ביולי)
-    if (target.noFriday) {
-        document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים, שבתות, וימי שישי של קייטנת הקיץ)" : "(בניכוי חגים, שישי ושבת)";
-    } else {
-        document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
-    }
-
+    const netDaysPrefix = document.getElementById('net-days-prefix');
+    const netDaysSuffix = document.getElementById('net-days-suffix');
+    const excludingLabel = document.getElementById('excluding-label');
     const vacationBox = document.getElementById('vacation-length-box');
-    if (vacationBox) {
-        let lengthText = '';
-        if (target.isSummer) {
-            const endOfSchool = new Date(target.date); endOfSchool.setHours(0, 0, 0, 0); const startOfSchool = new Date(target.date.getFullYear(), 8, 1);
-            lengthText = `<b>${Math.round((startOfSchool - endOfSchool) / 86400000)} ימים</b>`;
-        } else lengthText = target.lengthText;
-        document.getElementById('vacation-days-count').innerHTML = `החופש יימשך ${lengthText}`;
-        vacationBox.style.display = 'inline-block';
+
+    if (target.isHappeningNow) {
+        document.getElementById('main-target-title').textContent = `${target.name} כבר כאן! ${target.icon}`;
+        if (netDaysPrefix) netDaysPrefix.style.display = 'block';
+        if (netDaysSuffix) netDaysSuffix.textContent = 'ימים עד חזרה ללימודים';
+        if (excludingLabel) excludingLabel.style.display = 'none';
+        if (vacationBox) vacationBox.style.display = 'none';
+    } else {
+        document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
+        if (netDaysPrefix) netDaysPrefix.style.display = 'block';
+        if (netDaysSuffix) netDaysSuffix.textContent = 'ימי לימוד נטו!';
+        if (excludingLabel) {
+            excludingLabel.style.display = 'block';
+            if (target.noFriday) {
+                excludingLabel.textContent = userConfig.studyFriday ? "(בניכוי חגים, שבתות, וימי שישי של קייטנת הקיץ)" : "(בניכוי חגים, שישי ושבת)";
+            } else {
+                excludingLabel.textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
+            }
+        }
+        if (vacationBox) {
+            let lengthText = '';
+            if (target.isSummer) {
+                const endOfSchool = new Date(target.date); endOfSchool.setHours(0, 0, 0, 0); const startOfSchool = new Date(target.date.getFullYear(), 8, 1);
+                lengthText = `<b>${Math.round((startOfSchool - endOfSchool) / 86400000)} ימים</b>`;
+            } else lengthText = target.lengthText;
+            document.getElementById('vacation-days-count').innerHTML = `החופש יימשך ${lengthText}`;
+            vacationBox.style.display = 'inline-block';
+        }
     }
 
     loadDailyState(); renderTipBox(id); renderHolidays();
@@ -896,16 +921,26 @@ function updateDashboard() {
     const nowTime = new Date(); const todayStr = `${nowTime.getFullYear()}-${nowTime.getMonth() + 1}-${nowTime.getDate()}`;
     if (dailyTipsState.date && dailyTipsState.date !== todayStr) { loadDailyState(); renderTipBox(userConfig.activeTargetId); }
 
-    const diff = event.date.getTime() - Date.now();
+    let diff = event.date.getTime() - Date.now();
+    if (event.isHappeningNow) {
+        diff = event.endDate.getTime() - Date.now();
+    }
+
     if (diff <= 0) {
         document.getElementById('main-net-days').textContent = "הגיע!";
-        if (!confettiFired) { confettiFired = true; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
+        if (!event.isHappeningNow && !confettiFired) { confettiFired = true; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
     } else {
         document.getElementById('abs-days').textContent = Math.floor(diff / 86400000);
         document.getElementById('abs-hours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
         document.getElementById('abs-mins').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
         document.getElementById('abs-secs').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-        if (!isAnimatingNetDays) document.getElementById('main-net-days').textContent = calculateNetDays(event.date, event.noFriday);
+        if (!isAnimatingNetDays) {
+            if (event.isHappeningNow) {
+                document.getElementById('main-net-days').textContent = Math.ceil(diff / 86400000);
+            } else {
+                document.getElementById('main-net-days').textContent = calculateNetDays(event.date, event.noFriday);
+            }
+        }
     }
 }
 
