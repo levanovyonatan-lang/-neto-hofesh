@@ -877,6 +877,7 @@ function selectTarget(id, shouldScroll = true) {
     userConfig.activeTargetId = id; confettiFired = false;
     const target = activeEventsList.find(e => e.id === id); if (!target) return;
     document.getElementById('main-timer-bg').style.background = target.bg;
+    const timerBg = document.getElementById('main-timer-bg');
 
     const netDaysPrefix = document.getElementById('net-days-prefix');
     const netDaysSuffix = document.getElementById('net-days-suffix');
@@ -884,12 +885,14 @@ function selectTarget(id, shouldScroll = true) {
     const vacationBox = document.getElementById('vacation-length-box');
 
     if (target.isHappeningNow) {
+        timerBg.classList.add('vacation-mode');
         document.getElementById('main-target-title').textContent = `${target.name} כבר כאן! ${target.icon}`;
         if (netDaysPrefix) netDaysPrefix.style.display = 'block';
         if (netDaysSuffix) netDaysSuffix.textContent = 'ימים עד חזרה ללימודים';
         if (excludingLabel) excludingLabel.style.display = 'none';
         if (vacationBox) vacationBox.style.display = 'none';
     } else {
+        timerBg.classList.remove('vacation-mode');
         document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
         if (netDaysPrefix) netDaysPrefix.style.display = 'block';
         if (netDaysSuffix) netDaysSuffix.textContent = 'ימי לימוד נטו!';
