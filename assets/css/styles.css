@@ -652,7 +652,7 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     font-family: inherit; font-size: calc(16px * var(--text-scale, 1)); flex: 0 0 auto;
 }
 .holiday-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); }
-.holiday-card.active { background: #eff6ff; border-color: #3b82f6; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15); transform: translateY(-2px); }
+.holiday-card.active { background: #fefce8; border-color: var(--primary); box-shadow: 0 8px 25px rgba(234, 179, 8, 0.15); transform: translateY(-2px); }
 
 .app-banner-text {
     position: relative;
