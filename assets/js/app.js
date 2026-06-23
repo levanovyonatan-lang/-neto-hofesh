@@ -857,9 +857,7 @@ function renderHolidays() {
     const container = document.getElementById('holidays-container'); container.innerHTML = '';
     activeEventsList.forEach(ev => {
         const card = document.createElement('button');
-        let classes = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
-        if (ev.isHappeningNow) classes += ' happening-now';
-        card.className = classes;
+        card.className = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
         card.onclick = () => selectTarget(ev.id);
 
         let subText = `ב-${ev.date.toLocaleDateString('he-IL')}`;
