@@ -890,7 +890,10 @@ function selectTarget(id, shouldScroll = true) {
     if (target.isHappeningNow) {
         timerBg.classList.add('vacation-mode');
         document.getElementById('main-target-title').textContent = `${target.name} כבר כאן! ${target.icon}`;
-        if (netDaysPrefix) netDaysPrefix.style.display = 'block';
+        if (netDaysPrefix) {
+            netDaysPrefix.style.display = 'block';
+            netDaysPrefix.textContent = 'נשארו:';
+        }
         if (netDaysSuffix) netDaysSuffix.textContent = 'ימים עד חזרה ללימודים';
         if (excludingLabel) excludingLabel.style.display = 'none';
         if (vacationBox) vacationBox.style.display = 'none';
@@ -900,7 +903,10 @@ function selectTarget(id, shouldScroll = true) {
     } else {
         timerBg.classList.remove('vacation-mode');
         document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
-        if (netDaysPrefix) netDaysPrefix.style.display = 'block';
+        if (netDaysPrefix) {
+            netDaysPrefix.style.display = 'block';
+            netDaysPrefix.textContent = 'נשארו רק:';
+        }
         if (netDaysSuffix) netDaysSuffix.textContent = 'ימי לימוד נטו!';
         if (excludingLabel) {
             excludingLabel.style.display = 'block';
