@@ -654,11 +654,6 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 .holiday-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); }
 .holiday-card.active { background: #fffde7; border-color: #fcd34d; box-shadow: 0 8px 25px rgba(252, 211, 77, 0.15); transform: translateY(-2px); }
 
-.holiday-card.happening-now {
-    background: #fffde7; /* Very light yellow */
-    border-color: #fde047;
-}
-
 .app-banner-text {
     position: relative;
     z-index: 2;
