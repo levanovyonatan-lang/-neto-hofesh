@@ -835,7 +835,7 @@ function showMainScreen() {
         if (!e.isSummer) return true;
 
         if (userConfig.schoolType === 'elem') return e.type === 'elem';
-        if (userConfig.schoolType === 'middle') return e.type === 'middle' || (e.type === 'high' && e.id === 'summerHigh');
+        if (userConfig.schoolType === 'middle') return e.type === 'middle' || (e.type === 'high' && e.id.startsWith('summerHigh'));
         if (userConfig.schoolType === 'high') return e.type === 'high';
         return false;
     });
