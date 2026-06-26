@@ -550,6 +550,18 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 }
 
 async function getSmartTip(targetId, schoolType, tipNumber) {
+    if (tipNumber === 1) {
+        const _d = new Date();
+        const _il = new Date(_d.toLocaleString("en-US", {timeZone: "Asia/Jerusalem"}));
+        const _str = `${_il.getFullYear()}-${String(_il.getMonth()+1).padStart(2,'0')}-${String(_il.getDate()).padStart(2,'0')}`;
+        if (_str === '2026-06-27') {
+            return "המורה אמרה “נשאר לנו רק נושא קטן” ואז התחילה סופת שלגים של סיכומים, דפים ומבטי ייאוש. 📚😵💫";
+        }
+        if (_str === '2026-06-28') {
+            return "המזגן בכיתה עובד כאילו הוא קיבל משימה אישית להפוך את יוני לסופת שלגים. 🥶☀️";
+        }
+    }
+
     const tipsDb = await loadTipsDatabase();
     const { pool } = resolveTipPool(tipsDb, targetId, schoolType);
     if (!pool.length) throw new Error('No tips are available for the selected context');
