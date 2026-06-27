@@ -776,7 +776,7 @@ function showMainScreen() {
     const urlParams = new URLSearchParams(window.location.search);
     const isDemo = urlParams.get('show_demo') === 'true' || isExperimentalSite;
 
-    if (isDemo && !allTargets.find(t => t.id === 'roshHashana2026')) {
+    if (!allTargets.find(t => t.id === 'roshHashana2026')) {
         allTargets.push(...targets2027);
         activeHolidays.push(...holidays2027);
     }
