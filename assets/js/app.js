@@ -49,7 +49,7 @@ const holidays2027 = [
 
 const targets2027 = [
     { id: 'roshHashana2026', name: 'ראש השנה', date: new Date('2026-09-11T08:15:00'), icon: '🍯', bg: '#fef3c7', lengthText: '<b>שלושה ימים</b> כולל שישי-שבת' },
-    { id: 'kippurSukkot2026', name: 'כיפור וסוכות', date: new Date('2026-09-20T08:15:00'), icon: '🛖', bg: '#ecfdf5', lengthText: '<b>15 ימים!</b> (חופשה ברצף)' },
+    { id: 'kippurSukkot2026', name: 'כיפור וסוכות', date: new Date('2026-09-20T08:15:00'), icon: '🛖', bg: '#ecfdf5', lengthText: '<b>שבועיים רצופים!</b>' },
     { id: 'hanukkah2026', name: 'חנוכה', date: new Date('2026-12-06T08:15:00'), icon: '🍩', bg: '#eff6ff', lengthText: '<b>שבוע שלם</b>' },
     { id: 'purim2027', name: 'פורים', date: new Date('2027-03-23T08:15:00'), icon: '🎭', bg: '#fdf4ff', lengthText: '<b>יומיים</b> מטורפים' },
     { id: 'pesach2027', name: 'פסח', date: new Date('2027-04-13T08:15:00'), icon: '🍷', bg: '#fff7ed', lengthText: '<b>16 ימים!</b>' },
@@ -832,14 +832,14 @@ function showMainScreen() {
     const summerHighObj = allTargets.find(t => t.id === 'summerHigh');
     if (summerHighObj) { if (!userConfig.studyFriday) summerHighObj.date = new Date('2026-06-18T08:15:00'); else summerHighObj.date = new Date('2026-06-19T08:15:00'); }
 
-    const summerHighObj2027 = allTargets.find(t => t.id === 'summerHigh2027');
-    if (summerHighObj2027) { if (!userConfig.studyFriday) summerHighObj2027.date = new Date('2027-06-17T08:15:00'); else summerHighObj2027.date = new Date('2027-06-21T08:15:00'); }
+    // 2027 High school summer vacation ALWAYS starts on June 21, since June 20 is a Sunday.
+    // No dynamic adjustment needed for summerHigh2027.
 
     const summerElemLowObj = allTargets.find(t => t.id === 'summerElemLow');
     if (summerElemLowObj) { if (!userConfig.studyFriday) summerElemLowObj.date = new Date('2026-07-30T08:15:00'); else summerElemLowObj.date = new Date('2026-07-31T08:15:00'); }
 
     const summerElemLowObj2027 = allTargets.find(t => t.id === 'summerElemLow2027');
-    if (summerElemLowObj2027) { if (!userConfig.studyFriday) summerElemLowObj2027.date = new Date('2027-07-29T08:15:00'); else summerElemLowObj2027.date = new Date('2027-07-31T08:15:00'); }
+    if (summerElemLowObj2027) { if (!userConfig.studyFriday) summerElemLowObj2027.date = new Date('2027-07-30T08:15:00'); else summerElemLowObj2027.date = new Date('2027-08-01T08:15:00'); }
 
     const now = Date.now();
     activeEventsList = allTargets.filter(e => {
