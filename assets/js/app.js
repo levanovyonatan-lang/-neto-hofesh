@@ -56,8 +56,6 @@ const targets2027 = [
     { id: 'atzmaut2027', name: 'יום העצמאות', date: new Date('2027-05-12T08:15:00'), icon: '🇮🇱', bg: '#f0f9ff', lengthText: '<b>יום אחד</b>' },
     { id: 'shavuot2027', name: 'שבועות', date: new Date('2027-06-10T08:15:00'), icon: '🧀', bg: '#f0fdf4', lengthText: '<b>שלושה ימים</b> כולל שישי-שבת' },
     { id: 'summerHigh2027', name: 'החופש הגדול', date: new Date('2027-06-21T08:15:00'), isSummer: true, type: 'high', icon: '🏖️', bg: '#fefce8' },
-    { id: 'summerMiddlePrep2027', name: 'מכינת קיץ', date: new Date('2027-07-01T08:15:00'), isSummer: true, type: 'middle', icon: '🤖', bg: '#eff6ff', noFriday: true, description: 'לכיתות ז\'-ט\' (לא חובה). לומדים עד ה-30.6' },
-    { id: 'summerElemLow2027', name: 'ביה"ס של החופש הגדול (א\'-ג\')', date: new Date('2027-07-31T08:15:00'), isSummer: true, type: 'elem', icon: '🎒', bg: '#fdf4ff', description: 'לומדים עד ה-30.7 (לא חובה)', noFriday: true },
     { id: 'summerElem2027', name: 'החופש הגדול', date: new Date('2027-07-01T08:15:00'), isSummer: true, type: 'elem', icon: '🍉', bg: '#fefce8' }
 ];
 
@@ -837,9 +835,6 @@ function showMainScreen() {
 
     const summerElemLowObj = allTargets.find(t => t.id === 'summerElemLow');
     if (summerElemLowObj) { if (!userConfig.studyFriday) summerElemLowObj.date = new Date('2026-07-30T08:15:00'); else summerElemLowObj.date = new Date('2026-07-31T08:15:00'); }
-
-    const summerElemLowObj2027 = allTargets.find(t => t.id === 'summerElemLow2027');
-    if (summerElemLowObj2027) { if (!userConfig.studyFriday) summerElemLowObj2027.date = new Date('2027-07-30T08:15:00'); else summerElemLowObj2027.date = new Date('2027-08-01T08:15:00'); }
 
     const now = Date.now();
     activeEventsList = allTargets.filter(e => {
