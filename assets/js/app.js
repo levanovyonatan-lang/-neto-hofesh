@@ -742,7 +742,7 @@ function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
             if (current.getFullYear() === 2026 && current.getMonth() === 5 && current.getDate() >= 19) isSummerDay = true;
         }
 
-        if (isSummerDay && targetId !== 'summerMiddlePrep' && targetId !== 'summerElemLow' && targetId !== 'summerElem' && targetId !== 'summerHigh' && targetId !== 'summerHigh2027' && targetId !== 'summerElem2027') {
+        if (isSummerDay && targetId !== 'summerMiddlePrep' && targetId !== 'summerElemLow') {
             current.setDate(current.getDate() + 1);
             continue;
         }
