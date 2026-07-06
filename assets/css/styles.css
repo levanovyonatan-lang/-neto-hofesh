@@ -258,7 +258,7 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.holiday-card { background: #ffffff; border: 1px solid #f1f5f9; border-right: 5px solid #cbd5e1; padding: 16px 20px; border-radius: 18px; display: flex; justify-content: flex-start; align-items: center; text-align: right; cursor: pointer; transition: 0.2s; }
+.holiday-card { background: #ffffff; border: 1px solid #f1f5f9; border-right: 5px solid #cbd5e1; padding: 16px 20px; border-radius: 18px; display: flex; justify-content: flex-start; align-items: center; text-align: right; cursor: pointer; transition: 0.2s; color: var(--text-main); }
 .holiday-card.active { border-right-color: var(--primary); background: #fefce8; border-color: #fef08a; }
 
 @keyframes subtle-jump { 0%, 100% { transform: translateY(0); } 10% { transform: translateY(-6px); } 20% { transform: translateY(0); } 30% { transform: translateY(-3px); } 40%, 100% { transform: translateY(0); } }
