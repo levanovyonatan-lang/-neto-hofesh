@@ -721,7 +721,7 @@ function updateFridayToggle() {
     if (checkedSchool) updateSchoolSelection(checkedSchool);
 }
 
-function calculateNetDays(targetDate, forceNoFriday = false) {
+function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
     const now = new Date(); let count = 0, current = new Date(now);
     // אם השעה 15:00 ומעלה, היום הנוכחי כבר לא נחשב כיום לימודים (התלמידים סיימו)
     if (now.getHours() >= 15) current.setDate(current.getDate() + 1);
@@ -733,6 +733,20 @@ function calculateNetDays(targetDate, forceNoFriday = false) {
 
     while (current < targetNormalized) {
         const dStr = current.getFullYear() + '-' + String(current.getMonth() + 1).padStart(2, '0') + '-' + String(current.getDate()).padStart(2, '0');
+        
+        let isSummerDay = false;
+        if (userConfig.schoolType === 'elem') {
+            if (current.getMonth() === 6 || current.getMonth() === 7) isSummerDay = true;
+        } else {
+            if ((current.getMonth() === 5 && current.getDate() >= 21) || current.getMonth() === 6 || current.getMonth() === 7) isSummerDay = true;
+            if (current.getFullYear() === 2026 && current.getMonth() === 5 && current.getDate() >= 19) isSummerDay = true;
+        }
+
+        if (isSummerDay && targetId !== 'summerMiddlePrep' && targetId !== 'summerElemLow' && targetId !== 'summerElem' && targetId !== 'summerHigh' && targetId !== 'summerHigh2027' && targetId !== 'summerElem2027') {
+            current.setDate(current.getDate() + 1);
+            continue;
+        }
+
         // ימי שישי של בית הספר של החופש הגדול ביולי אינם נלמדים (גם אם לומדים בשישי בשגרת הלימודים)
         const isJulyOrLater = current.getMonth() >= 6; // 6 = July
         const isFridayStudy = userConfig.studyFriday && !(forceNoFriday && isJulyOrLater);
@@ -849,6 +863,13 @@ function showMainScreen() {
         }
 
         if (e.date.getTime() <= now && !isHappeningSummer) return false;
+
+        if (e.type) {
+            if (userConfig.schoolType === 'elem' && e.type !== 'elem') return false;
+            if (userConfig.schoolType === 'middle' && !(e.type === 'middle' || (e.type === 'high' && e.id.startsWith('summerHigh')))) return false;
+            if (userConfig.schoolType === 'high' && e.type !== 'high') return false;
+        }
+
         if (!e.isSummer) return true;
 
         if (userConfig.schoolType === 'elem') return e.type === 'elem';
@@ -944,7 +965,7 @@ function selectTarget(id, shouldScroll = true) {
     }
 
     loadDailyState(); renderTipBox(id); renderHolidays();
-    const netDays = calculateNetDays(target.date, target.noFriday); animateNetDays(netDays); updateDashboard();
+    const netDays = calculateNetDays(target.date, target.noFriday, target.id); animateNetDays(netDays); updateDashboard();
 }
 
 function updateDashboard() {
@@ -969,7 +990,7 @@ function updateDashboard() {
             if (event.isHappeningNow) {
                 document.getElementById('main-net-days').textContent = Math.ceil(diff / 86400000);
             } else {
-                document.getElementById('main-net-days').textContent = calculateNetDays(event.date, event.noFriday);
+                document.getElementById('main-net-days').textContent = calculateNetDays(event.date, event.noFriday, event.id);
             }
         }
     }
