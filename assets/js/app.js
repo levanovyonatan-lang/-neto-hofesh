@@ -478,11 +478,11 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             if (textElement) {
                 if (userConfig.schoolType === 'elem') {
                     if (isNewlyClicked) trackEvent('view_tip_sponsor_elem');
-                    
+
                     sponsorBanner.style.background = 'linear-gradient(135deg, #f3e8ff, #e9d5ff)';
                     sponsorBanner.style.borderColor = '#d8b4fe';
                     sponsorBanner.style.color = '#000000';
-                    
+
                     const elemSponsorOptions = [
                         "לונה פארק, בריכה ועוד?<br><b><span style=\"color: #ff6600;\">תצטרפו לקייטנת אקשן עם אביגיל</span></b>",
                         "פארק מים, קולנוע ועוד?<br><b><span style=\"color: #ff6600;\">תרשמו לקייטנת אקשן עם אביגיל!</span></b>",
@@ -500,11 +500,11 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                     textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}`;
                 } else if (userConfig.schoolType === 'high') {
                     if (isNewlyClicked) trackEvent('view_tip_jobs_sponsor');
-                    
+
                     sponsorBanner.style.background = '';
                     sponsorBanner.style.borderColor = '';
                     sponsorBanner.style.color = '';
-                    
+
                     textElement.innerHTML = `<span aria-hidden="true">🌟</span> <b style="font-size: 1.05em; color: #1e293b;">רוצים להרוויח הרבה כסף בחופש?</b><br><b style="font-size: 1.15em; text-decoration: underline;">לחצו כאן (16+)</b>`;
                 }
             }
@@ -550,8 +550,8 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 async function getSmartTip(targetId, schoolType, tipNumber) {
     if (tipNumber === 1) {
         const _d = new Date();
-        const _il = new Date(_d.toLocaleString("en-US", {timeZone: "Asia/Jerusalem"}));
-        const _str = `${_il.getFullYear()}-${String(_il.getMonth()+1).padStart(2,'0')}-${String(_il.getDate()).padStart(2,'0')}`;
+        const _il = new Date(_d.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
+        const _str = `${_il.getFullYear()}-${String(_il.getMonth() + 1).padStart(2, '0')}-${String(_il.getDate()).padStart(2, '0')}`;
         if (_str === '2026-06-27') {
             return "המורה אמרה “נשאר לנו רק נושא קטן” ואז התחילה סופת שלגים של סיכומים, דפים ומבטי ייאוש. 📚😵💫";
         }
@@ -561,7 +561,45 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     }
 
     const tipsDb = await loadTipsDatabase();
-    const { pool } = resolveTipPool(tipsDb, targetId, schoolType);
+
+    // Check if we are in vacation mode AND demo parameter is true
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDemo = urlParams.get('show_demo') === 'true';
+    const target = typeof activeEventsList !== 'undefined' ? activeEventsList.find(e => e.id === targetId) : null;
+
+    let poolKeyOverride = null;
+    let fallbackSchoolType = schoolType === 'middle' ? 'high' : schoolType;
+    let baseTargetName = targetId.replace(/\d+$/, ''); // remove year
+
+    // Map the internal target names to the ones used in tips.js
+    const targetMap = {
+        'summerHigh': 'summer',
+        'summerElem': 'summer',
+        'summerElemLow': 'summer',
+        'summerMiddlePrep': 'summer',
+        'pesach': 'passover',
+        'atzmaut': 'independenceday',
+        'roshHashana': 'roshHashana',
+        'kippurSukkot': 'kippurSukkot',
+        'hanukkah': 'hanukkah',
+        'purim': 'purim',
+        'shavuot': 'shavuot',
+        'lagbaomer': 'lagbaomer'
+    };
+    if (targetMap[baseTargetName]) baseTargetName = targetMap[baseTargetName];
+
+    if (isDemo && target && target.isHappeningNow) {
+        poolKeyOverride = `vacation_${baseTargetName}_${fallbackSchoolType}_${tipNumber}`;
+    }
+
+    let pool = [];
+    if (poolKeyOverride && tipsDb[poolKeyOverride]) {
+        pool = flattenTips(tipsDb[poolKeyOverride]);
+    } else {
+        const resolved = resolveTipPool(tipsDb, targetId, schoolType);
+        pool = resolved.pool;
+    }
+
     if (!pool.length) throw new Error('No tips are available for the selected context');
 
     // יצירת אינדקס דטרמיניסטי לפי התאריך (מאופס מהיום כדי שטיפים חדשים יופיעו קודם)
@@ -571,8 +609,20 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     if (dayIndex < 0) dayIndex = 0;
 
     // בחירת אינדקס בצורה עוקבת כדי למנוע חזרות ככל הניתן
-    // כל יום "מתקדמים" ב-2 טיפים בתוך המאגר
-    const finalIndex = (dayIndex * 2 + (tipNumber - 1)) % pool.length;
+    let finalIndex;
+    if (poolKeyOverride && tipsDb[poolKeyOverride]) {
+        // For vacation mode, each tipNumber is a separate list, so we just use dayIndex
+        finalIndex = dayIndex % pool.length;
+    } else {
+        if (isDemo && target && target.isHappeningNow) {
+            // During vacation, tip 1 is a recommendation, so tip 2 is the ONLY regular tip per day.
+            // Advance regular pool by 1 per day instead of 2.
+            finalIndex = dayIndex % pool.length;
+        } else {
+            // כל יום "מתקדמים" ב-2 טיפים בתוך המאגר
+            finalIndex = (dayIndex * 2 + (tipNumber - 1)) % pool.length;
+        }
+    }
 
     return pool[finalIndex];
 }
@@ -733,7 +783,7 @@ function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
 
     while (current < targetNormalized) {
         const dStr = current.getFullYear() + '-' + String(current.getMonth() + 1).padStart(2, '0') + '-' + String(current.getDate()).padStart(2, '0');
-        
+
         let isSummerDay = false;
         if (userConfig.schoolType === 'elem') {
             if (current.getMonth() === 6 || current.getMonth() === 7) isSummerDay = true;
@@ -814,20 +864,20 @@ function showMainScreen() {
         if (jobsBanner) {
             jobsBanner.style.display = 'flex';
             trackEvent('view_ad_jobs_sticky');
-            
+
             const isAndroid = /Android/i.test(navigator.userAgent);
             const jobsLink = document.getElementById('jobs-banner-link');
             const jobsImg = document.getElementById('jobs-banner-img');
-            
+
             if (jobsLink && jobsImg) {
                 if (isAndroid) {
                     jobsLink.href = "https://play.google.com/store/apps/details?id=com.hagovistim.app";
                     jobsImg.src = "assets/images/jobs-banner-android.jpeg?v=10";
-                    jobsLink.onclick = function() { trackEvent('click_ad_jobs_sticky'); trackEvent('click_ad_jobs_android'); };
+                    jobsLink.onclick = function () { trackEvent('click_ad_jobs_sticky'); trackEvent('click_ad_jobs_android'); };
                 } else {
                     jobsLink.href = "https://chat.whatsapp.com/GbuLGylKq5216WxoKKDKWe";
                     jobsImg.src = "assets/images/jobs-banner-iphone.jpg?v=10";
-                    jobsLink.onclick = function() { trackEvent('click_ad_jobs_sticky'); trackEvent('click_ad_jobs_iphone'); };
+                    jobsLink.onclick = function () { trackEvent('click_ad_jobs_sticky'); trackEvent('click_ad_jobs_iphone'); };
                 }
             }
         }
@@ -852,7 +902,11 @@ function showMainScreen() {
 
     const now = Date.now();
     activeEventsList = allTargets.filter(e => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDemo = urlParams.get('show_demo') === 'true';
         let isHappeningSummer = false;
+        let isHappeningDemo = false;
+
         if (e.isSummer) {
             const summerEnd = new Date(e.date.getFullYear(), 8, 1);
             if (e.date.getTime() <= now && now < summerEnd.getTime()) {
@@ -860,9 +914,24 @@ function showMainScreen() {
                 e.isHappeningNow = true;
                 e.endDate = summerEnd;
             }
+        } else if (isDemo) {
+            const durationMap = {
+                'atzmaut': 1, 'lagbaomer': 1, 'shavuot': 3,
+                'roshHashana': 3, 'kippurSukkot': 14, 'hanukkah': 8,
+                'purim': 2, 'pesach': 16
+            };
+            const baseName = e.id.replace(/\d+$/, '');
+            const days = durationMap[baseName] || 1;
+            const endDate = new Date(e.date.getTime() + days * 86400000);
+
+            if (e.date.getTime() <= now && now < endDate.getTime()) {
+                isHappeningDemo = true;
+                e.isHappeningNow = true;
+                e.endDate = endDate;
+            }
         }
 
-        if (e.date.getTime() <= now && !isHappeningSummer) return false;
+        if (e.date.getTime() <= now && !isHappeningSummer && !isHappeningDemo) return false;
 
         if (e.type) {
             if (userConfig.schoolType === 'elem' && e.type !== 'elem') return false;
