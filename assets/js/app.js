@@ -588,7 +588,7 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     };
     if (targetMap[baseTargetName]) baseTargetName = targetMap[baseTargetName];
 
-    if (isDemo && target && target.isHappeningNow) {
+    if ((isDemo && target) || (target && target.isHappeningNow)) {
         poolKeyOverride = `vacation_${baseTargetName}_${fallbackSchoolType}_${tipNumber}`;
     }
 
@@ -614,7 +614,7 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
         // For vacation mode, each tipNumber is a separate list, so we just use dayIndex
         finalIndex = dayIndex % pool.length;
     } else {
-        if (isDemo && target && target.isHappeningNow) {
+        if ((isDemo && target) || (target && target.isHappeningNow)) {
             // During vacation, tip 1 is a recommendation, so tip 2 is the ONLY regular tip per day.
             // Advance regular pool by 1 per day instead of 2.
             finalIndex = dayIndex % pool.length;
@@ -902,19 +902,16 @@ function showMainScreen() {
 
     const now = Date.now();
     activeEventsList = allTargets.filter(e => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const isDemo = urlParams.get('show_demo') === 'true';
-        let isHappeningSummer = false;
-        let isHappeningDemo = false;
-
+        let isHappening = false;
+        
         if (e.isSummer) {
             const summerEnd = new Date(e.date.getFullYear(), 8, 1);
             if (e.date.getTime() <= now && now < summerEnd.getTime()) {
-                isHappeningSummer = true;
+                isHappening = true;
                 e.isHappeningNow = true;
                 e.endDate = summerEnd;
             }
-        } else if (isDemo) {
+        } else {
             const durationMap = {
                 'atzmaut': 1, 'lagbaomer': 1, 'shavuot': 3,
                 'roshHashana': 3, 'kippurSukkot': 14, 'hanukkah': 8,
@@ -923,15 +920,15 @@ function showMainScreen() {
             const baseName = e.id.replace(/\d+$/, '');
             const days = durationMap[baseName] || 1;
             const endDate = new Date(e.date.getTime() + days * 86400000);
-
+            
             if (e.date.getTime() <= now && now < endDate.getTime()) {
-                isHappeningDemo = true;
+                isHappening = true;
                 e.isHappeningNow = true;
                 e.endDate = endDate;
             }
         }
 
-        if (e.date.getTime() <= now && !isHappeningSummer && !isHappeningDemo) return false;
+        if (e.date.getTime() <= now && !isHappening) return false;
 
         if (e.type) {
             if (userConfig.schoolType === 'elem' && e.type !== 'elem') return false;
