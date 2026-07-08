@@ -511,11 +511,19 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         }
     }
 
+    const target = typeof activeEventsList !== 'undefined' ? activeEventsList.find(e => e.id === targetId) : null;
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDemo = urlParams.get('show_demo') === 'true';
+    const isVacation = (isDemo && target) || (target && target.isHappeningNow);
+
     if (currentState.clicks > 0 && currentState.texts && currentState.texts.length > 0) {
         const latestTip = currentState.texts[currentState.texts.length - 1];
-        const title = currentState.clicks === 1 ? "הטיפ היומי" : "טיפ נוסף";
-        let extraHTML = currentState.clicks === 1 ? `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover); margin-top: 8px; display: block;">לחצו כאן לטיפ נוסף ✨</span>` : `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--text-muted); margin-top: 8px; display: block;">טיפ חדש יופיע מחר ✨</span>`;
-        btnText.innerHTML = `<b style="color: var(--text-main); font-size: calc(16px * var(--text-scale, 1));">${title} ✨</b><br><span style="color: var(--text-main); font-weight: 600;">${latestTip}</span>${extraHTML}`;
+        const title = currentState.clicks === 1 ? (isVacation ? "המשימה היומית" : "הטיפ היומי") : "טיפ נוסף";
+        const secondTipText = isVacation ? "לחצו לטיפ אופטימיות יומי ✨" : "לחצו כאן לטיפ נוסף ✨";
+        let extraHTML = currentState.clicks === 1 ? `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover); margin-top: 8px; display: block;">${secondTipText}</span>` : `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--text-muted); margin-top: 8px; display: block;">טיפ חדש יופיע מחר ✨</span>`;
+        
+        const titleIcon = isVacation && currentState.clicks === 1 ? "⚡" : "✨";
+        btnText.innerHTML = `<b style="color: var(--text-main); font-size: calc(16px * var(--text-scale, 1));">${title} ${titleIcon}</b><br><span style="color: var(--text-main); font-weight: 600;">${latestTip}</span>${extraHTML}`;
         btn.classList.add('has-tip');
 
         if (isNewlyClicked) {
@@ -542,7 +550,8 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         if (currentState.clicks >= 2) { btn.disabled = true; btn.style.pointerEvents = 'none'; btn.setAttribute('aria-disabled', 'true'); }
         else { btn.disabled = false; btn.style.pointerEvents = 'auto'; btn.removeAttribute('aria-disabled'); }
     } else {
-        btnText.innerHTML = "לחצו לטיפ אופטימיות יומי ✨"; btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
+        btnText.innerHTML = isVacation ? "לחצו למשימה היומית ⚡" : "לחצו לטיפ אופטימיות יומי ✨"; 
+        btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
         if (sponsorBanner) sponsorBanner.style.display = 'none';
     }
 }
