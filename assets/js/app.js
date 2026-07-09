@@ -470,13 +470,14 @@ function renderTipBox(targetId, isNewlyClicked = false) {
     const sponsorBanner = document.getElementById('tip-sponsor-banner');
 
     if (sponsorBanner) {
-        if (userConfig.schoolType === 'middle') {
+        if (userConfig.schoolType === 'middle' || userConfig.schoolType === 'elem') {
             sponsorBanner.style.display = 'none';
         } else {
             sponsorBanner.style.display = 'block';
             const textElement = sponsorBanner.querySelector('.sponsor-text');
             if (textElement) {
                 if (userConfig.schoolType === 'elem') {
+                    /* Temporarily disabled
                     if (isNewlyClicked) trackEvent('view_tip_sponsor_elem');
 
                     sponsorBanner.style.background = 'linear-gradient(135deg, #f3e8ff, #e9d5ff)';
@@ -498,6 +499,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                     const chosenOption = elemSponsorOptions[finalIndex];
 
                     textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}`;
+                    */
                 } else if (userConfig.schoolType === 'high') {
                     if (isNewlyClicked) trackEvent('view_tip_jobs_sponsor');
 
@@ -531,11 +533,11 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
 
-            if (sponsorBanner && (userConfig.schoolType === 'high' || userConfig.schoolType === 'elem')) {
+            if (sponsorBanner && (userConfig.schoolType === 'high')) { // || userConfig.schoolType === 'elem'
                 sponsorBanner.style.display = 'flex'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
                 sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
                 if (userConfig.schoolType === 'elem') {
-                    trackEvent('view_ad_avigail_tip');
+                    // trackEvent('view_ad_avigail_tip');
                 } else {
                     trackEvent('view_ad_vip_tip');
                 }
@@ -860,8 +862,9 @@ function showMainScreen() {
             // trackEvent('view_ad_summer_wheels_sticky');
         }
         if (avigailBanner) {
-            avigailBanner.style.display = 'flex';
-            trackEvent('view_ad_avigail_sticky');
+            // avigailBanner.style.display = 'flex';
+            // trackEvent('view_ad_avigail_sticky');
+            avigailBanner.style.display = 'none';
         }
         if (jobsBanner) jobsBanner.style.display = 'none';
 
