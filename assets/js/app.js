@@ -71,7 +71,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=159').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=160').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -465,6 +465,28 @@ function saveDailyState() { localStorage.setItem(dailyTipsStorageKey, JSON.strin
 function renderTipBox(targetId, isNewlyClicked = false) {
     const currentState = getDailyTipState(targetId);
 
+    const aiToolsContainer = document.querySelector('.ai-tools');
+    const target = typeof activeEventsList !== 'undefined' ? activeEventsList.find(e => e.id === targetId) : null;
+
+    let shouldShowTips = false;
+    if (target) {
+        if (target.isHappeningNow) {
+            shouldShowTips = true;
+        } else {
+            const nextUpcoming = activeEventsList.find(e => !e.isHappeningNow);
+            if (nextUpcoming && target.id === nextUpcoming.id) {
+                shouldShowTips = true;
+            }
+            if (target.isSummer || target.id.startsWith('summer')) {
+                shouldShowTips = true;
+            }
+        }
+    }
+
+    if (aiToolsContainer) {
+        aiToolsContainer.style.display = shouldShowTips ? '' : 'none';
+    }
+
     const btn = document.getElementById('main-ai-btn');
     const btnText = document.getElementById('ai-btn-text');
     const sponsorBanner = document.getElementById('tip-sponsor-banner');
@@ -513,7 +535,6 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         }
     }
 
-    const target = typeof activeEventsList !== 'undefined' ? activeEventsList.find(e => e.id === targetId) : null;
     const urlParams = new URLSearchParams(window.location.search);
     const isDemo = urlParams.get('show_demo') === 'true';
     const isVacation = (isDemo && target) || (target && target.isHappeningNow);
@@ -523,7 +544,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         const title = currentState.clicks === 1 ? (isVacation ? "המשימה היומית" : "הטיפ היומי") : "טיפ נוסף";
         const secondTipText = isVacation ? "לחצו לטיפ אופטימיות יומי ✨" : "לחצו כאן לטיפ נוסף ✨";
         let extraHTML = currentState.clicks === 1 ? `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover); margin-top: 8px; display: block;">${secondTipText}</span>` : `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--text-muted); margin-top: 8px; display: block;">טיפ חדש יופיע מחר ✨</span>`;
-        
+
         const titleIcon = isVacation && currentState.clicks === 1 ? "⚡" : "✨";
         btnText.innerHTML = `<b style="color: var(--text-main); font-size: calc(16px * var(--text-scale, 1));">${title} ${titleIcon}</b><br><span style="color: var(--text-main); font-weight: 600;">${latestTip}</span>${extraHTML}`;
         btn.classList.add('has-tip');
@@ -552,7 +573,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         if (currentState.clicks >= 2) { btn.disabled = true; btn.style.pointerEvents = 'none'; btn.setAttribute('aria-disabled', 'true'); }
         else { btn.disabled = false; btn.style.pointerEvents = 'auto'; btn.removeAttribute('aria-disabled'); }
     } else {
-        btnText.innerHTML = isVacation ? "לחצו למשימה היומית ⚡" : "לחצו לטיפ אופטימיות יומי ✨"; 
+        btnText.innerHTML = isVacation ? "לחצו למשימה היומית ⚡" : "לחצו לטיפ אופטימיות יומי ✨";
         btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
         if (sponsorBanner) sponsorBanner.style.display = 'none';
     }
@@ -588,8 +609,8 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
         'summerElem': 'summer',
         'summerElemLow': 'summer',
         'summerMiddlePrep': 'summer',
-        'pesach': 'passover',
-        'atzmaut': 'independenceday',
+        'pesach': 'pesach',
+        'atzmaut': 'atzmaut',
         'roshHashana': 'roshHashana',
         'kippurSukkot': 'kippurSukkot',
         'hanukkah': 'hanukkah',
@@ -915,7 +936,7 @@ function showMainScreen() {
     const now = Date.now();
     activeEventsList = allTargets.filter(e => {
         let isHappening = false;
-        
+
         if (e.isSummer) {
             const summerEnd = new Date(e.date.getFullYear(), 8, 1);
             if (e.date.getTime() <= now && now < summerEnd.getTime()) {
@@ -932,7 +953,7 @@ function showMainScreen() {
             const baseName = e.id.replace(/\d+$/, '');
             const days = durationMap[baseName] || 1;
             const endDate = new Date(e.date.getTime() + days * 86400000);
-            
+
             if (e.date.getTime() <= now && now < endDate.getTime()) {
                 isHappening = true;
                 e.isHappeningNow = true;
