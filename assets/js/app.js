@@ -473,11 +473,11 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         if (target.isHappeningNow) {
             shouldShowTips = true;
         } else {
-            const nextUpcoming = activeEventsList.find(e => !e.isHappeningNow);
-            if (nextUpcoming && target.id === nextUpcoming.id) {
+            const nextUpcomingHoliday = activeEventsList.find(e => !e.isHappeningNow && !e.id.startsWith('summer'));
+            if (nextUpcomingHoliday && target.id === nextUpcomingHoliday.id) {
                 shouldShowTips = true;
             }
-            if (target.isSummer || target.id.startsWith('summer')) {
+            if (target.isSummer) {
                 shouldShowTips = true;
             }
         }
