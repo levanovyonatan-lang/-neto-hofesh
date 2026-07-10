@@ -812,8 +812,6 @@ function resetApp() {
 function updateSchoolSelection(radio) {
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
     radio.parentElement.classList.add('selected');
-    
-    document.querySelectorAll('.btn-locked').forEach(btn => btn.classList.remove('btn-locked'));
 }
 
 function updateFridayToggle() {
