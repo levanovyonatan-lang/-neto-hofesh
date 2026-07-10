@@ -71,7 +71,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=160').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=161').catch(() => { });
     }
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
@@ -620,8 +620,12 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     };
     if (targetMap[baseTargetName]) baseTargetName = targetMap[baseTargetName];
 
-    if ((isDemo && target) || (target && target.isHappeningNow)) {
-        poolKeyOverride = `vacation_${baseTargetName}_${fallbackSchoolType}_${tipNumber}`;
+    // תמיד ננסה להשתמש בטיפים הספציפיים של החג (גם בספירה לאחור)
+    poolKeyOverride = `vacation_${baseTargetName}_${fallbackSchoolType}_${tipNumber}`;
+    
+    // אם אין טיפ שני (למשל בחגים קטנים יש רק מערך אחד), נחזור לטיפ הראשון כברירת מחדל
+    if (!tipsDb[poolKeyOverride]) {
+        poolKeyOverride = `vacation_${baseTargetName}_${fallbackSchoolType}_1`;
     }
 
     let pool = [];
