@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #333; color: white; }
+  .container { position: relative; display: inline-block; }
+  img { border: 1px solid red; }
+  #coords { font-size: 24px; position: fixed; top: 10px; right: 10px; background: black; padding: 10px; }
+  #overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="coords">X: 0, Y: 0</div>
+<div class="container">
+  <img id="banner" src="assets/images/jobs-banner-android.jpeg">
+  <canvas id="overlay"></canvas>
+</div>
+<script>
+  const img = document.getElementById('banner');
+  const overlay = document.getElementById('overlay');
+  const coords = document.getElementById('coords');
+  img.onload = () => {
+    overlay.width = img.width;
+    overlay.height = img.height;
+    const ctx = overlay.getContext('2d');
+    // Draw grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    for(let x=0; x<img.width; x+=50) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, img.height); ctx.stroke(); ctx.fillText(x, x+2, 10); }
+    for(let y=0; y<img.height; y+=20) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(img.width, y); ctx.stroke(); ctx.fillText(y, 2, y+10); }
+  };
+  img.onmousemove = (e) => {
+    const rect = img.getBoundingClientRect();
+    const x = Math.round(e.clientX - rect.left);
+    const y = Math.round(e.clientY - rect.top);
+    coords.innerText = `X: ${x}, Y: ${y}`;
+  };
+</script>
+</body>
+</html>

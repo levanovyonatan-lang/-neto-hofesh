@@ -152,7 +152,7 @@
         <div id="setup-screen">
             <div class="setup-header">
                 <span class="icon" aria-hidden="true">☀️</span>
-                <h1><span>נטו</span>מתי באמת החופש הגדול</h1>
+                <h1><span>נטו</span>מתי באמת החופש</h1>
                 <p>ספירה לאחור - בלי שבתות, שישי וחגים</p>
             </div>
 
@@ -176,11 +176,10 @@
                         <span class="option-emoji" aria-hidden="true">🎓</span>
                     </label>
                 </div>
-                <div id="school-hint-text" class="school-hint" style="visibility: hidden;" aria-live="polite"></div>
             </div>
 
             <!-- שלב 2: לומדים בשישי? -->
-            <div class="setup-step">
+            <div class="setup-step" style="margin-top: 15px;">
                 <div class="toggle-container" onclick="document.getElementById('friday-toggle').click();" role="button"
                     tabindex="0" onkeypress="if(event.key==='Enter') document.getElementById('friday-toggle').click();">
                     <div class="toggle-text-area">
@@ -199,7 +198,10 @@
             <div id="error-message"
                 style="color: #ef4444; font-weight: 900; text-align: center; display: none; background: #fee2e2; padding: 12px; border-radius: 16px;"
                 aria-live="assertive">רגע! לא סימנתם איפה אתם לומדים 🎒</div>
-            <button class="btn-start" onclick="initApp()">התחל ספירה לאחור! 🚀</button>
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                <button class="btn-start" onclick="initApp('next')" style="background: linear-gradient(135deg, #fde047 0%, #facc15 100%); color: #854d0e; font-size: 1.05em; padding: 14px;">התחל ספירה לחופש הקרוב 🚀</button>
+                <button class="btn-start" onclick="initApp('summer')">התחל ספירה לחופש הגדול ☀️</button>
+            </div>
         </div>
 
         <div id="main-screen">
@@ -582,7 +584,7 @@
         </a>
     </div>
 
-    <script src="assets/js/app.js?v=206" defer></script>
+    <script src="assets/js/app.js?v=207" defer></script>
 
     <script src="assets/js/games/emoji-rain.js" defer></script>
 </body>

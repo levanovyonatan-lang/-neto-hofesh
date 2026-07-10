@@ -751,18 +751,36 @@ window.onload = () => {
     });
 };
 
-function initApp() {
+function initApp(countdownTarget = 'summer') {
     const choice = document.querySelector('input[name="schoolType"]:checked');
     if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
 
-    if (userConfig.schoolType === 'elem') {
-        userConfig.activeTargetId = 'summerElem';
-    } else if (userConfig.schoolType === 'middle') {
-        userConfig.activeTargetId = 'summerHigh';
+    if (countdownTarget === 'next') {
+        const now = new Date();
+        const upcomingHolidays = targets.filter(t => 
+            t.date > now && 
+            !t.isSummer && 
+            t.id !== 'summerMiddlePrep' && 
+            t.id !== 'summerElemLow' && 
+            (!t.type || t.type === userConfig.schoolType)
+        );
+        upcomingHolidays.sort((a, b) => a.date - b.date);
+        
+        if (upcomingHolidays.length > 0) {
+            userConfig.activeTargetId = upcomingHolidays[0].id;
+        } else {
+            userConfig.activeTargetId = userConfig.schoolType === 'elem' ? 'summerElem' : 'summerHigh';
+        }
     } else {
-        userConfig.activeTargetId = 'summerHigh';
+        if (userConfig.schoolType === 'elem') {
+            userConfig.activeTargetId = 'summerElem';
+        } else if (userConfig.schoolType === 'middle') {
+            userConfig.activeTargetId = 'summerHigh';
+        } else {
+            userConfig.activeTargetId = 'summerHigh';
+        }
     }
 
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
@@ -803,11 +821,6 @@ function resetApp() {
 function updateSchoolSelection(radio) {
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
     radio.parentElement.classList.add('selected');
-    const hint = document.getElementById('school-hint-text'); const isFridayOff = !document.getElementById('friday-toggle').checked;
-    hint.style.visibility = 'visible';
-    if (radio.value === 'elem') hint.textContent = 'לומדים עד ה-30 ביוני 🍉';
-    else if (radio.value === 'middle') hint.textContent = isFridayOff ? 'יוצאים ב-18 ביוני 🏖️' : 'יוצאים ב-19 ביוני 🏖️';
-    else hint.textContent = isFridayOff ? 'יוצאים לחופש ב-18 ביוני 🏖️' : 'יוצאים לחופש ב-19 ביוני 🏖️';
 }
 
 function updateFridayToggle() {
@@ -815,8 +828,6 @@ function updateFridayToggle() {
     const hint = document.getElementById('friday-hint-text');
     hint.textContent = toggle.checked ? 'כן, יש לנו לימודים בשישי ☹️' : 'לא, אצלנו שישי זה חופש 😊';
     hint.style.color = toggle.checked ? '#ef4444' : 'var(--text-muted)';
-    const checkedSchool = document.querySelector('input[name="schoolType"]:checked');
-    if (checkedSchool) updateSchoolSelection(checkedSchool);
 }
 
 function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
