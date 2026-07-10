@@ -762,7 +762,7 @@ function updateNextVacationButtonText() {
     }
     
     if (isVacationNow) {
-        btn.innerHTML = 'כמה ימים נשאר לחופש? <span aria-hidden="true" style="font-size: 1.15em;">⏳</span>';
+        btn.innerHTML = 'כמה ימים נשאר לחופש הנוכחי? <span aria-hidden="true" style="font-size: 1.15em;">⏳</span>';
     } else {
         btn.innerHTML = 'התחל ספירה לחופש הקרוב <span aria-hidden="true" style="font-size: 1.15em;">🚀</span>';
     }
