@@ -724,8 +724,52 @@ function handleAiTip() {
         }
     }, 800);
 }
+function updateNextVacationButtonText() {
+    const btn = document.getElementById('btn-next-vacation');
+    if (!btn) return;
+    
+    const choice = document.querySelector('input[name="schoolType"]:checked');
+    const schoolType = choice ? choice.value : 'elem';
+    
+    const now = Date.now();
+    const currentTargets = [...allTargets, ...targets2027];
+    
+    let isVacationNow = false;
+    for (const e of currentTargets) {
+        if (e.type && e.type !== schoolType && !(schoolType === 'middle' && e.id.startsWith('summerHigh'))) continue;
+        if (e.id === 'summerMiddlePrep' || e.id === 'summerElemLow' || e.id.startsWith('atzmaut') || e.id.startsWith('lagbaomer')) continue;
+        
+        if (e.isSummer) {
+            const summerEnd = new Date(e.date.getFullYear(), 8, 1);
+            if (e.date.getTime() <= now && now < summerEnd.getTime()) {
+                isVacationNow = true;
+                break;
+            }
+        } else {
+            const durationMap = {
+                'atzmaut': 1, 'lagbaomer': 1, 'shavuot': 3,
+                'roshHashana': 3, 'kippurSukkot': 14, 'hanukkah': 8,
+                'purim': 2, 'pesach': 16
+            };
+            const baseName = e.id.replace(/\d+$/, '');
+            const days = durationMap[baseName] || 1;
+            const endDate = new Date(e.date.getTime() + days * 86400000);
+            if (e.date.getTime() <= now && now < endDate.getTime()) {
+                isVacationNow = true;
+                break;
+            }
+        }
+    }
+    
+    if (isVacationNow) {
+        btn.innerHTML = 'כמה זמן נשאר לסוף החופש? <span aria-hidden="true" style="font-size: 1.15em;">⏳</span>';
+    } else {
+        btn.innerHTML = 'התחל ספירה לחופש הקרוב <span aria-hidden="true" style="font-size: 1.15em;">🚀</span>';
+    }
+}
 
 window.onload = () => {
+    updateNextVacationButtonText();
     initPWA();
     setupManualCopyListener();
     const urlParams = new URLSearchParams(window.location.search);
@@ -812,6 +856,7 @@ function resetApp() {
 function updateSchoolSelection(radio) {
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
     radio.parentElement.classList.add('selected');
+    updateNextVacationButtonText();
 }
 
 function updateFridayToggle() {
