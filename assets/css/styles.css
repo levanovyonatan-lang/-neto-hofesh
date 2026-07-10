@@ -56,7 +56,7 @@ body {
 
 .app-container { width: 100%; max-width: 480px; position: relative; padding-bottom: 120px; }
 
-#setup-screen { display: flex; flex-direction: column; gap: 28px; animation: fadeIn 0.8s ease-out; }
+#setup-screen { display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.8s ease-out; }
 
 .setup-header { 
     text-align: center; 
@@ -693,7 +693,7 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     display: flex; 
     flex-direction: column; 
     gap: 14px; 
-    margin-top: 18px;
+    margin-top: 2px;
     margin-bottom: 5px;
     animation: fadeIn 0.8s ease-out;
 }
