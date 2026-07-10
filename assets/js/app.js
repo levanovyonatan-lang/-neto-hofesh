@@ -620,12 +620,16 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     };
     if (targetMap[baseTargetName]) baseTargetName = targetMap[baseTargetName];
 
-    // תמיד ננסה להשתמש בטיפים הספציפיים של החג (גם בספירה לאחור)
-    poolKeyOverride = `vacation_${baseTargetName}_${fallbackSchoolType}_${tipNumber}`;
-    
-    // אם אין טיפ שני (למשל בחגים קטנים יש רק מערך אחד), נחזור לטיפ הראשון כברירת מחדל
-    if (!tipsDb[poolKeyOverride]) {
-        poolKeyOverride = `vacation_${baseTargetName}_${fallbackSchoolType}_1`;
+    const isCountdown = target && !target.isHappeningNow && !isDemo;
+
+    if (isCountdown) {
+        const waitTargetName = baseTargetName === 'kippurSukkot' ? 'sukkot' : baseTargetName;
+        poolKeyOverride = `waiting_${waitTargetName}_${fallbackSchoolType}`;
+    } else {
+        poolKeyOverride = `vacation_${baseTargetName}_${fallbackSchoolType}_${tipNumber}`;
+        if (!tipsDb[poolKeyOverride]) {
+            poolKeyOverride = `vacation_${baseTargetName}_${fallbackSchoolType}_1`;
+        }
     }
 
     let pool = [];
@@ -647,8 +651,16 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     // בחירת אינדקס בצורה עוקבת כדי למנוע חזרות ככל הניתן
     let finalIndex;
     if (poolKeyOverride && tipsDb[poolKeyOverride]) {
-        // For vacation mode, each tipNumber is a separate list, so we just use dayIndex
-        finalIndex = dayIndex % pool.length;
+        if (isCountdown) {
+            if (tipNumber === 1) {
+                finalIndex = (dayIndex * 2) % pool.length;
+            } else {
+                finalIndex = (dayIndex * 2 + 1) % pool.length;
+            }
+        } else {
+            // For vacation mode, each tipNumber is a separate list, so we just use dayIndex
+            finalIndex = dayIndex % pool.length;
+        }
     } else {
         if ((isDemo && target) || (target && target.isHappeningNow)) {
             // During vacation, tip 1 is a recommendation, so tip 2 is the ONLY regular tip per day.
