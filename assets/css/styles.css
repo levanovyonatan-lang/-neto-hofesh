@@ -687,4 +687,97 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     background-color: #f59e0b;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
 }
+
+/* --- Start Buttons Design --- */
+.action-buttons-container {
+    display: flex; 
+    flex-direction: column; 
+    gap: 14px; 
+    margin-top: 18px;
+    margin-bottom: 5px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.btn-next-holiday {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    font-weight: 900;
+    font-size: calc(20px * var(--text-scale, 1));
+    padding: 16px 20px;
+    border: 3px solid #e0f2fe;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: 100%;
+    box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3), inset 0 -5px 0 rgba(3, 105, 161, 0.4);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-next-holiday:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(2, 132, 199, 0.4), inset 0 -5px 0 rgba(3, 105, 161, 0.4);
+    background: linear-gradient(135deg, #7dd3fc 0%, #0284c7 100%);
+}
+
+.btn-next-holiday:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.3), inset 0 -2px 0 rgba(3, 105, 161, 0.4);
+}
+
+.btn-next-holiday::before, .btn-summer-holiday::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    animation: btn-shine-anim 3.5s infinite;
+}
+
+.btn-summer-holiday::before {
+    animation-delay: 1.75s;
+}
+
+@keyframes btn-shine-anim {
+    0% { left: -100%; }
+    20% { left: 200%; }
+    100% { left: 200%; }
+}
+
+.btn-summer-holiday {
+    background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%);
+    color: #422006;
+    font-weight: 900;
+    font-size: calc(20px * var(--text-scale, 1));
+    padding: 16px 20px;
+    border: 3px solid #fef08a;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: 100%;
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3), inset 0 -5px 0 rgba(217, 119, 6, 0.4);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-summer-holiday:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(245, 158, 11, 0.4), inset 0 -5px 0 rgba(217, 119, 6, 0.4);
+    background: linear-gradient(135deg, #fde047 0%, #f59e0b 100%);
+}
+
+.btn-summer-holiday:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3), inset 0 -2px 0 rgba(217, 119, 6, 0.4);
+}
 

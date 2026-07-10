@@ -729,6 +729,21 @@ window.onload = () => {
     initPWA();
     setupManualCopyListener();
     const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlParams.get('show_demo') === 'true') {
+        document.title = "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש";
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.setAttribute("content", "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש");
+        
+        const seoFooterH2 = document.querySelector('.seo-footer h2');
+        if (seoFooterH2) seoFooterH2.textContent = "מתי באמת החופש 2026? ספירה לאחור - נטו חופש";
+        
+        const setupSteps = document.querySelectorAll('.setup-step');
+        if (setupSteps.length >= 2) {
+            setupSteps[1].style.marginTop = '2px';
+        }
+    }
+
     if (urlParams.get('install') === '1') {
         window.history.replaceState({}, document.title, window.location.pathname);
         setTimeout(() => {
@@ -757,31 +772,7 @@ function initApp(countdownTarget = 'summer') {
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
 
-    if (countdownTarget === 'next') {
-        const now = new Date();
-        const upcomingHolidays = targets.filter(t => 
-            t.date > now && 
-            !t.isSummer && 
-            t.id !== 'summerMiddlePrep' && 
-            t.id !== 'summerElemLow' && 
-            (!t.type || t.type === userConfig.schoolType)
-        );
-        upcomingHolidays.sort((a, b) => a.date - b.date);
-        
-        if (upcomingHolidays.length > 0) {
-            userConfig.activeTargetId = upcomingHolidays[0].id;
-        } else {
-            userConfig.activeTargetId = userConfig.schoolType === 'elem' ? 'summerElem' : 'summerHigh';
-        }
-    } else {
-        if (userConfig.schoolType === 'elem') {
-            userConfig.activeTargetId = 'summerElem';
-        } else if (userConfig.schoolType === 'middle') {
-            userConfig.activeTargetId = 'summerHigh';
-        } else {
-            userConfig.activeTargetId = 'summerHigh';
-        }
-    }
+    userConfig.targetIntent = countdownTarget;
 
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
     const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
@@ -1003,7 +994,28 @@ function showMainScreen() {
         if (userConfig.schoolType === 'high') return e.type === 'high';
         return false;
     });
-    activeEventsList.sort((a, b) => a.date - b.date); renderHolidays(); selectTarget(userConfig.activeTargetId || activeEventsList[0].id, false);
+    activeEventsList.sort((a, b) => a.date - b.date); 
+    
+    if (userConfig.targetIntent) {
+        let selectedId = '';
+        if (userConfig.targetIntent === 'next') {
+            const nextVacation = activeEventsList.find(t => 
+                !t.id.startsWith('atzmaut') && 
+                !t.id.startsWith('lagbaomer') && 
+                t.id !== 'summerMiddlePrep' && 
+                t.id !== 'summerElemLow'
+            );
+            selectedId = nextVacation ? nextVacation.id : activeEventsList[0].id;
+        } else if (userConfig.targetIntent === 'summer') {
+            const nextSummer = activeEventsList.find(t => t.isSummer);
+            selectedId = nextSummer ? nextSummer.id : activeEventsList[0].id;
+        }
+        userConfig.activeTargetId = selectedId;
+        userConfig.targetIntent = null;
+    }
+
+    renderHolidays(); 
+    selectTarget(userConfig.activeTargetId || activeEventsList[0].id, false);
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
 }
 
