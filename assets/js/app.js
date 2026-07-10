@@ -1052,7 +1052,7 @@ function showMainScreen() {
             );
             selectedId = nextVacation ? nextVacation.id : activeEventsList[0].id;
         } else if (userConfig.targetIntent === 'summer') {
-            const nextSummer = activeEventsList.find(t => t.isSummer);
+            const nextSummer = activeEventsList.find(t => t.isSummer && !t.isHappeningNow) || activeEventsList.find(t => t.isSummer);
             selectedId = nextSummer ? nextSummer.id : activeEventsList[0].id;
         }
         userConfig.activeTargetId = selectedId;
