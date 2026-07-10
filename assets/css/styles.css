@@ -730,26 +730,15 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     box-shadow: 0 2px 10px rgba(2, 132, 199, 0.3), inset 0 -2px 0 rgba(3, 105, 161, 0.4);
 }
 
-.btn-next-holiday::before, .btn-summer-holiday::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 50%; height: 100%;
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
-    transform: skewX(-25deg);
-    animation: btn-shine-anim 3.5s infinite;
+.btn-locked {
+    filter: grayscale(85%) opacity(0.7);
+    transform: scale(0.98);
+    box-shadow: none !important;
 }
-
-.btn-summer-holiday::before {
-    animation-delay: 1.75s;
+.btn-locked:hover {
+    transform: scale(0.98);
+    box-shadow: none !important;
 }
-
-@keyframes btn-shine-anim {
-    0% { left: -100%; }
-    20% { left: 200%; }
-    100% { left: 200%; }
-}
-
 .btn-summer-holiday {
     background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%);
     color: #422006;
