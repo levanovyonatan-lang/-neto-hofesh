@@ -87,6 +87,24 @@
         scoreDisplay.style.color = '#333';
         gameContainer.appendChild(scoreDisplay);
 
+        const closeBtn = document.createElement('div');
+        closeBtn.className = 'dino-element';
+        closeBtn.innerHTML = '✖';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '15px';
+        closeBtn.style.left = '20px';
+        closeBtn.style.fontSize = '22px';
+        closeBtn.style.fontWeight = 'bold';
+        closeBtn.style.color = '#94a3b8';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.zIndex = '300';
+        closeBtn.style.pointerEvents = 'auto';
+        closeBtn.onclick = (e) => {
+            e.stopPropagation();
+            cleanupGame();
+        };
+        gameContainer.appendChild(closeBtn);
+
         // Ground Line
         groundLine = document.createElement('div');
         groundLine.className = 'dino-element';
@@ -263,43 +281,26 @@
 
         const btnContainer = document.createElement('div');
         btnContainer.style.display = 'flex';
-        btnContainer.style.gap = '15px';
         btnContainer.style.marginTop = '20px';
         btnContainer.style.justifyContent = 'center';
         
         const playAgainBtn = document.createElement('button');
-        playAgainBtn.textContent = 'שוב 🔄';
-        playAgainBtn.style.padding = '8px 16px';
+        playAgainBtn.textContent = 'שחק שוב 🔄';
+        playAgainBtn.style.padding = '8px 24px';
         playAgainBtn.style.background = 'var(--primary)';
         playAgainBtn.style.border = 'none';
         playAgainBtn.style.borderRadius = '12px';
         playAgainBtn.style.fontWeight = 'bold';
         playAgainBtn.style.cursor = 'pointer';
-        playAgainBtn.style.fontSize = '16px';
+        playAgainBtn.style.fontSize = '18px';
         playAgainBtn.style.pointerEvents = 'auto';
+        playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
             cleanupGame();
             setTimeout(startGame, 50);
         };
 
-        const exitBtn = document.createElement('button');
-        exitBtn.textContent = 'יציאה 🚪';
-        exitBtn.style.padding = '8px 16px';
-        exitBtn.style.background = '#e2e8f0';
-        exitBtn.style.border = 'none';
-        exitBtn.style.borderRadius = '12px';
-        exitBtn.style.fontWeight = 'bold';
-        exitBtn.style.cursor = 'pointer';
-        exitBtn.style.fontSize = '16px';
-        exitBtn.style.color = '#333';
-        exitBtn.style.pointerEvents = 'auto';
-        exitBtn.onclick = (e) => {
-            e.stopPropagation();
-            cleanupGame();
-        };
-
-        btnContainer.appendChild(exitBtn);
         btnContainer.appendChild(playAgainBtn);
         title.appendChild(btnContainer);
     }

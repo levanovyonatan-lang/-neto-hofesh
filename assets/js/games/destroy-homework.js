@@ -90,6 +90,24 @@
         title.textContent = '💣 השמידו את שיעורי הבית!';
         gameContainer.appendChild(title);
 
+        const closeBtn = document.createElement('div');
+        closeBtn.id = 'hw-close-btn';
+        closeBtn.innerHTML = '✖';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '15px';
+        closeBtn.style.left = '20px';
+        closeBtn.style.fontSize = '22px';
+        closeBtn.style.fontWeight = 'bold';
+        closeBtn.style.color = '#94a3b8';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.zIndex = '300';
+        closeBtn.style.pointerEvents = 'auto';
+        closeBtn.onclick = (e) => {
+            e.stopPropagation();
+            endGame();
+        };
+        gameContainer.appendChild(closeBtn);
+
         // התחל להוציא דפים
         spawnInterval = setInterval(spawnHomework, SPAWN_INTERVAL_MS);
 
@@ -168,9 +186,11 @@
             // נקה דפים שנשארו
             gameContainer.querySelectorAll('.hw-paper').forEach(p => p.remove());
 
-            // הסר כותרת זירה
+            // הסר כותרת זירה וכפתור יציאה
             const title = document.getElementById('hw-arena-title');
             if (title) title.remove();
+            const closeBtn = document.getElementById('hw-close-btn');
+            if (closeBtn) closeBtn.remove();
 
             // החזר אלמנטים מוחבאים והחזר לחיצות
             const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
