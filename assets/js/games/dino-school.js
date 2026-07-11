@@ -8,18 +8,18 @@
     const CLOUDS = ['☁️'];
     
     const STAGES = [
-        /* 0  */ { threshold: 0, title: 'שלב 1: שעת אפס... 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'], dinoEmoji: '🦖' },
-        /* 1  */ { threshold: 150, title: 'שלב 2: בוחן פתע! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'], dinoEmoji: '🤓' },
-        /* 2  */ { threshold: 300, title: 'שלב 3: הפסקת 10! לאסוף אוכל! (+20) 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.6, bonusSet: ['🥪', '🍎', '🍉', '🍦', '🍩', '🍕'], obsSet: ['🗑️', '🛍️', '🧻'], dinoEmoji: '😎' },
-        /* 3  */ { threshold: 450, title: 'שלב 4: הברזייה התפוצצה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0, bonusChance: 0, obsSet: ['💧', '🌊', '🚰', '🐟'], dinoEmoji: '🤿' },
-        /* 4  */ { threshold: 600, title: 'שלב 5: שיעור ספורט! (מרחפים) 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎', '🎳'], dinoEmoji: '🏃‍♂️' },
-        /* 5  */ { threshold: 750, title: 'שלב 6: טיול שנתי - מסלול קשוח 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 0.6, jumpForce: -10, flyChance: 0.1, flySet: ['🦅', '🦇'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'], dinoEmoji: '🤠' },
-        /* 6  */ { threshold: 900, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, flySet: ['🧪', '🦠'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '👾' },
-        /* 7  */ { threshold: 1050, title: 'שלב 8: שיעור חלון! התרגעות... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.8, bonusSet: ['🎵', '🎶', '🎧', '📱', '🎮'], obsSet: ['🎒'], dinoEmoji: '🎧' },
-        /* 8  */ { threshold: 1200, title: 'שלב 9: מזגן על 16 מעלות 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.1, flySet: ['🌨️', '🌬️'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🥶' },
-        /* 9  */ { threshold: 1350, title: 'שלב 10: המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '😰' },
-        /* 10 */ { threshold: 1500, title: 'שלב 11: ננעלת בלילה! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['👻', '🦇'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '👻' },
-        /* 11 */ { threshold: 1650, title: 'שלב 12: החופש הגדול!!! 🏖️🎉', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.6, jumpForce: -10, flyChance: 0.15, flySet: ['🎈', '✈️'], bonusChance: 0.4, bonusSet: ['🍉', '🍦', '🏖️', '🕶️', '🥥', '🍹'], obsSet: ['🦀', '🦈', '☀️', '🐚'], dinoEmoji: '😎' }
+        /* 0  */ { threshold: 0, title: 'שלב 1: שעת אפס... 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 1  */ { threshold: 150, title: 'שלב 2: בוחן פתע! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 2  */ { threshold: 300, title: 'שלב 3: הפסקת 10! לאסוף אוכל! (+20) 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.6, bonusSet: ['🥪', '🍎', '🍉', '🍦', '🍩', '🍕'], obsSet: ['🗑️', '🛍️', '🧻'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 2px 5px rgba(251,191,36,0.6))', dinoOpacity: '1' },
+        /* 3  */ { threshold: 450, title: 'שלב 4: הברזייה התפוצצה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0, bonusChance: 0, obsSet: ['💧', '🌊', '🚰', '🐟'], dinoEmoji: '🐊', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 4  */ { threshold: 600, title: 'שלב 5: שיעור ספורט! (מרחפים) 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎', '🎳'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 5  */ { threshold: 750, title: 'שלב 6: טיול שנתי - מסלול קשוח 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 0.6, jumpForce: -10, flyChance: 0.1, flySet: ['🦅', '🦇'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 6  */ { threshold: 900, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, flySet: ['🧪', '🦠'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '🐉', dinoFilter: 'hue-rotate(280deg) saturate(2)', dinoOpacity: '1' },
+        /* 7  */ { threshold: 1050, title: 'שלב 8: שיעור חלון! התרגעות... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.8, bonusSet: ['🎵', '🎶', '🎧', '📱', '🎮'], obsSet: ['🎒'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 8  */ { threshold: 1200, title: 'שלב 9: מזגן על 16 מעלות 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.1, flySet: ['🌨️', '🌬️'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1' },
+        /* 9  */ { threshold: 1350, title: 'שלב 10: המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 10 */ { threshold: 1500, title: 'שלב 11: ננעלת בלילה! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['👻', '🦇'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
+        /* 11 */ { threshold: 1650, title: 'שלב 12: החופש הגדול!!! 🏖️🎉', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.6, jumpForce: -10, flyChance: 0.15, flySet: ['🎈', '✈️'], bonusChance: 0.4, bonusSet: ['🍉', '🍦', '🏖️', '🕶️', '🥥', '🍹'], obsSet: ['🦀', '🦈', '☀️', '🐚'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 0 8px #facc15)', dinoOpacity: '1' }
     ];
 
     if (!document.getElementById('dino-styles')) {
@@ -353,6 +353,8 @@
 
             // Change Dino appearance to match stage
             dino.textContent = newStage.dinoEmoji || '🦖';
+            dino.style.filter = newStage.dinoFilter || 'none';
+            dino.style.opacity = newStage.dinoOpacity || '1';
             
             // Announce Event
             const stageTxt = document.createElement('div');
@@ -595,6 +597,8 @@
         isJumping = false;
         dino.style.transform = `translateY(0px)`;
         dino.textContent = '🦖';
+        dino.style.filter = 'none';
+        dino.style.opacity = '1';
         
         window.addEventListener('keydown', handleInput);
         window.addEventListener('touchstart', handleInput, {passive: false});
