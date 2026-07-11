@@ -791,10 +791,19 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     position: relative;
     overflow: hidden;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 6px;
+    gap: 2px;
     letter-spacing: -0.3px;
+}
+.btn-demo-subtext {
+    font-size: 0.75em;
+    opacity: 0.9;
+    font-weight: 700;
+}
+.btn-demo-maintext {
+    font-size: 1em;
 }
 .btn-demo-next {
     background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
