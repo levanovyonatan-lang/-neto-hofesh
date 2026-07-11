@@ -776,14 +776,15 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 .demo-buttons-row {
     display: flex;
     flex-direction: row;
-    gap: 12px;
+    gap: 4px;
     justify-content: center;
+    width: 100%;
 }
 .btn-demo-next, .btn-demo-summer {
     flex: 1;
     font-weight: 900;
-    font-size: calc(15px * var(--text-scale, 1));
-    padding: 14px 8px;
+    font-size: calc(14.5px * var(--text-scale, 1));
+    padding: 14px 4px;
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
