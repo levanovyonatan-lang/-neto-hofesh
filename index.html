@@ -198,13 +198,21 @@
             <div id="error-message"
                 style="color: #ef4444; font-weight: 900; text-align: center; display: none; background: #fee2e2; padding: 12px; border-radius: 16px;"
                 aria-live="assertive">רגע! לא סימנתם איפה אתם לומדים 🎒</div>
-            <div class="action-buttons-container">
+            <div id="default-action-buttons" class="action-buttons-container">
                 <button id="btn-next-vacation" class="btn-next-holiday" onclick="initApp('next')">
                     התחל ספירה לחופש הקרוב <span aria-hidden="true" style="font-size: 1.15em;">🚀</span>
                 </button>
                 <button class="btn-summer-holiday" onclick="initApp('summer')">
                     התחל ספירה לחופש הגדול <span aria-hidden="true" style="font-size: 1.15em;">☀️</span>
                 </button>
+            </div>
+            
+            <div id="demo-action-buttons" class="demo-action-buttons-container" style="display: none;">
+                <h3 class="demo-buttons-title">התחל ספירה:</h3>
+                <div class="demo-buttons-row">
+                    <button id="btn-demo-next-vacation" class="btn-demo-next" onclick="initApp('next')">לחופש הנוכחי</button>
+                    <button class="btn-demo-summer" onclick="initApp('summer')">עד לחופש הגדול</button>
+                </div>
             </div>
         </div>
 

@@ -726,7 +726,8 @@ function handleAiTip() {
 }
 function updateNextVacationButtonText() {
     const btn = document.getElementById('btn-next-vacation');
-    if (!btn) return;
+    const demoBtn = document.getElementById('btn-demo-next-vacation');
+    if (!btn && !demoBtn) return;
     
     const choice = document.querySelector('input[name="schoolType"]:checked');
     const schoolType = choice ? choice.value : 'elem';
@@ -762,9 +763,11 @@ function updateNextVacationButtonText() {
     }
     
     if (isVacationNow) {
-        btn.innerHTML = 'כמה ימים נשאר לחופש הנוכחי? <span aria-hidden="true" style="font-size: 1.15em;">⏳</span>';
+        if (btn) btn.innerHTML = 'כמה ימים נשאר לחופש הנוכחי? <span aria-hidden="true" style="font-size: 1.15em;">⏳</span>';
+        if (demoBtn) demoBtn.innerHTML = 'לחופש הנוכחי';
     } else {
-        btn.innerHTML = 'התחל ספירה לחופש הקרוב <span aria-hidden="true" style="font-size: 1.15em;">🚀</span>';
+        if (btn) btn.innerHTML = 'התחל ספירה לחופש הקרוב <span aria-hidden="true" style="font-size: 1.15em;">🚀</span>';
+        if (demoBtn) demoBtn.innerHTML = 'לחופש הקרוב';
     }
 }
 
@@ -785,6 +788,13 @@ window.onload = () => {
         const setupSteps = document.querySelectorAll('.setup-step');
         if (setupSteps.length >= 2) {
             setupSteps[1].style.marginTop = '2px';
+        }
+        
+        const defaultBtns = document.getElementById('default-action-buttons');
+        const demoBtns = document.getElementById('demo-action-buttons');
+        if (defaultBtns && demoBtns) {
+            defaultBtns.style.display = 'none';
+            demoBtns.style.display = 'block';
         }
     }
 
