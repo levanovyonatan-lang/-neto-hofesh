@@ -8,12 +8,12 @@
     const CLOUDS = ['☁️'];
     
     const EVENTS = {
-        'morning': { title: 'בוקר רגיל ☀️', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0.02, bonusChance: 0.05, obsSet: OBSTACLES },
-        'storm': { title: 'סערת חורף! ⛈️', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.1, bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂'] },
-        'gym': { title: 'שיעור ספורט! 🏀 (קפיצות באוויר)', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0.05, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎'] },
-        'recess': { title: 'הפסקת עשר! 🍔 (מלא בונוסים)', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.7, obsSet: OBSTACLES },
-        'popquiz': { title: 'מבחן פתע! 📝 (מלא מטוסי נייר)', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.35, bonusChance: 0, obsSet: ['📝', '📋', '📚', '💯'] },
-        'night': { title: 'טירוף לילי! 🌙', bg: 'linear-gradient(to bottom, #1e1b4b, #4c1d95)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, bonusChance: 0.05, obsSet: OBSTACLES }
+        'morning': { title: 'שעת אפס... למי יש כוח 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0.02, bonusChance: 0.05, obsSet: OBSTACLES },
+        'storm': { title: 'מי שם מזגן על 16 מעלות?! 🥶🌪️', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.1, bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂'] },
+        'gym': { title: 'שיעור ספורט! (רגע, למה מרחפים?) 🏀🚀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0.05, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎'] },
+        'recess': { title: 'הפסקת 10! להסתער על הקפיטריה! 🍕🏃‍♂️', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.7, obsSet: OBSTACLES },
+        'popquiz': { title: 'בוחן פתע!! להוציא דפים! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.35, bonusChance: 0, obsSet: ['📝', '📋', '📚', '💯'] },
+        'night': { title: 'ננעלת בבית הספר בטעות! 🌙👻', bg: 'linear-gradient(to bottom, #1e1b4b, #4c1d95)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, bonusChance: 0.05, obsSet: OBSTACLES }
     };
     const EVENT_KEYS = Object.keys(EVENTS);
     
