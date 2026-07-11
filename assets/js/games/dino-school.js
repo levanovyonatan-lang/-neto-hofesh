@@ -7,23 +7,20 @@
     const BONUSES = ['🍉', '🍦', '🏖️', '🕶️', '🥥', '🍹'];
     const CLOUDS = ['☁️'];
     
-    const EVENTS = {
-        'morning': { title: 'שעת אפס... למי יש כוח 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0.02, bonusChance: 0, obsSet: OBSTACLES },
-        'storm': { title: 'מי שם מזגן על 16 מעלות?! 🥶🌪️', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.1, bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂'] },
-        'gym': { title: 'שיעור ספורט! (רגע, למה מרחפים?) 🏀🚀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎'] },
-        'recess': { title: 'הפסקת 10! לאסוף אוכל לקפיטריה! (+20 נק) 🍕🏃‍♂️', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.7, obsSet: OBSTACLES },
-        'popquiz': { title: 'בוחן פתע!! להוציא דפים! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.35, bonusChance: 0, obsSet: ['📝', '📋', '📚', '💯'] },
-        'night': { title: 'ננעלת בבית הספר בטעות! 🌙👻', bg: 'linear-gradient(to bottom, #1e1b4b, #4c1d95)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, bonusChance: 0, obsSet: OBSTACLES }
-    };
-    const EVENT_KEYS = Object.keys(EVENTS);
+    const STAGES = [
+        { threshold: 0, title: 'שלב 1: שעת אפס... 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'] },
+        { threshold: 150, title: 'שלב 2: בוחן פתע! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'] },
+        { threshold: 350, title: 'שלב 3: הפסקת 10! לאסוף אוכל! (+20 נק) 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.6, obsSet: ['🥪', '🍎', '🗑️', '🛍️'] },
+        { threshold: 600, title: 'שלב 4: שיעור ספורט! (מרחפים) 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎', '🎳'] },
+        { threshold: 900, title: 'שלב 5: מזגן על 16 מעלות 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.1, bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'] },
+        { threshold: 1250, title: 'שלב 6: ננעלת בלילה! 🌙👻', bg: 'linear-gradient(to bottom, #1e1b4b, #4c1d95)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'] }
+    ];
     
     const GAME_SPEED_START = 4;
     
     let isGameActive = false;
     let score = 0;
-    let currentEvent = 'morning';
-    let lastEventScore = 0;
-    let nextEventThreshold = 150;
+    let currentStageIndex = 0;
     let gameLoopId = null;
     let triggerBtn = null;
     let scoreDisplay = null;
@@ -48,9 +45,7 @@
         isGameActive = true;
         isGameOver = false;
         score = 0;
-        currentEvent = 'morning';
-        lastEventScore = 0;
-        nextEventThreshold = 150;
+        currentStageIndex = 0;
         gameSpeed = GAME_SPEED_START;
         obstaclesList = [];
         frameCount = 0;
@@ -203,8 +198,8 @@
 
         if (!isJumping) {
             isJumping = true;
-            const ev = EVENTS[currentEvent];
-            dinoVelocity = ev.jumpForce;
+            const stage = STAGES[currentStageIndex];
+            dinoVelocity = stage.jumpForce;
             if (navigator.vibrate) navigator.vibrate([15]);
             
             // Dust effect
@@ -232,13 +227,13 @@
     }
 
     function spawnObstacle() {
-        const ev = EVENTS[currentEvent];
+        const stage = STAGES[currentStageIndex];
         let type = 'obstacle';
         const rand = Math.random();
         
-        if (rand < ev.flyChance) {
+        if (rand < stage.flyChance) {
             type = 'flying';
-        } else if (rand >= ev.flyChance && rand < ev.flyChance + ev.bonusChance) {
+        } else if (rand >= stage.flyChance && rand < stage.flyChance + stage.bonusChance) {
             type = 'bonus';
         }
         
@@ -246,7 +241,7 @@
     }
 
     function spawnEntity(type) {
-        const ev = EVENTS[currentEvent];
+        const stage = STAGES[currentStageIndex];
         const el = document.createElement('div');
         el.className = 'dino-element';
         
@@ -257,7 +252,7 @@
         let isCloud = (type === 'cloud');
 
         if (type === 'obstacle') {
-            emoji = ev.obsSet[Math.floor(Math.random() * ev.obsSet.length)];
+            emoji = stage.obsSet[Math.floor(Math.random() * stage.obsSet.length)];
         } else if (type === 'flying') {
             emoji = FLYING[Math.floor(Math.random() * FLYING.length)];
             bottom = '70px'; // Head height, requires no jump
@@ -300,8 +295,8 @@
         gameSpeed += 0.0003;
 
         // Physics
-        const ev = EVENTS[currentEvent];
-        dinoVelocity += ev.gravity;
+        const stage = STAGES[currentStageIndex];
+        dinoVelocity += stage.gravity;
         dinoY += dinoVelocity;
 
         if (dinoY >= 0) {
@@ -313,33 +308,31 @@
         dino.style.transform = `translateY(${dinoY}px)`;
 
         // Event transition based on dynamic threshold
-        if (score - lastEventScore >= nextEventThreshold) {
-            lastEventScore = score;
-            nextEventThreshold += 50; // Every event takes 50 points longer to reach!
-            
-            // Pick random event that is not current (and avoid night/storm too early)
-            let possibleEvents = EVENT_KEYS.filter(e => e !== currentEvent && e !== 'morning');
-            if (score < 300) possibleEvents = possibleEvents.filter(e => e !== 'night' && e !== 'storm');
-            
-            if (possibleEvents.length > 0) {
-                currentEvent = possibleEvents[Math.floor(Math.random() * possibleEvents.length)];
+        let nextStageIndex = currentStageIndex;
+        for (let i = 0; i < STAGES.length; i++) {
+            if (score >= STAGES[i].threshold) {
+                nextStageIndex = i;
             }
+        }
+
+        if (nextStageIndex > currentStageIndex) {
+            currentStageIndex = nextStageIndex;
+            const newStage = STAGES[currentStageIndex];
             
-            const newEv = EVENTS[currentEvent];
-            gameContainer.style.background = newEv.bg;
+            gameContainer.style.background = newStage.bg;
             gameContainer.style.transition = 'background 2s ease, height 0.4s ease';
             
             // Announce Event
             const stageTxt = document.createElement('div');
             stageTxt.className = 'dino-element';
-            stageTxt.textContent = newEv.title;
+            stageTxt.textContent = newStage.title;
             stageTxt.style.position = 'absolute';
             stageTxt.style.top = '40px';
             stageTxt.style.left = '50%';
             stageTxt.style.transform = 'translateX(-50%)';
             stageTxt.style.fontSize = '24px';
             stageTxt.style.fontWeight = 'bold';
-            stageTxt.style.color = (currentEvent === 'night' || currentEvent === 'storm') ? '#fff' : '#ef4444';
+            stageTxt.style.color = (currentStageIndex === 4 || currentStageIndex === 5) ? '#fff' : '#ef4444';
             stageTxt.style.zIndex = '10';
             stageTxt.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
             stageTxt.style.opacity = '1';
@@ -357,8 +350,8 @@
         if (spawnTimer <= 0) {
             spawnObstacle();
             
-            // Calculate next spawn gap based on difficulty (total score)
-            const diffLevel = Math.min(5, Math.floor(score / 250));
+            // Calculate next spawn gap based on difficulty
+            const diffLevel = Math.min(5, currentStageIndex);
             
             // minGap shrinks as you progress (down to 35 frames - very tight!)
             let minGap = Math.max(35, 90 - Math.floor(gameSpeed * 2) - (diffLevel * 10));
@@ -366,17 +359,17 @@
             // maxGap shrinks heavily so obstacles spawn much more frequently
             let maxGap = minGap + Math.max(20, 60 - diffLevel * 20) + Math.floor(Math.random() * 30);
             
-            // Adjust gap based on event
-            if (currentEvent === 'recess') { minGap += 30; maxGap += 40; } // fewer obstacles
-            if (currentEvent === 'popquiz') { minGap -= 10; maxGap -= 10; } // very dense
-            if (currentEvent === 'gym') { minGap += 20; maxGap += 30; } // slower jumps, need bigger gap
+            // Adjust gap based on stage
+            if (currentStageIndex === 2) { minGap += 30; maxGap += 40; } // recess: fewer obstacles
+            if (currentStageIndex === 1) { minGap -= 10; maxGap -= 10; } // popquiz: very dense
+            if (currentStageIndex === 3) { minGap += 20; maxGap += 30; } // gym: slower jumps, need bigger gap
             
             minGap = Math.max(35, minGap);
             spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
         }
         
         // Randomly spawn clouds
-        if (currentEvent !== 'storm' && currentEvent !== 'night' && Math.random() < 0.015) {
+        if (currentStageIndex !== 4 && currentStageIndex !== 5 && Math.random() < 0.015) {
             spawnEntity('cloud');
         }
 
@@ -524,9 +517,7 @@
         obstaclesList = [];
 
         score = 0;
-        currentEvent = 'morning';
-        lastEventScore = 0;
-        nextEventThreshold = 150;
+        currentStageIndex = 0;
         gameContainer.style.background = '';
         document.getElementById('dino-score-val').textContent = '0';
         isGameOver = false;
