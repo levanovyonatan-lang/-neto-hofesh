@@ -488,7 +488,9 @@
                     obstaclesList.splice(i, 1);
                     continue;
                 } else if (obs.type === 'obstacle' || obs.type === 'flying') {
-                    // God mode: just remove the obstacle on collision!
+                    // God mode: just remove the obstacle on collision and accumulate points!
+                    score += 10;
+                    document.getElementById('dino-score-val').textContent = score;
                     obs.el.remove();
                     obstaclesList.splice(i, 1);
                     continue;
