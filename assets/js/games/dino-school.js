@@ -223,10 +223,19 @@
         let type = 'obstacle';
         const rand = Math.random();
         
-        if (bgLevel >= 1 && rand < 0.10) {
-            type = 'flying'; // Only from level 1 (Afternoon)
-        } else if (bgLevel >= 2 && rand >= 0.10 && rand < 0.20) {
-            type = 'bonus'; // Only from level 2 (Sunset)
+        // Flying chance increases with level
+        const flyingChance = bgLevel >= 1 ? (0.05 + bgLevel * 0.05) : 0;
+        
+        // Bonus chance drops at the highest difficulty
+        let bonusChance = 0;
+        if (bgLevel === 2) bonusChance = 0.10;
+        if (bgLevel === 3) bonusChance = 0.15;
+        if (bgLevel === 4) bonusChance = 0.05;
+        
+        if (rand < flyingChance) {
+            type = 'flying';
+        } else if (rand >= flyingChance && rand < flyingChance + bonusChance) {
+            type = 'bonus';
         }
         
         spawnEntity(type);
@@ -282,8 +291,8 @@
         if (!isGameActive) return;
         frameCount++;
 
-        // Speed increases slowly
-        gameSpeed += 0.001;
+        // Speed increases faster as levels go up
+        gameSpeed += (0.001 + (bgLevel * 0.0005));
 
         // Physics
         dinoVelocity += GRAVITY;
@@ -344,10 +353,10 @@
         if (spawnTimer <= 0) {
             spawnObstacle();
             
-            // Calculate next spawn: ensure minimum gap to make it fair
-            // At speed 4, minGap is ~88. Max speed (e.g. 10), minGap stops at 80.
-            const minGap = Math.max(80, 120 - Math.floor(gameSpeed * 8));
-            const maxGap = minGap + 40 + Math.floor(Math.random() * 30);
+            // Calculate next spawn: allow smaller gaps as it gets harder (down to 55 frames)
+            const minGap = Math.max(55, 120 - Math.floor(gameSpeed * 10));
+            // Max gap gets tighter at higher levels
+            const maxGap = minGap + Math.max(15, 50 - bgLevel * 10) + Math.floor(Math.random() * 20);
             
             spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
         }
