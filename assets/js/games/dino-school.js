@@ -45,7 +45,7 @@
         
         const currentHeight = gameContainer.getBoundingClientRect().height;
         gameContainer.dataset.hwPrevHeight = gameContainer.style.height || '';
-        gameContainer.style.height = currentHeight + 'px';
+        gameContainer.style.height = '200px';
 
         gameContainer.style.position = 'relative';
         gameContainer.style.overflow = 'hidden';
