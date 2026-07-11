@@ -7,13 +7,22 @@
     const BONUSES = ['🍉', '🍦', '☀️', '🏖️', '🕶️'];
     const CLOUDS = ['☁️', '🌤️'];
     
+    const EVENTS = {
+        'morning': { title: 'בוקר רגיל ☀️', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0.02, bonusChance: 0.05, obsSet: OBSTACLES },
+        'storm': { title: 'סערת חורף! ⛈️', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.1, bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂'] },
+        'gym': { title: 'שיעור ספורט! 🏀 (קפיצות באוויר)', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0.05, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎'] },
+        'recess': { title: 'הפסקת עשר! 🍔 (מלא בונוסים)', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.7, obsSet: OBSTACLES },
+        'popquiz': { title: 'מבחן פתע! 📝 (מלא מטוסי נייר)', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.35, bonusChance: 0, obsSet: ['📝', '📋', '📚', '💯'] },
+        'night': { title: 'טירוף לילי! 🌙', bg: 'linear-gradient(to bottom, #1e1b4b, #4c1d95)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, bonusChance: 0.05, obsSet: OBSTACLES }
+    };
+    const EVENT_KEYS = Object.keys(EVENTS);
+    
     const GAME_SPEED_START = 4;
-    const JUMP_FORCE = -10;
-    const GRAVITY = 0.6;
     
     let isGameActive = false;
     let score = 0;
-    let bgLevel = 0; // Tracks background color state
+    let currentEvent = 'morning';
+    let lastEventScore = 0;
     let gameLoopId = null;
     let triggerBtn = null;
     let scoreDisplay = null;
@@ -38,7 +47,8 @@
         isGameActive = true;
         isGameOver = false;
         score = 0;
-        bgLevel = 0;
+        currentEvent = 'morning';
+        lastEventScore = 0;
         gameSpeed = GAME_SPEED_START;
         obstaclesList = [];
         frameCount = 0;
@@ -191,7 +201,8 @@
 
         if (!isJumping) {
             isJumping = true;
-            dinoVelocity = JUMP_FORCE;
+            const ev = EVENTS[currentEvent];
+            dinoVelocity = ev.jumpForce;
             if (navigator.vibrate) navigator.vibrate([15]);
             
             // Dust effect
@@ -219,22 +230,13 @@
     }
 
     function spawnObstacle() {
-        // Decide what to spawn
+        const ev = EVENTS[currentEvent];
         let type = 'obstacle';
         const rand = Math.random();
         
-        // Flying chance increases with level
-        const flyingChance = bgLevel >= 1 ? (0.05 + bgLevel * 0.05) : 0;
-        
-        // Bonus chance drops at the highest difficulty
-        let bonusChance = 0;
-        if (bgLevel === 2) bonusChance = 0.10;
-        if (bgLevel === 3) bonusChance = 0.15;
-        if (bgLevel === 4) bonusChance = 0.05;
-        
-        if (rand < flyingChance) {
+        if (rand < ev.flyChance) {
             type = 'flying';
-        } else if (rand >= flyingChance && rand < flyingChance + bonusChance) {
+        } else if (rand >= ev.flyChance && rand < ev.flyChance + ev.bonusChance) {
             type = 'bonus';
         }
         
@@ -242,6 +244,7 @@
     }
 
     function spawnEntity(type) {
+        const ev = EVENTS[currentEvent];
         const el = document.createElement('div');
         el.className = 'dino-element';
         
@@ -252,7 +255,7 @@
         let isCloud = (type === 'cloud');
 
         if (type === 'obstacle') {
-            emoji = OBSTACLES[Math.floor(Math.random() * OBSTACLES.length)];
+            emoji = ev.obsSet[Math.floor(Math.random() * ev.obsSet.length)];
         } else if (type === 'flying') {
             emoji = FLYING[Math.floor(Math.random() * FLYING.length)];
             bottom = '70px'; // Head height, requires no jump
@@ -295,7 +298,8 @@
         gameSpeed += 0.001;
 
         // Physics
-        dinoVelocity += GRAVITY;
+        const ev = EVENTS[currentEvent];
+        dinoVelocity += ev.gravity;
         dinoY += dinoVelocity;
 
         if (dinoY >= 0) {
@@ -306,46 +310,43 @@
 
         dino.style.transform = `translateY(${dinoY}px)`;
 
-        // Background Color transition based on score
-        let newLevel = bgLevel;
-        if (score >= 700) newLevel = 4;
-        else if (score >= 500) newLevel = 3;
-        else if (score >= 300) newLevel = 2;
-        else if (score >= 100) newLevel = 1;
-
-        if (newLevel > bgLevel) {
-            bgLevel = newLevel;
-            if (bgLevel === 4) gameContainer.style.background = 'linear-gradient(to bottom, #1e1b4b, #4c1d95)'; // Night
-            else if (bgLevel === 3) gameContainer.style.background = 'linear-gradient(to bottom, #fca5a5, #fef08a)'; // Sunset
-            else if (bgLevel === 2) gameContainer.style.background = 'linear-gradient(to bottom, #fed7aa, #fffbeb)'; // Afternoon
-            else if (bgLevel === 1) {
-                gameContainer.style.background = 'linear-gradient(to bottom, #bae6fd, #f0f9ff)'; // Sky Blue
-                gameContainer.style.transition = 'background 2s ease, height 0.4s ease'; // Ensure transition
+        // Event transition based on score
+        if (score - lastEventScore >= 150) {
+            lastEventScore = score;
+            
+            // Pick random event that is not current (and avoid night/storm too early)
+            let possibleEvents = EVENT_KEYS.filter(e => e !== currentEvent && e !== 'morning');
+            if (score < 300) possibleEvents = possibleEvents.filter(e => e !== 'night' && e !== 'storm');
+            
+            if (possibleEvents.length > 0) {
+                currentEvent = possibleEvents[Math.floor(Math.random() * possibleEvents.length)];
             }
-
-            // Show Stage Announcement
-            const stageNames = ['', 'שלב 2 - צהריים חם! ☀️', 'שלב 3 - שקיעה ובונוסים! 🌅', 'שלב 4 - טירוף לילי! 🌙'];
-            if (stageNames[bgLevel]) {
-                const stageTxt = document.createElement('div');
-                stageTxt.className = 'dino-element';
-                stageTxt.textContent = stageNames[bgLevel];
-                stageTxt.style.position = 'absolute';
-                stageTxt.style.top = '40px';
-                stageTxt.style.left = '50%';
-                stageTxt.style.transform = 'translateX(-50%)';
-                stageTxt.style.fontSize = '24px';
-                stageTxt.style.fontWeight = 'bold';
-                stageTxt.style.color = (bgLevel === 4) ? '#fff' : '#ef4444';
-                stageTxt.style.zIndex = '10';
-                stageTxt.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
-                stageTxt.style.opacity = '1';
-                stageTxt.style.transition = 'opacity 1s ease';
-                gameContainer.appendChild(stageTxt);
-                setTimeout(() => {
-                    if (stageTxt.parentNode) stageTxt.style.opacity = '0';
-                    setTimeout(() => { if (stageTxt.parentNode) stageTxt.remove(); }, 1000);
-                }, 2000);
-            }
+            
+            const newEv = EVENTS[currentEvent];
+            gameContainer.style.background = newEv.bg;
+            gameContainer.style.transition = 'background 2s ease, height 0.4s ease';
+            
+            // Announce Event
+            const stageTxt = document.createElement('div');
+            stageTxt.className = 'dino-element';
+            stageTxt.textContent = newEv.title;
+            stageTxt.style.position = 'absolute';
+            stageTxt.style.top = '40px';
+            stageTxt.style.left = '50%';
+            stageTxt.style.transform = 'translateX(-50%)';
+            stageTxt.style.fontSize = '24px';
+            stageTxt.style.fontWeight = 'bold';
+            stageTxt.style.color = (currentEvent === 'night' || currentEvent === 'storm') ? '#fff' : '#ef4444';
+            stageTxt.style.zIndex = '10';
+            stageTxt.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
+            stageTxt.style.opacity = '1';
+            stageTxt.style.transition = 'opacity 1s ease';
+            gameContainer.appendChild(stageTxt);
+            
+            setTimeout(() => {
+                if (stageTxt.parentNode) stageTxt.style.opacity = '0';
+                setTimeout(() => { if (stageTxt.parentNode) stageTxt.remove(); }, 1000);
+            }, 2500);
         }
 
         // Spawn entities
@@ -353,16 +354,22 @@
         if (spawnTimer <= 0) {
             spawnObstacle();
             
-            // Calculate next spawn: allow smaller gaps as it gets harder (down to 45 frames)
-            const minGap = Math.max(45, 100 - Math.floor(gameSpeed * 5) - (bgLevel * 10));
-            // Max gap gets MUCH tighter at higher levels, forcing dense obstacle clusters
-            const maxGap = minGap + Math.max(10, 60 - bgLevel * 15) + Math.floor(Math.random() * 20);
+            // Calculate next spawn gap based on difficulty (total score)
+            const diffLevel = Math.min(5, Math.floor(score / 150));
+            let minGap = Math.max(45, 100 - Math.floor(gameSpeed * 5) - (diffLevel * 10));
+            let maxGap = minGap + Math.max(10, 60 - diffLevel * 15) + Math.floor(Math.random() * 20);
             
+            // Adjust gap based on event
+            if (currentEvent === 'recess') { minGap += 30; maxGap += 40; } // fewer obstacles
+            if (currentEvent === 'popquiz') { minGap -= 10; maxGap -= 10; } // very dense
+            if (currentEvent === 'gym') { minGap += 20; maxGap += 30; } // slower jumps, need bigger gap
+            
+            minGap = Math.max(35, minGap);
             spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
         }
         
         // Randomly spawn clouds
-        if (bgLevel >= 1 && Math.random() < 0.005) {
+        if (currentEvent !== 'storm' && currentEvent !== 'night' && Math.random() < 0.015) {
             spawnEntity('cloud');
         }
 
@@ -510,7 +517,8 @@
         obstaclesList = [];
 
         score = 0;
-        bgLevel = 0;
+        currentEvent = 'morning';
+        lastEventScore = 0;
         gameContainer.style.background = '';
         document.getElementById('dino-score-val').textContent = '0';
         isGameOver = false;
