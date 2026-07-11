@@ -948,6 +948,13 @@ function showMainScreen() {
     const urlParams = new URLSearchParams(window.location.search);
     const isDemo = urlParams.get('show_demo') === 'true' || isExperimentalSite;
 
+    if (isDemo && !document.getElementById('destroy-homework-script')) {
+        const script = document.createElement('script');
+        script.id = 'destroy-homework-script';
+        script.src = 'assets/js/games/destroy-homework.js?v=2';
+        document.body.appendChild(script);
+    }
+
     if (!allTargets.find(t => t.id === 'roshHashana2026')) {
         allTargets.push(...targets2027);
         activeHolidays.push(...holidays2027);
