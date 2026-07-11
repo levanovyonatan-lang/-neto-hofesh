@@ -781,30 +781,48 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 }
 .btn-demo-next, .btn-demo-summer {
     flex: 1;
-    font-weight: 800;
-    font-size: calc(16px * var(--text-scale, 1));
-    padding: 14px 10px;
-    border-radius: 12px;
-    border: none;
+    font-weight: 900;
+    font-size: calc(15px * var(--text-scale, 1));
+    padding: 14px 8px;
+    border-radius: 20px;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1), inset 0 -3px 0 rgba(0,0,0,0.15);
-    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
 }
 .btn-demo-next {
-    background: linear-gradient(to bottom, #f97316, #ea580c);
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
     color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    border: 3px solid #ffedd5;
+    box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3), inset 0 -4px 0 rgba(194, 65, 12, 0.4);
 }
 .btn-demo-summer {
-    background: linear-gradient(to bottom, #fcd34d, #f59e0b);
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
     color: #422006;
-    text-shadow: none;
+    border: 3px solid #fef3c7;
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3), inset 0 -4px 0 rgba(217, 119, 6, 0.4);
 }
-.btn-demo-next:active, .btn-demo-summer:active {
+.btn-demo-next:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(234, 88, 12, 0.4), inset 0 -4px 0 rgba(194, 65, 12, 0.4);
+    background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
+}
+.btn-demo-summer:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(245, 158, 11, 0.4), inset 0 -4px 0 rgba(217, 119, 6, 0.4);
+    background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
+}
+.btn-demo-next:active {
     transform: translateY(2px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1), inset 0 -1px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 2px 10px rgba(234, 88, 12, 0.3), inset 0 -2px 0 rgba(194, 65, 12, 0.4);
 }
-.btn-demo-next:hover, .btn-demo-summer:hover {
-    filter: brightness(1.05);
+.btn-demo-summer:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3), inset 0 -2px 0 rgba(217, 119, 6, 0.4);
 }
 
