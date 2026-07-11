@@ -843,7 +843,8 @@ function initApp(countdownTarget = 'summer') {
     showMainScreen();
     // גלילה קלה למטה כדי שיראו את ה"בחרו יעד ספירה" והבאנר לא יסתיר
     setTimeout(() => {
-        window.scrollTo({ top: 50, behavior: 'smooth' });
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        window.scrollTo({ top: isAndroid ? 15 : 50, behavior: 'smooth' });
     }, 100);
 }
 
