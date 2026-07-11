@@ -42,8 +42,20 @@
         if (!timerCard) { isGameActive = false; return; }
 
         gameContainer = timerCard;
+        
+        const currentHeight = gameContainer.getBoundingClientRect().height;
+        gameContainer.dataset.hwPrevHeight = gameContainer.style.height || '';
+        gameContainer.style.height = currentHeight + 'px';
+
         gameContainer.style.position = 'relative';
         gameContainer.style.overflow = 'hidden';
+
+        setTimeout(() => {
+            window.scrollTo({
+                top: gameContainer.getBoundingClientRect().top + window.scrollY - 15,
+                behavior: 'smooth'
+            });
+        }, 50);
 
         // Hide original elements
         const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor, .net-days, .absolute-timer, #excluding-label, #vacation-message, #main-target-title, .net-days-container, #total-days-label');
@@ -263,6 +275,10 @@
 
         document.body.style.touchAction = ''; 
         gameContainer.style.overflow = '';
+        if (gameContainer.dataset.hwPrevHeight !== undefined) {
+            gameContainer.style.height = gameContainer.dataset.hwPrevHeight;
+            delete gameContainer.dataset.hwPrevHeight;
+        }
 
         // Hide original elements
         const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
