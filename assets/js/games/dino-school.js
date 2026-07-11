@@ -220,8 +220,12 @@
         // Decide what to spawn
         let type = 'obstacle';
         const rand = Math.random();
-        if (rand < 0.15) type = 'flying';
-        else if (rand < 0.3) type = 'bonus';
+        
+        if (bgLevel >= 1 && rand < 0.10) {
+            type = 'flying'; // Only from level 1 (Afternoon)
+        } else if (bgLevel >= 2 && rand >= 0.10 && rand < 0.20) {
+            type = 'bonus'; // Only from level 2 (Sunset)
+        }
         
         spawnEntity(type);
     }
@@ -292,19 +296,45 @@
         dino.style.transform = `translateY(${dinoY}px)`;
 
         // Background Color transition based on score
-        if (score >= 700 && bgLevel < 4) {
-            bgLevel = 4;
-            gameContainer.style.background = 'linear-gradient(to bottom, #1e1b4b, #4c1d95)'; // Night
-        } else if (score >= 500 && bgLevel < 3) {
-            bgLevel = 3;
-            gameContainer.style.background = 'linear-gradient(to bottom, #fca5a5, #fef08a)'; // Sunset
-        } else if (score >= 300 && bgLevel < 2) {
-            bgLevel = 2;
-            gameContainer.style.background = 'linear-gradient(to bottom, #fed7aa, #fffbeb)'; // Afternoon
-        } else if (score >= 100 && bgLevel < 1) {
-            bgLevel = 1;
-            gameContainer.style.background = 'linear-gradient(to bottom, #bae6fd, #f0f9ff)'; // Sky Blue
-            gameContainer.style.transition = 'background 2s ease, height 0.4s ease'; // Ensure transition
+        let newLevel = bgLevel;
+        if (score >= 700) newLevel = 4;
+        else if (score >= 500) newLevel = 3;
+        else if (score >= 300) newLevel = 2;
+        else if (score >= 100) newLevel = 1;
+
+        if (newLevel > bgLevel) {
+            bgLevel = newLevel;
+            if (bgLevel === 4) gameContainer.style.background = 'linear-gradient(to bottom, #1e1b4b, #4c1d95)'; // Night
+            else if (bgLevel === 3) gameContainer.style.background = 'linear-gradient(to bottom, #fca5a5, #fef08a)'; // Sunset
+            else if (bgLevel === 2) gameContainer.style.background = 'linear-gradient(to bottom, #fed7aa, #fffbeb)'; // Afternoon
+            else if (bgLevel === 1) {
+                gameContainer.style.background = 'linear-gradient(to bottom, #bae6fd, #f0f9ff)'; // Sky Blue
+                gameContainer.style.transition = 'background 2s ease, height 0.4s ease'; // Ensure transition
+            }
+
+            // Show Stage Announcement
+            const stageNames = ['', 'שלב 2 - צהריים חם! ☀️', 'שלב 3 - שקיעה ובונוסים! 🌅', 'שלב 4 - טירוף לילי! 🌙'];
+            if (stageNames[bgLevel]) {
+                const stageTxt = document.createElement('div');
+                stageTxt.className = 'dino-element';
+                stageTxt.textContent = stageNames[bgLevel];
+                stageTxt.style.position = 'absolute';
+                stageTxt.style.top = '40px';
+                stageTxt.style.left = '50%';
+                stageTxt.style.transform = 'translateX(-50%)';
+                stageTxt.style.fontSize = '24px';
+                stageTxt.style.fontWeight = 'bold';
+                stageTxt.style.color = (bgLevel === 4) ? '#fff' : '#ef4444';
+                stageTxt.style.zIndex = '10';
+                stageTxt.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
+                stageTxt.style.opacity = '1';
+                stageTxt.style.transition = 'opacity 1s ease';
+                gameContainer.appendChild(stageTxt);
+                setTimeout(() => {
+                    if (stageTxt.parentNode) stageTxt.style.opacity = '0';
+                    setTimeout(() => { if (stageTxt.parentNode) stageTxt.remove(); }, 1000);
+                }, 2000);
+            }
         }
 
         // Spawn entities
@@ -313,7 +343,7 @@
         }
         
         // Randomly spawn clouds
-        if (Math.random() < 0.015) {
+        if (bgLevel >= 1 && Math.random() < 0.005) {
             spawnEntity('cloud');
         }
 
