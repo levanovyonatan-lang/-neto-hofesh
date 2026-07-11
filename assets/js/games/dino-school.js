@@ -25,35 +25,7 @@
     let frameCount = 0;
     let isGameOver = false;
 
-    function createTriggerButton() {
-        const timerCard = document.getElementById('main-timer-bg');
-        if (!timerCard) return;
-
-        triggerBtn = document.createElement('div');
-        triggerBtn.id = 'dino-trigger';
-        triggerBtn.textContent = '🦖';
-        triggerBtn.title = 'לחצו עליי...';
-        triggerBtn.setAttribute('role', 'button');
-        triggerBtn.setAttribute('aria-label', 'משחק ריצת בית ספר');
-        
-        // Style the trigger
-        triggerBtn.style.position = 'absolute';
-        triggerBtn.style.bottom = '10px';
-        triggerBtn.style.left = '15px';
-        triggerBtn.style.fontSize = '24px';
-        triggerBtn.style.cursor = 'pointer';
-        triggerBtn.style.zIndex = '100';
-        triggerBtn.style.opacity = '0.7';
-        triggerBtn.style.transition = 'opacity 0.2s';
-        
-        triggerBtn.addEventListener('mouseenter', () => triggerBtn.style.opacity = '1');
-        triggerBtn.addEventListener('mouseleave', () => triggerBtn.style.opacity = '0.7');
-
-        timerCard.style.position = 'relative';
-        timerCard.appendChild(triggerBtn);
-
-        triggerBtn.addEventListener('click', startGame);
-    }
+    // trigger button logic removed
 
     function startGame() {
         if (isGameActive) return;
@@ -65,8 +37,6 @@
         frameCount = 0;
 
         if (navigator.vibrate) navigator.vibrate([30]);
-
-        triggerBtn.style.display = 'none';
 
         const timerCard = document.getElementById('main-timer-bg');
         if (!timerCard) { isGameActive = false; return; }
@@ -294,7 +264,7 @@
         document.body.style.touchAction = ''; 
         gameContainer.style.overflow = '';
 
-        // Restore original elements
+        // Hide original elements
         const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
         hiddenEls.forEach(el => {
             el.style.display = el.dataset.hwPrevDisplay;
@@ -304,19 +274,7 @@
         Array.from(gameContainer.children).forEach(el => {
             el.style.pointerEvents = '';
         });
-
-        setTimeout(() => {
-            if (triggerBtn) triggerBtn.style.display = '';
-        }, 500);
     }
 
-    function initHomeworkGame() {
-        createTriggerButton();
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHomeworkGame);
-    } else {
-        initHomeworkGame();
-    }
+    window.startDinoGame = startGame;
 })();

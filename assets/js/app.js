@@ -483,16 +483,31 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         }
     }
 
+    const isDemo = new URLSearchParams(window.location.search).get('show_demo') === 'true' || window.location.hostname.includes('github.io');
+    const gameBtn = document.getElementById('main-game-btn');
+    const btn = document.getElementById('main-ai-btn');
+
     if (aiToolsContainer) {
-        aiToolsContainer.style.display = shouldShowTips ? '' : 'none';
+        if (shouldShowTips) {
+            aiToolsContainer.style.display = '';
+            if (btn) btn.style.display = '';
+            if (gameBtn) gameBtn.style.display = 'none';
+        } else if (isDemo) {
+            aiToolsContainer.style.display = '';
+            if (btn) btn.style.display = 'none';
+            if (gameBtn) gameBtn.style.display = '';
+        } else {
+            aiToolsContainer.style.display = 'none';
+        }
     }
 
-    const btn = document.getElementById('main-ai-btn');
     const btnText = document.getElementById('ai-btn-text');
     const sponsorBanner = document.getElementById('tip-sponsor-banner');
 
     if (sponsorBanner) {
-        if (userConfig.schoolType === 'middle' || userConfig.schoolType === 'elem') {
+        if (!shouldShowTips) {
+            sponsorBanner.style.display = 'none';
+        } else if (userConfig.schoolType === 'middle' || userConfig.schoolType === 'elem') {
             sponsorBanner.style.display = 'none';
         } else {
             sponsorBanner.style.display = 'block';
