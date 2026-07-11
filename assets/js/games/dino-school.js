@@ -45,6 +45,10 @@
         
         const currentHeight = gameContainer.getBoundingClientRect().height;
         gameContainer.dataset.hwPrevHeight = gameContainer.style.height || '';
+        
+        gameContainer.style.height = currentHeight + 'px';
+        gameContainer.offsetHeight; // force reflow
+        gameContainer.style.transition = 'height 0.4s ease, box-shadow 0.4s ease';
         gameContainer.style.height = '200px';
 
         gameContainer.style.position = 'relative';
@@ -63,6 +67,7 @@
             overlay.style.height = '100vh';
             overlay.style.zIndex = '999';
             overlay.style.background = 'transparent';
+            overlay.style.transition = 'background 0.4s ease';
             document.body.appendChild(overlay);
         }
         overlay.style.display = 'block';
@@ -73,7 +78,7 @@
                 top: gameContainer.getBoundingClientRect().top + window.scrollY - 15,
                 behavior: 'smooth'
             });
-        }, 50);
+        }, 400);
 
         // Hide original elements
         const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor, .net-days, .absolute-timer, #excluding-label, #vacation-message, #main-target-title, .net-days-container, #total-days-label');
@@ -81,8 +86,17 @@
             if(el.dataset.hwPrevDisplay === undefined) {
                 el.dataset.hwPrevDisplay = el.style.display || getComputedStyle(el).display; 
             }
-            el.style.display = 'none'; 
+            el.style.transition = 'opacity 0.2s ease';
+            el.style.opacity = '0'; 
         });
+
+        setTimeout(() => {
+            hiddenEls.forEach(el => { 
+                el.style.display = 'none'; 
+                el.style.opacity = '';
+                el.style.transition = '';
+            });
+        }, 200);
 
         // Block pointer events on other original elements
         Array.from(gameContainer.children).forEach(el => {
@@ -334,10 +348,7 @@
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
         gameContainer.style.overflow = '';
-        if (gameContainer.dataset.hwPrevHeight !== undefined) {
-            gameContainer.style.height = gameContainer.dataset.hwPrevHeight;
-            delete gameContainer.dataset.hwPrevHeight;
-        }
+
         if (gameContainer.dataset.hwPrevZIndex !== undefined) {
             gameContainer.style.zIndex = gameContainer.dataset.hwPrevZIndex;
             delete gameContainer.dataset.hwPrevZIndex;
@@ -346,12 +357,41 @@
         const overlay = document.getElementById('game-lock-overlay');
         if (overlay) overlay.style.display = 'none';
 
-        // Hide original elements
+        gameContainer.style.transition = '';
+        gameContainer.style.height = '200px'; // Lock before restore
+        
         const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
         hiddenEls.forEach(el => {
             el.style.display = el.dataset.hwPrevDisplay;
-            delete el.dataset.hwPrevDisplay;
+            el.style.opacity = '0';
         });
+
+        // Measure new target height
+        gameContainer.style.height = 'auto';
+        const targetHeight = gameContainer.getBoundingClientRect().height;
+
+        gameContainer.style.height = '200px';
+        gameContainer.offsetHeight; // reflow
+        gameContainer.style.transition = 'height 0.4s ease';
+        gameContainer.style.height = targetHeight + 'px';
+
+        hiddenEls.forEach(el => {
+            el.style.transition = 'opacity 0.4s ease';
+            el.style.opacity = '1';
+        });
+
+        setTimeout(() => {
+            gameContainer.style.transition = '';
+            if (gameContainer.dataset.hwPrevHeight !== undefined) {
+                gameContainer.style.height = gameContainer.dataset.hwPrevHeight;
+                delete gameContainer.dataset.hwPrevHeight;
+            }
+            hiddenEls.forEach(el => {
+                el.style.transition = '';
+                el.style.opacity = '';
+                delete el.dataset.hwPrevDisplay;
+            });
+        }, 400);
 
         Array.from(gameContainer.children).forEach(el => {
             el.style.pointerEvents = '';

@@ -85,7 +85,19 @@
 
         // החבא את הטיפ וחסום לחיצות על כל האלמנטים המקוריים
         const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor, .net-days, .absolute-timer, #excluding-label, #vacation-message, #main-target-title, .net-days-container, #total-days-label');
-        hiddenEls.forEach(el => { el.dataset.hwPrevDisplay = el.style.display; el.style.display = 'none'; });
+        hiddenEls.forEach(el => { 
+            el.dataset.hwPrevDisplay = el.style.display || getComputedStyle(el).display; 
+            el.style.transition = 'opacity 0.2s ease';
+            el.style.opacity = '0';
+        });
+
+        setTimeout(() => {
+            hiddenEls.forEach(el => {
+                el.style.display = 'none';
+                el.style.opacity = '';
+                el.style.transition = '';
+            });
+        }, 200);
         // חסום לחיצות על כל הילדים המקוריים
         Array.from(gameContainer.children).forEach(el => {
             if (!el.classList.contains('hw-paper') && !el.classList.contains('hw-score-display') && !el.classList.contains('hw-explosion') && el.id !== 'hw-arena-title') {
@@ -213,7 +225,26 @@
 
             // החזר אלמנטים מוחבאים והחזר לחיצות
             const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
-            hiddenEls.forEach(el => { el.style.display = el.dataset.hwPrevDisplay || ''; delete el.dataset.hwPrevDisplay; });
+            
+            hiddenEls.forEach(el => {
+                el.style.display = el.dataset.hwPrevDisplay || '';
+                el.style.opacity = '0';
+            });
+            
+            setTimeout(() => {
+                hiddenEls.forEach(el => {
+                    el.style.transition = 'opacity 0.4s ease';
+                    el.style.opacity = '1';
+                });
+            }, 50);
+
+            setTimeout(() => {
+                hiddenEls.forEach(el => {
+                    el.style.transition = '';
+                    el.style.opacity = '';
+                    delete el.dataset.hwPrevDisplay;
+                });
+            }, 450);
             Array.from(gameContainer.children).forEach(el => { el.style.pointerEvents = ''; });
         }
 
