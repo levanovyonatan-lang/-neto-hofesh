@@ -409,11 +409,11 @@
                     // Calculate next spawn gap based on difficulty
                     const diffLevel = Math.min(5, currentStageIndex);
                     
-                    // minGap shrinks as you progress (down to 35 frames - very tight!)
-                    let minGap = Math.max(35, 90 - Math.floor(gameSpeed * 2) - (diffLevel * 10));
+                    // minGap starts much tighter (72 instead of 90) so early stages are already dense
+                    let minGap = Math.max(35, 72 - Math.floor(gameSpeed * 1.5) - (diffLevel * 6));
                     
-                    // maxGap shrinks heavily so obstacles spawn much more frequently
-                    let maxGap = minGap + Math.max(20, 60 - diffLevel * 20) + Math.floor(Math.random() * 30);
+                    // maxGap is tighter to spawn obstacles more frequently
+                    let maxGap = minGap + Math.max(15, 35 - diffLevel * 8) + Math.floor(Math.random() * 15);
                     
                     // Adjust gap based on stage
                     if (currentStageIndex === 2) { minGap += 30; maxGap += 40; } // recess: fewer obstacles
