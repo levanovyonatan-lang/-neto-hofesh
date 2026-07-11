@@ -50,6 +50,7 @@
     let dinoVelocity = 0;
     let isJumping = false;
     let obstaclesList = [];
+    let obstacleQueue = []; // Queue for spawning combos
     let gameSpeed = GAME_SPEED_START;
     let spawnTimer = 0;
     let frameCount = 0;
@@ -65,6 +66,7 @@
         currentStageIndex = 0;
         gameSpeed = GAME_SPEED_START;
         obstaclesList = [];
+        obstacleQueue = [];
         frameCount = 0;
         spawnTimer = 60; // Initial delay
 
@@ -374,28 +376,52 @@
         // Spawn entities
         spawnTimer--;
         if (spawnTimer <= 0) {
-            spawnObstacle();
+            const stage = STAGES[currentStageIndex];
             
-            // Calculate next spawn gap based on difficulty
-            const diffLevel = Math.min(5, currentStageIndex);
-            
-            // minGap shrinks as you progress (down to 35 frames - very tight!)
-            let minGap = Math.max(35, 90 - Math.floor(gameSpeed * 2) - (diffLevel * 10));
-            
-            // maxGap shrinks heavily so obstacles spawn much more frequently
-            let maxGap = minGap + Math.max(20, 60 - diffLevel * 20) + Math.floor(Math.random() * 30);
-            
-            // Adjust gap based on stage
-            if (currentStageIndex === 2) { minGap += 30; maxGap += 40; } // recess: fewer obstacles
-            if (currentStageIndex === 7) { minGap += 60; maxGap += 80; } // free period: very relaxing
-            if (currentStageIndex === 3) { minGap += 10; maxGap += 20; } // fountain
-            if (currentStageIndex === 1 || currentStageIndex === 5 || currentStageIndex === 9 || currentStageIndex === 10) { 
-                minGap -= 10; maxGap -= 15; // dense stages
+            if (obstacleQueue.length > 0) {
+                const nextQueued = obstacleQueue.shift();
+                spawnEntity(nextQueued.type);
+                spawnTimer = nextQueued.delay;
+            } else {
+                const randCombo = Math.random();
+                // 35% chance to spawn a combo if stage has flying elements
+                if (stage.flyChance > 0 && randCombo < 0.35) {
+                    const isGroundFirst = Math.random() < 0.5;
+                    const delay = Math.floor(Math.random() * 15 + 48); // 48-63 frames delay
+                    
+                    if (isGroundFirst) {
+                        spawnEntity('obstacle');
+                        obstacleQueue.push({ type: 'flying', delay: delay });
+                    } else {
+                        spawnEntity('flying');
+                        obstacleQueue.push({ type: 'obstacle', delay: delay });
+                    }
+                    spawnTimer = delay;
+                } else {
+                    spawnObstacle();
+                    
+                    // Calculate next spawn gap based on difficulty
+                    const diffLevel = Math.min(5, currentStageIndex);
+                    
+                    // minGap shrinks as you progress (down to 35 frames - very tight!)
+                    let minGap = Math.max(35, 90 - Math.floor(gameSpeed * 2) - (diffLevel * 10));
+                    
+                    // maxGap shrinks heavily so obstacles spawn much more frequently
+                    let maxGap = minGap + Math.max(20, 60 - diffLevel * 20) + Math.floor(Math.random() * 30);
+                    
+                    // Adjust gap based on stage
+                    if (currentStageIndex === 2) { minGap += 30; maxGap += 40; } // recess: fewer obstacles
+                    if (currentStageIndex === 7) { minGap += 60; maxGap += 80; } // free period: very relaxing
+                    if (currentStageIndex === 3) { minGap += 10; maxGap += 20; } // fountain
+                    if (currentStageIndex === 1 || currentStageIndex === 5 || currentStageIndex === 9 || currentStageIndex === 10) { 
+                        minGap -= 10; maxGap -= 15; // dense stages
+                    }
+                    if (currentStageIndex === 4) { minGap += 20; maxGap += 30; } // gym: slower jumps, need bigger gap
+                    
+                    minGap = Math.max(35, minGap);
+                    spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
+                }
             }
-            if (currentStageIndex === 4) { minGap += 20; maxGap += 30; } // gym: slower jumps, need bigger gap
-            
-            minGap = Math.max(35, minGap);
-            spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
         }
         
         // Randomly spawn clouds
@@ -545,6 +571,7 @@
             if (obs.el && obs.el.parentNode) obs.el.remove();
         });
         obstaclesList = [];
+        obstacleQueue = [];
 
         score = 0;
         currentStageIndex = 0;
