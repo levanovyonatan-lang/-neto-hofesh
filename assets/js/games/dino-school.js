@@ -4,17 +4,31 @@
 (function() {
     const OBSTACLES = ['👩‍🏫', '👨‍🏫', '🎒', '🚌', '⏰', '📚', '📝', '🍎', '🥪', '🧻', '🧪', '📋', '📐'];
     const FLYING = ['✈️', '🦅'];
-    const BONUSES = ['🍉', '🍦', '🏖️', '🕶️', '🥥', '🍹'];
-    const CLOUDS = ['☁️'];
-    
     const STAGES = [
-        { threshold: 0, title: 'שלב 1: שעת אפס... 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'] },
-        { threshold: 150, title: 'שלב 2: בוחן פתע! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'] },
-        { threshold: 350, title: 'שלב 3: הפסקת 10! לאסוף אוכל! (+20 נק) 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.6, obsSet: ['🥪', '🍎', '🗑️', '🛍️'] },
-        { threshold: 600, title: 'שלב 4: שיעור ספורט! (מרחפים) 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎', '🎳'] },
-        { threshold: 900, title: 'שלב 5: מזגן על 16 מעלות 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.1, bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'] },
-        { threshold: 1250, title: 'שלב 6: ננעלת בלילה! 🌙👻', bg: 'linear-gradient(to bottom, #1e1b4b, #4c1d95)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'] }
+        /* 0  */ { threshold: 0, title: 'שלב 1: שעת אפס... 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'] },
+        /* 1  */ { threshold: 150, title: 'שלב 2: בוחן פתע! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'] },
+        /* 2  */ { threshold: 350, title: 'שלב 3: הפסקת 10! لاסוף אוכל! (+20) 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.6, bonusSet: ['🥪', '🍎', '🍉', '🍦', '🍩', '🍕'], obsSet: ['🗑️', '🛍️', '🧻'] },
+        /* 3  */ { threshold: 600, title: 'שלב 4: הברזייה התפוצצה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0, bonusChance: 0, obsSet: ['💧', '🌊', '🚰', '🐟'] },
+        /* 4  */ { threshold: 900, title: 'שלב 5: שיעור ספורט! (מרחפים) 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎', '🎳'] },
+        /* 5  */ { threshold: 1250, title: 'שלב 6: טיול שנתי - מסלול קשוח 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 0.6, jumpForce: -10, flyChance: 0.1, flySet: ['🦅', '🦇'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'] },
+        /* 6  */ { threshold: 1650, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, flySet: ['🧪', '🦠'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'] },
+        /* 7  */ { threshold: 2100, title: 'שלב 8: שיעור חלון! התרגעות... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.8, bonusSet: ['🎵', '🎶', '🎧', '📱', '🎮'], obsSet: ['🎒'] },
+        /* 8  */ { threshold: 2500, title: 'שלב 9: מזגן על 16 מעלות 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.1, flySet: ['🌨️', '🌬️'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'] },
+        /* 9  */ { threshold: 3000, title: 'שלב 10: המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'] },
+        /* 10 */ { threshold: 3500, title: 'שלב 11: ננעלת בלילה! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['👻', '🦇'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'] }
     ];
+
+    if (!document.getElementById('dino-styles')) {
+        const style = document.createElement('style');
+        style.id = 'dino-styles';
+        style.textContent = `
+        @keyframes flashRed {
+            0% { box-shadow: inset 0 0 50px rgba(239,68,68,0.2); }
+            100% { box-shadow: inset 0 0 150px rgba(239,68,68,0.9); }
+        }
+        `;
+        document.head.appendChild(style);
+    }
     
     const GAME_SPEED_START = 4;
     
@@ -254,10 +268,13 @@
         if (type === 'obstacle') {
             emoji = stage.obsSet[Math.floor(Math.random() * stage.obsSet.length)];
         } else if (type === 'flying') {
-            emoji = FLYING[Math.floor(Math.random() * FLYING.length)];
+            const pool = stage.flySet || FLYING;
+            emoji = pool[Math.floor(Math.random() * pool.length)];
             bottom = '70px'; // Head height, requires no jump
+            speedMult = 1.2; 
         } else if (type === 'bonus') {
-            emoji = BONUSES[Math.floor(Math.random() * BONUSES.length)];
+            const pool = stage.bonusSet || BONUSES;
+            emoji = pool[Math.floor(Math.random() * pool.length)];
             bottom = '95px'; // High up, requires jump
         } else if (isCloud) {
             emoji = CLOUDS[Math.floor(Math.random() * CLOUDS.length)];
@@ -322,6 +339,12 @@
             gameContainer.style.background = newStage.bg;
             gameContainer.style.transition = 'background 2s ease, height 0.4s ease';
             
+            if (currentStageIndex === 9) { // Stage 10: Principal
+                gameContainer.style.animation = 'flashRed 0.5s infinite alternate';
+            } else {
+                gameContainer.style.animation = 'none';
+            }
+            
             // Announce Event
             const stageTxt = document.createElement('div');
             stageTxt.className = 'dino-element';
@@ -361,8 +384,12 @@
             
             // Adjust gap based on stage
             if (currentStageIndex === 2) { minGap += 30; maxGap += 40; } // recess: fewer obstacles
-            if (currentStageIndex === 1) { minGap -= 10; maxGap -= 10; } // popquiz: very dense
-            if (currentStageIndex === 3) { minGap += 20; maxGap += 30; } // gym: slower jumps, need bigger gap
+            if (currentStageIndex === 7) { minGap += 60; maxGap += 80; } // free period: very relaxing
+            if (currentStageIndex === 3) { minGap += 10; maxGap += 20; } // fountain
+            if (currentStageIndex === 1 || currentStageIndex === 5 || currentStageIndex === 9 || currentStageIndex === 10) { 
+                minGap -= 10; maxGap -= 15; // dense stages
+            }
+            if (currentStageIndex === 4) { minGap += 20; maxGap += 30; } // gym: slower jumps, need bigger gap
             
             minGap = Math.max(35, minGap);
             spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
@@ -519,6 +546,7 @@
         score = 0;
         currentStageIndex = 0;
         gameContainer.style.background = '';
+        gameContainer.style.animation = 'none';
         document.getElementById('dino-score-val').textContent = '0';
         isGameOver = false;
         gameSpeed = GAME_SPEED_START;
