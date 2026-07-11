@@ -5,7 +5,7 @@
     const OBSTACLES = ['👩‍🏫', '👨‍🏫', '🎒', '🚌', '⏰', '📚', '📝', '🍎', '🥪', '🧻', '🧪', '📋', '📐'];
     const FLYING = ['✈️', '🦅'];
     const BONUSES = ['🍉', '🍦', '🏖️', '🕶️', '🥥', '🍹'];
-    const CLOUDS = ['☁️', '🌤️'];
+    const CLOUDS = ['☁️'];
     
     const EVENTS = {
         'morning': { title: 'בוקר רגיל ☀️', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0.02, bonusChance: 0.05, obsSet: OBSTACLES },
