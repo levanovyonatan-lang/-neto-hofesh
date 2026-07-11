@@ -116,7 +116,7 @@
         // Score Display
         scoreDisplay = document.createElement('div');
         scoreDisplay.className = 'dino-element';
-        scoreDisplay.innerHTML = '💯 <span id="dino-score-val">0</span>';
+        scoreDisplay.innerHTML = '<span id="dino-score-val">0</span>';
         scoreDisplay.style.position = 'absolute';
         scoreDisplay.style.top = '15px';
         scoreDisplay.style.right = '20px';
