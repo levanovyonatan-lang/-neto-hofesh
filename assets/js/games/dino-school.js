@@ -76,7 +76,7 @@
         gameContainer.style.overflow = 'hidden';
 
         // Hide original elements
-        const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor, .net-days, .absolute-timer, #excluding-label, #vacation-message');
+        const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor, .net-days, .absolute-timer, #excluding-label, #vacation-message, #main-target-title, .net-days-container, #total-days-label');
         hiddenEls.forEach(el => { 
             if(el.dataset.hwPrevDisplay === undefined) {
                 el.dataset.hwPrevDisplay = el.style.display || getComputedStyle(el).display; 

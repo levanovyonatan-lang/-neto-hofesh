@@ -53,7 +53,7 @@
         gameContainer.classList.add('hw-arena-mode');
 
         // החבא את הטיפ וחסום לחיצות על כל האלמנטים המקוריים
-        const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor');
+        const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor, .net-days, .absolute-timer, #excluding-label, #vacation-message, #main-target-title, .net-days-container, #total-days-label');
         hiddenEls.forEach(el => { el.dataset.hwPrevDisplay = el.style.display; el.style.display = 'none'; });
         // חסום לחיצות על כל הילדים המקוריים
         Array.from(gameContainer.children).forEach(el => {
