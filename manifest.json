@@ -3,8 +3,8 @@
   "short_name": "נטו חופש",
   "start_url": "./?v=167",
   "display": "standalone",
-  "background_color": "#fefce8",
-  "theme_color": "#fefce8",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "description": "ספירה לאחור לימי לימוד נטו עד החופש הגדול בלי שבתות וחגים",
   "icons": [
     {
