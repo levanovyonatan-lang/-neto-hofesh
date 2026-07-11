@@ -783,7 +783,7 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 .btn-demo-next, .btn-demo-summer {
     flex: 1;
     font-weight: 900;
-    font-size: calc(15.5px * var(--text-scale, 1));
+    font-size: calc(17px * var(--text-scale, 1));
     padding: 18px 4px;
     border-radius: 24px;
     cursor: pointer;
