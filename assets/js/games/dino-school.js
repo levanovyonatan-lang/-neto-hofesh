@@ -4,10 +4,13 @@
 (function() {
     const OBSTACLES = ['👩‍🏫', '👨‍🏫', '🎒', '🚌', '⏰', '📚', '📝', '🍎', '🥪', '🧻', '🧪', '📋', '📐'];
     const FLYING = ['✈️', '🦅'];
+    const BONUSES = ['🍉', '🍦', '🏖️', '🕶️', '🥥', '🍹'];
+    const CLOUDS = ['☁️'];
+    
     const STAGES = [
         /* 0  */ { threshold: 0, title: 'שלב 1: שעת אפס... 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'] },
         /* 1  */ { threshold: 150, title: 'שלב 2: בוחן פתע! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'] },
-        /* 2  */ { threshold: 350, title: 'שלב 3: הפסקת 10! لاסוף אוכל! (+20) 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.6, bonusSet: ['🥪', '🍎', '🍉', '🍦', '🍩', '🍕'], obsSet: ['🗑️', '🛍️', '🧻'] },
+        /* 2  */ { threshold: 350, title: 'שלב 3: הפסקת 10! לאסוף אוכל! (+20) 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.6, bonusSet: ['🥪', '🍎', '🍉', '🍦', '🍩', '🍕'], obsSet: ['🗑️', '🛍️', '🧻'] },
         /* 3  */ { threshold: 600, title: 'שלב 4: הברזייה התפוצצה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0, bonusChance: 0, obsSet: ['💧', '🌊', '🚰', '🐟'] },
         /* 4  */ { threshold: 900, title: 'שלב 5: שיעור ספורט! (מרחפים) 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎', '🎳'] },
         /* 5  */ { threshold: 1250, title: 'שלב 6: טיול שנתי - מסלול קשוח 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 0.6, jumpForce: -10, flyChance: 0.1, flySet: ['🦅', '🦇'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'] },
