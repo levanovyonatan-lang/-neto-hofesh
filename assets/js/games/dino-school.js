@@ -8,12 +8,12 @@
     const CLOUDS = ['☁️'];
     
     const EVENTS = {
-        'morning': { title: 'שעת אפס... למי יש כוח 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0.02, bonusChance: 0.05, obsSet: OBSTACLES },
+        'morning': { title: 'שעת אפס... למי יש כוח 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0.02, bonusChance: 0, obsSet: OBSTACLES },
         'storm': { title: 'מי שם מזגן על 16 מעלות?! 🥶🌪️', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.1, bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂'] },
-        'gym': { title: 'שיעור ספורט! (רגע, למה מרחפים?) 🏀🚀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0.05, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎'] },
-        'recess': { title: 'הפסקת 10! להסתער על הקפיטריה! 🍕🏃‍♂️', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.7, obsSet: OBSTACLES },
+        'gym': { title: 'שיעור ספורט! (רגע, למה מרחפים?) 🏀🚀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎'] },
+        'recess': { title: 'הפסקת 10! לאסוף אוכל לקפיטריה! (+20 נק) 🍕🏃‍♂️', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.7, obsSet: OBSTACLES },
         'popquiz': { title: 'בוחן פתע!! להוציא דפים! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.35, bonusChance: 0, obsSet: ['📝', '📋', '📚', '💯'] },
-        'night': { title: 'ננעלת בבית הספר בטעות! 🌙👻', bg: 'linear-gradient(to bottom, #1e1b4b, #4c1d95)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, bonusChance: 0.05, obsSet: OBSTACLES }
+        'night': { title: 'ננעלת בבית הספר בטעות! 🌙👻', bg: 'linear-gradient(to bottom, #1e1b4b, #4c1d95)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, bonusChance: 0, obsSet: OBSTACLES }
     };
     const EVENT_KEYS = Object.keys(EVENTS);
     
@@ -23,6 +23,7 @@
     let score = 0;
     let currentEvent = 'morning';
     let lastEventScore = 0;
+    let nextEventThreshold = 150;
     let gameLoopId = null;
     let triggerBtn = null;
     let scoreDisplay = null;
@@ -49,6 +50,7 @@
         score = 0;
         currentEvent = 'morning';
         lastEventScore = 0;
+        nextEventThreshold = 150;
         gameSpeed = GAME_SPEED_START;
         obstaclesList = [];
         frameCount = 0;
@@ -294,8 +296,8 @@
         if (!isGameActive) return;
         frameCount++;
 
-        // Speed increases slowly but steadily
-        gameSpeed += 0.001;
+        // Speed increases VERY slowly but steadily
+        gameSpeed += 0.0003;
 
         // Physics
         const ev = EVENTS[currentEvent];
@@ -310,9 +312,10 @@
 
         dino.style.transform = `translateY(${dinoY}px)`;
 
-        // Event transition based on score
-        if (score - lastEventScore >= 250) {
+        // Event transition based on dynamic threshold
+        if (score - lastEventScore >= nextEventThreshold) {
             lastEventScore = score;
+            nextEventThreshold += 50; // Every event takes 50 points longer to reach!
             
             // Pick random event that is not current (and avoid night/storm too early)
             let possibleEvents = EVENT_KEYS.filter(e => e !== currentEvent && e !== 'morning');
@@ -358,10 +361,10 @@
             const diffLevel = Math.min(5, Math.floor(score / 250));
             
             // minGap shrinks as you progress (down to 35 frames - very tight!)
-            let minGap = Math.max(35, 90 - Math.floor(gameSpeed * 4) - (diffLevel * 10));
+            let minGap = Math.max(35, 90 - Math.floor(gameSpeed * 2) - (diffLevel * 10));
             
-            // maxGap stays relatively large to create uneven, clustered spacing
-            let maxGap = minGap + Math.max(40, 100 - diffLevel * 15) + Math.floor(Math.random() * 60);
+            // maxGap shrinks heavily so obstacles spawn much more frequently
+            let maxGap = minGap + Math.max(20, 60 - diffLevel * 20) + Math.floor(Math.random() * 30);
             
             // Adjust gap based on event
             if (currentEvent === 'recess') { minGap += 30; maxGap += 40; } // fewer obstacles
@@ -409,13 +412,13 @@
                 dinoHitbox.top < obsHitbox.bottom
             ) {
                 if (obs.type === 'bonus') {
-                    score += 50;
+                    score += 20;
                     document.getElementById('dino-score-val').textContent = score;
                     if (navigator.vibrate) navigator.vibrate([20, 20]);
                     
                     const floatText = document.createElement('div');
                     floatText.className = 'dino-element';
-                    floatText.textContent = '+50';
+                    floatText.textContent = '+20';
                     floatText.style.position = 'absolute';
                     floatText.style.right = obs.x + 'px';
                     floatText.style.bottom = '110px';
@@ -523,6 +526,7 @@
         score = 0;
         currentEvent = 'morning';
         lastEventScore = 0;
+        nextEventThreshold = 150;
         gameContainer.style.background = '';
         document.getElementById('dino-score-val').textContent = '0';
         isGameOver = false;
