@@ -311,7 +311,7 @@
         dino.style.transform = `translateY(${dinoY}px)`;
 
         // Event transition based on score
-        if (score - lastEventScore >= 150) {
+        if (score - lastEventScore >= 250) {
             lastEventScore = score;
             
             // Pick random event that is not current (and avoid night/storm too early)
@@ -355,9 +355,13 @@
             spawnObstacle();
             
             // Calculate next spawn gap based on difficulty (total score)
-            const diffLevel = Math.min(5, Math.floor(score / 150));
-            let minGap = Math.max(45, 100 - Math.floor(gameSpeed * 5) - (diffLevel * 10));
-            let maxGap = minGap + Math.max(10, 60 - diffLevel * 15) + Math.floor(Math.random() * 20);
+            const diffLevel = Math.min(5, Math.floor(score / 250));
+            
+            // minGap shrinks as you progress (down to 35 frames - very tight!)
+            let minGap = Math.max(35, 90 - Math.floor(gameSpeed * 4) - (diffLevel * 10));
+            
+            // maxGap stays relatively large to create uneven, clustered spacing
+            let maxGap = minGap + Math.max(40, 100 - diffLevel * 15) + Math.floor(Math.random() * 60);
             
             // Adjust gap based on event
             if (currentEvent === 'recess') { minGap += 30; maxGap += 40; } // fewer obstacles
