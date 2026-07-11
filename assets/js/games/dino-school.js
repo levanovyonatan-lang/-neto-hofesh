@@ -140,7 +140,7 @@
         dino.textContent = '🦖';
         dino.style.position = 'absolute';
         dino.style.bottom = '30px';
-        dino.style.left = '30px';
+        dino.style.right = '30px';
         dino.style.fontSize = '35px';
         dino.style.lineHeight = '1';
         dino.style.width = '35px';
@@ -181,7 +181,7 @@
         obs.textContent = emoji;
         obs.style.position = 'absolute';
         obs.style.bottom = '30px';
-        obs.style.left = '100%';
+        obs.style.right = '100%';
         obs.style.fontSize = '28px';
         obs.style.lineHeight = '1';
         obs.style.zIndex = '5';
@@ -232,7 +232,7 @@
         for (let i = obstaclesList.length - 1; i >= 0; i--) {
             const obs = obstaclesList[i];
             obs.x -= gameSpeed;
-            obs.el.style.left = obs.x + 'px';
+            obs.el.style.right = obs.x + 'px';
 
             const obsRect = obs.el.getBoundingClientRect();
             const obsHitbox = {
@@ -254,7 +254,7 @@
             }
 
             // Score
-            if (!obs.passed && obsHitbox.right < dinoHitbox.left) {
+            if (!obs.passed && obsHitbox.left > dinoHitbox.right) {
                 obs.passed = true;
                 score += 10;
                 document.getElementById('dino-score-val').textContent = score;
@@ -291,7 +291,7 @@
         title.style.zIndex = '200';
         gameContainer.appendChild(title);
 
-        dino.style.transform = `translateY(${dinoY}px) rotate(90deg)`;
+        dino.style.transform = `translateY(${dinoY}px) rotate(-90deg)`;
 
         window.removeEventListener('keydown', handleInput);
         window.removeEventListener('touchstart', handleInput);
