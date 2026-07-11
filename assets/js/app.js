@@ -764,10 +764,10 @@ function updateNextVacationButtonText() {
     
     if (isVacationNow) {
         if (btn) btn.innerHTML = 'כמה ימים נשאר עד תחילת הלימודים? <span aria-hidden="true" style="font-size: 1.15em;">⏳</span>';
-        if (demoBtn) demoBtn.innerHTML = '<span class="btn-demo-subtext">התחל ספירה עד</span><span class="btn-demo-maintext">תחילת הלימודים ⏳</span>';
+        if (demoBtn) demoBtn.innerHTML = 'תחילת הלימודים ⏳';
     } else {
         if (btn) btn.innerHTML = 'התחל ספירה לחופש הקרוב <span aria-hidden="true" style="font-size: 1.15em;">🚀</span>';
-        if (demoBtn) demoBtn.innerHTML = '<span class="btn-demo-subtext">התחל ספירה עד</span><span class="btn-demo-maintext">לחופש הקרוב 🚀</span>';
+        if (demoBtn) demoBtn.innerHTML = 'לחופש הקרוב 🚀';
     }
 }
 
