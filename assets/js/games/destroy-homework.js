@@ -67,8 +67,7 @@
             overlay.style.width = '100vw';
             overlay.style.height = '100vh';
             overlay.style.zIndex = '999';
-            overlay.style.background = 'rgba(0,0,0,0.6)';
-            overlay.style.backdropFilter = 'blur(3px)';
+            overlay.style.background = 'transparent';
             document.body.appendChild(overlay);
         }
         overlay.style.display = 'block';
