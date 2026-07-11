@@ -291,8 +291,8 @@
         if (!isGameActive) return;
         frameCount++;
 
-        // Speed increases faster as levels go up
-        gameSpeed += (0.001 + (bgLevel * 0.0005));
+        // Speed increases slowly but steadily
+        gameSpeed += 0.001;
 
         // Physics
         dinoVelocity += GRAVITY;
@@ -353,10 +353,10 @@
         if (spawnTimer <= 0) {
             spawnObstacle();
             
-            // Calculate next spawn: allow smaller gaps as it gets harder (down to 55 frames)
-            const minGap = Math.max(55, 120 - Math.floor(gameSpeed * 10));
-            // Max gap gets tighter at higher levels
-            const maxGap = minGap + Math.max(15, 50 - bgLevel * 10) + Math.floor(Math.random() * 20);
+            // Calculate next spawn: allow smaller gaps as it gets harder (down to 45 frames)
+            const minGap = Math.max(45, 100 - Math.floor(gameSpeed * 5) - (bgLevel * 10));
+            // Max gap gets MUCH tighter at higher levels, forcing dense obstacle clusters
+            const maxGap = minGap + Math.max(10, 60 - bgLevel * 15) + Math.floor(Math.random() * 20);
             
             spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
         }
