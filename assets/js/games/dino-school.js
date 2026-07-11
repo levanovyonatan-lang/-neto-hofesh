@@ -27,6 +27,7 @@
     let isJumping = false;
     let obstaclesList = [];
     let gameSpeed = GAME_SPEED_START;
+    let spawnTimer = 0;
     let frameCount = 0;
     let isGameOver = false;
 
@@ -41,6 +42,7 @@
         gameSpeed = GAME_SPEED_START;
         obstaclesList = [];
         frameCount = 0;
+        spawnTimer = 60; // Initial delay
 
         if (navigator.vibrate) navigator.vibrate([30]);
 
@@ -338,8 +340,16 @@
         }
 
         // Spawn entities
-        if (frameCount % Math.max(60, Math.floor(120 - gameSpeed * 10)) === 0) {
+        spawnTimer--;
+        if (spawnTimer <= 0) {
             spawnObstacle();
+            
+            // Calculate next spawn: ensure minimum gap to make it fair
+            // At speed 4, minGap is ~88. Max speed (e.g. 10), minGap stops at 80.
+            const minGap = Math.max(80, 120 - Math.floor(gameSpeed * 8));
+            const maxGap = minGap + 40 + Math.floor(Math.random() * 30);
+            
+            spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
         }
         
         // Randomly spawn clouds
@@ -496,6 +506,7 @@
         document.getElementById('dino-score-val').textContent = '0';
         isGameOver = false;
         gameSpeed = GAME_SPEED_START;
+        spawnTimer = 60;
         frameCount = 0;
         dinoY = 0;
         dinoVelocity = 0;
