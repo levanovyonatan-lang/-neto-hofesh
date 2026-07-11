@@ -49,6 +49,25 @@
 
         gameContainer.style.position = 'relative';
         gameContainer.style.overflow = 'hidden';
+        gameContainer.dataset.hwPrevZIndex = gameContainer.style.zIndex || '';
+        gameContainer.style.zIndex = '1000';
+
+        let overlay = document.getElementById('game-lock-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'game-lock-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.zIndex = '999';
+            overlay.style.background = 'rgba(0,0,0,0.6)';
+            overlay.style.backdropFilter = 'blur(3px)';
+            document.body.appendChild(overlay);
+        }
+        overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
 
         setTimeout(() => {
             window.scrollTo({
@@ -314,11 +333,19 @@
         els.forEach(el => el.remove());
 
         document.body.style.touchAction = ''; 
+        document.body.style.overflow = '';
         gameContainer.style.overflow = '';
         if (gameContainer.dataset.hwPrevHeight !== undefined) {
             gameContainer.style.height = gameContainer.dataset.hwPrevHeight;
             delete gameContainer.dataset.hwPrevHeight;
         }
+        if (gameContainer.dataset.hwPrevZIndex !== undefined) {
+            gameContainer.style.zIndex = gameContainer.dataset.hwPrevZIndex;
+            delete gameContainer.dataset.hwPrevZIndex;
+        }
+
+        const overlay = document.getElementById('game-lock-overlay');
+        if (overlay) overlay.style.display = 'none';
 
         // Hide original elements
         const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
