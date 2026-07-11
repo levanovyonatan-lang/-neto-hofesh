@@ -1158,7 +1158,15 @@ function selectTarget(id, shouldScroll = true) {
     }
 
     loadDailyState(); renderTipBox(id); renderHolidays();
-    const netDays = calculateNetDays(target.date, target.noFriday, target.id); animateNetDays(netDays); updateDashboard();
+    let targetDaysForAnim = 0;
+    if (target.isHappeningNow) {
+        const diff = target.endDate.getTime() - Date.now();
+        targetDaysForAnim = Math.ceil(diff / 86400000);
+    } else {
+        targetDaysForAnim = calculateNetDays(target.date, target.noFriday, target.id);
+    }
+    animateNetDays(targetDaysForAnim); 
+    updateDashboard();
 }
 
 function updateDashboard() {
