@@ -291,6 +291,7 @@
         if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
 
         const title = document.createElement('div');
+        title.id = 'dino-game-over';
         title.className = 'dino-element';
         title.innerHTML = `נפסלת! 💥<br><span style="font-size:18px">צברת ${score} נקודות</span>`;
         title.style.position = 'absolute';
@@ -329,12 +330,38 @@
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
-            cleanupGame();
-            setTimeout(startGame, 50);
+            restartGame();
         };
 
         btnContainer.appendChild(playAgainBtn);
         title.appendChild(btnContainer);
+    }
+
+    function restartGame() {
+        const title = document.getElementById('dino-game-over');
+        if (title) title.remove();
+
+        obstaclesList.forEach(obs => {
+            if (obs.el && obs.el.parentNode) obs.el.remove();
+        });
+        obstaclesList = [];
+
+        score = 0;
+        document.getElementById('dino-score-val').textContent = '0';
+        isGameOver = false;
+        gameSpeed = GAME_SPEED_START;
+        frameCount = 0;
+        dinoY = 0;
+        dinoVelocity = 0;
+        isJumping = false;
+        dino.style.transform = `translateY(0px)`;
+        
+        window.addEventListener('keydown', handleInput);
+        window.addEventListener('touchstart', handleInput, {passive: false});
+        gameContainer.addEventListener('mousedown', handleInput);
+
+        if (gameLoopId) cancelAnimationFrame(gameLoopId);
+        gameLoopId = requestAnimationFrame(gameLoop);
     }
 
     function cleanupGame() {
