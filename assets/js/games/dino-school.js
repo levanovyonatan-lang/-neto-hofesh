@@ -488,8 +488,10 @@
                     obstaclesList.splice(i, 1);
                     continue;
                 } else if (obs.type === 'obstacle' || obs.type === 'flying') {
-                    gameOver();
-                    return;
+                    // God mode: just remove the obstacle on collision!
+                    obs.el.remove();
+                    obstaclesList.splice(i, 1);
+                    continue;
                 }
             }
 
