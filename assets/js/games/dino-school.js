@@ -3,12 +3,17 @@
 
 (function() {
     const OBSTACLES = ['👩‍🏫', '👨‍🏫', '🎒', '🚌', '⏰', '📚', '📝', '🍎', '🥪', '🧻', '🧪', '📋', '📐'];
+    const FLYING = ['✈️', '🦅'];
+    const BONUSES = ['🍉', '🍦', '☀️', '🏖️', '🕶️'];
+    const CLOUDS = ['☁️', '🌤️'];
+    
     const GAME_SPEED_START = 4;
     const JUMP_FORCE = -10;
     const GRAVITY = 0.6;
     
     let isGameActive = false;
     let score = 0;
+    let bgLevel = 0; // Tracks background color state
     let gameLoopId = null;
     let triggerBtn = null;
     let scoreDisplay = null;
@@ -32,6 +37,7 @@
         isGameActive = true;
         isGameOver = false;
         score = 0;
+        bgLevel = 0;
         gameSpeed = GAME_SPEED_START;
         obstaclesList = [];
         frameCount = 0;
@@ -185,25 +191,83 @@
             isJumping = true;
             dinoVelocity = JUMP_FORCE;
             if (navigator.vibrate) navigator.vibrate([15]);
+            
+            // Dust effect
+            const dust = document.createElement('div');
+            dust.className = 'dino-element';
+            dust.textContent = '💨';
+            dust.style.position = 'absolute';
+            dust.style.bottom = '30px';
+            dust.style.right = '40px';
+            dust.style.fontSize = '20px';
+            dust.style.opacity = '0.7';
+            dust.style.transition = 'all 0.5s ease-out';
+            dust.style.zIndex = '2';
+            dust.style.pointerEvents = 'none';
+            gameContainer.appendChild(dust);
+            
+            requestAnimationFrame(() => {
+                dust.style.right = '60px';
+                dust.style.bottom = '40px';
+                dust.style.opacity = '0';
+                dust.style.transform = 'scale(1.5)';
+            });
+            setTimeout(() => { if(dust.parentNode) dust.remove(); }, 500);
         }
     }
 
     function spawnObstacle() {
-        const obs = document.createElement('div');
-        obs.className = 'dino-element';
-        const emoji = OBSTACLES[Math.floor(Math.random() * OBSTACLES.length)];
-        obs.textContent = emoji;
-        obs.style.position = 'absolute';
-        obs.style.bottom = '30px';
-        obs.style.right = '100%';
-        obs.style.fontSize = '28px';
-        obs.style.lineHeight = '1';
-        obs.style.zIndex = '5';
-        gameContainer.appendChild(obs);
+        // Decide what to spawn
+        let type = 'obstacle';
+        const rand = Math.random();
+        if (rand < 0.15) type = 'flying';
+        else if (rand < 0.3) type = 'bonus';
+        
+        spawnEntity(type);
+    }
+
+    function spawnEntity(type) {
+        const el = document.createElement('div');
+        el.className = 'dino-element';
+        
+        let emoji = '';
+        let bottom = '30px';
+        let speedMult = 1;
+        let size = '28px';
+        let isCloud = (type === 'cloud');
+
+        if (type === 'obstacle') {
+            emoji = OBSTACLES[Math.floor(Math.random() * OBSTACLES.length)];
+        } else if (type === 'flying') {
+            emoji = FLYING[Math.floor(Math.random() * FLYING.length)];
+            bottom = '70px'; // Head height, requires no jump
+        } else if (type === 'bonus') {
+            emoji = BONUSES[Math.floor(Math.random() * BONUSES.length)];
+            bottom = '95px'; // High up, requires jump
+        } else if (isCloud) {
+            emoji = CLOUDS[Math.floor(Math.random() * CLOUDS.length)];
+            bottom = Math.floor(Math.random() * 60 + 100) + 'px'; // Random sky height
+            speedMult = 0.2 + Math.random() * 0.3; // Parallax slow
+            size = Math.floor(Math.random() * 20 + 30) + 'px';
+            el.style.opacity = '0.6';
+            el.style.zIndex = '1';
+        }
+
+        el.textContent = emoji;
+        el.style.position = 'absolute';
+        el.style.bottom = bottom;
+        el.style.right = '100%';
+        el.style.fontSize = size;
+        el.style.lineHeight = '1';
+        if (!el.style.zIndex) el.style.zIndex = '5';
+        
+        gameContainer.appendChild(el);
 
         obstaclesList.push({
-            el: obs,
+            el: el,
             x: gameContainer.clientWidth,
+            type: type,
+            speedMult: speedMult,
             passed: false
         });
     }
@@ -227,9 +291,30 @@
 
         dino.style.transform = `translateY(${dinoY}px)`;
 
-        // Spawn obstacles
+        // Background Color transition based on score
+        if (score >= 700 && bgLevel < 4) {
+            bgLevel = 4;
+            gameContainer.style.background = 'linear-gradient(to bottom, #1e1b4b, #4c1d95)'; // Night
+        } else if (score >= 500 && bgLevel < 3) {
+            bgLevel = 3;
+            gameContainer.style.background = 'linear-gradient(to bottom, #fca5a5, #fef08a)'; // Sunset
+        } else if (score >= 300 && bgLevel < 2) {
+            bgLevel = 2;
+            gameContainer.style.background = 'linear-gradient(to bottom, #fed7aa, #fffbeb)'; // Afternoon
+        } else if (score >= 100 && bgLevel < 1) {
+            bgLevel = 1;
+            gameContainer.style.background = 'linear-gradient(to bottom, #bae6fd, #f0f9ff)'; // Sky Blue
+            gameContainer.style.transition = 'background 2s ease, height 0.4s ease'; // Ensure transition
+        }
+
+        // Spawn entities
         if (frameCount % Math.max(60, Math.floor(120 - gameSpeed * 10)) === 0) {
             spawnObstacle();
+        }
+        
+        // Randomly spawn clouds
+        if (Math.random() < 0.015) {
+            spawnEntity('cloud');
         }
 
         const dinoRect = dino.getBoundingClientRect();
@@ -245,7 +330,7 @@
         // Move obstacles
         for (let i = obstaclesList.length - 1; i >= 0; i--) {
             const obs = obstaclesList[i];
-            obs.x -= gameSpeed;
+            obs.x -= gameSpeed * obs.speedMult;
             obs.el.style.right = obs.x + 'px';
 
             const obsRect = obs.el.getBoundingClientRect();
@@ -263,19 +348,48 @@
                 dinoHitbox.bottom > obsHitbox.top &&
                 dinoHitbox.top < obsHitbox.bottom
             ) {
-                gameOver();
-                return;
+                if (obs.type === 'bonus') {
+                    score += 50;
+                    document.getElementById('dino-score-val').textContent = score;
+                    if (navigator.vibrate) navigator.vibrate([20, 20]);
+                    
+                    const floatText = document.createElement('div');
+                    floatText.className = 'dino-element';
+                    floatText.textContent = '+50';
+                    floatText.style.position = 'absolute';
+                    floatText.style.right = obs.x + 'px';
+                    floatText.style.bottom = '110px';
+                    floatText.style.color = '#10b981';
+                    floatText.style.fontWeight = 'bold';
+                    floatText.style.fontSize = '24px';
+                    floatText.style.zIndex = '10';
+                    floatText.style.transition = 'all 0.5s ease-out';
+                    gameContainer.appendChild(floatText);
+                    
+                    requestAnimationFrame(() => {
+                        floatText.style.bottom = '150px';
+                        floatText.style.opacity = '0';
+                    });
+                    setTimeout(() => { if (floatText.parentNode) floatText.remove(); }, 500);
+
+                    obs.el.remove();
+                    obstaclesList.splice(i, 1);
+                    continue;
+                } else if (obs.type === 'obstacle' || obs.type === 'flying') {
+                    gameOver();
+                    return;
+                }
             }
 
-            // Score
-            if (!obs.passed && obsHitbox.left > dinoHitbox.right) {
+            // Score passing logic
+            if (!obs.passed && obs.type !== 'cloud' && obs.type !== 'bonus' && obsHitbox.left > dinoHitbox.right) {
                 obs.passed = true;
                 score += 10;
                 document.getElementById('dino-score-val').textContent = score;
             }
 
             // Remove off-screen
-            if (obs.x < -50) {
+            if (obs.x < -100) { // Increased to -100 to allow clouds to fully clear
                 obs.el.remove();
                 obstaclesList.splice(i, 1);
             }
@@ -347,6 +461,8 @@
         obstaclesList = [];
 
         score = 0;
+        bgLevel = 0;
+        gameContainer.style.background = '';
         document.getElementById('dino-score-val').textContent = '0';
         isGameOver = false;
         gameSpeed = GAME_SPEED_START;
@@ -386,6 +502,7 @@
 
         gameContainer.style.transition = '';
         gameContainer.style.height = '200px'; // Lock before restore
+        gameContainer.style.background = '';
         
         const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
         hiddenEls.forEach(el => {
