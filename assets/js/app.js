@@ -763,8 +763,8 @@ function updateNextVacationButtonText() {
     }
     
     if (isVacationNow) {
-        if (btn) btn.innerHTML = 'כמה ימים נשאר לתחילת הלימודים? <span aria-hidden="true" style="font-size: 1.15em;">⏳</span>';
-        if (demoBtn) demoBtn.innerHTML = 'לתחילת הלימודים ⏳';
+        if (btn) btn.innerHTML = 'כמה ימים נשאר עד תחילת הלימודים? <span aria-hidden="true" style="font-size: 1.15em;">⏳</span>';
+        if (demoBtn) demoBtn.innerHTML = 'עד תחילת הלימודים ⏳';
     } else {
         if (btn) btn.innerHTML = 'התחל ספירה לחופש הקרוב <span aria-hidden="true" style="font-size: 1.15em;">🚀</span>';
         if (demoBtn) demoBtn.innerHTML = 'לחופש הקרוב 🚀';
