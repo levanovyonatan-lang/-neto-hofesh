@@ -257,12 +257,51 @@
 
         dino.style.transform = `translateY(${dinoY}px) rotate(90deg)`;
 
-        // Clean up events
         window.removeEventListener('keydown', handleInput);
         window.removeEventListener('touchstart', handleInput);
         gameContainer.removeEventListener('mousedown', handleInput);
 
-        setTimeout(cleanupGame, 3500);
+        const btnContainer = document.createElement('div');
+        btnContainer.style.display = 'flex';
+        btnContainer.style.gap = '15px';
+        btnContainer.style.marginTop = '20px';
+        btnContainer.style.justifyContent = 'center';
+        
+        const playAgainBtn = document.createElement('button');
+        playAgainBtn.textContent = 'שוב 🔄';
+        playAgainBtn.style.padding = '8px 16px';
+        playAgainBtn.style.background = 'var(--primary)';
+        playAgainBtn.style.border = 'none';
+        playAgainBtn.style.borderRadius = '12px';
+        playAgainBtn.style.fontWeight = 'bold';
+        playAgainBtn.style.cursor = 'pointer';
+        playAgainBtn.style.fontSize = '16px';
+        playAgainBtn.style.pointerEvents = 'auto';
+        playAgainBtn.onclick = (e) => {
+            e.stopPropagation();
+            cleanupGame();
+            setTimeout(startGame, 50);
+        };
+
+        const exitBtn = document.createElement('button');
+        exitBtn.textContent = 'יציאה 🚪';
+        exitBtn.style.padding = '8px 16px';
+        exitBtn.style.background = '#e2e8f0';
+        exitBtn.style.border = 'none';
+        exitBtn.style.borderRadius = '12px';
+        exitBtn.style.fontWeight = 'bold';
+        exitBtn.style.cursor = 'pointer';
+        exitBtn.style.fontSize = '16px';
+        exitBtn.style.color = '#333';
+        exitBtn.style.pointerEvents = 'auto';
+        exitBtn.onclick = (e) => {
+            e.stopPropagation();
+            cleanupGame();
+        };
+
+        btnContainer.appendChild(exitBtn);
+        btnContainer.appendChild(playAgainBtn);
+        title.appendChild(btnContainer);
     }
 
     function cleanupGame() {
