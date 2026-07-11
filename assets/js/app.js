@@ -483,7 +483,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         }
     }
 
-    const isDemo = new URLSearchParams(window.location.search).get('show_demo') === 'true' || window.location.hostname.includes('github.io');
+    const isDemoSite = new URLSearchParams(window.location.search).get('show_demo') === 'true' || window.location.hostname.includes('github.io');
     const gameBtn = document.getElementById('main-game-btn');
     const btn = document.getElementById('main-ai-btn');
 
@@ -492,7 +492,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             aiToolsContainer.style.display = '';
             if (btn) btn.style.display = '';
             if (gameBtn) gameBtn.style.display = 'none';
-        } else if (isDemo) {
+        } else if (isDemoSite) {
             aiToolsContainer.style.display = '';
             if (btn) btn.style.display = 'none';
             if (gameBtn) gameBtn.style.display = '';
