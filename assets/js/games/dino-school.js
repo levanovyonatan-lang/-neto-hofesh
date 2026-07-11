@@ -2,7 +2,7 @@
 // A T-Rex styled endless runner with school obstacles.
 
 (function() {
-    const OBSTACLES = ['📓', '📚', '📝', '🏫', '📐', '✏️'];
+    const OBSTACLES = ['👩‍🏫', '👨‍🏫', '🎒', '🚌', '⏰', '📚', '📝', '🍎', '🥪', '🧻', '🧪', '📋', '📐'];
     const GAME_SPEED_START = 4;
     const JUMP_FORCE = -10;
     const GRAVITY = 0.6;
