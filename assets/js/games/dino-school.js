@@ -444,6 +444,9 @@
         // Speed increases steadily but has a max limit so the final stages stay playable
         if (gameSpeed < 7.5) {
             gameSpeed += 0.0004;
+        } else if (currentStageIndex === 11 && gameSpeed < 8.8) {
+            // In the final stage, let it increase even further but very slowly to create a "survival" feel
+            gameSpeed += 0.0001;
         }
 
         // Physics
@@ -543,11 +546,17 @@
                     if (currentStageIndex === 4) { minGap += 10; maxGap += 15; } 
                     // Give a bit more breathing room in stage 11
                     if (currentStageIndex === 10) { minGap += 5; maxGap += 10; } 
-                    // Final stage is chaotic!
-                    if (currentStageIndex === 11) { maxGap -= 10; } 
+                    // Final stage is chaotic! Gradually gets harder the further you go
+                    if (currentStageIndex === 11) { 
+                        let progress = Math.max(0, score - 3100);
+                        let shrink = Math.floor(progress / 50); // every 50 points, shrink max gap
+                        maxGap -= shrink; 
+                    } 
                     
                     // Enforce absolute fairness minimum
                     minGap = Math.max(Math.floor(jumpFrames + 5), minGap);
+                    // Ensure maxGap is strictly >= minGap to prevent math errors
+                    maxGap = Math.max(minGap, maxGap);
                     spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
                 }
             }
