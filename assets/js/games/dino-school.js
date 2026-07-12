@@ -775,30 +775,32 @@
         title.style.top = '50%';
         title.style.left = '50%';
         title.style.transform = 'translate(-50%, -50%)';
-        title.style.width = '85%';
-        title.style.maxWidth = '340px';
-        title.style.background = 'rgba(15, 23, 42, 0.9)';
+        title.style.width = '90%';
+        title.style.maxWidth = '320px';
+        title.style.maxHeight = '185px';
+        title.style.background = 'rgba(15, 23, 42, 0.95)';
         title.style.backdropFilter = 'blur(4px)';
-        title.style.border = '3px solid #ef4444';
-        title.style.borderRadius = '16px';
-        title.style.padding = '20px';
+        title.style.border = '2px solid #ef4444';
+        title.style.borderRadius = '12px';
+        title.style.padding = '12px 15px';
         title.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
         title.style.textAlign = 'center';
         title.style.zIndex = '200';
         title.style.display = 'flex';
         title.style.flexDirection = 'column';
         title.style.alignItems = 'center';
-        title.style.gap = '12px';
+        title.style.justifyContent = 'center';
+        title.style.gap = '6px';
 
         const closeX = document.createElement('button');
         closeX.innerHTML = '✖';
         closeX.style.position = 'absolute';
-        closeX.style.top = '12px';
-        closeX.style.right = '12px';
+        closeX.style.top = '6px';
+        closeX.style.left = '10px';
         closeX.style.background = 'none';
         closeX.style.border = 'none';
         closeX.style.color = '#94a3b8';
-        closeX.style.fontSize = '24px';
+        closeX.style.fontSize = '18px';
         closeX.style.cursor = 'pointer';
         closeX.style.padding = '0';
         closeX.style.lineHeight = '1';
@@ -809,22 +811,23 @@
         title.appendChild(closeX);
 
         const msgEl = document.createElement('div');
-        msgEl.style.fontSize = '20px';
+        msgEl.style.fontSize = '15px';
         msgEl.style.fontWeight = 'bold';
         msgEl.style.color = '#f8fafc';
-        msgEl.style.lineHeight = '1.4';
+        msgEl.style.lineHeight = '1.2';
+        msgEl.style.marginTop = '4px';
         msgEl.innerHTML = funnyMessage;
         title.appendChild(msgEl);
 
         const scoreEl = document.createElement('div');
-        scoreEl.style.fontSize = '18px';
+        scoreEl.style.fontSize = '14px';
         scoreEl.style.color = '#cbd5e1';
         scoreEl.innerHTML = `צברת ${score} נקודות`;
         title.appendChild(scoreEl);
 
         if (isNewRecord) {
             const recordEl = document.createElement('div');
-            recordEl.style.fontSize = '20px';
+            recordEl.style.fontSize = '13px';
             recordEl.style.color = '#34d399';
             recordEl.style.fontWeight = 'bold';
             recordEl.innerHTML = '🏆 שיא חדש! 🏆';
@@ -840,21 +843,21 @@
         gameContainer.removeEventListener('mousedown', handleInput);
 
         const btnContainer = document.createElement('div');
-        btnContainer.style.marginTop = '5px';
+        btnContainer.style.marginTop = '4px';
         btnContainer.style.display = 'flex';
-        btnContainer.style.gap = '10px';
+        btnContainer.style.gap = '8px';
         btnContainer.style.justifyContent = 'center';
         
         const playAgainBtn = document.createElement('button');
         playAgainBtn.textContent = 'שחק שוב 🔄';
-        playAgainBtn.style.padding = '10px 20px';
+        playAgainBtn.style.padding = '6px 14px';
         playAgainBtn.style.background = '#ef4444';
         playAgainBtn.style.color = '#ffffff';
         playAgainBtn.style.border = 'none';
-        playAgainBtn.style.borderRadius = '12px';
+        playAgainBtn.style.borderRadius = '8px';
         playAgainBtn.style.fontWeight = 'bold';
         playAgainBtn.style.cursor = 'pointer';
-        playAgainBtn.style.fontSize = '16px';
+        playAgainBtn.style.fontSize = '14px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
@@ -863,14 +866,14 @@
 
         const exitBtn = document.createElement('button');
         exitBtn.textContent = 'יציאה 🚪';
-        exitBtn.style.padding = '10px 16px';
+        exitBtn.style.padding = '6px 12px';
         exitBtn.style.background = 'transparent';
         exitBtn.style.color = '#cbd5e1';
-        exitBtn.style.border = '2px solid #475569';
-        exitBtn.style.borderRadius = '12px';
+        exitBtn.style.border = '1px solid #475569';
+        exitBtn.style.borderRadius = '8px';
         exitBtn.style.fontWeight = 'bold';
         exitBtn.style.cursor = 'pointer';
-        exitBtn.style.fontSize = '16px';
+        exitBtn.style.fontSize = '14px';
         exitBtn.onclick = (e) => {
             e.stopPropagation();
             cleanupGame();
