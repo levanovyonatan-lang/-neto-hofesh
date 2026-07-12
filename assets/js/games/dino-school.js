@@ -249,15 +249,17 @@
         
         const highScore = localStorage.getItem('dinoHighScore') || 0;
         
-        scoreDisplay.innerHTML = `<span id="dino-score-val">0</span> <span style="font-size:14px; color:#6b7280; margin-right: 15px;">שיא: <span id="dino-high-score-val">${highScore}</span></span>`;
+        scoreDisplay.innerHTML = `
+            <div id="dino-score-val" style="font-size: 22px; line-height: 1;">0</div>
+            <div style="font-size: 11px; color: #4b5563; font-weight: 500; margin-top: 2px; line-height: 1;">שיא: <span id="dino-high-score-val">${highScore}</span></div>
+        `;
         scoreDisplay.style.position = 'absolute';
-        scoreDisplay.style.top = '15px';
+        scoreDisplay.style.top = '10px';
         scoreDisplay.style.right = '20px';
-        scoreDisplay.style.fontSize = '20px';
         scoreDisplay.style.fontWeight = 'bold';
         scoreDisplay.style.color = '#333';
-        scoreDisplay.style.display = 'flex';
-        scoreDisplay.style.alignItems = 'center';
+        scoreDisplay.style.display = 'block';
+        scoreDisplay.style.textAlign = 'right';
         gameContainer.appendChild(scoreDisplay);
 
         // Persistent objective text for collecting stages (under score)
