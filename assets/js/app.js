@@ -966,7 +966,7 @@ function showMainScreen() {
     if (isDemo && !document.getElementById('dino-school-script')) {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=12';
+        script.src = 'assets/js/games/dino-school.js?v=13';
         document.body.appendChild(script);
     }
 

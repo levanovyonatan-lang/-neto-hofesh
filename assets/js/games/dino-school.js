@@ -294,14 +294,14 @@
             dust.style.transition = 'all 0.5s ease-out';
             dust.style.zIndex = '2';
             dust.style.pointerEvents = 'none';
-            dust.style.transform = 'scaleX(-1)';
+            dust.style.transform = 'scaleX(1)';
             gameContainer.appendChild(dust);
             
             requestAnimationFrame(() => {
                 dust.style.right = '10px';
                 dust.style.bottom = '40px';
                 dust.style.opacity = '0';
-                dust.style.transform = 'scaleX(-1.5) scaleY(1.5)';
+                dust.style.transform = 'scaleX(1.5) scaleY(1.5)';
             });
             setTimeout(() => { if(dust.parentNode) dust.remove(); }, 500);
         }
