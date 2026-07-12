@@ -212,8 +212,9 @@
         objectiveDisplay = document.createElement('div');
         objectiveDisplay.className = 'dino-objective dino-element';
         objectiveDisplay.style.position = 'absolute';
-        objectiveDisplay.style.top = '40px';
-        objectiveDisplay.style.right = '20px';
+        objectiveDisplay.style.top = '15px';
+        objectiveDisplay.style.left = '50%';
+        objectiveDisplay.style.transform = 'translateX(-50%)';
         objectiveDisplay.style.fontSize = '16px';
         objectiveDisplay.style.fontWeight = 'bold';
         objectiveDisplay.style.color = '#10b981'; // Green color to match points
