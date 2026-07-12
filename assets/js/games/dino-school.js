@@ -155,7 +155,7 @@
         setTimeout(() => {
             if (stageTxt.parentNode) stageTxt.style.opacity = '0';
             setTimeout(() => { if (stageTxt.parentNode) stageTxt.remove(); }, 1000);
-        }, 2500);
+        }, 4500);
     }
 
     function startGame() {
