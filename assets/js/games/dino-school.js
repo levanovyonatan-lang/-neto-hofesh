@@ -8,7 +8,7 @@
     const CLOUDS = ['☁️'];
     
     const STAGES = [
-        /* 0  */ { threshold: 0, title: 'שלב 1: שעת אפס... למי יש כוח 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 0  */ { threshold: 0, title: 'שלב 1: 8:00 בבוקר... למי יש כוח 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
         /* 1  */ { threshold: 120, title: 'שלב 2: בוחן פתע ששכחת ממנו! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
         /* 2  */ { threshold: 240, title: 'שלב 3: מלחמת אוכל בקפיטריה! 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.45, bonusSet: ['🍕', '🥪'], obsSet: ['🗑️', '🪑', '🧹', '📦', '🗄️'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 2px 5px rgba(251,191,36,0.6))', dinoOpacity: '1', objective: 'תאספו אוכל! 🍕🥪' },
         /* 3  */ { threshold: 380, title: 'שלב 4: מישהו פוצץ את הברזייה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0.3, flySet: ['🐟', '🌊', '💧'], bonusChance: 0, obsSet: ['🚰', '🪣', '🧹', '🚧', '⚠️'], dinoEmoji: '🐊', dinoFilter: 'none', dinoOpacity: '1' },
