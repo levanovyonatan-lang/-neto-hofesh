@@ -30,6 +30,18 @@
             0% { box-shadow: inset 0 0 50px rgba(239,68,68,0.2); }
             100% { box-shadow: inset 0 0 150px rgba(239,68,68,0.9); }
         }
+        @keyframes dinoWalk {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-1.2px) rotate(-1.2deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        .dino-inner {
+            display: inline-block;
+            transform-origin: bottom center;
+        }
+        .dino-inner.walking {
+            animation: dinoWalk 0.18s infinite ease-in-out;
+        }
         `;
         document.head.appendChild(style);
     }
@@ -244,7 +256,7 @@
         // Dino
         dino = document.createElement('div');
         dino.className = 'dino-element';
-        dino.textContent = '🦖';
+        dino.innerHTML = '<span class="dino-inner walking">🦖</span>';
         dino.style.position = 'absolute';
         dino.style.bottom = '30px';
         dino.style.right = '30px';
@@ -391,6 +403,16 @@
 
         dino.style.transform = `translateY(${dinoY}px)`;
 
+        // Update walking class based on state
+        const dinoInner = dino.querySelector('.dino-inner');
+        if (dinoInner) {
+            if (!isJumping && !isGameOver) {
+                dinoInner.classList.add('walking');
+            } else {
+                dinoInner.classList.remove('walking');
+            }
+        }
+
         // Event transition based on dynamic threshold
         let nextStageIndex = currentStageIndex;
         for (let i = 0; i < STAGES.length; i++) {
@@ -413,7 +435,8 @@
             }
 
             // Change Dino appearance to match stage
-            dino.textContent = newStage.dinoEmoji || '🦖';
+            const wasWalking = dino.querySelector('.dino-inner')?.classList.contains('walking');
+            dino.innerHTML = `<span class="dino-inner${wasWalking ? ' walking' : ''}">${newStage.dinoEmoji || '🦖'}</span>`;
             dino.style.filter = newStage.dinoFilter || 'none';
             dino.style.opacity = newStage.dinoOpacity || '1';
             
@@ -638,7 +661,7 @@
         dinoVelocity = 0;
         isJumping = false;
         dino.style.transform = `translateY(0px)`;
-        dino.textContent = '🦖';
+        dino.innerHTML = '<span class="dino-inner walking">🦖</span>';
         dino.style.filter = 'none';
         dino.style.opacity = '1';
         
