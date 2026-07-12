@@ -14,12 +14,12 @@
         /* 3  */ { threshold: 380, title: 'שלב 4: מישהו פוצץ את הברזייה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0.3, flySet: ['🐟', '🌊', '💧'], bonusChance: 0, obsSet: ['🚰', '🪣', '🧹', '🚧', '⚠️'], dinoEmoji: '🐊', dinoFilter: 'none', dinoOpacity: '1' },
         /* 4  */ { threshold: 520, title: 'שלב 5: שיעור ספורט ממוצע! 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.5, jumpForce: -9, flyChance: 0.35, flySet: ['🏸', '🥏', '🏐', '🎾'], bonusChance: 0, obsSet: ['⚽', '🏀', '🎳', '🏋️‍♂️', '🚧', '👟'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
         /* 5  */ { threshold: 680, title: 'שלב 6: הטיול השנתי המקולל 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, flySet: ['🦅', '🦇', '🐝', '🦟', '🦅'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 6  */ { threshold: 880, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['🧪', '🦠', '🛸', '⚡', '☄️'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '🐉', dinoFilter: 'hue-rotate(280deg) saturate(2)', dinoOpacity: '1' },
-        /* 7  */ { threshold: 1100, title: 'שלב 8: שיעור חלון! התגנבות יחידים... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.5, bonusSet: ['🎧', '📱'], obsSet: ['🎒', '🎵', '🎶', '🎮'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו ציוד! 🎧📱' },
-        /* 8  */ { threshold: 1350, title: 'שלב 9: מזגן על 16 - קפוא פה! 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.25, flySet: ['🌨️', '🌬️', '🧊', '❄️', '🪁'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1' },
-        /* 9  */ { threshold: 1650, title: 'שלב 10: אוי לא, המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 10 */ { threshold: 2000, title: 'שלב 11: ננעלת בבית ספר! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
-        /* 11 */ { threshold: 2450, title: 'שלב 12: החופש הגדול!!! (המורה עדיין רודפת אחריך 😱)', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.7, jumpForce: -11.5, flyChance: 0.35, flySet: ['✈️', '📓', '📝', '🛸'], bonusChance: 0.4, bonusSet: ['🍉', '🍦', '🍹'], obsSet: ['👩‍🏫', '📝', '⏰', '🏫', '🎈', '✈️'], dinoEmoji: '😎', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו פינוקים! 🍉🍦🍹' }
+        /* 6  */ { threshold: 950, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['🧪', '🦠', '🛸', '⚡', '☄️'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '🐉', dinoFilter: 'hue-rotate(280deg) saturate(2)', dinoOpacity: '1' },
+        /* 7  */ { threshold: 1250, title: 'שלב 8: שיעור חלון! התגנבות יחידים... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.5, bonusSet: ['🎧', '📱'], obsSet: ['🎒', '🎵', '🎶', '🎮'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו ציוד! 🎧📱' },
+        /* 8  */ { threshold: 1600, title: 'שלב 9: מזגן על 16 - קפוא פה! 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.25, flySet: ['🌨️', '🌬️', '🧊', '❄️', '🪁'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1' },
+        /* 9  */ { threshold: 2000, title: 'שלב 10: אוי לא, המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 10 */ { threshold: 2500, title: 'שלב 11: ננעלת בבית ספר! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
+        /* 11 */ { threshold: 3100, title: 'שלב 12: החופש הגדול!!! (המורה עדיין רודפת אחריך 😱)', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.7, jumpForce: -11.5, flyChance: 0.35, flySet: ['✈️', '📓', '📝', '🛸'], bonusChance: 0.4, bonusSet: ['🍉', '🍦', '🍹'], obsSet: ['👩‍🏫', '📝', '⏰', '🏫', '🎈', '✈️'], dinoEmoji: '😎', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו פינוקים! 🍉🍦🍹' }
     ];
 
     if (!document.getElementById('dino-styles')) {
@@ -530,13 +530,13 @@
                     const jumpFrames = 2 * Math.abs(stage.jumpForce / stage.gravity);
                     
                     let minGap = Math.max(Math.floor(jumpFrames + 10), 75 - Math.floor(gameSpeed * 2) - (diffLevel * 5));
-                    let maxGap = minGap + Math.max(20, 45 - diffLevel * 5) + Math.floor(Math.random() * 15);
+                    let maxGap = minGap + Math.max(10, 30 - diffLevel * 5) + Math.floor(Math.random() * 10);
                     
                     // Adjust gap based on stage explicitly adding extra space if needed, but not reducing below jumpFrames+10
                     if (currentStageIndex === 0) { maxGap += 10; } 
-                    if (currentStageIndex === 3) { minGap += 5; maxGap += 10; } 
-                    if (currentStageIndex === 9) { minGap += 22; maxGap += 30; } 
-                    if (currentStageIndex === 4) { minGap += 20; maxGap += 30; } 
+                    if (currentStageIndex === 3) { minGap += 5; maxGap += 8; } 
+                    if (currentStageIndex === 9) { minGap += 15; maxGap += 20; } 
+                    if (currentStageIndex === 4) { minGap += 15; maxGap += 20; } 
                     
                     // Enforce absolute fairness minimum
                     minGap = Math.max(Math.floor(jumpFrames + 10), minGap);
