@@ -880,23 +880,7 @@
         title.style.justifyContent = 'center';
         title.style.gap = '6px';
 
-        const closeX = document.createElement('button');
-        closeX.innerHTML = '✖';
-        closeX.style.position = 'absolute';
-        closeX.style.top = '6px';
-        closeX.style.left = '10px';
-        closeX.style.background = 'none';
-        closeX.style.border = 'none';
-        closeX.style.color = '#94a3b8';
-        closeX.style.fontSize = '18px';
-        closeX.style.cursor = 'pointer';
-        closeX.style.padding = '0';
-        closeX.style.lineHeight = '1';
-        closeX.onclick = (e) => {
-            e.stopPropagation();
-            cleanupGame();
-        };
-        title.appendChild(closeX);
+
 
         const msgEl = document.createElement('div');
         msgEl.style.fontSize = '15px';
