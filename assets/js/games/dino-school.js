@@ -90,7 +90,7 @@
         document.head.appendChild(style);
     }
     
-    const GAME_SPEED_START = 4;
+    const GAME_SPEED_START = 4.5;
     
     let isGameActive = false;
     let score = 0;
@@ -529,7 +529,7 @@
                     const diffLevel = Math.min(5, currentStageIndex);
                     const jumpFrames = 2 * Math.abs(stage.jumpForce / stage.gravity);
                     
-                    let minGap = Math.max(Math.floor(jumpFrames + 10), 80 - Math.floor(gameSpeed * 2) - (diffLevel * 5));
+                    let minGap = Math.max(Math.floor(jumpFrames + 10), 75 - Math.floor(gameSpeed * 2) - (diffLevel * 5));
                     let maxGap = minGap + Math.max(20, 45 - diffLevel * 5) + Math.floor(Math.random() * 15);
                     
                     // Adjust gap based on stage explicitly adding extra space if needed, but not reducing below jumpFrames+10
