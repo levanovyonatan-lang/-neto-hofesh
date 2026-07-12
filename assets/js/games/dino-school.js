@@ -43,6 +43,18 @@
             80% { filter: hue-rotate(288deg) drop-shadow(0 0 10px #00ff00); }
             100% { filter: hue-rotate(360deg) drop-shadow(0 0 10px #ff0000); }
         }
+        @keyframes shiverDino {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-1px) rotate(-3deg); }
+            50% { transform: translateX(1px) rotate(3deg); }
+            75% { transform: translateX(-1px) rotate(-3deg); }
+            100% { transform: translateX(0); }
+        }
+        @keyframes stagePop {
+            0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
+            50% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+            100% { transform: translateX(-50%) scale(1); opacity: 1; }
+        }
         .dino-inner {
             display: inline-block;
             transform-origin: bottom center;
@@ -55,6 +67,12 @@
         }
         .dino-inner.walking.rainbow {
             animation: dinoWalk 0.22s infinite ease-in-out, rainbowDino 1.5s infinite linear;
+        }
+        .dino-inner.shivering {
+            animation: shiverDino 0.1s infinite;
+        }
+        .dino-inner.walking.shivering {
+            animation: dinoWalk 0.22s infinite ease-in-out, shiverDino 0.1s infinite;
         }
         `;
         document.head.appendChild(style);
@@ -112,6 +130,7 @@
         stageTxt.style.top = '40px';
         stageTxt.style.left = '50%';
         stageTxt.style.transform = 'translateX(-50%)';
+        stageTxt.style.animation = 'stagePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
         stageTxt.style.fontSize = '24px';
         stageTxt.style.fontWeight = 'bold';
         stageTxt.style.color = (stageIndex === 4 || stageIndex === 5) ? '#fff' : '#ef4444';
@@ -213,13 +232,18 @@
         // Score Display
         scoreDisplay = document.createElement('div');
         scoreDisplay.className = 'dino-element';
-        scoreDisplay.innerHTML = '<span id="dino-score-val">0</span>';
+        
+        const highScore = localStorage.getItem('dinoHighScore') || 0;
+        
+        scoreDisplay.innerHTML = `<span id="dino-score-val">0</span> <span style="font-size:14px; color:#6b7280; margin-right: 15px;">שיא: <span id="dino-high-score-val">${highScore}</span></span>`;
         scoreDisplay.style.position = 'absolute';
         scoreDisplay.style.top = '15px';
         scoreDisplay.style.right = '20px';
         scoreDisplay.style.fontSize = '20px';
         scoreDisplay.style.fontWeight = 'bold';
         scoreDisplay.style.color = '#333';
+        scoreDisplay.style.display = 'flex';
+        scoreDisplay.style.alignItems = 'center';
         gameContainer.appendChild(scoreDisplay);
 
         // Persistent objective text for collecting stages (under score)
@@ -452,7 +476,8 @@
             // Change Dino appearance to match stage
             const wasWalking = dino.querySelector('.dino-inner')?.classList.contains('walking');
             const isRainbow = (currentStageIndex === 11);
-            dino.innerHTML = `<span class="dino-inner${wasWalking ? ' walking' : ''}${isRainbow ? ' rainbow' : ''}">${newStage.dinoEmoji || '🦖'}</span>`;
+            const isShivering = (currentStageIndex === 8);
+            dino.innerHTML = `<span class="dino-inner${wasWalking ? ' walking' : ''}${isRainbow ? ' rainbow' : ''}${isShivering ? ' shivering' : ''}">${newStage.dinoEmoji || '🦖'}</span>`;
             dino.style.filter = newStage.dinoFilter || 'none';
             dino.style.opacity = newStage.dinoOpacity || '1';
             
@@ -604,14 +629,44 @@
         }
     }
 
+    function getGameOverMessage(stageIndex) {
+        const msgs = [
+            "הכלב אכל לי את המחברת! 🐕", // Stage 1
+            "האוטובוס ברח לך! 🚌💨", // Stage 2
+            "2 + 2 = 5? חזור על החומר! 📚", // Stage 3
+            "הסנדוויץ' נפל עם הממרח למטה! 🥪💥", // Stage 4
+            "נפסלת במחניים! 🏐", // Stage 5
+            "נפל לך הסנדוויץ' לבוץ! 🥾", // Stage 6
+            "הניסוי התפוצץ במעבדה! 💥🧪", // Stage 7
+            "המורה תפסה אותך משחק בטלפון! 📱", // Stage 8
+            "קפאת למוות, מי שם על 16 מעלות?! 🥶", // Stage 9
+            "המנהל קורא לך למשרד! 👨‍💼", // Stage 10
+            "הדלתות ננעלו! 👻", // Stage 11
+            "נשרפת בים, שכחת קרם הגנה! 🥵☀️" // Stage 12
+        ];
+        return msgs[stageIndex] || "נפסלת! 💥";
+    }
+
     function gameOver() {
         isGameOver = true;
         if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
+        
+        let currentHighScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
+        let isNewRecord = false;
+        if (score > currentHighScore) {
+            currentHighScore = score;
+            localStorage.setItem('dinoHighScore', currentHighScore);
+            isNewRecord = true;
+            const hsEl = document.getElementById('dino-high-score-val');
+            if (hsEl) hsEl.textContent = currentHighScore;
+        }
+
+        const funnyMessage = getGameOverMessage(currentStageIndex);
 
         const title = document.createElement('div');
         title.id = 'dino-game-over';
         title.className = 'dino-element';
-        title.innerHTML = `נפסלת! 💥<br><span style="font-size:18px">צברת ${score} נקודות</span>`;
+        title.innerHTML = `${funnyMessage}<br><span style="font-size:18px">צברת ${score} נקודות</span>${isNewRecord ? '<br><span style="font-size:22px; color:#10b981;">🏆 שיא חדש! 🏆</span>' : ''}`;
         title.style.position = 'absolute';
         title.style.top = '50%';
         title.style.left = '50%';
