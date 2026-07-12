@@ -10,16 +10,16 @@
     const STAGES = [
         /* 0  */ { threshold: 0, title: 'שלב 1: שעת אפס... למי יש כוח 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
         /* 1  */ { threshold: 120, title: 'שלב 2: בוחן פתע ששכחת ממנו! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 2  */ { threshold: 240, title: 'שלב 3: מלחמת אוכל בקפיטריה! 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.45, bonusSet: ['🥪', '🍎', '🍉', '🍦', '🍩', '🍕'], obsSet: ['🗑️', '🛍️', '🧻'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 2px 5px rgba(251,191,36,0.6))', dinoOpacity: '1', objective: 'תאספו אוכל! 🍕🥪' },
+        /* 2  */ { threshold: 240, title: 'שלב 3: מלחמת אוכל בקפיטריה! 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.45, bonusSet: ['🍕', '🥪'], obsSet: ['🗑️', '🛍️', '🧻', '🍉', '🍦', '🍩', '🍎'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 2px 5px rgba(251,191,36,0.6))', dinoOpacity: '1', objective: 'תאספו אוכל! 🍕🥪' },
         /* 3  */ { threshold: 380, title: 'שלב 4: מישהו פוצץ את הברזייה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0, bonusChance: 0, obsSet: ['💧', '🌊', '🚰', '🐟'], dinoEmoji: '🐊', dinoFilter: 'none', dinoOpacity: '1' },
         /* 4  */ { threshold: 520, title: 'שלב 5: שיעור ספורט ממוצע! 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎', '🎳'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
         /* 5  */ { threshold: 680, title: 'שלב 6: הטיול השנתי המקולל 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, flySet: ['🦅', '🦇', '🐝', '🦟', '🦅'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
         /* 6  */ { threshold: 860, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['🧪', '🦠', '🛸', '⚡', '☄️'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '🐉', dinoFilter: 'hue-rotate(280deg) saturate(2)', dinoOpacity: '1' },
-        /* 7  */ { threshold: 1060, title: 'שלב 8: שיעור חלון! התגנבות יחידים... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.5, bonusSet: ['🎵', '🎶', '🎧', '📱', '🎮'], obsSet: ['🎒'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו מוזיקה! 🎧' },
+        /* 7  */ { threshold: 1060, title: 'שלב 8: שיעור חלון! התגנבות יחידים... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.5, bonusSet: ['🎧', '📱'], obsSet: ['🎒', '🎵', '🎶', '🎮'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו ציוד! 🎧📱' },
         /* 8  */ { threshold: 1280, title: 'שלב 9: מזגן על 16 - קפוא פה! 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.25, flySet: ['🌨️', '🌬️', '🧊', '❄️', '🪁'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1' },
         /* 9  */ { threshold: 1530, title: 'שלב 10: אוי לא, המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
         /* 10 */ { threshold: 1830, title: 'שלב 11: ננעלת בבית ספר! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
-        /* 11 */ { threshold: 2180, title: 'שלב 12: החופש הגדול!!! 🏖️🎉', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.7, jumpForce: -11.5, flyChance: 0.35, flySet: ['🎈', '✈️', '🛸', '🪁', '🕊️', '🥏', '🪂'], bonusChance: 0.4, bonusSet: ['🏖️', '🕶️', '🎈', '✈️', '🏝️', '⛵'], obsSet: ['🦀', '🦈', '☀️', '🐚'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 0 8px #facc15)', dinoOpacity: '1', objective: 'תאספו פרסים! 🏖️🕶️' }
+        /* 11 */ { threshold: 2180, title: 'שלב 12: החופש הגדול!!! 🏖️🎉', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.7, jumpForce: -11.5, flyChance: 0.35, flySet: ['🎈', '✈️', '🛸', '🪁', '🕊️', '🥏', '🪂'], bonusChance: 0.4, bonusSet: ['🏖️', '🕶️'], obsSet: ['🦀', '🦈', '☀️', '🐚', '🎈', '✈️', '🏝️', '⛵'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 0 8px #facc15)', dinoOpacity: '1', objective: 'תאספו פרסים! 🏖️🕶️' }
     ];
 
     if (!document.getElementById('dino-styles')) {
@@ -481,8 +481,9 @@
                     let maxGap = minGap + Math.max(15, 35 - diffLevel * 8) + Math.floor(Math.random() * 15);
                     
                     // Adjust gap based on stage
-                    // Stage 3 (cafeteria) and Stage 8 (window class) now have standard obstacle spawns as requested
-                    if (currentStageIndex === 3) { minGap += 10; maxGap += 20; } // fountain
+                    if (currentStageIndex === 0) { minGap -= 8; maxGap -= 12; } // Stage 1: more obstacles
+                    if (currentStageIndex === 2) { minGap -= 8; maxGap -= 12; } // Stage 3: more obstacles
+                    if (currentStageIndex === 3) { minGap += 2; maxGap += 6; } // Stage 4: fountain, slightly wider but harder than before
                     if (currentStageIndex === 9) { minGap += 22; maxGap += 30; } // Principal: slightly wider gaps to make it possible but still challenging
                     if (currentStageIndex === 1 || currentStageIndex === 5 || currentStageIndex === 10 || currentStageIndex === 11) { 
                         minGap -= 12; maxGap -= 18; // dense stages (Stage 12 is even denser!)
