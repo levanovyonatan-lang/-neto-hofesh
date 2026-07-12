@@ -19,7 +19,7 @@
         /* 8  */ { threshold: 1280, title: 'שלב 9: מזגן על 16 - קפוא פה! 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.25, flySet: ['🌨️', '🌬️', '🧊', '❄️', '🪁'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1' },
         /* 9  */ { threshold: 1530, title: 'שלב 10: אוי לא, המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
         /* 10 */ { threshold: 1830, title: 'שלב 11: ננעלת בבית ספר! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
-        /* 11 */ { threshold: 2180, title: 'שלב 12: החופש הגדול!!! 🏖️🎉', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.7, jumpForce: -11.5, flyChance: 0.35, flySet: ['🎈', '✈️', '🛸', '🪁', '🕊️', '🥏', '🪂'], bonusChance: 0.4, bonusSet: ['🏖️', '🕶️'], obsSet: ['🦀', '🦈', '☀️', '🐚', '🎈', '✈️', '🏝️', '⛵'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 0 8px #facc15)', dinoOpacity: '1', objective: 'תאספו פרסים! 🏖️🕶️' }
+        /* 11 */ { threshold: 2180, title: 'שלב 12: החופש הגדול!!! (המורה עדיין רודפת אחריך 😱)', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.7, jumpForce: -11.5, flyChance: 0.35, flySet: ['✈️', '📓', '📝', '🛸'], bonusChance: 0.4, bonusSet: ['🍉', '🍦', '🍹'], obsSet: ['👩‍🏫', '📝', '⏰', '🏫', '🎈', '✈️'], dinoEmoji: '😎', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו פינוקים! 🍉🍦🍹' }
     ];
 
     if (!document.getElementById('dino-styles')) {
@@ -35,12 +35,26 @@
             50% { transform: translateY(-0.6px); }
             100% { transform: translateY(0); }
         }
+        @keyframes rainbowDino {
+            0% { filter: hue-rotate(0deg) drop-shadow(0 0 10px #ff0000); }
+            20% { filter: hue-rotate(72deg) drop-shadow(0 0 10px #ff00ff); }
+            40% { filter: hue-rotate(144deg) drop-shadow(0 0 10px #0000ff); }
+            60% { filter: hue-rotate(216deg) drop-shadow(0 0 10px #00ffff); }
+            80% { filter: hue-rotate(288deg) drop-shadow(0 0 10px #00ff00); }
+            100% { filter: hue-rotate(360deg) drop-shadow(0 0 10px #ff0000); }
+        }
         .dino-inner {
             display: inline-block;
             transform-origin: bottom center;
         }
         .dino-inner.walking {
             animation: dinoWalk 0.22s infinite ease-in-out;
+        }
+        .dino-inner.rainbow {
+            animation: rainbowDino 1.5s infinite linear;
+        }
+        .dino-inner.walking.rainbow {
+            animation: dinoWalk 0.22s infinite ease-in-out, rainbowDino 1.5s infinite linear;
         }
         `;
         document.head.appendChild(style);
@@ -437,7 +451,8 @@
 
             // Change Dino appearance to match stage
             const wasWalking = dino.querySelector('.dino-inner')?.classList.contains('walking');
-            dino.innerHTML = `<span class="dino-inner${wasWalking ? ' walking' : ''}">${newStage.dinoEmoji || '🦖'}</span>`;
+            const isRainbow = (currentStageIndex === 11);
+            dino.innerHTML = `<span class="dino-inner${wasWalking ? ' walking' : ''}${isRainbow ? ' rainbow' : ''}">${newStage.dinoEmoji || '🦖'}</span>`;
             dino.style.filter = newStage.dinoFilter || 'none';
             dino.style.opacity = newStage.dinoOpacity || '1';
             
