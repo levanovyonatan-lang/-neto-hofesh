@@ -441,8 +441,10 @@
         if (!isGameActive) return;
         frameCount++;
 
-        // Speed increases steadily
-        gameSpeed += 0.001;
+        // Speed increases steadily but has a max limit so the final stages stay playable
+        if (gameSpeed < 7.5) {
+            gameSpeed += 0.0004;
+        }
 
         // Physics
         const stage = STAGES[currentStageIndex];
@@ -539,6 +541,8 @@
                     if (currentStageIndex === 3) { minGap += 3; maxGap += 5; } 
                     if (currentStageIndex === 9) { minGap += 10; maxGap += 15; } 
                     if (currentStageIndex === 4) { minGap += 10; maxGap += 15; } 
+                    // Give a bit more breathing room in the last two stages
+                    if (currentStageIndex >= 10) { minGap += 5; maxGap += 10; } 
                     
                     // Enforce absolute fairness minimum
                     minGap = Math.max(Math.floor(jumpFrames + 5), minGap);
