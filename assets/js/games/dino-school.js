@@ -771,17 +771,48 @@
         const title = document.createElement('div');
         title.id = 'dino-game-over';
         title.className = 'dino-element';
-        title.innerHTML = `${funnyMessage}<br><span style="font-size:18px">צברת ${score} נקודות</span>${isNewRecord ? '<br><span style="font-size:22px; color:#10b981;">🏆 שיא חדש! 🏆</span>' : ''}`;
         title.style.position = 'absolute';
         title.style.top = '50%';
         title.style.left = '50%';
         title.style.transform = 'translate(-50%, -50%)';
-        title.style.fontSize = '32px';
-        title.style.fontWeight = '900';
-        title.style.color = '#ef4444';
-        title.style.textShadow = '0 2px 10px rgba(0,0,0,0.2)';
+        title.style.width = '85%';
+        title.style.maxWidth = '340px';
+        title.style.background = 'rgba(15, 23, 42, 0.9)';
+        title.style.backdropFilter = 'blur(4px)';
+        title.style.border = '3px solid #ef4444';
+        title.style.borderRadius = '16px';
+        title.style.padding = '20px';
+        title.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
         title.style.textAlign = 'center';
         title.style.zIndex = '200';
+        title.style.display = 'flex';
+        title.style.flexDirection = 'column';
+        title.style.alignItems = 'center';
+        title.style.gap = '12px';
+
+        const msgEl = document.createElement('div');
+        msgEl.style.fontSize = '20px';
+        msgEl.style.fontWeight = 'bold';
+        msgEl.style.color = '#f8fafc';
+        msgEl.style.lineHeight = '1.4';
+        msgEl.innerHTML = funnyMessage;
+        title.appendChild(msgEl);
+
+        const scoreEl = document.createElement('div');
+        scoreEl.style.fontSize = '18px';
+        scoreEl.style.color = '#cbd5e1';
+        scoreEl.innerHTML = `צברת ${score} נקודות`;
+        title.appendChild(scoreEl);
+
+        if (isNewRecord) {
+            const recordEl = document.createElement('div');
+            recordEl.style.fontSize = '20px';
+            recordEl.style.color = '#34d399';
+            recordEl.style.fontWeight = 'bold';
+            recordEl.innerHTML = '🏆 שיא חדש! 🏆';
+            title.appendChild(recordEl);
+        }
+
         gameContainer.appendChild(title);
 
         dino.style.transform = `translateY(${dinoY}px) rotate(-90deg)`;
@@ -791,21 +822,19 @@
         gameContainer.removeEventListener('mousedown', handleInput);
 
         const btnContainer = document.createElement('div');
-        btnContainer.style.display = 'flex';
-        btnContainer.style.marginTop = '20px';
-        btnContainer.style.justifyContent = 'center';
+        btnContainer.style.marginTop = '5px';
         
         const playAgainBtn = document.createElement('button');
         playAgainBtn.textContent = 'שחק שוב 🔄';
-        playAgainBtn.style.padding = '8px 24px';
-        playAgainBtn.style.background = 'var(--primary)';
+        playAgainBtn.style.padding = '10px 24px';
+        playAgainBtn.style.background = '#ef4444';
+        playAgainBtn.style.color = '#ffffff';
         playAgainBtn.style.border = 'none';
         playAgainBtn.style.borderRadius = '12px';
         playAgainBtn.style.fontWeight = 'bold';
         playAgainBtn.style.cursor = 'pointer';
         playAgainBtn.style.fontSize = '18px';
-        playAgainBtn.style.pointerEvents = 'auto';
-        playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
+        playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
             restartGame();
