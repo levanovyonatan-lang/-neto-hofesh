@@ -14,12 +14,12 @@
         /* 3  */ { threshold: 380, title: 'שלב 4: מישהו פוצץ את הברזייה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0.3, flySet: ['🐟', '🌊', '💧'], bonusChance: 0, obsSet: ['🚰', '🪣', '🧹', '🚧', '⚠️'], dinoEmoji: '🐊', dinoFilter: 'none', dinoOpacity: '1' },
         /* 4  */ { threshold: 520, title: 'שלב 5: שיעור ספורט ממוצע! 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.5, jumpForce: -9, flyChance: 0.35, flySet: ['🏸', '🥏', '🏐', '🎾'], bonusChance: 0, obsSet: ['⚽', '🏀', '🎳', '🏋️‍♂️', '🚧', '👟'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
         /* 5  */ { threshold: 680, title: 'שלב 6: הטיול השנתי המקולל 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, flySet: ['🦅', '🦇', '🐝', '🦟', '🦅'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 6  */ { threshold: 860, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['🧪', '🦠', '🛸', '⚡', '☄️'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '🐉', dinoFilter: 'hue-rotate(280deg) saturate(2)', dinoOpacity: '1' },
-        /* 7  */ { threshold: 1060, title: 'שלב 8: שיעור חלון! התגנבות יחידים... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.5, bonusSet: ['🎧', '📱'], obsSet: ['🎒', '🎵', '🎶', '🎮'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו ציוד! 🎧📱' },
-        /* 8  */ { threshold: 1280, title: 'שלב 9: מזגן על 16 - קפוא פה! 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.25, flySet: ['🌨️', '🌬️', '🧊', '❄️', '🪁'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1' },
-        /* 9  */ { threshold: 1530, title: 'שלב 10: אוי לא, המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 10 */ { threshold: 1830, title: 'שלב 11: ננעלת בבית ספר! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
-        /* 11 */ { threshold: 2180, title: 'שלב 12: החופש הגדול!!! (המורה עדיין רודפת אחריך 😱)', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.7, jumpForce: -11.5, flyChance: 0.35, flySet: ['✈️', '📓', '📝', '🛸'], bonusChance: 0.4, bonusSet: ['🍉', '🍦', '🍹'], obsSet: ['👩‍🏫', '📝', '⏰', '🏫', '🎈', '✈️'], dinoEmoji: '😎', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו פינוקים! 🍉🍦🍹' }
+        /* 6  */ { threshold: 880, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['🧪', '🦠', '🛸', '⚡', '☄️'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '🐉', dinoFilter: 'hue-rotate(280deg) saturate(2)', dinoOpacity: '1' },
+        /* 7  */ { threshold: 1100, title: 'שלב 8: שיעור חלון! התגנבות יחידים... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.5, bonusSet: ['🎧', '📱'], obsSet: ['🎒', '🎵', '🎶', '🎮'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו ציוד! 🎧📱' },
+        /* 8  */ { threshold: 1350, title: 'שלב 9: מזגן על 16 - קפוא פה! 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.25, flySet: ['🌨️', '🌬️', '🧊', '❄️', '🪁'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1' },
+        /* 9  */ { threshold: 1650, title: 'שלב 10: אוי לא, המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 10 */ { threshold: 2000, title: 'שלב 11: ננעלת בבית ספר! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
+        /* 11 */ { threshold: 2450, title: 'שלב 12: החופש הגדול!!! (המורה עדיין רודפת אחריך 😱)', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.7, jumpForce: -11.5, flyChance: 0.35, flySet: ['✈️', '📓', '📝', '🛸'], bonusChance: 0.4, bonusSet: ['🍉', '🍦', '🍹'], obsSet: ['👩‍🏫', '📝', '⏰', '🏫', '🎈', '✈️'], dinoEmoji: '😎', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו פינוקים! 🍉🍦🍹' }
     ];
 
     if (!document.getElementById('dino-styles')) {
@@ -75,13 +75,13 @@
             animation: dinoWalk 0.22s infinite ease-in-out, shiverDino 0.1s infinite;
         }
         @keyframes bonusGlow {
-            0% { filter: drop-shadow(0 0 5px #10b981) drop-shadow(0 0 10px #10b981); transform: scale(1); }
-            50% { filter: drop-shadow(0 0 10px #10b981) drop-shadow(0 0 20px #10b981); transform: scale(1.1); }
-            100% { filter: drop-shadow(0 0 5px #10b981) drop-shadow(0 0 10px #10b981); transform: scale(1); }
+            0% { filter: drop-shadow(0 0 5px #facc15) drop-shadow(0 0 10px #facc15); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 10px #facc15) drop-shadow(0 0 20px #facc15); transform: scale(1.1); }
+            100% { filter: drop-shadow(0 0 5px #facc15) drop-shadow(0 0 10px #facc15); transform: scale(1); }
         }
         .bonus-item {
             animation: bonusGlow 1s infinite ease-in-out !important;
-            background: radial-gradient(circle, rgba(16,185,129,0.3) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(250,204,21,0.3) 0%, transparent 60%);
             border-radius: 50%;
             padding: 5px;
             margin: -5px;
@@ -440,7 +440,7 @@
         frameCount++;
 
         // Speed increases VERY slowly but steadily
-        gameSpeed += 0.0003;
+        gameSpeed += 0.0005;
 
         // Physics
         const stage = STAGES[currentStageIndex];
