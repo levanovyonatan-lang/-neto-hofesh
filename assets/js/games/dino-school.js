@@ -92,7 +92,7 @@
     
     const GAME_SPEED_START = 5.0;
     const urlParams = new URLSearchParams(window.location.search);
-    const isGodMode = urlParams.get('show_demo') === 'true';
+    const isGodMode = false; // Disabled so you can actually lose and see jokes!
     
     let isGameActive = false;
     let score = 0;
