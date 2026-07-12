@@ -829,6 +829,7 @@
         const overlay = document.getElementById('game-lock-overlay');
         if (overlay) overlay.style.display = 'none';
         document.body.style.overflow = '';
+        document.body.style.touchAction = '';
         
         let currentHighScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         let isNewRecord = false;
@@ -986,6 +987,7 @@
     }
 
     function cleanupGame() {
+        if (!gameContainer) return;
         isGameActive = false;
         if (gameLoopId) cancelAnimationFrame(gameLoopId);
         if (objectiveTimeoutId) clearTimeout(objectiveTimeoutId);
