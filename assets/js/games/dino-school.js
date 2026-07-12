@@ -4,22 +4,22 @@
 (function() {
     const OBSTACLES = ['👩‍🏫', '👨‍🏫', '🎒', '🚌', '⏰', '📚', '📝', '🍎', '🥪', '🧻', '🧪', '📋', '📐'];
     const FLYING = ['✈️', '🦅'];
-    const BONUSES = ['🍉', '🍦', '🏖️', '🕶️', '🥥', '🍹'];
+    const BONUSES = ['🏖️', '🕶️', '🎈', '✈️', '🏝️', '⛵'];
     const CLOUDS = ['☁️'];
     
     const STAGES = [
-        /* 0  */ { threshold: 0, title: 'שלב 1: שעת אפס... 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'התחמק ממכשולים! 🎒🚌' },
-        /* 1  */ { threshold: 120, title: 'שלב 2: בוחן פתע! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1', objective: 'בוחן פתע! התחמק מהמבחנים 📝' },
-        /* 2  */ { threshold: 240, title: 'שלב 3: הפסקת 10! לאסוף אוכל! (+20) 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.6, bonusSet: ['🥪', '🍎', '🍉', '🍦', '🍩', '🍕'], obsSet: ['🗑️', '🛍️', '🧻'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 2px 5px rgba(251,191,36,0.6))', dinoOpacity: '1', objective: 'הפסקת 10! תאסוף אוכל! 🍕🥪 (+20)' },
-        /* 3  */ { threshold: 380, title: 'שלב 4: הברזייה התפוצצה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0, bonusChance: 0, obsSet: ['💧', '🌊', '🚰', '🐟'], dinoEmoji: '🐊', dinoFilter: 'none', dinoOpacity: '1', objective: 'הברזייה התפוצצה! התחמק מהמים 🌊' },
-        /* 4  */ { threshold: 520, title: 'שלב 5: שיעור ספורט! (מרחפים) 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎', '🎳'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'שיעור ספורט! התחמק מכדורים 🏀' },
-        /* 5  */ { threshold: 680, title: 'שלב 6: טיול שנתי - מסלול קשוח 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, flySet: ['🦅', '🦇', '🐝', '🦟', '🦅'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1', objective: 'טיול שנתי! היזהר מנחשים וקוצים 🌵' },
-        /* 6  */ { threshold: 860, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['🧪', '🦠', '🛸', '⚡', '☄️'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '🐉', dinoFilter: 'hue-rotate(280deg) saturate(2)', dinoOpacity: '1', objective: 'ניסוי מדעים! התחמק מרעלים 🧪' },
-        /* 7  */ { threshold: 1060, title: 'שלב 8: שיעור חלון! התרגעות... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.8, bonusSet: ['🎵', '🎶', '🎧', '📱', '🎮'], obsSet: ['🎒'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'שיעור חלון! תאסוף מוזיקה 🎧 (+20)' },
-        /* 8  */ { threshold: 1280, title: 'שלב 9: מזגן על 16 מעלות 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.25, flySet: ['🌨️', '🌬️', '🧊', '❄️', '🪁'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1', objective: 'מזגן על 16! התחמק מקרח ורוח 🥶' },
-        /* 9  */ { threshold: 1530, title: 'שלב 10: המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'המנהל מגיע! רוץ מהר ואל תיתפס! 🚨' },
-        /* 10 */ { threshold: 1830, title: 'שלב 11: ננעלת בלילה! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6', objective: 'ננעלת בלילה! תשרוד את הרוחות 👻' },
-        /* 11 */ { threshold: 2180, title: 'שלב 12: החופש הגדול!!! 🏖️🎉', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.7, jumpForce: -11.5, flyChance: 0.35, flySet: ['🎈', '✈️', '🛸', '🪁', '🕊️', '🥏', '🪂'], bonusChance: 0.4, bonusSet: ['🍉', '🍦', '🏖️', '🕶️', '🥥', '🍹'], obsSet: ['🦀', '🦈', '☀️', '🐚'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 0 8px #facc15)', dinoOpacity: '1', objective: 'החופש הגדול! התחמק ותאסוף פרסים! 🏖️🍦' }
+        /* 0  */ { threshold: 0, title: 'שלב 1: שעת אפס... למי יש כוח 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 1  */ { threshold: 120, title: 'שלב 2: בוחן פתע ששכחת ממנו! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 2  */ { threshold: 240, title: 'שלב 3: מלחמת אוכל בקפיטריה! 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.45, bonusSet: ['🥪', '🍎', '🍉', '🍦', '🍩', '🍕'], obsSet: ['🗑️', '🛍️', '🧻'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 2px 5px rgba(251,191,36,0.6))', dinoOpacity: '1', objective: 'תאספו אוכל! 🍕🥪' },
+        /* 3  */ { threshold: 380, title: 'שלב 4: מישהו פוצץ את הברזייה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0, bonusChance: 0, obsSet: ['💧', '🌊', '🚰', '🐟'], dinoEmoji: '🐊', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 4  */ { threshold: 520, title: 'שלב 5: שיעור ספורט ממוצע! 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.25, jumpForce: -6, flyChance: 0, bonusChance: 0, obsSet: ['⚽', '🏀', '🎾', '🏐', '🥎', '🎳'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 5  */ { threshold: 680, title: 'שלב 6: הטיול השנתי המקולל 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, flySet: ['🦅', '🦇', '🐝', '🦟', '🦅'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 6  */ { threshold: 860, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['🧪', '🦠', '🛸', '⚡', '☄️'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '🐉', dinoFilter: 'hue-rotate(280deg) saturate(2)', dinoOpacity: '1' },
+        /* 7  */ { threshold: 1060, title: 'שלב 8: שיעור חלון! התגנבות יחידים... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.5, bonusSet: ['🎵', '🎶', '🎧', '📱', '🎮'], obsSet: ['🎒'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו מוזיקה! 🎧' },
+        /* 8  */ { threshold: 1280, title: 'שלב 9: מזגן על 16 - קפוא פה! 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.25, flySet: ['🌨️', '🌬️', '🧊', '❄️', '🪁'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1' },
+        /* 9  */ { threshold: 1530, title: 'שלב 10: אוי לא, המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 10 */ { threshold: 1830, title: 'שלב 11: ננעלת בבית ספר! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
+        /* 11 */ { threshold: 2180, title: 'שלב 12: החופש הגדול!!! 🏖️🎉', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.7, jumpForce: -11.5, flyChance: 0.35, flySet: ['🎈', '✈️', '🛸', '🪁', '🕊️', '🥏', '🪂'], bonusChance: 0.4, bonusSet: ['🏖️', '🕶️', '🎈', '✈️', '🏝️', '⛵'], obsSet: ['🦀', '🦈', '☀️', '🐚'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 0 8px #facc15)', dinoOpacity: '1', objective: 'תאספו פרסים! 🏖️🕶️' }
     ];
 
     if (!document.getElementById('dino-styles')) {
@@ -59,6 +59,47 @@
     let isGameOver = false;
 
     // trigger button logic removed
+
+    let objectiveTimeoutId = null;
+
+    function announceStage(stageIndex) {
+        const stage = STAGES[stageIndex];
+        
+        const isCollecting = stage.bonusChance > 0;
+        if (isCollecting && stage.objective) {
+            objectiveDisplay.textContent = stage.objective;
+            objectiveDisplay.style.display = 'block';
+            objectiveDisplay.style.opacity = '1';
+        } else {
+            objectiveDisplay.style.opacity = '0';
+            setTimeout(() => {
+                if (objectiveDisplay && objectiveDisplay.style.opacity === '0') {
+                    objectiveDisplay.style.display = 'none';
+                }
+            }, 500);
+        }
+        
+        const stageTxt = document.createElement('div');
+        stageTxt.className = 'dino-element';
+        stageTxt.textContent = stage.title;
+        stageTxt.style.position = 'absolute';
+        stageTxt.style.top = '40px';
+        stageTxt.style.left = '50%';
+        stageTxt.style.transform = 'translateX(-50%)';
+        stageTxt.style.fontSize = '24px';
+        stageTxt.style.fontWeight = 'bold';
+        stageTxt.style.color = (stageIndex === 4 || stageIndex === 5) ? '#fff' : '#ef4444';
+        stageTxt.style.zIndex = '10';
+        stageTxt.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
+        stageTxt.style.opacity = '1';
+        stageTxt.style.transition = 'opacity 1s ease';
+        gameContainer.appendChild(stageTxt);
+        
+        setTimeout(() => {
+            if (stageTxt.parentNode) stageTxt.style.opacity = '0';
+            setTimeout(() => { if (stageTxt.parentNode) stageTxt.remove(); }, 1000);
+        }, 2500);
+    }
 
     function startGame() {
         if (isGameActive) return;
@@ -155,24 +196,20 @@
         scoreDisplay.style.color = '#333';
         gameContainer.appendChild(scoreDisplay);
 
-        // Permanent Objective Bar
+        // Persistent objective text for collecting stages (under score)
         objectiveDisplay = document.createElement('div');
         objectiveDisplay.className = 'dino-objective dino-element';
         objectiveDisplay.style.position = 'absolute';
-        objectiveDisplay.style.top = '14px';
-        objectiveDisplay.style.left = '50%';
-        objectiveDisplay.style.transform = 'translateX(-50%)';
-        objectiveDisplay.style.fontSize = '13px';
+        objectiveDisplay.style.top = '40px';
+        objectiveDisplay.style.right = '20px';
+        objectiveDisplay.style.fontSize = '16px';
         objectiveDisplay.style.fontWeight = 'bold';
-        objectiveDisplay.style.color = '#1e293b';
+        objectiveDisplay.style.color = '#10b981'; // Green color to match points
         objectiveDisplay.style.zIndex = '200';
-        objectiveDisplay.style.background = 'rgba(255, 255, 255, 0.85)';
-        objectiveDisplay.style.padding = '4px 14px';
-        objectiveDisplay.style.borderRadius = '9999px';
-        objectiveDisplay.style.boxShadow = '0 1px 4px rgba(0,0,0,0.1)';
         objectiveDisplay.style.pointerEvents = 'none';
-        objectiveDisplay.style.transition = 'transform 0.2s ease, background 0.5s ease';
-        objectiveDisplay.textContent = STAGES[0].objective;
+        objectiveDisplay.style.transition = 'opacity 0.5s ease';
+        objectiveDisplay.style.display = 'none';
+        objectiveDisplay.style.opacity = '0';
         gameContainer.appendChild(objectiveDisplay);
 
         const closeBtn = document.createElement('div');
@@ -229,6 +266,8 @@
 
         // Start Loop
         gameLoopId = requestAnimationFrame(gameLoop);
+
+        announceStage(0);
     }
 
     function handleInput(e) {
@@ -243,7 +282,7 @@
             dinoVelocity = stage.jumpForce;
             if (navigator.vibrate) navigator.vibrate([15]);
             
-            // Dust effect
+            // Dust effect (flying to the right)
             const dust = document.createElement('div');
             dust.className = 'dino-element';
             dust.textContent = '💨';
@@ -255,13 +294,14 @@
             dust.style.transition = 'all 0.5s ease-out';
             dust.style.zIndex = '2';
             dust.style.pointerEvents = 'none';
+            dust.style.transform = 'scaleX(-1)';
             gameContainer.appendChild(dust);
             
             requestAnimationFrame(() => {
-                dust.style.right = '60px';
+                dust.style.right = '10px';
                 dust.style.bottom = '40px';
                 dust.style.opacity = '0';
-                dust.style.transform = 'scale(1.5)';
+                dust.style.transform = 'scaleX(-1.5) scaleY(1.5)';
             });
             setTimeout(() => { if(dust.parentNode) dust.remove(); }, 500);
         }
@@ -372,41 +412,13 @@
                 gameContainer.style.animation = 'none';
             }
 
-            // Update objective text
-            if (objectiveDisplay) {
-                objectiveDisplay.textContent = newStage.objective || '';
-                objectiveDisplay.style.transform = 'translateX(-50%) scale(1.15)';
-                setTimeout(() => {
-                    if (objectiveDisplay) objectiveDisplay.style.transform = 'translateX(-50%) scale(1)';
-                }, 200);
-            }
-
             // Change Dino appearance to match stage
             dino.textContent = newStage.dinoEmoji || '🦖';
             dino.style.filter = newStage.dinoFilter || 'none';
             dino.style.opacity = newStage.dinoOpacity || '1';
             
-            // Announce Event
-            const stageTxt = document.createElement('div');
-            stageTxt.className = 'dino-element';
-            stageTxt.textContent = newStage.title;
-            stageTxt.style.position = 'absolute';
-            stageTxt.style.top = '40px';
-            stageTxt.style.left = '50%';
-            stageTxt.style.transform = 'translateX(-50%)';
-            stageTxt.style.fontSize = '24px';
-            stageTxt.style.fontWeight = 'bold';
-            stageTxt.style.color = (currentStageIndex === 4 || currentStageIndex === 5) ? '#fff' : '#ef4444';
-            stageTxt.style.zIndex = '10';
-            stageTxt.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
-            stageTxt.style.opacity = '1';
-            stageTxt.style.transition = 'opacity 1s ease';
-            gameContainer.appendChild(stageTxt);
-            
-            setTimeout(() => {
-                if (stageTxt.parentNode) stageTxt.style.opacity = '0';
-                setTimeout(() => { if (stageTxt.parentNode) stageTxt.remove(); }, 1000);
-            }, 2500);
+            // Announce Event and show objective temporarily
+            announceStage(currentStageIndex);
         }
 
         // Spawn entities
@@ -446,10 +458,10 @@
                     let maxGap = minGap + Math.max(15, 35 - diffLevel * 8) + Math.floor(Math.random() * 15);
                     
                     // Adjust gap based on stage
-                    if (currentStageIndex === 2) { minGap += 30; maxGap += 40; } // recess: fewer obstacles
-                    if (currentStageIndex === 7) { minGap += 60; maxGap += 80; } // free period: very relaxing
+                    // Stage 3 (cafeteria) and Stage 8 (window class) now have standard obstacle spawns as requested
                     if (currentStageIndex === 3) { minGap += 10; maxGap += 20; } // fountain
-                    if (currentStageIndex === 1 || currentStageIndex === 5 || currentStageIndex === 9 || currentStageIndex === 10 || currentStageIndex === 11) { 
+                    if (currentStageIndex === 9) { minGap += 35; maxGap += 45; } // Principal: significantly wider gaps to make it easier
+                    if (currentStageIndex === 1 || currentStageIndex === 5 || currentStageIndex === 10 || currentStageIndex === 11) { 
                         minGap -= 12; maxGap -= 18; // dense stages (Stage 12 is even denser!)
                     }
                     if (currentStageIndex === 4) { minGap += 20; maxGap += 30; } // gym: slower jumps, need bigger gap
@@ -629,8 +641,11 @@
         dino.textContent = '🦖';
         dino.style.filter = 'none';
         dino.style.opacity = '1';
+        
+        if (objectiveTimeoutId) clearTimeout(objectiveTimeoutId);
         if (objectiveDisplay) {
-            objectiveDisplay.textContent = STAGES[0].objective;
+            objectiveDisplay.style.opacity = '1';
+            objectiveDisplay.style.display = 'none';
         }
         
         window.addEventListener('keydown', handleInput);
@@ -639,11 +654,14 @@
 
         if (gameLoopId) cancelAnimationFrame(gameLoopId);
         gameLoopId = requestAnimationFrame(gameLoop);
+
+        announceStage(0);
     }
 
     function cleanupGame() {
         isGameActive = false;
         if (gameLoopId) cancelAnimationFrame(gameLoopId);
+        if (objectiveTimeoutId) clearTimeout(objectiveTimeoutId);
         
         // Remove dynamic game elements
         const els = gameContainer.querySelectorAll('.dino-element');
