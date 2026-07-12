@@ -966,7 +966,7 @@ function showMainScreen() {
     if (isDemo && !document.getElementById('dino-school-script')) {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=38';
+        script.src = 'assets/js/games/dino-school.js?v=39';
         document.body.appendChild(script);
     }
 
@@ -1116,6 +1116,7 @@ function renderHolidays() {
 }
 
 function selectTarget(id, shouldScroll = true) {
+    if (window.cleanupDinoGame) window.cleanupDinoGame();
     if (userConfig.activeTargetId !== id && userConfig.activeTargetId !== '') trackEvent('select_target_holiday', { 'holiday_id': id });
     if (shouldScroll) {
         window.scrollTo({ top: 0, behavior: 'smooth' });

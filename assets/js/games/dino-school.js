@@ -826,6 +826,10 @@
         isGameOver = true;
         if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
         
+        const overlay = document.getElementById('game-lock-overlay');
+        if (overlay) overlay.style.display = 'none';
+        document.body.style.overflow = '';
+        
         let currentHighScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         let isNewRecord = false;
         if (score > currentHighScore) {
@@ -934,23 +938,7 @@
             restartGame();
         };
 
-        const exitBtn = document.createElement('button');
-        exitBtn.textContent = 'יציאה 🚪';
-        exitBtn.style.padding = '6px 12px';
-        exitBtn.style.background = 'transparent';
-        exitBtn.style.color = '#cbd5e1';
-        exitBtn.style.border = '1px solid #475569';
-        exitBtn.style.borderRadius = '8px';
-        exitBtn.style.fontWeight = 'bold';
-        exitBtn.style.cursor = 'pointer';
-        exitBtn.style.fontSize = '14px';
-        exitBtn.onclick = (e) => {
-            e.stopPropagation();
-            cleanupGame();
-        };
-
         btnContainer.appendChild(playAgainBtn);
-        btnContainer.appendChild(exitBtn);
         title.appendChild(btnContainer);
     }
 
@@ -1061,4 +1049,5 @@
     }
 
     window.startDinoGame = startGame;
+    window.cleanupDinoGame = cleanupGame;
 })();
