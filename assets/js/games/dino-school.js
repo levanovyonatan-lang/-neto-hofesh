@@ -31,16 +31,16 @@
             100% { box-shadow: inset 0 0 150px rgba(239,68,68,0.9); }
         }
         @keyframes dinoWalk {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-1.2px) rotate(-1.2deg); }
-            100% { transform: translateY(0) rotate(0deg); }
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-0.6px); }
+            100% { transform: translateY(0); }
         }
         .dino-inner {
             display: inline-block;
             transform-origin: bottom center;
         }
         .dino-inner.walking {
-            animation: dinoWalk 0.18s infinite ease-in-out;
+            animation: dinoWalk 0.22s infinite ease-in-out;
         }
         `;
         document.head.appendChild(style);
@@ -483,7 +483,7 @@
                     // Adjust gap based on stage
                     // Stage 3 (cafeteria) and Stage 8 (window class) now have standard obstacle spawns as requested
                     if (currentStageIndex === 3) { minGap += 10; maxGap += 20; } // fountain
-                    if (currentStageIndex === 9) { minGap += 35; maxGap += 45; } // Principal: significantly wider gaps to make it easier
+                    if (currentStageIndex === 9) { minGap += 22; maxGap += 30; } // Principal: slightly wider gaps to make it possible but still challenging
                     if (currentStageIndex === 1 || currentStageIndex === 5 || currentStageIndex === 10 || currentStageIndex === 11) { 
                         minGap -= 12; maxGap -= 18; // dense stages (Stage 12 is even denser!)
                     }
