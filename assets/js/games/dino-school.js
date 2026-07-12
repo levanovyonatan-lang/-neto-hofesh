@@ -74,6 +74,18 @@
         .dino-inner.walking.shivering {
             animation: dinoWalk 0.22s infinite ease-in-out, shiverDino 0.1s infinite;
         }
+        @keyframes bonusGlow {
+            0% { filter: drop-shadow(0 0 5px #10b981) drop-shadow(0 0 10px #10b981); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 10px #10b981) drop-shadow(0 0 20px #10b981); transform: scale(1.1); }
+            100% { filter: drop-shadow(0 0 5px #10b981) drop-shadow(0 0 10px #10b981); transform: scale(1); }
+        }
+        .bonus-item {
+            animation: bonusGlow 1s infinite ease-in-out !important;
+            background: radial-gradient(circle, rgba(16,185,129,0.3) 0%, transparent 60%);
+            border-radius: 50%;
+            padding: 5px;
+            margin: -5px;
+        }
         `;
         document.head.appendChild(style);
     }
@@ -391,6 +403,7 @@
             bottom = '70px'; // Head height, requires no jump
             speedMult = 1.2; 
         } else if (type === 'bonus') {
+            el.classList.add('bonus-item');
             const pool = stage.bonusSet || BONUSES;
             emoji = pool[Math.floor(Math.random() * pool.length)];
             bottom = '95px'; // High up, requires jump
@@ -514,24 +527,19 @@
                     
                     // Calculate next spawn gap based on difficulty
                     const diffLevel = Math.min(5, currentStageIndex);
+                    const jumpFrames = 2 * Math.abs(stage.jumpForce / stage.gravity);
                     
-                    // minGap starts much tighter (72 instead of 90) so early stages are already dense
-                    let minGap = Math.max(35, 72 - Math.floor(gameSpeed * 1.5) - (diffLevel * 6));
+                    let minGap = Math.max(Math.floor(jumpFrames + 10), 80 - Math.floor(gameSpeed * 2) - (diffLevel * 5));
+                    let maxGap = minGap + Math.max(20, 45 - diffLevel * 5) + Math.floor(Math.random() * 15);
                     
-                    // maxGap is tighter to spawn obstacles more frequently
-                    let maxGap = minGap + Math.max(15, 35 - diffLevel * 8) + Math.floor(Math.random() * 15);
+                    // Adjust gap based on stage explicitly adding extra space if needed, but not reducing below jumpFrames+10
+                    if (currentStageIndex === 0) { maxGap += 10; } 
+                    if (currentStageIndex === 3) { minGap += 5; maxGap += 10; } 
+                    if (currentStageIndex === 9) { minGap += 22; maxGap += 30; } 
+                    if (currentStageIndex === 4) { minGap += 20; maxGap += 30; } 
                     
-                    // Adjust gap based on stage
-                    if (currentStageIndex === 0) { minGap -= 8; maxGap -= 12; } // Stage 1: more obstacles
-                    if (currentStageIndex === 2) { minGap -= 8; maxGap -= 12; } // Stage 3: more obstacles
-                    if (currentStageIndex === 3) { minGap += 2; maxGap += 6; } // Stage 4: fountain, slightly wider but harder than before
-                    if (currentStageIndex === 9) { minGap += 22; maxGap += 30; } // Principal: slightly wider gaps to make it possible but still challenging
-                    if (currentStageIndex === 1 || currentStageIndex === 5 || currentStageIndex === 10 || currentStageIndex === 11) { 
-                        minGap -= 12; maxGap -= 18; // dense stages (Stage 12 is even denser!)
-                    }
-                    if (currentStageIndex === 4) { minGap += 20; maxGap += 30; } // gym: slower jumps, need bigger gap
-                    
-                    minGap = Math.max(35, minGap);
+                    // Enforce absolute fairness minimum
+                    minGap = Math.max(Math.floor(jumpFrames + 10), minGap);
                     spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
                 }
             }
