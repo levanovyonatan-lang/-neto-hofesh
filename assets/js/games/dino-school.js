@@ -90,7 +90,7 @@
         document.head.appendChild(style);
     }
     
-    const GAME_SPEED_START = 4.5;
+    const GAME_SPEED_START = 5.0;
     const urlParams = new URLSearchParams(window.location.search);
     const isGodMode = urlParams.get('show_demo') === 'true';
     
@@ -441,8 +441,8 @@
         if (!isGameActive) return;
         frameCount++;
 
-        // Speed increases VERY slowly but steadily
-        gameSpeed += 0.0005;
+        // Speed increases steadily
+        gameSpeed += 0.001;
 
         // Physics
         const stage = STAGES[currentStageIndex];
@@ -531,17 +531,17 @@
                     const diffLevel = Math.min(5, currentStageIndex);
                     const jumpFrames = 2 * Math.abs(stage.jumpForce / stage.gravity);
                     
-                    let minGap = Math.max(Math.floor(jumpFrames + 10), 75 - Math.floor(gameSpeed * 2) - (diffLevel * 5));
-                    let maxGap = minGap + Math.max(10, 30 - diffLevel * 5) + Math.floor(Math.random() * 10);
+                    let minGap = Math.max(Math.floor(jumpFrames + 5), 70 - Math.floor(gameSpeed * 2.5) - (diffLevel * 6));
+                    let maxGap = minGap + Math.max(5, 20 - diffLevel * 5) + Math.floor(Math.random() * 5);
                     
-                    // Adjust gap based on stage explicitly adding extra space if needed, but not reducing below jumpFrames+10
-                    if (currentStageIndex === 0) { maxGap += 10; } 
-                    if (currentStageIndex === 3) { minGap += 5; maxGap += 8; } 
-                    if (currentStageIndex === 9) { minGap += 15; maxGap += 20; } 
-                    if (currentStageIndex === 4) { minGap += 15; maxGap += 20; } 
+                    // Adjust gap based on stage explicitly adding extra space if needed, but not reducing below jumpFrames+5
+                    if (currentStageIndex === 0) { maxGap += 8; } 
+                    if (currentStageIndex === 3) { minGap += 3; maxGap += 5; } 
+                    if (currentStageIndex === 9) { minGap += 10; maxGap += 15; } 
+                    if (currentStageIndex === 4) { minGap += 10; maxGap += 15; } 
                     
                     // Enforce absolute fairness minimum
-                    minGap = Math.max(Math.floor(jumpFrames + 10), minGap);
+                    minGap = Math.max(Math.floor(jumpFrames + 5), minGap);
                     spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
                 }
             }
