@@ -790,6 +790,24 @@
         title.style.alignItems = 'center';
         title.style.gap = '12px';
 
+        const closeX = document.createElement('button');
+        closeX.innerHTML = '✖';
+        closeX.style.position = 'absolute';
+        closeX.style.top = '12px';
+        closeX.style.right = '12px';
+        closeX.style.background = 'none';
+        closeX.style.border = 'none';
+        closeX.style.color = '#94a3b8';
+        closeX.style.fontSize = '24px';
+        closeX.style.cursor = 'pointer';
+        closeX.style.padding = '0';
+        closeX.style.lineHeight = '1';
+        closeX.onclick = (e) => {
+            e.stopPropagation();
+            cleanupGame();
+        };
+        title.appendChild(closeX);
+
         const msgEl = document.createElement('div');
         msgEl.style.fontSize = '20px';
         msgEl.style.fontWeight = 'bold';
@@ -823,24 +841,43 @@
 
         const btnContainer = document.createElement('div');
         btnContainer.style.marginTop = '5px';
+        btnContainer.style.display = 'flex';
+        btnContainer.style.gap = '10px';
+        btnContainer.style.justifyContent = 'center';
         
         const playAgainBtn = document.createElement('button');
         playAgainBtn.textContent = 'שחק שוב 🔄';
-        playAgainBtn.style.padding = '10px 24px';
+        playAgainBtn.style.padding = '10px 20px';
         playAgainBtn.style.background = '#ef4444';
         playAgainBtn.style.color = '#ffffff';
         playAgainBtn.style.border = 'none';
         playAgainBtn.style.borderRadius = '12px';
         playAgainBtn.style.fontWeight = 'bold';
         playAgainBtn.style.cursor = 'pointer';
-        playAgainBtn.style.fontSize = '18px';
+        playAgainBtn.style.fontSize = '16px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
             restartGame();
         };
 
+        const exitBtn = document.createElement('button');
+        exitBtn.textContent = 'יציאה 🚪';
+        exitBtn.style.padding = '10px 16px';
+        exitBtn.style.background = 'transparent';
+        exitBtn.style.color = '#cbd5e1';
+        exitBtn.style.border = '2px solid #475569';
+        exitBtn.style.borderRadius = '12px';
+        exitBtn.style.fontWeight = 'bold';
+        exitBtn.style.cursor = 'pointer';
+        exitBtn.style.fontSize = '16px';
+        exitBtn.onclick = (e) => {
+            e.stopPropagation();
+            cleanupGame();
+        };
+
         btnContainer.appendChild(playAgainBtn);
+        btnContainer.appendChild(exitBtn);
         title.appendChild(btnContainer);
     }
 
