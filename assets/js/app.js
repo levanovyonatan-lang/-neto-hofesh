@@ -71,8 +71,18 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=161').catch(() => { });
+        navigator.serviceWorker.register('sw.js?v=251').then(reg => {
+            reg.update();
+        }).catch(() => { });
+
+        navigator.serviceWorker.addEventListener('message', e => {
+            if (e.data && e.data.type === 'UPDATE_ICONS') {
+                refreshPWAIconsSilently();
+            }
+        });
     }
+
+    refreshPWAIconsSilently();
 
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
 
@@ -107,19 +117,18 @@ function detectIOSBrowser() {
     return 'ios-safari';
 }
 
-function handleA2HS() {
-    if (deferredPrompt) {
-        trackEvent('click_install_pwa');
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
-    } else {
-        trackEvent('open_ios_install_modal');
-        const iosBrowserType = detectIOSBrowser();
-        document.getElementById('modal-safari-content').style.display = 'none';
-        document.getElementById('modal-nonsafari-content').style.display = 'none';
-        document.getElementById('modal-android-content').style.display = 'none';
+function openSafariInstallVideoModal() {
+    try {
+        const modal = document.getElementById('ios-modal');
+        if (!modal) return;
 
-        // Reset to video mode by default
+        const safariContent = document.getElementById('modal-safari-content');
+        const nonsafariContent = document.getElementById('modal-nonsafari-content');
+        const androidContent = document.getElementById('modal-android-content');
+        if (safariContent) safariContent.style.display = 'block';
+        if (nonsafariContent) nonsafariContent.style.display = 'none';
+        if (androidContent) androidContent.style.display = 'none';
+
         const videoContainer = document.getElementById('video-instruction-container');
         const writtenContent = document.getElementById('written-instructions');
         const toggleBtn = document.getElementById('toggle-instruction-mode');
@@ -128,13 +137,43 @@ function handleA2HS() {
         if (writtenContent) writtenContent.style.display = 'none';
         if (toggleBtn) toggleBtn.innerHTML = 'הסבר כתוב 📝';
 
-        if (iosBrowserType === 'not-ios') document.getElementById('modal-android-content').style.display = 'block';
-        else if (iosBrowserType === 'ios-non-safari') {
+        const video = videoContainer ? videoContainer.querySelector('video') : null;
+        if (video) {
+            video.currentTime = 0;
+            video.play().catch(() => { });
+        }
+
+        modal.style.display = 'flex';
+        modal.focus();
+        trackEvent('opened_safari_install_video');
+    } catch (e) { }
+}
+
+function handleA2HS() {
+    if (deferredPrompt) {
+        trackEvent('click_install_pwa');
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+    } else {
+        trackEvent('open_ios_install_modal');
+        const iosBrowserType = detectIOSBrowser();
+        if (iosBrowserType === 'ios-safari') {
+            openSafariInstallVideoModal();
+            return;
+        }
+
+        document.getElementById('modal-safari-content').style.display = 'none';
+        document.getElementById('modal-nonsafari-content').style.display = 'none';
+        document.getElementById('modal-android-content').style.display = 'none';
+
+        if (iosBrowserType === 'not-ios') {
+            document.getElementById('modal-android-content').style.display = 'block';
+            document.getElementById('ios-modal').style.display = 'flex';
+            document.getElementById('ios-modal').focus();
+        } else if (iosBrowserType === 'ios-non-safari') {
             trackEvent('attempt_auto_safari_redirect');
-            // נסיון פתיחה אוטומטית בספארי
             window.location.href = `x-safari-https://${window.location.hostname}${window.location.pathname}?install=1`;
 
-            // אם המשתמש נשאר בדף אחרי השהייה, נציג את המודל כגיבוי
             setTimeout(() => {
                 if (document.getElementById('ios-modal').style.display !== 'flex') {
                     document.getElementById('modal-nonsafari-content').style.display = 'block';
@@ -144,19 +183,8 @@ function handleA2HS() {
                     trackEvent('ios_auto_safari_failed');
                 }
             }, 1200);
-            return; // עוצרים כאן כדי לא להציג את המודל הריק או לבצע לוגיקה של ספארי
+            return;
         }
-        else {
-            document.getElementById('modal-safari-content').style.display = 'block';
-            const video = videoContainer ? videoContainer.querySelector('video') : null;
-            if (video) {
-                video.currentTime = 0;
-                video.play().catch(() => { });
-            }
-        }
-
-        document.getElementById('ios-modal').style.display = 'flex';
-        document.getElementById('ios-modal').focus();
     }
 }
 
@@ -176,6 +204,25 @@ function closeIosModal() {
     document.getElementById('ios-modal').style.display = 'none';
     const video = document.querySelector('#modal-safari-content video');
     if (video) video.pause();
+}
+
+function refreshPWAIconsSilently() {
+    try {
+        const cb = Date.now();
+        fetch('manifest.json?v=251&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses.png?v=251&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-white.png?v=251&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-transparent.png?v=251&cb=' + cb, { cache: 'reload' }).catch(() => {});
+
+        document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
+            const baseHref = link.href.split('?')[0];
+            link.href = baseHref + '?v=251&cb=' + cb;
+        });
+        const manifestLink = document.querySelector('link[rel="manifest"]');
+        if (manifestLink) {
+            manifestLink.href = 'manifest.json?v=251&cb=' + cb;
+        }
+    } catch (e) { }
 }
 
 function toggleInstructionMode() {
@@ -815,13 +862,7 @@ window.onload = () => {
 
     if (urlParams.get('install') === '1') {
         window.history.replaceState({}, document.title, window.location.pathname);
-        setTimeout(() => {
-            trackEvent('opened_from_auto_safari');
-            document.getElementById('modal-safari-content').style.display = 'block';
-            document.getElementById('modal-nonsafari-content').style.display = 'none';
-            document.getElementById('modal-android-content').style.display = 'none';
-            document.getElementById('ios-modal').style.display = 'flex';
-        }, 500);
+        openSafariInstallVideoModal();
     }
 
     // תמיכה במקלדת ונגישות לסגירת חלונות
@@ -1288,6 +1329,14 @@ document.addEventListener('keydown', function (e) {
 
 // אתחול מראש של נגן ה-Vimeo לביצועים מהירים
 document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('install') === '1') {
+            window.history.replaceState({}, document.title, window.location.pathname);
+            openSafariInstallVideoModal();
+        }
+    } catch (e) { }
+
     const vidElement = document.getElementById('promo-video');
     if (vidElement && vidElement.tagName === 'IFRAME' && typeof Vimeo !== 'undefined' && !vimeoPlayerInstance) {
         vimeoPlayerInstance = new Vimeo.Player(vidElement);
