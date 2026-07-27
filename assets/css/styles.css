@@ -56,7 +56,7 @@ body {
 
 .app-container { width: 100%; max-width: 480px; position: relative; padding-bottom: 120px; }
 
-#setup-screen { display: flex; flex-direction: column; gap: 28px; animation: fadeIn 0.8s ease-out; }
+#setup-screen { display: flex; flex-direction: column; gap: 14px; animation: fadeIn 0.8s ease-out; }
 
 .setup-header { 
     text-align: center; 
@@ -80,15 +80,15 @@ body {
 }
 
 .setup-header h1 { color: var(--primary); font-size: calc(34px * var(--text-scale, 1)); font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
-.setup-header h1 span { display: block; font-size: calc(58px * var(--text-scale, 1)); margin-bottom: 8px; letter-spacing: -3px; }
-.setup-header p { color: var(--text-muted); font-size: calc(17px * var(--text-scale, 1)); font-weight: 700; margin-top: 14px; }
-.setup-step h3 { font-size: calc(18px * var(--text-scale, 1)); color: var(--text-main); margin-bottom: 14px; font-weight: 700; text-align: center;}
+.setup-header h1 span { display: block; font-size: calc(58px * var(--text-scale, 1)); margin-bottom: 2px; letter-spacing: -3px; }
+.setup-header p { color: var(--text-muted); font-size: calc(17px * var(--text-scale, 1)); font-weight: 700; margin-top: 6px; }
+.setup-step h3 { font-size: calc(18px * var(--text-scale, 1)); color: var(--text-main); margin-bottom: 8px; font-weight: 700; text-align: center;}
 
-.school-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.school-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 
 .option-card {
     background: rgba(255, 255, 255, 0.9); border: 2px solid #f1f5f9; border-radius: 20px;
-    padding: 24px 10px; text-align: center; cursor: pointer;
+    padding: 14px 8px; text-align: center; cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex;
     flex-direction: row; justify-content: center; align-items: center; gap: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.03);
@@ -108,7 +108,7 @@ body {
 
 .toggle-container {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-    background: rgba(255, 255, 255, 0.9); padding: 14px 20px; border-radius: 18px;
+    background: rgba(255, 255, 255, 0.9); padding: 10px 16px; border-radius: 18px;
     border: 2px solid #f1f5f9; cursor: pointer;
 }
 
@@ -771,7 +771,7 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     font-size: calc(20px * var(--text-scale, 1));
     font-weight: 900;
     color: #78716c;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
 }
 .demo-buttons-row {
     display: flex;
@@ -784,7 +784,7 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     flex: 1;
     font-weight: 900;
     font-size: calc(17px * var(--text-scale, 1));
-    padding: 18px 4px;
+    padding: 14px 4px;
     border-radius: 24px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
