@@ -56,22 +56,22 @@ body {
 
 .app-container { width: 100%; max-width: 480px; position: relative; padding-bottom: 24px; }
 
-#setup-screen { display: flex; flex-direction: column; gap: clamp(10px, 2.3vh, 20px); animation: fadeIn 0.8s ease-out; width: 100%; margin: 0 auto; }
+#setup-screen { display: flex; flex-direction: column; gap: clamp(16px, 3vh, 26px); animation: fadeIn 0.8s ease-out; width: 100%; margin: 0 auto; }
 
 #main-screen { padding-bottom: 110px; }
 
 .setup-header { 
     text-align: center; 
-    margin-bottom: 2px; 
+    margin-bottom: 4px; 
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .setup-header .icon { 
-    width: clamp(56px, 9vh, 76px);
-    height: clamp(56px, 9vh, 76px);
-    margin-bottom: clamp(2px, 0.8vh, 6px);
+    width: clamp(64px, 9vh, 78px);
+    height: clamp(64px, 9vh, 78px);
+    margin-bottom: clamp(4px, 1vh, 8px);
     animation: float-main 3s infinite ease-in-out; 
     display: inline-block; 
     filter: drop-shadow(0 10px 15px rgba(234, 179, 8, 0.2)); 
@@ -82,16 +82,16 @@ body {
     50% { transform: translate3d(0, -8px, 0); }
 }
 
-.setup-header h1 { color: var(--primary); font-size: clamp(26px, 4vh, calc(34px * var(--text-scale, 1))); font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
-.setup-header h1 span { display: block; font-size: clamp(42px, 6.5vh, calc(58px * var(--text-scale, 1))); margin-bottom: clamp(2px, 0.6vh, 6px); letter-spacing: -3px; }
-.setup-header p { color: var(--text-muted); font-size: clamp(14px, 2vh, calc(17px * var(--text-scale, 1))); font-weight: 700; margin-top: clamp(4px, 1vh, 10px); }
-.setup-step h3 { font-size: clamp(15px, 2.2vh, calc(18px * var(--text-scale, 1))); color: var(--text-main); margin-bottom: clamp(6px, 1.2vh, 12px); font-weight: 700; text-align: center;}
+.setup-header h1 { color: var(--primary); font-size: clamp(28px, 4vh, calc(34px * var(--text-scale, 1))); font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
+.setup-header h1 span { display: block; font-size: clamp(46px, 6.5vh, calc(58px * var(--text-scale, 1))); margin-bottom: clamp(4px, 0.8vh, 6px); letter-spacing: -3px; }
+.setup-header p { color: var(--text-muted); font-size: clamp(15px, 2vh, calc(17px * var(--text-scale, 1))); font-weight: 700; margin-top: clamp(6px, 1.2vh, 12px); }
+.setup-step h3 { font-size: clamp(16px, 2.2vh, calc(18px * var(--text-scale, 1))); color: var(--text-main); margin-bottom: clamp(8px, 1.4vh, 14px); font-weight: 700; text-align: center;}
 
 .school-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 
 .option-card {
     background: rgba(255, 255, 255, 0.9); border: 2px solid #f1f5f9; border-radius: 20px;
-    padding: clamp(12px, 2vh, 18px) 10px; text-align: center; cursor: pointer;
+    padding: clamp(16px, 2.2vh, 22px) 10px; text-align: center; cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex;
     flex-direction: row; justify-content: center; align-items: center; gap: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.03);
@@ -111,7 +111,7 @@ body {
 
 .toggle-container {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-    background: rgba(255, 255, 255, 0.9); padding: clamp(8px, 1.5vh, 12px) 18px; border-radius: 18px;
+    background: rgba(255, 255, 255, 0.9); padding: clamp(10px, 1.8vh, 14px) 18px; border-radius: 18px;
     border: 2px solid #f1f5f9; cursor: pointer;
 }
 
@@ -787,7 +787,7 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     flex: 1;
     font-weight: 900;
     font-size: clamp(15px, 2.2vh, calc(17px * var(--text-scale, 1)));
-    padding: clamp(12px, 2vh, 16px) 4px;
+    padding: clamp(14px, 2.2vh, 18px) 4px;
     border-radius: 24px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -871,66 +871,5 @@ body.splash-active {
     opacity: 0;
     transform: scale(1.02);
     pointer-events: none;
-}
-
-/* --- Perfect Responsive Layout for iOS & Android Screens (No Overflow) --- */
-@media (max-height: 740px) {
-    #setup-screen {
-        gap: 12px !important;
-    }
-    .setup-header .icon {
-        width: 62px !important;
-        height: 62px !important;
-        margin-bottom: 2px !important;
-    }
-    .setup-header h1 {
-        font-size: 28px !important;
-    }
-    .setup-header h1 span {
-        font-size: 46px !important;
-        margin-bottom: 2px !important;
-    }
-    .setup-header p {
-        margin-top: 4px !important;
-        font-size: 15px !important;
-    }
-    .setup-step h3, .demo-buttons-title {
-        margin-bottom: 6px !important;
-        font-size: 16px !important;
-    }
-    .option-card {
-        padding: 12px 6px !important;
-        border-radius: 16px !important;
-    }
-    .toggle-container {
-        padding: 8px 14px !important;
-    }
-    .btn-demo-next, .btn-demo-summer {
-        padding: 12px 4px !important;
-        font-size: 15px !important;
-    }
-}
-
-@media (max-height: 640px) {
-    #setup-screen {
-        gap: 8px !important;
-    }
-    .setup-header .icon {
-        width: 52px !important;
-        height: 52px !important;
-    }
-    .setup-header h1 {
-        font-size: 24px !important;
-    }
-    .setup-header h1 span {
-        font-size: 38px !important;
-    }
-    .option-card {
-        padding: 10px 4px !important;
-    }
-    .btn-demo-next, .btn-demo-summer {
-        padding: 10px 4px !important;
-        font-size: 14px !important;
-    }
 }
 
