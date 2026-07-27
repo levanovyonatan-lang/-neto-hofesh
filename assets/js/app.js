@@ -13,8 +13,19 @@ let confettiFired = false;
 let deferredPrompt = null;
 let isAnimatingNetDays = false;
 let netDaysAnimationId = null;
-let vimeoPlayerInstance = null;
-const shouldOpenInstallVideo = (new URLSearchParams(window.location.search).get('install') === '1');
+let safariInstallModalOpened = false;
+const shouldOpenInstallVideo = (() => {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        return (
+            urlParams.get('install') === '1' ||
+            urlParams.get('install') === 'true' ||
+            window.location.href.includes('install=1') ||
+            window.location.search.includes('install=1') ||
+            window.location.hash.includes('install=1')
+        );
+    } catch (e) { return false; }
+})();
 
 // שמירת ה-Prompt להתקנה אוטומטית באנדרואיד
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -72,7 +83,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=253').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=254').then(reg => {
             reg.update();
         }).catch(() => { });
 
@@ -118,6 +129,10 @@ function openSafariInstallVideoModal() {
     try {
         const modal = document.getElementById('ios-modal');
         if (!modal) return;
+        if (safariInstallModalOpened && modal.style.display === 'flex') {
+            return;
+        }
+        safariInstallModalOpened = true;
 
         const safariContent = document.getElementById('modal-safari-content');
         const nonsafariContent = document.getElementById('modal-nonsafari-content');
@@ -136,7 +151,6 @@ function openSafariInstallVideoModal() {
 
         const video = videoContainer ? videoContainer.querySelector('video') : null;
         if (video) {
-            video.currentTime = 0;
             video.play().catch(() => { });
         }
 
@@ -216,6 +230,7 @@ function copySiteUrlForSafari(btn) {
 
 function closeIosModal() {
     trackEvent('close_ios_install_modal');
+    safariInstallModalOpened = false;
     document.getElementById('ios-modal').style.display = 'none';
     const video = document.querySelector('#modal-safari-content video');
     if (video) video.pause();
@@ -224,18 +239,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=253&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses.png?v=253&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-white.png?v=253&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-transparent.png?v=253&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('manifest.json?v=254&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses.png?v=254&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-white.png?v=254&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-transparent.png?v=254&cb=' + cb, { cache: 'reload' }).catch(() => {});
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=253&cb=' + cb;
+            link.href = baseHref + '?v=254&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=253&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=254&cb=' + cb;
         }
     } catch (e) { }
 }
@@ -877,7 +892,6 @@ window.onload = () => {
 
     if (shouldOpenInstallVideo) {
         openSafariInstallVideoModal();
-        try { window.history.replaceState({}, document.title, window.location.pathname); } catch(e){}
     }
 
     // תמיכה במקלדת ונגישות לסגירת חלונות

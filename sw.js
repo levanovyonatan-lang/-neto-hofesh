@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v253';
+const CACHE_VERSION = 'v254';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -19,8 +19,8 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   const url = e.request.url || '';
-  // Bypass cache for navigation, manifest, and all icon/image assets to force standalone PWA icon updates
-  if (e.request.mode === 'navigate' || url.includes('manifest.json') || url.includes('official-sun-neto') || url.includes('icon-neto-sunglasses') || url.includes('.png') || url.includes('.ico') || url.includes('.jpg') || url.includes('.jpeg')) {
+  // Only bypass cache for manifest and icon/image assets to force standalone PWA icon updates without touching page navigation
+  if (url.includes('manifest.json') || url.includes('official-sun-neto') || url.includes('icon-neto-sunglasses') || url.includes('.png') || url.includes('.ico') || url.includes('.jpg') || url.includes('.jpeg')) {
     e.respondWith(
       fetch(e.request.url + (e.request.url.includes('?') ? '&' : '?') + 'cb=' + Date.now(), { cache: 'no-store' })
         .catch(() => fetch(e.request))
