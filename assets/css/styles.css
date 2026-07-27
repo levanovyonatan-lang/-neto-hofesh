@@ -828,4 +828,45 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     transform: translateY(2px);
     box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3), inset 0 -2px 0 rgba(217, 119, 6, 0.5);
 }
+
+/* מסך פתיחה וטעינה - סגנונות ואנימציות */
+@keyframes splash-pulse-glow {
+    0%, 100% { transform: scale(1); opacity: 0.55; }
+    50% { transform: scale(1.18); opacity: 0.95; }
+}
+
+@keyframes splash-sun-float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes splash-fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body.splash-active {
+    overflow: hidden !important;
+}
+
+#neto-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: linear-gradient(135deg, #ffffff 0%, #fefce8 55%, #fef9c3 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    padding: 20px;
+    text-align: center;
+}
+
+#neto-splash.splash-hiding {
+    opacity: 0;
+    transform: scale(1.04);
+    pointer-events: none;
+}
 
