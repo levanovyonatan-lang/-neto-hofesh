@@ -277,7 +277,10 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 
 .seo-footer { margin-top: 40px; padding: 30px 10px; border-top: 1px solid #f1f5f9; font-size: calc(14px * var(--text-scale, 1)); color: var(--text-muted); text-align: right; line-height: 1.7; }
 .seo-footer h2 { font-size: calc(18px * var(--text-scale, 1)); margin-bottom: 12px; color: var(--text-main); font-weight: 800; }
-.seo-footer h3 { font-size: calc(16px * var(--text-scale, 1)); margin-top: 15px; margin-bottom: 8px; color: var(--text-main); font-weight: 700; }
+.seo-footer h3 { font-size: calc(16px * var(--text-scale, 1)); margin-top: 20px; margin-bottom: 10px; color: var(--text-main); font-weight: 700; }
+.seo-holiday-list { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+.seo-holiday-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px; line-height: 1.65; }
+.seo-holiday-item strong { color: #0f172a; font-size: calc(15px * var(--text-scale, 1)); display: block; margin-bottom: 4px; }
 .contact-area { margin-top: 25px; padding-top: 15px; border-top: 1px dashed #e2e8f0; font-size: calc(13px * var(--text-scale, 1)); font-weight: 600; }
 .contact-link { color: var(--accent); text-decoration: none; }
 
