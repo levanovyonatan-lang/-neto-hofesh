@@ -56,7 +56,7 @@ body {
 
 .app-container { width: 100%; max-width: 480px; position: relative; padding-bottom: 24px; }
 
-#setup-screen { display: flex; flex-direction: column; gap: clamp(16px, 3vh, 26px); animation: fadeIn 0.8s ease-out; width: 100%; margin: 0 auto; }
+#setup-screen { display: flex; flex-direction: column; gap: clamp(18px, 3.2vh, 28px); animation: fadeIn 0.8s ease-out; width: 100%; margin: 0 auto; }
 
 #main-screen { padding-bottom: 110px; }
 
@@ -87,13 +87,13 @@ body {
 .setup-header p { color: var(--text-muted); font-size: clamp(15px, 2vh, calc(17px * var(--text-scale, 1))); font-weight: 700; margin-top: clamp(6px, 1.2vh, 12px); }
 .setup-step h3 { font-size: clamp(16px, 2.2vh, calc(18px * var(--text-scale, 1))); color: var(--text-main); margin-bottom: clamp(8px, 1.4vh, 14px); font-weight: 700; text-align: center;}
 
-.school-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.school-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
 
 .option-card {
     background: rgba(255, 255, 255, 0.9); border: 2px solid #f1f5f9; border-radius: 20px;
-    padding: clamp(16px, 2.2vh, 22px) 10px; text-align: center; cursor: pointer;
+    padding: clamp(20px, 2.8vh, 26px) 12px; text-align: center; cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex;
-    flex-direction: row; justify-content: center; align-items: center; gap: 8px;
+    flex-direction: row; justify-content: center; align-items: center; gap: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.03);
 }
 
@@ -101,8 +101,8 @@ body {
 .option-card input { display: none; }
 .option-card.selected { border-color: var(--primary); background: #fefce8; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(234, 179, 8, 0.15); }
 
-.option-emoji { font-size: calc(28px * var(--text-scale, 1)); }
-.option-title { font-weight: 900; font-size: calc(16px * var(--text-scale, 1)); }
+.option-emoji { font-size: clamp(30px, 3.8vh, calc(34px * var(--text-scale, 1))); }
+.option-title { font-weight: 900; font-size: clamp(17px, 2.3vh, calc(19px * var(--text-scale, 1))); }
 
 .school-hint {
     text-align: center; margin-top: 5px; font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover);
@@ -110,13 +110,13 @@ body {
 }
 
 .toggle-container {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-    background: rgba(255, 255, 255, 0.9); padding: clamp(10px, 1.8vh, 14px) 18px; border-radius: 18px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    background: rgba(255, 255, 255, 0.9); padding: clamp(14px, 2.2vh, 18px) 22px; border-radius: 18px;
     border: 2px solid #f1f5f9; cursor: pointer;
 }
 
-.toggle-title { font-size: calc(17px * var(--text-scale, 1)); font-weight: 800; color: var(--text-main); margin-bottom: 2px; text-align: center; }
-.toggle-hint { font-size: calc(14px * var(--text-scale, 1)); color: var(--text-muted); font-weight: 600; text-align: center; }
+.toggle-title { font-size: clamp(18px, 2.5vh, calc(20px * var(--text-scale, 1))); font-weight: 800; color: var(--text-main); margin-bottom: 3px; text-align: center; }
+.toggle-hint { font-size: clamp(15px, 2vh, calc(16px * var(--text-scale, 1))); color: var(--text-muted); font-weight: 600; text-align: center; }
 
 .smiley-switch {
     position: relative; display: inline-block; width: 56px; height: 30px;
@@ -779,15 +779,15 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 .demo-buttons-row {
     display: flex;
     flex-direction: row;
-    gap: 12px;
+    gap: 16px;
     justify-content: center;
     width: 100%;
 }
 .btn-demo-next, .btn-demo-summer {
     flex: 1;
     font-weight: 900;
-    font-size: clamp(15px, 2.2vh, calc(17px * var(--text-scale, 1)));
-    padding: clamp(14px, 2.2vh, 18px) 4px;
+    font-size: clamp(17px, 2.5vh, calc(19px * var(--text-scale, 1)));
+    padding: clamp(18px, 2.6vh, 22px) 8px;
     border-radius: 24px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
