@@ -2,32 +2,32 @@
   "id": "/",
   "name": "נטו חופש | מתי החופש הגדול",
   "short_name": "נטו חופש",
-  "start_url": "./?v=252",
+  "start_url": "./?v=253",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "description": "ספירה לאחור לימי לימוד נטו עד החופש הגדול בלי שבתות וחגים",
   "icons": [
     {
-      "src": "icon-neto-sunglasses.png?v=252",
+      "src": "icon-neto-sunglasses.png?v=253",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icon-neto-sunglasses.png?v=252",
+      "src": "icon-neto-sunglasses.png?v=253",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icon-neto-sunglasses-white.png?v=252",
+      "src": "icon-neto-sunglasses-white.png?v=253",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "icon-neto-sunglasses-white.png?v=252",
+      "src": "icon-neto-sunglasses-white.png?v=253",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

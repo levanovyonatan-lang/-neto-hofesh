@@ -14,6 +14,7 @@ let deferredPrompt = null;
 let isAnimatingNetDays = false;
 let netDaysAnimationId = null;
 let vimeoPlayerInstance = null;
+const shouldOpenInstallVideo = (new URLSearchParams(window.location.search).get('install') === '1');
 
 // שמירת ה-Prompt להתקנה אוטומטית באנדרואיד
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -71,7 +72,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=252').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=253').then(reg => {
             reg.update();
         }).catch(() => { });
 
@@ -106,14 +107,10 @@ function initPWA() {
 
 function detectIOSBrowser() {
     const ua = window.navigator.userAgent;
-    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     if (!isIOS) return 'not-ios';
-    const isChrome = /CriOS/.test(ua);
-    const isFirefox = /FxiOS/.test(ua);
-    const isGoogleApp = /GSA/.test(ua);
-    const isInstagram = /Instagram/.test(ua);
-    const isFacebook = /FBAV|FBAN/.test(ua);
-    if (isChrome || isFirefox || isGoogleApp || isInstagram || isFacebook) return 'ios-non-safari';
+    const isNonSafari = /CriOS|FxiOS|GSA|Instagram|FBAV|FBAN|TikTok|WhatsApp|Snapchat|Telegram|LinkedIn|Twitter|MicroMessenger|WeChat|Viber|EdgiOS|OPiOS|DuckDuckGo|Brave|crios|fxios|gsa|instagram|tiktok|whatsapp|fb_iab|fbav|wv/i.test(ua);
+    if (isNonSafari) return 'ios-non-safari';
     return 'ios-safari';
 }
 
@@ -172,7 +169,12 @@ function handleA2HS() {
             document.getElementById('ios-modal').focus();
         } else if (iosBrowserType === 'ios-non-safari') {
             trackEvent('attempt_auto_safari_redirect');
-            window.location.href = `x-safari-https://${window.location.hostname}${window.location.pathname}?install=1`;
+            const targetUrl = `x-safari-https://${window.location.hostname}${window.location.pathname}?install=1`;
+            const copyInput = document.getElementById('site-url-input');
+            if (copyInput) {
+                copyInput.value = `${window.location.hostname}${window.location.pathname}?install=1`;
+            }
+            window.location.href = targetUrl;
 
             setTimeout(() => {
                 if (document.getElementById('ios-modal').style.display !== 'flex') {
@@ -188,11 +190,24 @@ function handleA2HS() {
     }
 }
 
+function openDirectlyInSafari() {
+    trackEvent('click_open_directly_safari');
+    const targetUrl = `x-safari-https://${window.location.hostname}${window.location.pathname}?install=1`;
+    window.location.href = targetUrl;
+}
+
 function copySiteUrlForSafari(btn) {
+    const installUrl = `https://${window.location.hostname}${window.location.pathname}?install=1`;
     const copyText = document.getElementById("site-url-input");
-    copyText.select();
-    copyText.setSelectionRange(0, 99999);
-    document.execCommand("copy");
+    if (copyText) {
+        copyText.value = `${window.location.hostname}${window.location.pathname}?install=1`;
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        try { document.execCommand("copy"); } catch (e) { }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(installUrl).catch(() => {});
+    }
     trackEvent('copied_url_for_safari');
     btn.innerHTML = "הועתק! ✅";
     btn.style.background = "#dcfce7"; btn.style.color = "#166534"; btn.style.borderColor = "#86efac";
@@ -209,18 +224,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=252&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses.png?v=252&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-white.png?v=252&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-transparent.png?v=252&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('manifest.json?v=253&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses.png?v=253&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-white.png?v=253&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-transparent.png?v=253&cb=' + cb, { cache: 'reload' }).catch(() => {});
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=252&cb=' + cb;
+            link.href = baseHref + '?v=253&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=252&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=253&cb=' + cb;
         }
     } catch (e) { }
 }
@@ -860,9 +875,9 @@ window.onload = () => {
         }
     }
 
-    if (urlParams.get('install') === '1') {
-        window.history.replaceState({}, document.title, window.location.pathname);
+    if (shouldOpenInstallVideo) {
         openSafariInstallVideoModal();
+        try { window.history.replaceState({}, document.title, window.location.pathname); } catch(e){}
     }
 
     // תמיכה במקלדת ונגישות לסגירת חלונות
@@ -1330,9 +1345,7 @@ document.addEventListener('keydown', function (e) {
 // אתחול מראש של נגן ה-Vimeo לביצועים מהירים
 document.addEventListener('DOMContentLoaded', () => {
     try {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('install') === '1') {
-            window.history.replaceState({}, document.title, window.location.pathname);
+        if (shouldOpenInstallVideo) {
             openSafariInstallVideoModal();
         }
     } catch (e) { }
