@@ -853,12 +853,12 @@ body.splash-active {
     position: fixed;
     inset: 0;
     z-index: 999999;
-    background: linear-gradient(135deg, #ffffff 0%, #fefce8 55%, #fef9c3 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #fefce8 60%, #fef9c3 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.38s ease, transform 0.38s ease;
     overflow: hidden;
     padding: 20px;
     text-align: center;
@@ -866,7 +866,7 @@ body.splash-active {
 
 #neto-splash.splash-hiding {
     opacity: 0;
-    transform: scale(1.04);
+    transform: scale(1.02);
     pointer-events: none;
 }
 

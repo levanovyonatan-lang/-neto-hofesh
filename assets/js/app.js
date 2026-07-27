@@ -83,7 +83,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=255').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=256').then(reg => {
             reg.update();
         }).catch(() => { });
 
@@ -239,18 +239,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=255&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses.png?v=255&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-white.png?v=255&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-transparent.png?v=255&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('manifest.json?v=256&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses.png?v=256&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-white.png?v=256&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-transparent.png?v=256&cb=' + cb, { cache: 'reload' }).catch(() => {});
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=255&cb=' + cb;
+            link.href = baseHref + '?v=256&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=255&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=256&cb=' + cb;
         }
     } catch (e) { }
 }
@@ -1359,43 +1359,16 @@ document.addEventListener('keydown', function (e) {
 function initSplashScreen() {
     try {
         const splash = document.getElementById('neto-splash');
-        const progressBar = document.getElementById('splash-progress-bar');
-        const loadingText = document.getElementById('splash-loading-text');
         if (!splash) return;
 
-        const phrases = [
-            "טוען ימי חופש מדויקים... ☀️",
-            "מוריד שבתות, שישי וחגים... 🍉",
-            "מכין את האנרגיות לקיץ... 🚀"
-        ];
-
-        let step = 0;
-        const progressSteps = [35, 75, 100];
-        const stepTime = shouldOpenInstallVideo ? 180 : 360;
-        const totalDuration = shouldOpenInstallVideo ? 550 : 1250;
-
-        const interval = setInterval(() => {
-            step++;
-            if (step < phrases.length) {
-                if (loadingText) loadingText.textContent = phrases[step];
-                if (progressBar) progressBar.style.width = progressSteps[step] + '%';
-            }
-        }, stepTime);
-
-        const dismissSplash = () => {
-            clearInterval(interval);
-            if (progressBar) progressBar.style.width = '100%';
-            if (loadingText) loadingText.textContent = "מוכן לקיץ! 🏖️";
+        const duration = shouldOpenInstallVideo ? 180 : 400;
+        setTimeout(() => {
+            splash.classList.add('splash-hiding');
+            document.body.classList.remove('splash-active');
             setTimeout(() => {
-                splash.classList.add('splash-hiding');
-                document.body.classList.remove('splash-active');
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                }, 650);
-            }, 180);
-        };
-
-        setTimeout(dismissSplash, totalDuration);
+                splash.style.display = 'none';
+            }, 380);
+        }, duration);
     } catch (e) { }
 }
 
