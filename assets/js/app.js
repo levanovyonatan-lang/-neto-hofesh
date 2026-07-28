@@ -83,12 +83,39 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=284').then(reg => {
+        let isRefreshing = false;
+
+        navigator.serviceWorker.register('sw.js?v=285').then(reg => {
             reg.update();
+
+            setInterval(() => {
+                reg.update();
+            }, 30 * 60 * 1000);
+
+            reg.onupdatefound = () => {
+                const installingWorker = reg.installing;
+                if (installingWorker) {
+                    installingWorker.onstatechange = () => {
+                        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            if (!isRefreshing) {
+                                isRefreshing = true;
+                                window.location.reload();
+                            }
+                        }
+                    };
+                }
+            };
         }).catch(() => { });
 
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!isRefreshing) {
+                isRefreshing = true;
+                window.location.reload();
+            }
+        });
+
         navigator.serviceWorker.addEventListener('message', e => {
-            if (e.data && e.data.type === 'UPDATE_ICONS') {
+            if (e.data && (e.data.type === 'SW_UPDATED' || e.data.type === 'UPDATE_ICONS')) {
                 refreshPWAIconsSilently();
             }
         });
