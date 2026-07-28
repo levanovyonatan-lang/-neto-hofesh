@@ -83,7 +83,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=282').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=283').then(reg => {
             reg.update();
         }).catch(() => { });
 
@@ -239,18 +239,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=282&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses.png?v=282&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-white.png?v=282&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-transparent.png?v=282&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('manifest.json?v=283&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses.png?v=283&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-white.png?v=283&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-transparent.png?v=283&cb=' + cb, { cache: 'reload' }).catch(() => {});
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=282&cb=' + cb;
+            link.href = baseHref + '?v=283&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=282&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=283&cb=' + cb;
         }
     } catch (e) { }
 }
