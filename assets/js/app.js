@@ -83,32 +83,19 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
+        const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=294').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=295').then(reg => {
             reg.update();
 
             setInterval(() => {
                 reg.update();
             }, 30 * 60 * 1000);
-
-            reg.onupdatefound = () => {
-                const installingWorker = reg.installing;
-                if (installingWorker) {
-                    installingWorker.onstatechange = () => {
-                        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if (!isRefreshing) {
-                                isRefreshing = true;
-                                window.location.reload();
-                            }
-                        }
-                    };
-                }
-            };
         }).catch(() => { });
 
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-            if (!isRefreshing) {
+            if (hadController && !isRefreshing) {
                 isRefreshing = true;
                 window.location.reload();
             }
@@ -1101,7 +1088,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=294';
+        script.src = 'assets/js/games/dino-school.js?v=295';
         document.body.appendChild(script);
     }
 
