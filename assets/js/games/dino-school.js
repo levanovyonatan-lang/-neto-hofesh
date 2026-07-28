@@ -161,9 +161,53 @@
     }
 
     function startGame() {
-        if (isGameActive) return;
-        isGameActive = true;
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
+
+        if (isGameActive) {
+            const title = document.getElementById('dino-game-over');
+            if (title) title.remove();
+
+            obstaclesList.forEach(obs => {
+                if (obs.el && obs.el.parentNode) obs.el.remove();
+            });
+            obstaclesList = [];
+            obstacleQueue = [];
+
+            score = 0;
+            currentStageIndex = 0;
+            gameContainer.style.background = '';
+            gameContainer.style.animation = 'none';
+            document.getElementById('dino-score-val').textContent = '0';
+            isGameOver = false;
+            gameSpeed = GAME_SPEED_START;
+            spawnTimer = 60;
+            frameCount = 0;
+            dinoY = 0;
+            dinoVelocity = 0;
+            isJumping = false;
+            dino.style.transform = `translateY(0px)`;
+            dino.innerHTML = '<span class="dino-inner walking">🦖</span>';
+            dino.style.filter = 'none';
+            dino.style.opacity = '1';
+            
+            if (objectiveTimeoutId) clearTimeout(objectiveTimeoutId);
+            if (objectiveDisplay) {
+                objectiveDisplay.style.opacity = '1';
+                objectiveDisplay.style.display = 'none';
+            }
+            
+            window.addEventListener('keydown', handleInput);
+            window.addEventListener('touchstart', handleInput, {passive: false});
+            gameContainer.addEventListener('mousedown', handleInput);
+
+            if (gameLoopId) cancelAnimationFrame(gameLoopId);
+            gameLoopId = requestAnimationFrame(gameLoop);
+
+            announceStage(0);
+            return;
+        }
+
+        isGameActive = true;
         isGameOver = false;
         score = 0;
         currentStageIndex = 0;
@@ -942,56 +986,14 @@
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
-            restartGame();
+            startGame();
         };
 
         btnContainer.appendChild(playAgainBtn);
         title.appendChild(btnContainer);
     }
 
-    function restartGame() {
-        if (typeof trackEvent === 'function') trackEvent('dino_game_play');
-        const title = document.getElementById('dino-game-over');
-        if (title) title.remove();
 
-        obstaclesList.forEach(obs => {
-            if (obs.el && obs.el.parentNode) obs.el.remove();
-        });
-        obstaclesList = [];
-        obstacleQueue = [];
-
-        score = 0;
-        currentStageIndex = 0;
-        gameContainer.style.background = '';
-        gameContainer.style.animation = 'none';
-        document.getElementById('dino-score-val').textContent = '0';
-        isGameOver = false;
-        gameSpeed = GAME_SPEED_START;
-        spawnTimer = 60;
-        frameCount = 0;
-        dinoY = 0;
-        dinoVelocity = 0;
-        isJumping = false;
-        dino.style.transform = `translateY(0px)`;
-        dino.innerHTML = '<span class="dino-inner walking">🦖</span>';
-        dino.style.filter = 'none';
-        dino.style.opacity = '1';
-        
-        if (objectiveTimeoutId) clearTimeout(objectiveTimeoutId);
-        if (objectiveDisplay) {
-            objectiveDisplay.style.opacity = '1';
-            objectiveDisplay.style.display = 'none';
-        }
-        
-        window.addEventListener('keydown', handleInput);
-        window.addEventListener('touchstart', handleInput, {passive: false});
-        gameContainer.addEventListener('mousedown', handleInput);
-
-        if (gameLoopId) cancelAnimationFrame(gameLoopId);
-        gameLoopId = requestAnimationFrame(gameLoop);
-
-        announceStage(0);
-    }
 
     function cleanupGame() {
         if (!gameContainer) return;
