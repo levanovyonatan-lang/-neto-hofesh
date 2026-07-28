@@ -592,10 +592,15 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 
     if (aiToolsContainer) {
         aiToolsContainer.style.display = '';
-        if (btn) btn.style.display = shouldShowTips ? '' : 'none';
-        if (gameBtn) {
-            gameBtn.style.display = '';
-            gameBtn.style.marginTop = (btn && shouldShowTips) ? '10px' : '0px';
+        if (shouldShowTips) {
+            if (btn) btn.style.display = '';
+            if (gameBtn) gameBtn.style.display = 'none';
+        } else {
+            if (btn) btn.style.display = 'none';
+            if (gameBtn) {
+                gameBtn.style.display = '';
+                gameBtn.style.marginTop = '20px';
+            }
         }
     }
 
@@ -1057,7 +1062,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=290';
+        script.src = 'assets/js/games/dino-school.js?v=291';
         document.body.appendChild(script);
     }
 
