@@ -83,7 +83,7 @@ const allTargets = [
 
 function initPWA() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js?v=277').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=278').then(reg => {
             reg.update();
         }).catch(() => { });
 
@@ -239,18 +239,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=277&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses.png?v=277&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-white.png?v=277&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-transparent.png?v=277&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('manifest.json?v=278&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses.png?v=278&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-white.png?v=278&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('icon-neto-sunglasses-transparent.png?v=278&cb=' + cb, { cache: 'reload' }).catch(() => {});
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=277&cb=' + cb;
+            link.href = baseHref + '?v=278&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=277&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=278&cb=' + cb;
         }
     } catch (e) { }
 }
@@ -1361,31 +1361,14 @@ function initSplashScreen() {
         const splash = document.getElementById('neto-splash');
         if (!splash) return;
 
-        const hideSplash = () => {
-            if (splash.dataset.hidden) return;
-            splash.dataset.hidden = 'true';
+        const duration = shouldOpenInstallVideo ? 180 : 400;
+        setTimeout(() => {
             splash.classList.add('splash-hiding');
             document.body.classList.remove('splash-active');
             setTimeout(() => {
                 splash.style.display = 'none';
             }, 380);
-        };
-
-        const minDuration = (typeof shouldOpenInstallVideo !== 'undefined' && shouldOpenInstallVideo) ? 150 : 650;
-        const startTime = Date.now();
-
-        const triggerHide = () => {
-            const elapsed = Date.now() - startTime;
-            const remaining = Math.max(0, minDuration - elapsed);
-            setTimeout(hideSplash, remaining);
-        };
-
-        if (document.readyState === 'complete') {
-            triggerHide();
-        } else {
-            window.addEventListener('load', triggerHide);
-            setTimeout(triggerHide, 1200);
-        }
+        }, duration);
     } catch (e) { }
 }
 
