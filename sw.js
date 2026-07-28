@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v291';
+const CACHE_VERSION = 'v292';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -9,6 +9,8 @@ self.addEventListener('install', e => {
         'index.html',
         'assets/css/styles.css',
         'assets/js/app.js',
+        'tips.js',
+        'assets/js/games/dino-school.js',
         'manifest.json'
       ]).catch(() => {});
     })

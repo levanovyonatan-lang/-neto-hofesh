@@ -85,7 +85,7 @@ function initPWA() {
     if ('serviceWorker' in navigator) {
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=288').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=292').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -566,6 +566,42 @@ function loadDailyState() {
 
 function saveDailyState() { localStorage.setItem(dailyTipsStorageKey, JSON.stringify(dailyTipsState)); }
 
+function hasDailyTips(targetId, schoolType = userConfig.schoolType) {
+    if (!window.tipsDatabase) return false;
+    const fallbackSchoolType = schoolType === 'middle' ? 'high' : schoolType;
+    let baseTargetName = targetId.replace(/\d+$/, '');
+    const targetMap = {
+        'summerHigh': 'summer',
+        'summerElem': 'summer',
+        'summerElemLow': 'summer',
+        'summerMiddlePrep': 'summer',
+        'pesach': 'pesach',
+        'atzmaut': 'atzmaut',
+        'roshHashana': 'roshHashana',
+        'kippurSukkot': 'kippurSukkot',
+        'hanukkah': 'hanukkah',
+        'purim': 'purim',
+        'shavuot': 'shavuot',
+        'lagbaomer': 'lagbaomer'
+    };
+    if (targetMap[baseTargetName]) baseTargetName = targetMap[baseTargetName];
+
+    const target = typeof activeEventsList !== 'undefined' ? activeEventsList.find(e => e.id === targetId) : null;
+    const isExperimentalSite = window.location.hostname.includes('github.io');
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDemo = urlParams.get('show_demo') === 'true' || isExperimentalSite;
+    const isCountdown = target && !target.isHappeningNow && !isDemo;
+
+    if (isCountdown) {
+        const waitTargetName = baseTargetName === 'kippurSukkot' ? 'sukkot' : baseTargetName;
+        const key = `waiting_${waitTargetName}_${fallbackSchoolType}`;
+        return !!(window.tipsDatabase[key] && window.tipsDatabase[key].length);
+    } else {
+        const key = `vacation_${baseTargetName}_${fallbackSchoolType}_1`;
+        return !!(window.tipsDatabase[key] && window.tipsDatabase[key].length);
+    }
+}
+
 function renderTipBox(targetId, isNewlyClicked = false) {
     const currentState = getDailyTipState(targetId);
 
@@ -584,6 +620,9 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             if (target.isSummer) {
                 shouldShowTips = true;
             }
+        }
+        if (shouldShowTips && !hasDailyTips(targetId)) {
+            shouldShowTips = false;
         }
     }
 
@@ -1062,7 +1101,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=291';
+        script.src = 'assets/js/games/dino-school.js?v=292';
         document.body.appendChild(script);
     }
 
