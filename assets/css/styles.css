@@ -801,6 +801,19 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     align-items: center;
     gap: 6px;
     letter-spacing: -0.3px;
+    white-space: nowrap;
+}
+
+body.is-android .demo-buttons-row {
+    gap: 8px;
+}
+
+body.is-android .btn-demo-next, 
+body.is-android .btn-demo-summer {
+    white-space: nowrap;
+    font-size: clamp(14px, 3.8vw, 17px);
+    padding: clamp(16px, 2.5vh, 20px) 4px;
+    letter-spacing: -0.4px;
 }
 .btn-demo-next {
     background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
