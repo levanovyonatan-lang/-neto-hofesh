@@ -86,7 +86,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=297').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=298').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -1094,7 +1094,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=297';
+        script.src = 'assets/js/games/dino-school.js?v=298';
         document.body.appendChild(script);
     }
 
@@ -1417,8 +1417,16 @@ document.addEventListener('keydown', function (e) {
 function initSplashScreen() {
     try {
         const splash = document.getElementById('neto-splash');
-        if (splash) splash.style.display = 'none';
-        document.body.classList.remove('splash-active');
+        if (!splash) return;
+
+        // משאירים את מסך הפתיחה ל-1100ms כדי שייתן תחושה יפה ומעבר חלק ואלגנטי לממשק
+        setTimeout(() => {
+            splash.classList.add('splash-hiding');
+            document.body.classList.remove('splash-active');
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 450);
+        }, 1100);
     } catch (e) { }
 }
 

@@ -191,7 +191,24 @@
     </style>
 </head>
 
-<body>
+<body class="splash-active">
+    <!-- מסך פתיחה אלגנטי ויפה -->
+    <div id="neto-splash">
+        <div style="position: absolute; width: 320px; height: 320px; background: radial-gradient(circle, rgba(250, 204, 21, 0.28) 0%, rgba(250, 204, 21, 0) 70%); border-radius: 50%; pointer-events: none; animation: splash-pulse-glow 2.5s infinite ease-in-out;"></div>
+        
+        <div style="position: relative; margin-bottom: 18px; animation: splash-sun-float 3s infinite ease-in-out;">
+            <img src="official-sun-neto-transparent.png?v=288" alt="נטו חופש לוגו" style="width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 12px 24px rgba(234, 179, 8, 0.4));">
+        </div>
+
+        <div style="animation: splash-fade-up 0.6s ease-out;">
+            <h1 style="font-size: calc(32px * var(--text-scale, 1)); font-weight: 900; color: #0f172a; margin: 0 0 6px 0; letter-spacing: -0.6px;">
+                <span style="color: #ea580c;">נטו</span> חופש
+            </h1>
+            <p style="font-size: calc(16px * var(--text-scale, 1)); font-weight: 600; color: #64748b; margin: 0;">
+                ספירה לאחור - בלי שבתות וחגים
+            </p>
+        </div>
+    </div>
     <div class="sun-background"></div>
     <main class="app-container">
         <div id="setup-screen">
@@ -729,8 +746,8 @@
     </div>
 
     <script src="tips.js?v=tips-file-v2" defer></script>
-    <script src="assets/js/app.js?v=297" defer></script>
-    <script src="assets/js/games/dino-school.js?v=297" defer></script>
+    <script src="assets/js/app.js?v=298" defer></script>
+    <script src="assets/js/games/dino-school.js?v=298" defer></script>
     <script src="assets/js/games/emoji-rain.js" defer></script>
 </body>
 
