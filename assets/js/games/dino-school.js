@@ -995,6 +995,10 @@
         const els = gameContainer.querySelectorAll('.dino-element');
         els.forEach(el => el.remove());
 
+        window.removeEventListener('keydown', handleInput);
+        window.removeEventListener('touchstart', handleInput);
+        gameContainer.removeEventListener('mousedown', handleInput);
+
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
         gameContainer.style.overflow = '';

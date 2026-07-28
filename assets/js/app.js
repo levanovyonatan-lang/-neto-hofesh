@@ -587,22 +587,13 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         }
     }
 
-    const isDemoSite = new URLSearchParams(window.location.search).get('show_demo') === 'true' || window.location.hostname.includes('github.io');
     const gameBtn = document.getElementById('main-game-btn');
     const btn = document.getElementById('main-ai-btn');
 
     if (aiToolsContainer) {
-        if (shouldShowTips) {
-            aiToolsContainer.style.display = '';
-            if (btn) btn.style.display = '';
-            if (gameBtn) gameBtn.style.display = 'none';
-        } else if (isDemoSite) {
-            aiToolsContainer.style.display = '';
-            if (btn) btn.style.display = 'none';
-            if (gameBtn) gameBtn.style.display = '';
-        } else {
-            aiToolsContainer.style.display = 'none';
-        }
+        aiToolsContainer.style.display = '';
+        if (btn) btn.style.display = shouldShowTips ? '' : 'none';
+        if (gameBtn) gameBtn.style.display = '';
     }
 
     const btnText = document.getElementById('ai-btn-text');
@@ -1060,10 +1051,10 @@ function showMainScreen() {
     const urlParams = new URLSearchParams(window.location.search);
     const isDemo = urlParams.get('show_demo') === 'true' || isExperimentalSite;
 
-    if (isDemo && !document.getElementById('dino-school-script')) {
+    if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=43';
+        script.src = 'assets/js/games/dino-school.js?v=289';
         document.body.appendChild(script);
     }
 
