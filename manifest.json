@@ -2,7 +2,7 @@
   "id": "/",
   "name": "נטו חופש | מתי החופש הגדול",
   "short_name": "נטו חופש",
-  "start_url": "./?v=288",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",

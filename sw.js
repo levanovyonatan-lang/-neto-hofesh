@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v296';
+const CACHE_VERSION = 'v297';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -39,18 +39,20 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   const url = req.url || '';
 
-  // Network-First for HTML/document navigation and core scripts/styles to force immediate updates on installed Home Screen PWAs
+  // Stale-While-Revalidate for HTML/document navigation and core scripts/styles for instant PWA startup
   if (req.mode === 'navigate' || url.includes('index.html') || url.endsWith('/') || url.includes('.css') || url.includes('.js') || url.includes('manifest.json')) {
     e.respondWith(
-      fetch(req)
-        .then(networkResponse => {
+      caches.match(req).then(cachedResponse => {
+        const fetchPromise = fetch(req).then(networkResponse => {
           if (networkResponse && networkResponse.status === 200) {
             const responseClone = networkResponse.clone();
             caches.open(CACHE_VERSION).then(cache => cache.put(req, responseClone));
           }
           return networkResponse;
-        })
-        .catch(() => caches.match(req))
+        }).catch(() => cachedResponse);
+
+        return cachedResponse || fetchPromise;
+      })
     );
     return;
   }
