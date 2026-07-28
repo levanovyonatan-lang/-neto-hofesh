@@ -804,16 +804,52 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
     white-space: nowrap;
 }
 
-body.is-android .demo-buttons-row {
+/* --- Android Specific Adjustments --- */
+body.is-android .school-grid {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+body.is-android .option-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 16px 8px;
     gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+body.is-android .option-title {
+    font-size: 16px;
+    font-weight: 900;
+}
+
+body.is-android .option-emoji {
+    font-size: 24px;
+}
+
+body.is-android .demo-buttons-row {
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
 }
 
 body.is-android .btn-demo-next, 
 body.is-android .btn-demo-summer {
     white-space: nowrap;
-    font-size: clamp(14px, 3.8vw, 17px);
-    padding: clamp(16px, 2.5vh, 20px) 4px;
-    letter-spacing: -0.4px;
+    font-size: clamp(15px, 4vw, 18px);
+    padding: 18px 6px;
+    min-height: 52px;
+    letter-spacing: -0.3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
 .btn-demo-next {
     background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
