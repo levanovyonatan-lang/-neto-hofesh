@@ -59,15 +59,13 @@ body {
 #setup-screen { 
     display: flex; 
     flex-direction: column; 
-    justify-content: space-between; 
-    min-height: calc(100dvh - 28px); 
-    max-height: calc(100dvh - 16px); 
-    padding: clamp(8px, 1.5vh, 16px) 4px; 
+    justify-content: center; 
+    gap: clamp(10px, 1.8vh, 18px); 
+    padding: clamp(6px, 1vh, 14px) 4px; 
     box-sizing: border-box; 
     animation: fadeIn 0.8s ease-out; 
     width: 100%; 
     margin: 0 auto; 
-    overflow: hidden; 
 }
 
 #main-screen { padding-bottom: 110px; }
