@@ -86,7 +86,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=295').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=296').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -96,6 +96,12 @@ function initPWA() {
 
         navigator.serviceWorker.addEventListener('controllerchange', () => {
             if (hadController && !isRefreshing) {
+                const lastReload = sessionStorage.getItem('pwa_last_reload');
+                const now = Date.now();
+                if (lastReload && (now - parseInt(lastReload, 10) < 20000)) {
+                    return;
+                }
+                sessionStorage.setItem('pwa_last_reload', String(now));
                 isRefreshing = true;
                 window.location.reload();
             }
@@ -1088,7 +1094,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=295';
+        script.src = 'assets/js/games/dino-school.js?v=296';
         document.body.appendChild(script);
     }
 
