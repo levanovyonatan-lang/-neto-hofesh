@@ -86,7 +86,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=298').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=299').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -95,6 +95,10 @@ function initPWA() {
         }).catch(() => { });
 
         navigator.serviceWorker.addEventListener('controllerchange', () => {
+            // בPWA ממסך הבית - לעולם לא לעשות reload כדי למנוע הבהוב כפול
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            if (isStandalone) return;
+
             if (hadController && !isRefreshing) {
                 const lastReload = sessionStorage.getItem('pwa_last_reload');
                 const now = Date.now();
@@ -1094,7 +1098,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=298';
+        script.src = 'assets/js/games/dino-school.js?v=299';
         document.body.appendChild(script);
     }
 

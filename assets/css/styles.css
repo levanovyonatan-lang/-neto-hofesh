@@ -904,6 +904,11 @@ body.splash-active {
     overflow: hidden !important;
 }
 
+body.splash-active .app-container,
+body.splash-active .sun-background {
+    visibility: hidden !important;
+}
+
 #neto-splash {
     position: fixed;
     inset: 0;
