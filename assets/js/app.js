@@ -85,7 +85,7 @@ function initPWA() {
     if ('serviceWorker' in navigator) {
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=285').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=286').then(reg => {
             reg.update();
 
             setInterval(() => {
