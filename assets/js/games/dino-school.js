@@ -163,6 +163,7 @@
     function startGame() {
         if (isGameActive) return;
         isGameActive = true;
+        if (typeof trackEvent === 'function') trackEvent('dino_game_play');
         isGameOver = false;
         score = 0;
         currentStageIndex = 0;
@@ -505,6 +506,12 @@
             
             // Announce Event and show objective temporarily
             announceStage(currentStageIndex);
+
+            if (currentStageIndex === 5) {
+                if (typeof trackEvent === 'function') trackEvent('dino_game_reach_stage_6');
+            } else if (currentStageIndex === 11) {
+                if (typeof trackEvent === 'function') trackEvent('dino_game_reach_stage_12');
+            }
         }
 
         // Spawn entities
@@ -943,6 +950,7 @@
     }
 
     function restartGame() {
+        if (typeof trackEvent === 'function') trackEvent('dino_game_play');
         const title = document.getElementById('dino-game-over');
         if (title) title.remove();
 
