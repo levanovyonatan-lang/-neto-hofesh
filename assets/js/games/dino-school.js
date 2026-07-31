@@ -90,7 +90,10 @@
         document.head.appendChild(style);
     }
     
-    const GAME_SPEED_START = 5.0;
+    const isMobileSpeed = window.innerWidth < 768;
+    const GAME_SPEED_START = isMobileSpeed ? 3.5 : 5.0;
+    const MAX_SPEED_CAP = isMobileSpeed ? 5.5 : 7.5;
+    const ULTRA_SPEED_CAP = isMobileSpeed ? 6.5 : 8.8;
     const urlParams = new URLSearchParams(window.location.search);
     const isGodMode = false; // Disabled so you can actually lose and see jokes!
     
@@ -525,9 +528,9 @@
         frameCount++;
 
         // Speed increases steadily but has a max limit so the final stages stay playable
-        if (gameSpeed < 7.5) {
+        if (gameSpeed < MAX_SPEED_CAP) {
             gameSpeed += 0.0004;
-        } else if (currentStageIndex === 11 && gameSpeed < 8.8) {
+        } else if (currentStageIndex === 11 && gameSpeed < ULTRA_SPEED_CAP) {
             // In the final stage, let it increase even further but very slowly to create a "survival" feel
             gameSpeed += 0.0001;
         }
