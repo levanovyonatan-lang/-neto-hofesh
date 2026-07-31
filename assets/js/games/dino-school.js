@@ -630,11 +630,12 @@
                     const diffLevel = Math.min(5, currentStageIndex);
                     const jumpFrames = 2 * Math.abs(stage.jumpForce / stage.gravity);
                     
-                    let minGap = Math.max(Math.floor(jumpFrames + 5), 70 - Math.floor(gameSpeed * 2.5) - (diffLevel * 6));
-                    let maxGap = minGap + Math.max(5, 20 - diffLevel * 5) + Math.floor(Math.random() * 5);
+                    let minGap = Math.max(Math.floor(jumpFrames + 5), 55 - Math.floor(gameSpeed * 2.5) - (diffLevel * 6));
+                    let maxGap = minGap + Math.max(5, 15 - diffLevel * 5) + Math.floor(Math.random() * 5);
                     
                     // Adjust gap based on stage explicitly adding extra space if needed, but not reducing below jumpFrames+5
-                    if (currentStageIndex === 0) { maxGap += 8; } 
+                    if (currentStageIndex === 0) { minGap -= 10; maxGap -= 10; } 
+                    if (currentStageIndex === 1) { minGap -= 5; maxGap -= 5; }
                     if (currentStageIndex === 3) { minGap += 3; maxGap += 5; } 
                     if (currentStageIndex === 9) { minGap += 10; maxGap += 15; } 
                     if (currentStageIndex === 4) { minGap += 10; maxGap += 15; } 
@@ -768,7 +769,9 @@
                 "עלית לאוטובוס הלא נכון. עכשיו אתה בדרך לאזור תעשייה. 🚌",
                 "התיישבת ליד מישהו שחפר לך כל הדרך על שיעורי הבית במתמטיקה. 🚌",
                 "עמדת ליד הדלת והיא נסגרה עליך. הנהג אמר 'רק אל תבכה לי'. 🚌",
-                "הגעת לתחנה וראית את האוטובוס מתרחק, רצת חצי קילומטר והוא לא פתח לך. 🚌💨"
+                "הגעת לתחנה וראית את האוטובוס מתרחק, רצת חצי קילומטר והוא לא פתח לך. 🚌💨",
+                "הנהג סגר עליך את הדלת בכוונה כי ראה שיש לך כרטיסייה ישנה. 🚌",
+                "רצת כמו מטורף לאוטובוס, עלית, ושמת לב שזה בכלל יום שבת! 🚌"
             ],
             '🎒': [
                 "שכחת להוציא מהתיק את הסנדוויץ' משבוע שעבר... התעלפת מהריח. 🎒",
@@ -828,6 +831,14 @@
             '📦': "קרטון של טרופיות נפל עליך. עכשיו אתה פשוט דביק. 📦",
             '🗄️': "המורה ביקשה להביא גיר מהארון, אבל הוא נפל עליך. 🗄️",
             '🐟': "דג בברזייה?! משרד הבריאות חייב לדעת מזה. 🐟",
+            '⚽': "חטפת כדורגל לפרצוף כי הסתכלת בטלפון במגרש. ⚽",
+            '🏀': "ניסית להטביע ונתלית על הטבעת, אבל המכנסיים נפלו. 🏀",
+            '🌵': "מי שם קקטוס באמצע הדרך בטיול השנתי?! זה בטח המדריך. 🌵",
+            '🦇': "עטלף נתקע לך בשיער. לקחו אותך למיון ויש לך עכשיו קרחת. 🦇",
+            '👻': "רוח רפאים הפחידה אותך! ברחת החוצה והשארת את התיק. 👻",
+            '👩‍🏫': "המורה תפסה אותך בורח לחופש והחזירה אותך לכיתה! 👩‍🏫",
+            '👽': "חייזרים חטפו אותך באמצע בוחן פתע. איזה מזל! 👽",
+            '☄️': "מטאור נפל לך על הראש. דינוזאורים, זוכר? ☄️",
             '🌊': [
                 "מישהו סתם את הברזייה והשפריץ לך ישר לתוך העין. 🌊",
                 "לחצת חזק מדי על הלחצן והמים עפו לך על כל החולצה. פאדיחה. 🌊"
