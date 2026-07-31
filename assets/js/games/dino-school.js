@@ -119,12 +119,84 @@
     let frameCount = 0;
     let isGameOver = false;
     let stage5AsteroidSpawned = false;
+    let isMuted = false;
+
+    // --- Retro 8-bit Web Audio Synth ---
+    let audioCtx = null;
+    function playDinoSound(type) {
+        if (isMuted) return;
+        try {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const now = audioCtx.currentTime;
+            if (type === 'jump') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(160, now);
+                osc.frequency.exponentialRampToValueAtTime(420, now + 0.12);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.12);
+            } else if (type === 'bonus') {
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(987.77, now); // B5
+                osc1.frequency.setValueAtTime(1318.51, now + 0.08); // E6
+                gain1.gain.setValueAtTime(0.1, now);
+                gain1.gain.linearRampToValueAtTime(0.01, now + 0.25);
+                osc1.connect(gain1);
+                gain1.connect(audioCtx.destination);
+                osc1.start(now);
+                osc1.stop(now + 0.25);
+            } else if (type === 'level') {
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, index) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + index * 0.07);
+                    gain.gain.setValueAtTime(0.1, now + index * 0.07);
+                    gain.gain.linearRampToValueAtTime(0.01, now + index * 0.07 + 0.15);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + index * 0.07);
+                    osc.stop(now + index * 0.07 + 0.15);
+                });
+            } else if (type === 'hit') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(40, now + 0.35);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            }
+        } catch(e) {
+            // Ignore audio errors
+        }
+    }
 
     // trigger button logic removed
 
     let objectiveTimeoutId = null;
 
     function announceStage(stageIndex) {
+        if (stageIndex > 0) {
+            playDinoSound('level');
+        }
         const stage = STAGES[stageIndex];
         
         const isCollecting = stage.bonusChance > 0;
@@ -207,6 +279,7 @@
             if (gameLoopId) cancelAnimationFrame(gameLoopId);
             gameLoopId = requestAnimationFrame(gameLoop);
 
+            playDinoSound('level');
             announceStage(0);
             return;
         }
@@ -347,6 +420,23 @@
         };
         gameContainer.appendChild(closeBtn);
 
+        const soundBtn = document.createElement('div');
+        soundBtn.className = 'dino-element';
+        soundBtn.innerHTML = '🔊';
+        soundBtn.style.position = 'absolute';
+        soundBtn.style.top = '15px';
+        soundBtn.style.left = '55px';
+        soundBtn.style.fontSize = '22px';
+        soundBtn.style.cursor = 'pointer';
+        soundBtn.style.zIndex = '300';
+        soundBtn.style.pointerEvents = 'auto';
+        soundBtn.onclick = (e) => {
+            e.stopPropagation();
+            isMuted = !isMuted;
+            soundBtn.innerHTML = isMuted ? '🔇' : '🔊';
+        };
+        gameContainer.appendChild(soundBtn);
+
         // Ground Line
         groundLine = document.createElement('div');
         groundLine.className = 'dino-element';
@@ -384,6 +474,7 @@
         // Start Loop
         gameLoopId = requestAnimationFrame(gameLoop);
 
+        playDinoSound('level');
         announceStage(0);
     }
 
@@ -397,6 +488,7 @@
             isJumping = true;
             const stage = STAGES[currentStageIndex];
             dinoVelocity = stage.jumpForce;
+            playDinoSound('jump');
             if (navigator.vibrate) navigator.vibrate([15]);
             
             // Dust effect (flying to the right)
@@ -702,6 +794,7 @@
                 if (obs.type === 'bonus') {
                     score += 20;
                     document.getElementById('dino-score-val').textContent = score;
+                    playDinoSound('bonus');
                     if (navigator.vibrate) navigator.vibrate([20, 20]);
                     
                     const floatText = document.createElement('div');
@@ -971,6 +1064,7 @@
 
     function gameOver(killerEmoji) {
         isGameOver = true;
+        playDinoSound('hit');
         if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
         
         const overlay = document.getElementById('game-lock-overlay');
