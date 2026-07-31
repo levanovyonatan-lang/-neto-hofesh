@@ -23,8 +23,6 @@ foreach ($holiday in $holidays) {
 
     $html = $baseHtml
 
-    # 1. Remove Homepage Hub section so it does not duplicate on holiday pages
-    $html = [System.Text.RegularExpressions.Regex]::Replace($html, '<!-- HOME_HUB_START -->.*?<!-- HOME_HUB_END -->', "", [System.Text.RegularExpressions.RegexOptions]::Singleline)
 
     # 2. Replace Title, Description, Keywords, Canonical URL
     $html = [System.Text.RegularExpressions.Regex]::Replace($html, '<title>.*?</title>', "<title>$($holiday.title)</title>", [System.Text.RegularExpressions.RegexOptions]::Singleline)
