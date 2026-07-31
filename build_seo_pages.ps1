@@ -168,28 +168,6 @@ $introHtmlJoined
 $faqAccordionHtml
                     </div>
                 </section>
-
-                <!-- Silo Internal Linking Hub -->
-                <section style="border-top: 1.5px dashed #e2e8f0; padding-top: 20px;">
-                    <h3 style="font-size: calc(18px * var(--text-scale, 1)); font-weight: 900; color: var(--text-main); margin-bottom: 8px;">
-                        $($labels.hubTitle)
-                    </h3>
-                    <p style="font-size: calc(13px * var(--text-scale, 1)); color: var(--text-muted); margin-bottom: 12px; font-weight: 600;">
-                        $($labels.hubSubtitle)
-                    </p>
-                    <div class="holiday-hub-grid">
-                        <a href="../hanukkah/" class="holiday-hub-card">🕯️ חנוכה</a>
-                        <a href="../taanit-esther/" class="holiday-hub-card">📜 תענית אסתר</a>
-                        <a href="../purim/" class="holiday-hub-card">🎭 פורים</a>
-                        <a href="../pesach/" class="holiday-hub-card">🍷 פסח</a>
-                        <a href="../asru-chag/" class="holiday-hub-card">🌸 אסרו חג פסח</a>
-                        <a href="../atzmaut/" class="holiday-hub-card">🇮🇱 יום העצמאות</a>
-                        <a href="../lag-baomer/" class="holiday-hub-card">🔥 ל"ג בעומר</a>
-                        <a href="../shavuot/" class="holiday-hub-card">🧀 שבועות</a>
-                        <a href="../summer-high/" class="holiday-hub-card">🏖️ החופש הגדול (תיכון)</a>
-                        <a href="../summer/" class="holiday-hub-card">☀️ החופש הגדול (יסודי)</a>
-                    </div>
-                </section>
             </section>
 "@
 
