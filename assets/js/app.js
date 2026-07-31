@@ -967,7 +967,7 @@ window.onload = () => {
     });
 };
 
-function initApp(countdownTarget = 'summer') {
+function initApp(countdownTarget = 'purim') {
     const choice = document.querySelector('input[name="schoolType"]:checked');
     if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
     window.scrollTo(0, 0);
@@ -1274,6 +1274,9 @@ function showMainScreen() {
         } else if (userConfig.targetIntent === 'summer') {
             const nextSummer = activeEventsList.find(t => t.isSummer && !t.isHappeningNow) || activeEventsList.find(t => t.isSummer);
             selectedId = nextSummer ? nextSummer.id : activeEventsList[0].id;
+        } else if (userConfig.targetIntent === 'purim') {
+            const purimEvent = activeEventsList.find(t => t.id === 'purim2027' || t.id.includes('purim'));
+            selectedId = purimEvent ? purimEvent.id : activeEventsList[0].id;
         }
         userConfig.activeTargetId = selectedId;
         userConfig.targetIntent = null;
