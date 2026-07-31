@@ -1050,7 +1050,7 @@ body.splash-active .sun-background {
 
 .seo-faq-item[open] summary::after {
     content: '−';
-    color: #0ea5e9;
+    color: #eab308;
 }
 
 .seo-faq-answer {
