@@ -118,6 +118,7 @@
     let spawnTimer = 0;
     let frameCount = 0;
     let isGameOver = false;
+    let stage5AsteroidSpawned = false;
 
     // trigger button logic removed
 
@@ -216,6 +217,7 @@
         currentStageIndex = 0;
         gameSpeed = GAME_SPEED_START;
         obstaclesList = [];
+        stage5AsteroidSpawned = false;
         obstacleQueue = [];
         frameCount = 0;
         spawnTimer = 60; // Initial delay
@@ -660,8 +662,9 @@
         }
 
         // Asteroids for stage 5 (School trip - dinosaur extinction reference)
-        if (currentStageIndex === 5 && Math.random() < 0.02) {
+        if (currentStageIndex === 5 && !stage5AsteroidSpawned && Math.random() < 0.02) {
             spawnAsteroid();
+            stage5AsteroidSpawned = true;
         }
 
         const dinoRect = dino.getBoundingClientRect();
