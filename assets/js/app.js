@@ -967,7 +967,7 @@ window.onload = () => {
     });
 };
 
-function initApp(countdownTarget = 'purim') {
+function initApp(countdownTarget = 'summer') {
     const choice = document.querySelector('input[name="schoolType"]:checked');
     if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
     window.scrollTo(0, 0);
@@ -1274,9 +1274,10 @@ function showMainScreen() {
         } else if (userConfig.targetIntent === 'summer') {
             const nextSummer = activeEventsList.find(t => t.isSummer && !t.isHappeningNow) || activeEventsList.find(t => t.isSummer);
             selectedId = nextSummer ? nextSummer.id : activeEventsList[0].id;
-        } else if (userConfig.targetIntent === 'purim') {
-            const purimEvent = activeEventsList.find(t => t.id === 'purim2027' || t.id.includes('purim'));
-            selectedId = purimEvent ? purimEvent.id : activeEventsList[0].id;
+        } else {
+            // Generic: targetIntent is a direct targetId (e.g. 'purim2027', 'pesach2027', etc.)
+            const directMatch = activeEventsList.find(t => t.id === userConfig.targetIntent);
+            selectedId = directMatch ? directMatch.id : activeEventsList[0].id;
         }
         userConfig.activeTargetId = selectedId;
         userConfig.targetIntent = null;
