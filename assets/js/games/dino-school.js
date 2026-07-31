@@ -1,4 +1,4 @@
-﻿// --- Dino School Runner Mini-Game ---
+// --- Dino School Runner Mini-Game ---
 // A T-Rex styled endless runner with school obstacles.
 
 (function() {
@@ -1099,7 +1099,24 @@
             startGame();
         };
 
+        const exitBtn = document.createElement('button');
+        exitBtn.textContent = 'יציאה 🚪';
+        exitBtn.style.padding = '6px 14px';
+        exitBtn.style.background = '#64748b';
+        exitBtn.style.color = '#ffffff';
+        exitBtn.style.border = 'none';
+        exitBtn.style.borderRadius = '8px';
+        exitBtn.style.fontWeight = 'bold';
+        exitBtn.style.cursor = 'pointer';
+        exitBtn.style.fontSize = '14px';
+        exitBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+        exitBtn.onclick = (e) => {
+            e.stopPropagation();
+            cleanupGame();
+        };
+
         btnContainer.appendChild(playAgainBtn);
+        btnContainer.appendChild(exitBtn);
         title.appendChild(btnContainer);
     }
 
