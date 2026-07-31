@@ -91,9 +91,9 @@
     }
     
     const isMobileSpeed = window.innerWidth < 768;
-    const GAME_SPEED_START = isMobileSpeed ? 3.5 : 5.0;
-    const MAX_SPEED_CAP = isMobileSpeed ? 5.5 : 7.5;
-    const ULTRA_SPEED_CAP = isMobileSpeed ? 6.5 : 8.8;
+    const GAME_SPEED_START = isMobileSpeed ? 6.5 : 5.0;
+    const MAX_SPEED_CAP = isMobileSpeed ? 8.5 : 7.5;
+    const ULTRA_SPEED_CAP = isMobileSpeed ? 9.5 : 8.8;
     const urlParams = new URLSearchParams(window.location.search);
     const isGodMode = false; // Disabled so you can actually lose and see jokes!
     
