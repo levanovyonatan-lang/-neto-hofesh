@@ -433,6 +433,42 @@
         spawnEntity(type);
     }
 
+    function spawnAsteroid() {
+        const el = document.createElement('div');
+        el.className = 'dino-element';
+        el.textContent = '☄️';
+        el.style.position = 'absolute';
+        const startY = Math.random() * 40; 
+        const endY = 175;
+        el.style.top = startY + 'px';
+        el.style.right = '-30px';
+        el.style.fontSize = '24px';
+        el.style.zIndex = '3';
+        el.style.transition = 'top 0.8s linear, right 0.8s linear';
+        el.style.pointerEvents = 'none';
+        gameContainer.appendChild(el);
+        el.offsetHeight;
+        const dropDist = Math.random() * 120 + 200;
+        el.style.top = endY + 'px';
+        el.style.right = dropDist + 'px';
+        setTimeout(() => {
+            if (el.parentNode) {
+                el.textContent = '💥';
+                el.style.fontSize = '35px';
+                el.style.transform = 'translate(10px, -15px)';
+                el.style.transition = 'opacity 0.6s ease-out';
+                setTimeout(() => {
+                    if (el.parentNode) {
+                        el.style.opacity = '0';
+                        setTimeout(() => {
+                            if (el.parentNode) el.remove();
+                        }, 600);
+                    }
+                }, 400);
+            }
+        }, 800);
+    }
+
     function spawnEntity(type) {
         const stage = STAGES[currentStageIndex];
         const el = document.createElement('div');
@@ -618,6 +654,11 @@
         // Randomly spawn clouds
         if (currentStageIndex !== 4 && currentStageIndex !== 5 && Math.random() < 0.015) {
             spawnEntity('cloud');
+        }
+
+        // Asteroids for stage 5 (School trip - dinosaur extinction reference)
+        if (currentStageIndex === 5 && Math.random() < 0.02) {
+            spawnAsteroid();
         }
 
         const dinoRect = dino.getBoundingClientRect();
