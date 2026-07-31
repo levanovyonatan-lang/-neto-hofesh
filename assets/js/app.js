@@ -1081,6 +1081,55 @@ function animateNetDays(finalValue) {
     netDaysAnimationId = window.requestAnimationFrame(step);
 }
 
+function getActiveHolidayFromUrlOrWindow() {
+    if (window.NETO_ACTIVE_HOLIDAY) return window.NETO_ACTIVE_HOLIDAY;
+    try {
+        const path = window.location.pathname;
+        const holidaySlugs = {
+            '/hanukkah': 'hanukkah2026',
+            '/taanit-esther': 'purim2027',
+            '/purim': 'purim2027',
+            '/pesach': 'pesach2027',
+            '/asru-chag': 'pesach2027',
+            '/atzmaut': 'atzmaut2027',
+            '/lag-baomer': 'lagbaomer',
+            '/shavuot': 'shavuot2027',
+            '/summer-high': 'summerHigh2027',
+            '/summer': 'summerElem2027'
+        };
+        for (const [slug, targetId] of Object.entries(holidaySlugs)) {
+            if (path.includes(slug)) return targetId;
+        }
+    } catch (e) { }
+    return null;
+}
+
+function applyHolidayLandingPageMode() {
+    try {
+        const activeHolidayId = window.NETO_ACTIVE_HOLIDAY || getActiveHolidayFromUrlOrWindow();
+        if (activeHolidayId) {
+            const holidayObj = allTargets.find(t => t.id === activeHolidayId) || targets2027.find(t => t.id === activeHolidayId);
+            if (holidayObj) {
+                const btnNext = document.getElementById('btn-demo-next-vacation');
+                if (btnNext) {
+                    btnNext.innerHTML = `ספירה לאחור ל${holidayObj.name} ${holidayObj.icon || '⏳'}`;
+                }
+                const demoTitle = document.querySelector('.demo-buttons-title');
+                if (demoTitle) {
+                    demoTitle.textContent = `התחל ספירה לאחור עד לחופשת ${holidayObj.name}:`;
+                }
+                if (activeHolidayId === 'summerHigh2027' || activeHolidayId === 'summerHigh') {
+                    const radioHigh = document.querySelector('input[name="schoolType"][value="high"]');
+                    if (radioHigh) radioHigh.checked = true;
+                } else if (activeHolidayId === 'summerElem2027' || activeHolidayId === 'summerElem' || activeHolidayId === 'summerElemLow') {
+                    const radioElem = document.querySelector('input[name="schoolType"][value="elem"]');
+                    if (radioElem) radioElem.checked = true;
+                }
+            }
+        }
+    } catch (e) { }
+}
+
 function showMainScreen() {
     document.getElementById('setup-screen').style.display = 'none'; document.getElementById('main-screen').style.display = 'flex';
     document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
@@ -1208,7 +1257,11 @@ function showMainScreen() {
     });
     activeEventsList.sort((a, b) => a.date - b.date); 
     
-    if (userConfig.targetIntent) {
+    const activeHolidayFromUrl = window.NETO_ACTIVE_HOLIDAY || getActiveHolidayFromUrlOrWindow();
+    if (activeHolidayFromUrl && activeEventsList.some(t => t.id === activeHolidayFromUrl)) {
+        userConfig.activeTargetId = activeHolidayFromUrl;
+        userConfig.targetIntent = null;
+    } else if (userConfig.targetIntent) {
         let selectedId = '';
         if (userConfig.targetIntent === 'next') {
             const nextVacation = activeEventsList.find(t => 
@@ -1357,7 +1410,35 @@ function updateDashboard() {
 
 function shareWhatsApp(event) {
     event.preventDefault(); trackEvent('share_whatsapp_click');
-    const text = `מצאתי אתר שמראה כמה ימי לימוד נטו נשאר עד החופש! 🏖️😱\nכנסו לבדוק >> http://neto-hofesh.co.il/`;
+    const activeHolidayId = window.NETO_ACTIVE_HOLIDAY || userConfig.activeTargetId || getActiveHolidayFromUrlOrWindow();
+    let text = `מצאתי אתר שמראה כמה ימי לימוד נטו נשארו עד החופש! 🏖️😱\nכנסו לבדוק >> https://www.neto-hofesh.co.il/`;
+    if (activeHolidayId) {
+        const targetObj = activeEventsList.find(t => t.id === activeHolidayId) || allTargets.find(t => t.id === activeHolidayId) || targets2027.find(t => t.id === activeHolidayId);
+        if (targetObj) {
+            const currentDaysElem = document.getElementById('main-net-days');
+            const currentDays = currentDaysElem ? currentDaysElem.textContent.trim() : '';
+            const daysText = (currentDays && currentDays !== '-' && !isNaN(currentDays))
+                ? `נשארו רק *${currentDays} ימי לימודים נטו* לחופש ${targetObj.name}!! 😱`
+                : `כמה ימי לימודים נטו נשארו לחופש ${targetObj.name}? 😱`;
+            const slugMap = {
+                'hanukkah2026': 'hanukkah',
+                'purim2027': 'purim',
+                'pesach2027': 'pesach',
+                'atzmaut2027': 'atzmaut',
+                'atzmaut': 'atzmaut',
+                'lagbaomer': 'lag-baomer',
+                'shavuot2027': 'shavuot',
+                'shavuot': 'shavuot',
+                'summerHigh2027': 'summer-high',
+                'summerHigh': 'summer-high',
+                'summerElem2027': 'summer',
+                'summerElem': 'summer'
+            };
+            const slug = slugMap[targetObj.id] || window.NETO_ACTIVE_HOLIDAY_SLUG || '';
+            const shareUrl = slug ? `https://www.neto-hofesh.co.il/${slug}/` : `https://www.neto-hofesh.co.il/`;
+            text = `חבר'ה קלטתם?? 😱 ${daysText} (בלי שבתות וחגים)\nבדקו כמה ימים נשארו לכם בנטו חופש ${targetObj.icon || '🏖️'} >> ${shareUrl}`;
+        }
+    }
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 }
 
@@ -1442,6 +1523,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } catch (e) { }
     initSplashScreen();
+    applyHolidayLandingPageMode();
     try {
         if (shouldOpenInstallVideo) {
             openSafariInstallVideoModal();
