@@ -127,6 +127,30 @@
         return Math.max(1, Math.min(2.2, width / 360));
     }
 
+    function attachControls() {
+        const overlay = document.getElementById('game-lock-overlay');
+        const targets = [window, document, document.body, gameContainer, overlay].filter(Boolean);
+        targets.forEach(target => {
+            target.addEventListener('keydown', handleInput);
+            target.addEventListener('touchstart', handleInput, {passive: false});
+            target.addEventListener('mousedown', handleInput);
+            target.addEventListener('pointerdown', handleInput);
+            target.addEventListener('click', handleInput);
+        });
+    }
+
+    function detachControls() {
+        const overlay = document.getElementById('game-lock-overlay');
+        const targets = [window, document, document.body, gameContainer, overlay].filter(Boolean);
+        targets.forEach(target => {
+            target.removeEventListener('keydown', handleInput);
+            target.removeEventListener('touchstart', handleInput);
+            target.removeEventListener('mousedown', handleInput);
+            target.removeEventListener('pointerdown', handleInput);
+            target.removeEventListener('click', handleInput);
+        });
+    }
+
     function announceStage(stageIndex) {
         const stage = STAGES[stageIndex];
         
@@ -203,10 +227,7 @@
                 objectiveDisplay.style.display = 'none';
             }
             
-            window.addEventListener('keydown', handleInput);
-            window.addEventListener('touchstart', handleInput, {passive: false});
-            window.addEventListener('mousedown', handleInput);
-            window.addEventListener('pointerdown', handleInput);
+            attachControls();
 
             if (gameLoopId) cancelAnimationFrame(gameLoopId);
             gameLoopId = requestAnimationFrame(gameLoop);
@@ -383,10 +404,7 @@
         isJumping = false;
 
         // Controls
-        window.addEventListener('keydown', handleInput);
-        window.addEventListener('touchstart', handleInput, {passive: false});
-        window.addEventListener('mousedown', handleInput);
-        window.addEventListener('pointerdown', handleInput);
+        attachControls();
 
         // Start Loop
         gameLoopId = requestAnimationFrame(gameLoop);
@@ -976,10 +994,7 @@
 
         dino.style.transform = `translateY(${dinoY}px) rotate(-90deg)`;
 
-        window.removeEventListener('keydown', handleInput);
-        window.removeEventListener('touchstart', handleInput);
-        window.removeEventListener('mousedown', handleInput);
-        window.removeEventListener('pointerdown', handleInput);
+        detachControls();
 
         const btnContainer = document.createElement('div');
         btnContainer.style.marginTop = '4px';
@@ -1042,10 +1057,7 @@
         const els = gameContainer.querySelectorAll('.dino-element');
         els.forEach(el => el.remove());
 
-        window.removeEventListener('keydown', handleInput);
-        window.removeEventListener('touchstart', handleInput);
-        window.removeEventListener('mousedown', handleInput);
-        window.removeEventListener('pointerdown', handleInput);
+        detachControls();
 
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
