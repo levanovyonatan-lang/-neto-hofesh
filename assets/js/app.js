@@ -124,6 +124,11 @@ function initPWA() {
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
 
     if (isInStandaloneMode()) {
+        const subPages = ['/hanukkah', '/taanit-esther', '/purim', '/pesach', '/asru-chag', '/atzmaut', '/lag-baomer', '/shavuot', '/summer-high', '/summer'];
+        if (subPages.some(p => window.location.pathname.includes(p))) {
+            window.location.replace('https://www.neto-hofesh.co.il/');
+            return;
+        }
         const a2hsBtn = document.getElementById('a2hs-btn');
         if (a2hsBtn) a2hsBtn.style.display = 'none';
 
@@ -1000,6 +1005,15 @@ function initApp(countdownTarget = 'summer') {
 
 function resetApp() {
     window.scrollTo(0, 0); trackEvent('click_change_settings');
+    const subPages = ['/hanukkah', '/taanit-esther', '/purim', '/pesach', '/asru-chag', '/atzmaut', '/lag-baomer', '/shavuot', '/summer-high', '/summer'];
+    if (subPages.some(p => window.location.pathname.includes(p))) {
+        if (window.location.hostname.includes('neto-hofesh.co.il') || (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.protocol !== 'file:')) {
+            window.location.href = 'https://www.neto-hofesh.co.il/';
+        } else {
+            window.location.href = '../index.html';
+        }
+        return;
+    }
     if (timerInterval) clearInterval(timerInterval);
     userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' }; confettiFired = false;
     document.getElementById('main-screen').style.display = 'none'; document.getElementById('setup-screen').style.display = 'flex';

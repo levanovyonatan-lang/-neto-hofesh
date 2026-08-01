@@ -1,8 +1,8 @@
 {
-  "id": "/",
+  "id": "https://www.neto-hofesh.co.il/",
   "name": "נטו חופש | מתי החופש הגדול",
   "short_name": "נטו חופש",
-  "start_url": "./",
+  "start_url": "https://www.neto-hofesh.co.il/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
