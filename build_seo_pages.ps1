@@ -1,4 +1,4 @@
-# build_seo_pages.ps1 - 100% ASCII script reading UTF-8 JSON and generating rich SEO landing pages
+﻿# build_seo_pages.ps1 - 100% ASCII script reading UTF-8 JSON and generating rich SEO landing pages
 $ErrorActionPreference = "Stop"
 
 $baseDir = $PSScriptRoot
@@ -117,10 +117,16 @@ $faqsJoined
 
 
     # 7.5 Replace setup screen demo buttons with ONE large yellow button specific to THIS holiday
+    $buttonLabel = if ($holiday.slug -like "summer*") {
+        "$($holiday.icon) התחל ספירה לאחור עד $($holiday.name) $($holiday.icon)"
+    } else {
+        "$($holiday.icon) התחל ספירה לאחור עד חופשת $($holiday.name) $($holiday.icon)"
+    }
+
     $customButtonHtml = @"
                 <div class="demo-buttons-row" style="display: flex; justify-content: center; width: 100%;">
-                    <button id="btn-demo-holiday" class="btn-demo-summer" style="width: 100%; max-width: 340px; font-size: calc(22px * var(--text-scale, 1)); padding: 18px 28px; border-radius: 22px; box-shadow: 0 12px 28px rgba(234, 179, 8, 0.4); font-weight: 900; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #0f172a; border: 3px solid #fef08a; cursor: pointer; transition: all 0.2s ease-out; letter-spacing: -0.5px;" onclick="initApp('$($holiday.targetId)')">
-                        $($holiday.icon) $($holiday.name) $($holiday.icon)
+                    <button id="btn-demo-holiday" class="btn-demo-summer" style="width: 100%; max-width: 360px; font-size: calc(20px * var(--text-scale, 1)); padding: 18px 24px; border-radius: 22px; box-shadow: 0 12px 28px rgba(234, 179, 8, 0.4); font-weight: 900; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #0f172a; border: 3px solid #fef08a; cursor: pointer; transition: all 0.2s ease-out; letter-spacing: -0.5px;" onclick="initApp('$($holiday.targetId)')">
+                        $buttonLabel
                     </button>
                 </div>
 "@
