@@ -1117,7 +1117,7 @@ function applyHolidayLandingPageMode() {
                 }
                 const demoTitle = document.querySelector('.demo-buttons-title');
                 if (demoTitle) {
-                    demoTitle.textContent = `התחל ספירה לאחור עד לחופשת ${holidayObj.name}:`;
+                    demoTitle.textContent = 'התחל ספירה לאחור עד:';
                 }
                 if (activeHolidayId === 'summerHigh2027' || activeHolidayId === 'summerHigh') {
                     const radioHigh = document.querySelector('input[name="schoolType"][value="high"]');
