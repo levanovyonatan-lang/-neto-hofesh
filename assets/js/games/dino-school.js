@@ -117,10 +117,8 @@
     let isGameOver = false;
 
     let objectiveTimeoutId = null;
-
-    function isDesktopPC() {
-        return !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-    }
+    let lastFrameTime = 0;
+    let timeAccumulator = 0;
 
     function attachControls() {
         const overlay = document.getElementById('game-lock-overlay');
@@ -225,6 +223,8 @@
             attachControls();
 
             if (gameLoopId) cancelAnimationFrame(gameLoopId);
+            lastFrameTime = 0;
+            timeAccumulator = 0;
             gameLoopId = requestAnimationFrame(gameLoop);
 
             announceStage(0);
@@ -402,6 +402,8 @@
         attachControls();
 
         // Start Loop
+        lastFrameTime = 0;
+        timeAccumulator = 0;
         gameLoopId = requestAnimationFrame(gameLoop);
 
         announceStage(0);
@@ -417,7 +419,7 @@
         if (!isJumping) {
             isJumping = true;
             const stage = STAGES[currentStageIndex];
-            dinoVelocity = stage.jumpForce * (isDesktopPC() ? 2.0 : 1);
+            dinoVelocity = stage.jumpForce;
             if (navigator.vibrate) navigator.vibrate([15]);
             
             // Dust effect (flying to the right)
@@ -510,7 +512,7 @@
         });
     }
 
-    function gameLoop() {
+    function updatePhysicsStep() {
         if (!isGameActive) return;
         frameCount++;
 
@@ -524,7 +526,7 @@
 
         // Physics
         const stage = STAGES[currentStageIndex];
-        dinoVelocity += stage.gravity * (isDesktopPC() ? 4.0 : 1);
+        dinoVelocity += stage.gravity;
         dinoY += dinoVelocity;
 
         if (dinoY >= 0) {
@@ -613,7 +615,7 @@
                     
                     // Calculate next spawn gap based on difficulty
                     const diffLevel = Math.min(5, currentStageIndex);
-                    const jumpFrames = 2 * Math.abs((stage.jumpForce * (isDesktopPC() ? 2.0 : 1)) / (stage.gravity * (isDesktopPC() ? 4.0 : 1)));
+                    const jumpFrames = 2 * Math.abs(stage.jumpForce / stage.gravity);
                     
                     let minGap = Math.max(Math.floor(jumpFrames + 5), 70 - Math.floor(gameSpeed * 2.5) - (diffLevel * 6));
                     let maxGap = minGap + Math.max(5, 20 - diffLevel * 5) + Math.floor(Math.random() * 5);
@@ -657,10 +659,9 @@
         };
 
         // Move obstacles
-        const speedMultDesktop = isDesktopPC() ? 2.0 : 1;
         for (let i = obstaclesList.length - 1; i >= 0; i--) {
             const obs = obstaclesList[i];
-            obs.x -= gameSpeed * speedMultDesktop * obs.speedMult;
+            obs.x -= gameSpeed * obs.speedMult;
             obs.el.style.right = obs.x + 'px';
 
             const obsRect = obs.el.getBoundingClientRect();
@@ -734,7 +735,28 @@
             }
         }
 
-        if (!isGameOver) {
+    }
+
+    function gameLoop(currentTime) {
+        if (!isGameActive) return;
+
+        let now = currentTime || performance.now();
+        if (!lastFrameTime) lastFrameTime = now;
+        let delta = now - lastFrameTime;
+        lastFrameTime = now;
+
+        // Prevent spiral of death if tab was inactive or stuttered
+        if (delta > 100) delta = 100;
+        timeAccumulator += delta;
+
+        const STEP_MS = 1000 / 120; // 120 physics ticks per second - exact 120Hz phone rate
+
+        while (timeAccumulator >= STEP_MS && isGameActive && !isGameOver) {
+            updatePhysicsStep();
+            timeAccumulator -= STEP_MS;
+        }
+
+        if (isGameActive && !isGameOver) {
             gameLoopId = requestAnimationFrame(gameLoop);
         }
     }
