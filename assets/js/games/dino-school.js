@@ -205,7 +205,9 @@
             
             window.addEventListener('keydown', handleInput);
             window.addEventListener('touchstart', handleInput, {passive: false});
-            window.addEventListener('mousedown', handleInput);
+            gameContainer.addEventListener('mousedown', handleInput);
+            gameContainer.addEventListener('pointerdown', handleInput);
+            gameContainer.addEventListener('click', handleInput);
 
             if (gameLoopId) cancelAnimationFrame(gameLoopId);
             gameLoopId = requestAnimationFrame(gameLoop);
@@ -387,7 +389,9 @@
         // Controls
         window.addEventListener('keydown', handleInput);
         window.addEventListener('touchstart', handleInput, {passive: false});
-        window.addEventListener('mousedown', handleInput);
+        gameContainer.addEventListener('mousedown', handleInput);
+        gameContainer.addEventListener('pointerdown', handleInput);
+        gameContainer.addEventListener('click', handleInput);
 
         // Start Loop
         gameLoopId = requestAnimationFrame(gameLoop);
@@ -982,7 +986,9 @@
 
         window.removeEventListener('keydown', handleInput);
         window.removeEventListener('touchstart', handleInput);
-        window.removeEventListener('mousedown', handleInput);
+        gameContainer.removeEventListener('mousedown', handleInput);
+        gameContainer.removeEventListener('pointerdown', handleInput);
+        gameContainer.removeEventListener('click', handleInput);
 
         const btnContainer = document.createElement('div');
         btnContainer.style.marginTop = '4px';
@@ -1045,7 +1051,9 @@
 
         window.removeEventListener('keydown', handleInput);
         window.removeEventListener('touchstart', handleInput);
-        window.removeEventListener('mousedown', handleInput);
+        gameContainer.removeEventListener('mousedown', handleInput);
+        gameContainer.removeEventListener('pointerdown', handleInput);
+        gameContainer.removeEventListener('click', handleInput);
 
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
