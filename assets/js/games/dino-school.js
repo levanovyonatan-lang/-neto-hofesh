@@ -122,7 +122,7 @@
 
     function getSpeedScale() {
         const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window || navigator.maxTouchPoints > 0);
-        return isDesktop ? 2.0 : 1;
+        return isDesktop ? 2.8 : 1;
     }
 
     function attachControls() {
