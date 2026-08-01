@@ -120,13 +120,6 @@
 
     let objectiveTimeoutId = null;
 
-    function getSpeedScale() {
-        if (!gameContainer) return 1;
-        const width = gameContainer.clientWidth || window.innerWidth;
-        // Base width on mobile ~360px. Scale speed proportionally on wider desktop screens (capped at 2.2x) so obstacles traverse at the same visual speed!
-        return Math.max(1, Math.min(2.2, width / 360));
-    }
-
     function announceStage(stageIndex) {
         const stage = STAGES[stageIndex];
         
@@ -206,8 +199,6 @@
             window.addEventListener('keydown', handleInput);
             window.addEventListener('touchstart', handleInput, {passive: false});
             gameContainer.addEventListener('mousedown', handleInput);
-            gameContainer.addEventListener('pointerdown', handleInput);
-            gameContainer.addEventListener('click', handleInput);
 
             if (gameLoopId) cancelAnimationFrame(gameLoopId);
             gameLoopId = requestAnimationFrame(gameLoop);
@@ -333,8 +324,7 @@
         objectiveDisplay.style.opacity = '0';
         gameContainer.appendChild(objectiveDisplay);
 
-        const closeBtn = document.createElement('button');
-        closeBtn.id = 'dino-close-btn';
+        const closeBtn = document.createElement('div');
         closeBtn.className = 'dino-element';
         closeBtn.innerHTML = '✖';
         closeBtn.style.position = 'absolute';
@@ -343,14 +333,9 @@
         closeBtn.style.fontSize = '22px';
         closeBtn.style.fontWeight = 'bold';
         closeBtn.style.color = '#94a3b8';
-        closeBtn.style.background = 'transparent';
-        closeBtn.style.border = 'none';
         closeBtn.style.cursor = 'pointer';
         closeBtn.style.zIndex = '300';
         closeBtn.style.pointerEvents = 'auto';
-        closeBtn.addEventListener('mousedown', (e) => e.stopPropagation());
-        closeBtn.addEventListener('touchstart', (e) => e.stopPropagation());
-        closeBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
         closeBtn.onclick = (e) => {
             e.stopPropagation();
             cleanupGame();
@@ -390,8 +375,6 @@
         window.addEventListener('keydown', handleInput);
         window.addEventListener('touchstart', handleInput, {passive: false});
         gameContainer.addEventListener('mousedown', handleInput);
-        gameContainer.addEventListener('pointerdown', handleInput);
-        gameContainer.addEventListener('click', handleInput);
 
         // Start Loop
         gameLoopId = requestAnimationFrame(gameLoop);
@@ -400,7 +383,6 @@
     }
 
     function handleInput(e) {
-        if (e.target && (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.id === 'dino-close-btn' || e.target.classList.contains('close-btn') || e.target.closest('#dino-game-over'))) return;
         if (e.type === 'keydown' && e.code !== 'Space' && e.code !== 'ArrowUp') return;
         if (e.type === 'touchstart') e.preventDefault();
         
@@ -651,7 +633,7 @@
         // Move obstacles
         for (let i = obstaclesList.length - 1; i >= 0; i--) {
             const obs = obstaclesList[i];
-            obs.x -= gameSpeed * getSpeedScale() * obs.speedMult;
+            obs.x -= gameSpeed * obs.speedMult;
             obs.el.style.right = obs.x + 'px';
 
             const obsRect = obs.el.getBoundingClientRect();
@@ -911,7 +893,7 @@
         if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
         
         const overlay = document.getElementById('game-lock-overlay');
-        if (overlay) overlay.remove();
+        if (overlay) overlay.style.display = 'none';
         document.body.style.overflow = '';
         document.body.style.touchAction = '';
         
@@ -950,9 +932,6 @@
         title.style.alignItems = 'center';
         title.style.justifyContent = 'center';
         title.style.gap = '6px';
-        title.addEventListener('mousedown', (e) => e.stopPropagation());
-        title.addEventListener('touchstart', (e) => e.stopPropagation());
-        title.addEventListener('pointerdown', (e) => e.stopPropagation());
 
 
 
@@ -987,8 +966,6 @@
         window.removeEventListener('keydown', handleInput);
         window.removeEventListener('touchstart', handleInput);
         gameContainer.removeEventListener('mousedown', handleInput);
-        gameContainer.removeEventListener('pointerdown', handleInput);
-        gameContainer.removeEventListener('click', handleInput);
 
         const btnContainer = document.createElement('div');
         btnContainer.style.marginTop = '4px';
@@ -1007,8 +984,6 @@
         playAgainBtn.style.cursor = 'pointer';
         playAgainBtn.style.fontSize = '14px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
-        playAgainBtn.addEventListener('mousedown', (e) => e.stopPropagation());
-        playAgainBtn.addEventListener('touchstart', (e) => e.stopPropagation());
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
             startGame();
@@ -1025,8 +1000,6 @@
         exitBtn.style.cursor = 'pointer';
         exitBtn.style.fontSize = '14px';
         exitBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
-        exitBtn.addEventListener('mousedown', (e) => e.stopPropagation());
-        exitBtn.addEventListener('touchstart', (e) => e.stopPropagation());
         exitBtn.onclick = (e) => {
             e.stopPropagation();
             cleanupGame();
@@ -1052,8 +1025,6 @@
         window.removeEventListener('keydown', handleInput);
         window.removeEventListener('touchstart', handleInput);
         gameContainer.removeEventListener('mousedown', handleInput);
-        gameContainer.removeEventListener('pointerdown', handleInput);
-        gameContainer.removeEventListener('click', handleInput);
 
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
@@ -1065,7 +1036,7 @@
         }
 
         const overlay = document.getElementById('game-lock-overlay');
-        if (overlay) overlay.remove();
+        if (overlay) overlay.style.display = 'none';
 
         gameContainer.style.transition = '';
         gameContainer.style.height = '200px'; // Lock before restore
