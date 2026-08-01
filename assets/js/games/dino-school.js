@@ -91,6 +91,7 @@
     }
     
     const GAME_SPEED_START = 5.0;
+    const TARGET_MS_PER_FRAME = 1000 / 60; // 16.67ms — game is designed for 60fps
     const urlParams = new URLSearchParams(window.location.search);
     const isGodMode = false; // Disabled so you can actually lose and see jokes!
     
@@ -115,34 +116,11 @@
     let spawnTimer = 0;
     let frameCount = 0;
     let isGameOver = false;
+    let lastFrameTime = 0; // For delta-time normalization
+
+    // trigger button logic removed
 
     let objectiveTimeoutId = null;
-    let lastFrameTime = 0;
-    let timeAccumulator = 0;
-
-    function attachControls() {
-        const overlay = document.getElementById('game-lock-overlay');
-        const targets = [window, document, document.body, gameContainer, overlay].filter(Boolean);
-        targets.forEach(target => {
-            target.addEventListener('keydown', handleInput);
-            target.addEventListener('touchstart', handleInput, {passive: false});
-            target.addEventListener('mousedown', handleInput);
-            target.addEventListener('pointerdown', handleInput);
-            target.addEventListener('click', handleInput);
-        });
-    }
-
-    function detachControls() {
-        const overlay = document.getElementById('game-lock-overlay');
-        const targets = [window, document, document.body, gameContainer, overlay].filter(Boolean);
-        targets.forEach(target => {
-            target.removeEventListener('keydown', handleInput);
-            target.removeEventListener('touchstart', handleInput);
-            target.removeEventListener('mousedown', handleInput);
-            target.removeEventListener('pointerdown', handleInput);
-            target.removeEventListener('click', handleInput);
-        });
-    }
 
     function announceStage(stageIndex) {
         const stage = STAGES[stageIndex];
@@ -206,6 +184,7 @@
             gameSpeed = GAME_SPEED_START;
             spawnTimer = 60;
             frameCount = 0;
+            lastFrameTime = 0;
             dinoY = 0;
             dinoVelocity = 0;
             isJumping = false;
@@ -220,11 +199,11 @@
                 objectiveDisplay.style.display = 'none';
             }
             
-            attachControls();
+            window.addEventListener('keydown', handleInput);
+            window.addEventListener('touchstart', handleInput, {passive: false});
+            gameContainer.addEventListener('mousedown', handleInput);
 
             if (gameLoopId) cancelAnimationFrame(gameLoopId);
-            lastFrameTime = 0;
-            timeAccumulator = 0;
             gameLoopId = requestAnimationFrame(gameLoop);
 
             announceStage(0);
@@ -239,6 +218,7 @@
         obstaclesList = [];
         obstacleQueue = [];
         frameCount = 0;
+        lastFrameTime = 0;
         spawnTimer = 60; // Initial delay
 
         if (navigator.vibrate) navigator.vibrate([30]);
@@ -360,9 +340,6 @@
         closeBtn.style.cursor = 'pointer';
         closeBtn.style.zIndex = '300';
         closeBtn.style.pointerEvents = 'auto';
-        closeBtn.addEventListener('mousedown', (e) => e.stopPropagation());
-        closeBtn.addEventListener('touchstart', (e) => e.stopPropagation());
-        closeBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
         closeBtn.onclick = (e) => {
             e.stopPropagation();
             cleanupGame();
@@ -399,18 +376,17 @@
         isJumping = false;
 
         // Controls
-        attachControls();
+        window.addEventListener('keydown', handleInput);
+        window.addEventListener('touchstart', handleInput, {passive: false});
+        gameContainer.addEventListener('mousedown', handleInput);
 
         // Start Loop
-        lastFrameTime = 0;
-        timeAccumulator = 0;
         gameLoopId = requestAnimationFrame(gameLoop);
 
         announceStage(0);
     }
 
     function handleInput(e) {
-        if (e.target && (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.id === 'dino-close-btn' || e.target.classList.contains('close-btn') || e.target.closest('#dino-game-over'))) return;
         if (e.type === 'keydown' && e.code !== 'Space' && e.code !== 'ArrowUp') return;
         if (e.type === 'touchstart') e.preventDefault();
         
@@ -512,22 +488,30 @@
         });
     }
 
-    function updatePhysicsStep() {
+    function gameLoop(timestamp) {
         if (!isGameActive) return;
+
+        // Delta-time normalization: scale everything so the game feels the
+        // same on 60 Hz phones, 120 Hz laptops, and anything in between.
+        if (!lastFrameTime) lastFrameTime = timestamp;
+        const deltaMs = Math.min(timestamp - lastFrameTime, 50); // cap at 50ms to avoid huge jumps
+        lastFrameTime = timestamp;
+        const timeScale = deltaMs / TARGET_MS_PER_FRAME; // 1.0 at 60fps, ~0.5 at 120fps
+
         frameCount++;
 
         // Speed increases steadily but has a max limit so the final stages stay playable
         if (gameSpeed < 7.5) {
-            gameSpeed += 0.0004;
+            gameSpeed += 0.0004 * timeScale;
         } else if (currentStageIndex === 11 && gameSpeed < 8.8) {
             // In the final stage, let it increase even further but very slowly to create a "survival" feel
-            gameSpeed += 0.0001;
+            gameSpeed += 0.0001 * timeScale;
         }
 
         // Physics
         const stage = STAGES[currentStageIndex];
-        dinoVelocity += stage.gravity;
-        dinoY += dinoVelocity;
+        dinoVelocity += stage.gravity * timeScale;
+        dinoY += dinoVelocity * timeScale;
 
         if (dinoY >= 0) {
             dinoY = 0;
@@ -587,7 +571,7 @@
         }
 
         // Spawn entities
-        spawnTimer--;
+        spawnTimer -= timeScale;
         if (spawnTimer <= 0) {
             const stage = STAGES[currentStageIndex];
             
@@ -634,16 +618,10 @@
                         maxGap -= shrink; 
                     } 
                     
-                    // On desktop/computer screens, shorten the intervals so obstacle spacing feels compact like on mobile
-                    const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window);
-                    if (isDesktop) {
-                        minGap = Math.floor(minGap);
-                        maxGap = Math.floor(maxGap);
-                    }
-
-                    // Enforce absolute fairness minimum so every gap is jumpable
-                    minGap = Math.max(Math.floor(jumpFrames + 3), minGap);
-                    maxGap = Math.max(minGap + 4, maxGap);
+                    // Enforce absolute fairness minimum
+                    minGap = Math.max(Math.floor(jumpFrames + 5), minGap);
+                    // Ensure maxGap is strictly >= minGap to prevent math errors
+                    maxGap = Math.max(minGap, maxGap);
                     spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
                 }
             }
@@ -667,7 +645,7 @@
         // Move obstacles
         for (let i = obstaclesList.length - 1; i >= 0; i--) {
             const obs = obstaclesList[i];
-            obs.x -= gameSpeed * obs.speedMult;
+            obs.x -= gameSpeed * obs.speedMult * timeScale;
             obs.el.style.right = obs.x + 'px';
 
             const obsRect = obs.el.getBoundingClientRect();
@@ -741,28 +719,7 @@
             }
         }
 
-    }
-
-    function gameLoop(currentTime) {
-        if (!isGameActive) return;
-
-        let now = currentTime || performance.now();
-        if (!lastFrameTime) lastFrameTime = now;
-        let delta = now - lastFrameTime;
-        lastFrameTime = now;
-
-        // Prevent spiral of death if tab was inactive or stuttered
-        if (delta > 100) delta = 100;
-        timeAccumulator += delta;
-
-        const STEP_MS = (window.innerWidth > 600 || !('ontouchstart' in window)) ? 1000 / 90 : 1000 / 120; // Desktop ~90Hz, Mobile 120Hz
-
-        while (timeAccumulator >= STEP_MS && isGameActive && !isGameOver) {
-            updatePhysicsStep();
-            timeAccumulator -= STEP_MS;
-        }
-
-        if (isGameActive && !isGameOver) {
+        if (!isGameOver) {
             gameLoopId = requestAnimationFrame(gameLoop);
         }
     }
@@ -1018,7 +975,9 @@
 
         dino.style.transform = `translateY(${dinoY}px) rotate(-90deg)`;
 
-        detachControls();
+        window.removeEventListener('keydown', handleInput);
+        window.removeEventListener('touchstart', handleInput);
+        gameContainer.removeEventListener('mousedown', handleInput);
 
         const btnContainer = document.createElement('div');
         btnContainer.style.marginTop = '4px';
@@ -1037,15 +996,29 @@
         playAgainBtn.style.cursor = 'pointer';
         playAgainBtn.style.fontSize = '14px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
-        playAgainBtn.addEventListener('mousedown', (e) => e.stopPropagation());
-        playAgainBtn.addEventListener('touchstart', (e) => e.stopPropagation());
-        playAgainBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
             startGame();
         };
 
+        const exitBtn = document.createElement('button');
+        exitBtn.textContent = 'יציאה 🚪';
+        exitBtn.style.padding = '6px 14px';
+        exitBtn.style.background = '#64748b';
+        exitBtn.style.color = '#ffffff';
+        exitBtn.style.border = 'none';
+        exitBtn.style.borderRadius = '8px';
+        exitBtn.style.fontWeight = 'bold';
+        exitBtn.style.cursor = 'pointer';
+        exitBtn.style.fontSize = '14px';
+        exitBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+        exitBtn.onclick = (e) => {
+            e.stopPropagation();
+            cleanupGame();
+        };
+
         btnContainer.appendChild(playAgainBtn);
+        btnContainer.appendChild(exitBtn);
         title.appendChild(btnContainer);
     }
 
@@ -1061,7 +1034,9 @@
         const els = gameContainer.querySelectorAll('.dino-element');
         els.forEach(el => el.remove());
 
-        detachControls();
+        window.removeEventListener('keydown', handleInput);
+        window.removeEventListener('touchstart', handleInput);
+        gameContainer.removeEventListener('mousedown', handleInput);
 
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
