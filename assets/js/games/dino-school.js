@@ -210,6 +210,10 @@
             return;
         }
 
+        // Remove focus from the trigger button so Space/Enter only fires
+        // the jump handler, not the button's click event again.
+        if (document.activeElement) document.activeElement.blur();
+
         isGameActive = true;
         isGameOver = false;
         score = 0;
