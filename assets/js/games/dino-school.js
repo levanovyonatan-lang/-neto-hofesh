@@ -165,6 +165,26 @@
     function startGame() {
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
 
+        const appContainer = document.querySelector('.app-container');
+        if (appContainer) appContainer.style.zIndex = '1001';
+
+        let overlay = document.getElementById('game-lock-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'game-lock-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.zIndex = '999';
+            overlay.style.background = 'transparent';
+            overlay.style.transition = 'background 0.4s ease';
+            document.body.appendChild(overlay);
+        }
+        overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+
         if (isGameActive) {
             const title = document.getElementById('dino-game-over');
             if (title) title.remove();
@@ -244,23 +264,6 @@
         gameContainer.style.overflow = 'hidden';
         gameContainer.dataset.hwPrevZIndex = gameContainer.style.zIndex || '';
         gameContainer.style.zIndex = '1000';
-
-        let overlay = document.getElementById('game-lock-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'game-lock-overlay';
-            overlay.style.position = 'fixed';
-            overlay.style.top = '0';
-            overlay.style.left = '0';
-            overlay.style.width = '100vw';
-            overlay.style.height = '100vh';
-            overlay.style.zIndex = '999';
-            overlay.style.background = 'transparent';
-            overlay.style.transition = 'background 0.4s ease';
-            document.body.appendChild(overlay);
-        }
-        overlay.style.display = 'block';
-        document.body.style.overflow = 'hidden';
 
         setTimeout(() => {
             window.scrollTo({
@@ -912,6 +915,9 @@
         if (overlay) overlay.style.display = 'none';
         document.body.style.overflow = '';
         document.body.style.touchAction = '';
+
+        const appContainer = document.querySelector('.app-container');
+        if (appContainer) appContainer.style.zIndex = '';
         
         let currentHighScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         let isNewRecord = false;
@@ -1053,6 +1059,9 @@
 
         const overlay = document.getElementById('game-lock-overlay');
         if (overlay) overlay.style.display = 'none';
+
+        const appContainer = document.querySelector('.app-container');
+        if (appContainer) appContainer.style.zIndex = '';
 
         gameContainer.style.transition = '';
         gameContainer.style.height = '200px'; // Lock before restore

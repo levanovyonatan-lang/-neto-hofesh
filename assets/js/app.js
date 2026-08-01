@@ -1,4 +1,4 @@
-const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
+﻿const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
 const tipsDataVersion = 'tips-file-v2';
 const dailyTipsStorageKey = `holiday_calc_daily_tips_${tipsDataVersion}`;
 const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
@@ -87,7 +87,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=299').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=300').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -1168,7 +1168,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=299';
+        script.src = 'assets/js/games/dino-school.js?v=300';
         document.body.appendChild(script);
     }
 
@@ -1637,3 +1637,4 @@ function triggerSurferAnimation() {
 }
 
 // Demo Site specific logic removed as requested by user.
+
