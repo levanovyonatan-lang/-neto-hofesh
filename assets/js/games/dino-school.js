@@ -632,6 +632,11 @@
                     minGap = Math.max(Math.floor(jumpFrames + 5), minGap);
                     // Ensure maxGap is strictly >= minGap to prevent math errors
                     maxGap = Math.max(minGap, maxGap);
+                    const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window || navigator.maxTouchPoints > 0);
+                    if (isDesktop) {
+                        minGap = Math.floor(minGap * 1.8);
+                        maxGap = Math.floor(maxGap * 1.8);
+                    }
                     spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
                 }
             }
@@ -653,9 +658,10 @@
         };
 
         // Move obstacles
+        const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window || navigator.maxTouchPoints > 0);
         for (let i = obstaclesList.length - 1; i >= 0; i--) {
             const obs = obstaclesList[i];
-            obs.x -= gameSpeed * obs.speedMult;
+            obs.x -= gameSpeed * (isDesktop ? 2.0 : 1) * obs.speedMult;
             obs.el.style.right = obs.x + 'px';
 
             const obsRect = obs.el.getBoundingClientRect();
