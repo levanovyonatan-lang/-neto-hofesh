@@ -125,6 +125,16 @@
         return isDesktop ? 2.8 : 1;
     }
 
+    function getDesktopJumpScale() {
+        const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        return isDesktop ? 1.5 : 1;
+    }
+
+    function getDesktopGravityScale() {
+        const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        return isDesktop ? 2.25 : 1;
+    }
+
     function attachControls() {
         const overlay = document.getElementById('game-lock-overlay');
         const targets = [window, document, document.body, gameContainer, overlay].filter(Boolean);
@@ -420,7 +430,7 @@
         if (!isJumping) {
             isJumping = true;
             const stage = STAGES[currentStageIndex];
-            dinoVelocity = stage.jumpForce;
+            dinoVelocity = stage.jumpForce * getDesktopJumpScale();
             if (navigator.vibrate) navigator.vibrate([15]);
             
             // Dust effect (flying to the right)
@@ -527,7 +537,7 @@
 
         // Physics
         const stage = STAGES[currentStageIndex];
-        dinoVelocity += stage.gravity;
+        dinoVelocity += stage.gravity * getDesktopGravityScale();
         dinoY += dinoVelocity;
 
         if (dinoY >= 0) {
@@ -616,7 +626,7 @@
                     
                     // Calculate next spawn gap based on difficulty
                     const diffLevel = Math.min(5, currentStageIndex);
-                    const jumpFrames = 2 * Math.abs(stage.jumpForce / stage.gravity);
+                    const jumpFrames = 2 * Math.abs((stage.jumpForce * getDesktopJumpScale()) / (stage.gravity * getDesktopGravityScale()));
                     
                     let minGap = Math.max(Math.floor(jumpFrames + 5), 70 - Math.floor(gameSpeed * 2.5) - (diffLevel * 6));
                     let maxGap = minGap + Math.max(5, 20 - diffLevel * 5) + Math.floor(Math.random() * 5);
