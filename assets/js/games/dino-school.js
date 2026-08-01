@@ -417,7 +417,7 @@
         if (!isJumping) {
             isJumping = true;
             const stage = STAGES[currentStageIndex];
-            dinoVelocity = stage.jumpForce;
+            dinoVelocity = stage.jumpForce * (isDesktopPC() ? 2.0 : 1);
             if (navigator.vibrate) navigator.vibrate([15]);
             
             // Dust effect (flying to the right)
@@ -524,7 +524,7 @@
 
         // Physics
         const stage = STAGES[currentStageIndex];
-        dinoVelocity += stage.gravity;
+        dinoVelocity += stage.gravity * (isDesktopPC() ? 4.0 : 1);
         dinoY += dinoVelocity;
 
         if (dinoY >= 0) {
@@ -613,7 +613,7 @@
                     
                     // Calculate next spawn gap based on difficulty
                     const diffLevel = Math.min(5, currentStageIndex);
-                    const jumpFrames = 2 * Math.abs(stage.jumpForce / stage.gravity);
+                    const jumpFrames = 2 * Math.abs((stage.jumpForce * (isDesktopPC() ? 2.0 : 1)) / (stage.gravity * (isDesktopPC() ? 4.0 : 1)));
                     
                     let minGap = Math.max(Math.floor(jumpFrames + 5), 70 - Math.floor(gameSpeed * 2.5) - (diffLevel * 6));
                     let maxGap = minGap + Math.max(5, 20 - diffLevel * 5) + Math.floor(Math.random() * 5);
@@ -635,10 +635,7 @@
                     // Enforce absolute fairness minimum
                     minGap = Math.max(Math.floor(jumpFrames + 5), minGap);
                     // Ensure maxGap is strictly >= minGap to prevent math errors
-                    if (isDesktopPC()) {
-                        minGap = Math.floor(minGap * 1.8);
-                        maxGap = Math.floor(maxGap * 1.8);
-                    }
+                    maxGap = Math.max(minGap, maxGap);
                     spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
                 }
             }
@@ -660,7 +657,7 @@
         };
 
         // Move obstacles
-        const speedMultDesktop = isDesktopPC() ? 2.2 : 1;
+        const speedMultDesktop = isDesktopPC() ? 2.0 : 1;
         for (let i = obstaclesList.length - 1; i >= 0; i--) {
             const obs = obstaclesList[i];
             obs.x -= gameSpeed * speedMultDesktop * obs.speedMult;
