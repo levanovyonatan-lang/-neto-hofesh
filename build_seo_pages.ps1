@@ -114,35 +114,23 @@ $faqsJoined
 
     $html = $html -replace '</head>', $ogAndSchema
 
-    # 6. Inject Holiday Hero Badge at top of <main class="app-container">
-    $heroBadgeHtml = @"
-    <main class="app-container">
-        <div class="holiday-seo-hero-badge">
-            <span>$($holiday.icon)</span>
-            <span>$($holiday.heroBadgeText)</span>
-        </div>
-"@
-    $html = $html -replace '<main class="app-container">', $heroBadgeHtml
 
 
     # 7.5 Replace setup screen demo buttons with ONE large yellow button specific to THIS holiday
     $customButtonHtml = @"
-            <!-- DEMO_BUTTONS_START -->
-            <div id="demo-action-buttons" class="demo-action-buttons-container">
-                <h3 class="demo-buttons-title" style="font-size: calc(18px * var(--text-scale, 1)); font-weight: 800; color: #475569; margin-bottom: 14px;">התחל ספירה עד:</h3>
                 <div class="demo-buttons-row" style="display: flex; justify-content: center; width: 100%;">
                     <button id="btn-demo-holiday" class="btn-demo-summer" style="width: 100%; max-width: 340px; font-size: calc(22px * var(--text-scale, 1)); padding: 18px 28px; border-radius: 22px; box-shadow: 0 12px 28px rgba(234, 179, 8, 0.4); font-weight: 900; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #0f172a; border: 3px solid #fef08a; cursor: pointer; transition: all 0.2s ease-out; letter-spacing: -0.5px;" onclick="initApp('$($holiday.targetId)')">
                         $($holiday.icon) $($holiday.name) $($holiday.icon)
                     </button>
                 </div>
-            </div>
-            <!-- DEMO_BUTTONS_END -->
 "@
-    $html = [System.Text.RegularExpressions.Regex]::Replace($html, '<!-- DEMO_BUTTONS_START -->.*?<!-- DEMO_BUTTONS_END -->', $customButtonHtml, [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    $html = [System.Text.RegularExpressions.Regex]::Replace($html, '<div class="demo-buttons-row">.*?</div>', $customButtonHtml, [System.Text.RegularExpressions.RegexOptions]::Singleline)
 
     # 8. Convert Relative Paths for Subdirectories
     $html = $html.Replace('href="official-sun-neto-transparent.png', 'href="../official-sun-neto-transparent.png')
+    $html = $html.Replace('src="official-sun-neto-transparent.png', 'src="../official-sun-neto-transparent.png')
     $html = $html.Replace('href="icon-neto-sunglasses-white.png', 'href="../icon-neto-sunglasses-white.png')
+    $html = $html.Replace('src="icon-neto-sunglasses-white.png', 'src="../icon-neto-sunglasses-white.png')
     $html = $html.Replace('href="manifest.json', 'href="../manifest.json')
     $html = $html.Replace('href="assets/', 'href="../assets/')
     $html = $html.Replace('src="assets/', 'src="../assets/')
