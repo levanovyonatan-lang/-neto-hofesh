@@ -118,6 +118,10 @@
 
     let objectiveTimeoutId = null;
 
+    function isDesktopPC() {
+        return !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    }
+
     function attachControls() {
         const overlay = document.getElementById('game-lock-overlay');
         const targets = [window, document, document.body, gameContainer, overlay].filter(Boolean);
@@ -631,9 +635,7 @@
                     // Enforce absolute fairness minimum
                     minGap = Math.max(Math.floor(jumpFrames + 5), minGap);
                     // Ensure maxGap is strictly >= minGap to prevent math errors
-                    maxGap = Math.max(minGap, maxGap);
-                    const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window || navigator.maxTouchPoints > 0);
-                    if (isDesktop) {
+                    if (isDesktopPC()) {
                         minGap = Math.floor(minGap * 1.8);
                         maxGap = Math.floor(maxGap * 1.8);
                     }
@@ -658,10 +660,10 @@
         };
 
         // Move obstacles
-        const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        const speedMultDesktop = isDesktopPC() ? 2.2 : 1;
         for (let i = obstaclesList.length - 1; i >= 0; i--) {
             const obs = obstaclesList[i];
-            obs.x -= gameSpeed * (isDesktop ? 2.0 : 1) * obs.speedMult;
+            obs.x -= gameSpeed * speedMultDesktop * obs.speedMult;
             obs.el.style.right = obs.x + 'px';
 
             const obsRect = obs.el.getBoundingClientRect();
