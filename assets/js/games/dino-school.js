@@ -637,8 +637,8 @@
                     // On desktop/computer screens, shorten the intervals so obstacle spacing feels compact like on mobile
                     const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window);
                     if (isDesktop) {
-                        minGap = Math.floor(minGap * 0.62);
-                        maxGap = Math.floor(maxGap * 0.62);
+                        minGap = Math.floor(minGap * 0.78);
+                        maxGap = Math.floor(maxGap * 0.78);
                     }
 
                     // Enforce absolute fairness minimum so every gap is jumpable
