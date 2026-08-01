@@ -121,10 +121,8 @@
     let objectiveTimeoutId = null;
 
     function getSpeedScale() {
-        if (!gameContainer) return 1;
-        const width = gameContainer.clientWidth || window.innerWidth;
-        // Scale speed proportionally on wider desktop screens (capped at 2.2x) so obstacles traverse at the same visual speed as mobile!
-        return Math.max(1, Math.min(2.2, width / 360));
+        const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        return isDesktop ? 2.0 : 1;
     }
 
     function attachControls() {
