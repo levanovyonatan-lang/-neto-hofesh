@@ -637,8 +637,8 @@
                     // On desktop/computer screens, shorten the intervals so obstacle spacing feels compact like on mobile
                     const isDesktop = window.innerWidth > 600 || !('ontouchstart' in window);
                     if (isDesktop) {
-                        minGap = Math.floor(minGap * 0.9);
-                        maxGap = Math.floor(maxGap * 0.9);
+                        minGap = Math.floor(minGap);
+                        maxGap = Math.floor(maxGap);
                     }
 
                     // Enforce absolute fairness minimum so every gap is jumpable
@@ -755,7 +755,7 @@
         if (delta > 100) delta = 100;
         timeAccumulator += delta;
 
-        const STEP_MS = 1000 / 120; // 120Hz engine for fast, exciting gameplay identical to 120Hz mobile displays
+        const STEP_MS = (window.innerWidth > 600 || !('ontouchstart' in window)) ? 1000 / 90 : 1000 / 120; // Desktop ~90Hz, Mobile 120Hz
 
         while (timeAccumulator >= STEP_MS && isGameActive && !isGameOver) {
             updatePhysicsStep();
