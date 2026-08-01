@@ -124,52 +124,6 @@ $faqsJoined
 "@
     $html = $html -replace '<main class="app-container">', $heroBadgeHtml
 
-    # 7. Build Rich SEO Holiday Content Section (replaces generic seo-footer)
-    $holidaySeoSection = @"
-            <!-- Dedicated Holiday SEO Landing Content -->
-            <section class="holiday-seo-content-box">
-                <h1 style="font-size: clamp(22px, 4vw, calc(28px * var(--text-scale, 1))); font-weight: 900; color: var(--text-main); margin-bottom: 12px; line-height: 1.3;">
-                    $($holiday.icon) $($holiday.articleTitle)
-                </h1>
-
-                <!-- Holiday Quick Facts -->
-                <div class="holiday-quick-facts-grid">
-                    <div class="holiday-quick-fact-card">
-                        <span class="holiday-quick-fact-title">$($labels.datesTitle)</span>
-                        <span class="holiday-quick-fact-val">$($holiday.vacationDatesText)</span>
-                    </div>
-                    <div class="holiday-quick-fact-card">
-                        <span class="holiday-quick-fact-title">$($labels.daysTitle)</span>
-                        <span class="holiday-quick-fact-val">$($holiday.totalVacationDays)</span>
-                    </div>
-                    <div class="holiday-quick-fact-card">
-                        <span class="holiday-quick-fact-title">$($labels.returnTitle)</span>
-                        <span class="holiday-quick-fact-val">$($holiday.returnToSchoolText)</span>
-                    </div>
-                    <div class="holiday-quick-fact-card" style="background: #fffbeb; border-color: #fde047;">
-                        <span class="holiday-quick-fact-title" style="color: #b45309;">$($labels.tipTitle)</span>
-                        <span class="holiday-quick-fact-val" style="color: #92400e; font-size: calc(14px * var(--text-scale, 1));">$($holiday.holidayTip)</span>
-                    </div>
-                </div>
-
-                <!-- Article Content -->
-                <article style="margin-bottom: 25px;">
-$introHtmlJoined
-                </article>
-
-                <!-- Interactive FAQ Accordion -->
-                <section style="margin-bottom: 30px;">
-                    <h2 style="font-size: calc(20px * var(--text-scale, 1)); font-weight: 900; color: var(--text-main); margin-bottom: 12px;">
-                        $($labels.faqTitle) $($holiday.name)
-                    </h2>
-                    <div class="seo-faq-accordion">
-$faqAccordionHtml
-                    </div>
-                </section>
-            </section>
-"@
-
-    $html = [System.Text.RegularExpressions.Regex]::Replace($html, '<footer class="seo-footer">.*?</footer>', $holidaySeoSection, [System.Text.RegularExpressions.RegexOptions]::Singleline)
 
     # 7.5 Replace setup screen demo buttons with ONE large yellow button specific to THIS holiday
     $customButtonHtml = @"
