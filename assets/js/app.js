@@ -1041,8 +1041,13 @@ function updateFridayToggle() {
     hint.style.color = toggle.checked ? '#ef4444' : 'var(--text-muted)';
 }
 
+const netDaysCache = {};
+
 function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
-    const now = new Date(); let count = 0, current = new Date(now);
+    const now = new Date();
+    const cacheKey = `${targetDate.getTime()}_${userConfig.schoolType}_${userConfig.studyFriday}_${forceNoFriday}_${targetId}_${now.toDateString()}_${now.getHours() >= 15 ? 'pm' : 'am'}`;
+    if (netDaysCache[cacheKey] !== undefined) return netDaysCache[cacheKey];
+    let count = 0, current = new Date(now);
     // אם השעה 15:00 ומעלה, היום הנוכחי כבר לא נחשב כיום לימודים (התלמידים סיימו)
     if (now.getHours() >= 15) current.setDate(current.getDate() + 1);
     current.setHours(0, 0, 0, 0);
@@ -1073,6 +1078,7 @@ function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
         if (current.getDay() !== 6 && (current.getDay() !== 5 || isFridayStudy) && !activeHolidays.includes(dStr)) count++;
         current.setDate(current.getDate() + 1);
     }
+    netDaysCache[cacheKey] = count;
     return count;
 }
 
@@ -1303,6 +1309,21 @@ function showMainScreen() {
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
 }
 
+function updateActiveHolidayCard(id) {
+    const container = document.getElementById('holidays-container');
+    if (container && container.children.length === activeEventsList.length) {
+        Array.from(container.children).forEach((card, idx) => {
+            if (activeEventsList[idx] && activeEventsList[idx].id === id) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+        });
+    } else {
+        renderHolidays();
+    }
+}
+
 function renderHolidays() {
     const container = document.getElementById('holidays-container'); container.innerHTML = '';
     activeEventsList.forEach(ev => {
@@ -1387,7 +1408,7 @@ function selectTarget(id, shouldScroll = true) {
         if (vacationMessage) vacationMessage.style.display = 'none';
     }
 
-    loadDailyState(); renderTipBox(id); renderHolidays();
+    loadDailyState(); renderTipBox(id); updateActiveHolidayCard(id);
     let targetDaysForAnim = 0;
     if (target.isHappeningNow) {
         const diff = target.endDate.getTime() - Date.now();
@@ -1397,6 +1418,11 @@ function selectTarget(id, shouldScroll = true) {
     }
     animateNetDays(targetDaysForAnim); 
     updateDashboard();
+}
+
+function setDomText(id, val) {
+    const el = document.getElementById(id);
+    if (el && el.textContent !== String(val)) el.textContent = String(val);
 }
 
 function updateDashboard() {
@@ -1410,18 +1436,18 @@ function updateDashboard() {
     }
 
     if (diff <= 0) {
-        document.getElementById('main-net-days').textContent = "הגיע!";
+        setDomText('main-net-days', "הגיע!");
         if (!event.isHappeningNow && !confettiFired) { confettiFired = true; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
     } else {
-        document.getElementById('abs-days').textContent = Math.floor(diff / 86400000);
-        document.getElementById('abs-hours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
-        document.getElementById('abs-mins').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
-        document.getElementById('abs-secs').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+        setDomText('abs-days', Math.floor(diff / 86400000));
+        setDomText('abs-hours', String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0'));
+        setDomText('abs-mins', String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0'));
+        setDomText('abs-secs', String(Math.floor((diff % 60000) / 1000)).padStart(2, '0'));
         if (!isAnimatingNetDays) {
             if (event.isHappeningNow) {
-                document.getElementById('main-net-days').textContent = Math.ceil(diff / 86400000);
+                setDomText('main-net-days', Math.ceil(diff / 86400000));
             } else {
-                document.getElementById('main-net-days').textContent = calculateNetDays(event.date, event.noFriday, event.id);
+                setDomText('main-net-days', calculateNetDays(event.date, event.noFriday, event.id));
             }
         }
     }

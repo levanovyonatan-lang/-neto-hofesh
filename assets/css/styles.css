@@ -21,6 +21,13 @@ a, button, .btn, .glass-card, .event-card, .day-card, .option-card, .smiley-swit
     touch-action: manipulation;
 }
 
+/* אופטימיזציית מאיץ גרפי (GPU Hardware Acceleration) למניעת תקיעות ולריצה חלקה במכשירים ניידים */
+.app-container, .main-timer-card, .holiday-card, .setup-step, #neto-splash {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
 /* --- התאמות נגישות גלובליות --- */
 html { transition: font-size 0.3s ease; }
 *:focus-visible { outline: 3px solid var(--accent) !important; outline-offset: 2px !important; }
