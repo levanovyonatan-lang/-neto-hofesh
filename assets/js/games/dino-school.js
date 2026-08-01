@@ -120,6 +120,13 @@
 
     let objectiveTimeoutId = null;
 
+    function getSpeedScale() {
+        if (!gameContainer) return 1;
+        const width = gameContainer.clientWidth || window.innerWidth;
+        // Scale speed proportionally on wider desktop screens (capped at 2.2x) so obstacles traverse at the same visual speed as mobile!
+        return Math.max(1, Math.min(2.2, width / 360));
+    }
+
     function announceStage(stageIndex) {
         const stage = STAGES[stageIndex];
         
@@ -198,7 +205,8 @@
             
             window.addEventListener('keydown', handleInput);
             window.addEventListener('touchstart', handleInput, {passive: false});
-            gameContainer.addEventListener('mousedown', handleInput);
+            window.addEventListener('mousedown', handleInput);
+            window.addEventListener('pointerdown', handleInput);
 
             if (gameLoopId) cancelAnimationFrame(gameLoopId);
             gameLoopId = requestAnimationFrame(gameLoop);
@@ -336,6 +344,9 @@
         closeBtn.style.cursor = 'pointer';
         closeBtn.style.zIndex = '300';
         closeBtn.style.pointerEvents = 'auto';
+        closeBtn.addEventListener('mousedown', (e) => e.stopPropagation());
+        closeBtn.addEventListener('touchstart', (e) => e.stopPropagation());
+        closeBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
         closeBtn.onclick = (e) => {
             e.stopPropagation();
             cleanupGame();
@@ -374,7 +385,8 @@
         // Controls
         window.addEventListener('keydown', handleInput);
         window.addEventListener('touchstart', handleInput, {passive: false});
-        gameContainer.addEventListener('mousedown', handleInput);
+        window.addEventListener('mousedown', handleInput);
+        window.addEventListener('pointerdown', handleInput);
 
         // Start Loop
         gameLoopId = requestAnimationFrame(gameLoop);
@@ -383,6 +395,7 @@
     }
 
     function handleInput(e) {
+        if (e.target && (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.id === 'dino-close-btn' || e.target.classList.contains('close-btn') || e.target.closest('#dino-game-over'))) return;
         if (e.type === 'keydown' && e.code !== 'Space' && e.code !== 'ArrowUp') return;
         if (e.type === 'touchstart') e.preventDefault();
         
@@ -633,7 +646,7 @@
         // Move obstacles
         for (let i = obstaclesList.length - 1; i >= 0; i--) {
             const obs = obstaclesList[i];
-            obs.x -= gameSpeed * obs.speedMult;
+            obs.x -= gameSpeed * getSpeedScale() * obs.speedMult;
             obs.el.style.right = obs.x + 'px';
 
             const obsRect = obs.el.getBoundingClientRect();
@@ -965,7 +978,8 @@
 
         window.removeEventListener('keydown', handleInput);
         window.removeEventListener('touchstart', handleInput);
-        gameContainer.removeEventListener('mousedown', handleInput);
+        window.removeEventListener('mousedown', handleInput);
+        window.removeEventListener('pointerdown', handleInput);
 
         const btnContainer = document.createElement('div');
         btnContainer.style.marginTop = '4px';
@@ -984,6 +998,9 @@
         playAgainBtn.style.cursor = 'pointer';
         playAgainBtn.style.fontSize = '14px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+        playAgainBtn.addEventListener('mousedown', (e) => e.stopPropagation());
+        playAgainBtn.addEventListener('touchstart', (e) => e.stopPropagation());
+        playAgainBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
             startGame();
@@ -1000,6 +1017,9 @@
         exitBtn.style.cursor = 'pointer';
         exitBtn.style.fontSize = '14px';
         exitBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+        exitBtn.addEventListener('mousedown', (e) => e.stopPropagation());
+        exitBtn.addEventListener('touchstart', (e) => e.stopPropagation());
+        exitBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
         exitBtn.onclick = (e) => {
             e.stopPropagation();
             cleanupGame();
@@ -1024,7 +1044,8 @@
 
         window.removeEventListener('keydown', handleInput);
         window.removeEventListener('touchstart', handleInput);
-        gameContainer.removeEventListener('mousedown', handleInput);
+        window.removeEventListener('mousedown', handleInput);
+        window.removeEventListener('pointerdown', handleInput);
 
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
