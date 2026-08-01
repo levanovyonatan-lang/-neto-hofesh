@@ -8,18 +8,18 @@
     const CLOUDS = ['☁️'];
     
     const STAGES = [
-        /* 0  */ { threshold: 0, title: 'שלב 1: 8:00 בבוקר... למי יש כוח 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 1.2, jumpForce: -14, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 1  */ { threshold: 120, title: 'שלב 2: בוחן פתע ששכחת ממנו! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 1.25, jumpForce: -13.5, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 2  */ { threshold: 240, title: 'שלב 3: מלחמת אוכל בקפיטריה! 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 1.2, jumpForce: -14, flyChance: 0, bonusChance: 0.45, bonusSet: ['🍕', '🥪'], obsSet: ['🗑️', '🪑', '🧹', '📦', '🗄️'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 2px 5px rgba(251,191,36,0.6))', dinoOpacity: '1', objective: 'תאספו אוכל! 🍕🥪' },
-        /* 3  */ { threshold: 380, title: 'שלב 4: מישהו פוצץ את הברזייה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 1.22, jumpForce: -13.8, flyChance: 0.3, flySet: ['🐟', '🌊', '💧'], bonusChance: 0, obsSet: ['🚰', '🪣', '🧹', '🚧', '⚠️'], dinoEmoji: '🐊', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 4  */ { threshold: 520, title: 'שלב 5: שיעור ספורט ממוצע! 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 1.2, jumpForce: -14, flyChance: 0.35, flySet: ['🏸', '🥏', '🏐', '🎾'], bonusChance: 0, obsSet: ['⚽', '🏀', '🎳', '🏋️‍♂️', '🚧', '👟'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 5  */ { threshold: 680, title: 'שלב 6: הטיול השנתי המקולל 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 1.25, jumpForce: -13.5, flyChance: 0.2, flySet: ['🦅', '🦇', '🐝', '🦟', '🦅'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 6  */ { threshold: 950, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 1.15, jumpForce: -14.2, flyChance: 0.3, flySet: ['🧪', '🦠', '🛸', '⚡', '☄️'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '🐉', dinoFilter: 'hue-rotate(280deg) saturate(2)', dinoOpacity: '1' },
-        /* 7  */ { threshold: 1250, title: 'שלב 8: שיעור חלון! התגנבות יחידים... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 1.2, jumpForce: -14, flyChance: 0, bonusChance: 0.5, bonusSet: ['🎧', '📱'], obsSet: ['🎒', '🎵', '🎶', '🎮'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו ציוד! 🎧📱' },
-        /* 8  */ { threshold: 1600, title: 'שלב 9: מזגן על 16 - קפוא פה! 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 1.22, jumpForce: -14, flyChance: 0.25, flySet: ['🌨️', '🌬️', '🧊', '❄️', '🪁'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1' },
-        /* 9  */ { threshold: 2000, title: 'שלב 10: אוי לא, המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 1.2, jumpForce: -14, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
-        /* 10 */ { threshold: 2500, title: 'שלב 11: ננעלת בבית ספר! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 1.15, jumpForce: -14.2, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
-        /* 11 */ { threshold: 3100, title: 'שלב 12: החופש הגדול!!! (המורה עדיין רודפת אחריך 😱)', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 1.18, jumpForce: -14.2, flyChance: 0.45, flySet: ['✈️', '📓', '📝', '🛸'], bonusChance: 0.3, bonusSet: ['🍉', '🍦', '🍹'], obsSet: ['👩‍🏫', '📝', '⏰', '🏫', '🎈', '✈️'], dinoEmoji: '😎', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו פינוקים! 🍉🍦🍹' }
+        /* 0  */ { threshold: 0, title: 'שלב 1: 8:00 בבוקר... למי יש כוח 🥱', bg: 'linear-gradient(to bottom, #bae6fd, #f0f9ff)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['🚌', '🎒', '⏰'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 1  */ { threshold: 120, title: 'שלב 2: בוחן פתע ששכחת ממנו! 😱📝', bg: 'linear-gradient(to bottom, #fca5a5, #fee2e2)', gravity: 0.6, jumpForce: -10, flyChance: 0.25, bonusChance: 0, obsSet: ['📝', '📋', '📚', '📐'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 2  */ { threshold: 240, title: 'שלב 3: מלחמת אוכל בקפיטריה! 🍕', bg: 'linear-gradient(to bottom, #fbcfe8, #fdf2f8)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.45, bonusSet: ['🍕', '🥪'], obsSet: ['🗑️', '🪑', '🧹', '📦', '🗄️'], dinoEmoji: '🦖', dinoFilter: 'drop-shadow(0 2px 5px rgba(251,191,36,0.6))', dinoOpacity: '1', objective: 'תאספו אוכל! 🍕🥪' },
+        /* 3  */ { threshold: 380, title: 'שלב 4: מישהו פוצץ את הברזייה! 🌊', bg: 'linear-gradient(to bottom, #60a5fa, #1d4ed8)', gravity: 0.4, jumpForce: -8, flyChance: 0.3, flySet: ['🐟', '🌊', '💧'], bonusChance: 0, obsSet: ['🚰', '🪣', '🧹', '🚧', '⚠️'], dinoEmoji: '🐊', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 4  */ { threshold: 520, title: 'שלב 5: שיעור ספורט ממוצע! 🏀', bg: 'linear-gradient(to bottom, #86efac, #dcfce7)', gravity: 0.5, jumpForce: -9, flyChance: 0.35, flySet: ['🏸', '🥏', '🏐', '🎾'], bonusChance: 0, obsSet: ['⚽', '🏀', '🎳', '🏋️‍♂️', '🚧', '👟'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 5  */ { threshold: 680, title: 'שלב 6: הטיול השנתי המקולל 🌵', bg: 'linear-gradient(to bottom, #fde047, #ea580c)', gravity: 0.6, jumpForce: -10, flyChance: 0.2, flySet: ['🦅', '🦇', '🐝', '🦟', '🦅'], bonusChance: 0, obsSet: ['🐍', '🦂', '🌵', '🥾'], dinoEmoji: '🦕', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 6  */ { threshold: 950, title: 'שלב 7: ניסוי מדעים יצא משליטה 💥', bg: 'linear-gradient(to bottom, #a78bfa, #c026d3)', gravity: 0.6, jumpForce: -10, flyChance: 0.3, flySet: ['🧪', '🦠', '🛸', '⚡', '☄️'], bonusChance: 0, obsSet: ['🧪', '🔬', '💥', '🦠'], dinoEmoji: '🐉', dinoFilter: 'hue-rotate(280deg) saturate(2)', dinoOpacity: '1' },
+        /* 7  */ { threshold: 1250, title: 'שלב 8: שיעור חלון! התגנבות יחידים... 🎧', bg: 'linear-gradient(to bottom, #fbcfe8, #f43f5e)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0.5, bonusSet: ['🎧', '📱'], obsSet: ['🎒', '🎵', '🎶', '🎮'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו ציוד! 🎧📱' },
+        /* 8  */ { threshold: 1600, title: 'שלב 9: מזגן על 16 - קפוא פה! 🥶', bg: 'linear-gradient(to bottom, #1e293b, #334155)', gravity: 0.7, jumpForce: -11, flyChance: 0.25, flySet: ['🌨️', '🌬️', '🧊', '❄️', '🪁'], bonusChance: 0, obsSet: ['☔', '💧', '🌬️', '🌨️', '🌂', '🧊'], dinoEmoji: '🦖', dinoFilter: 'hue-rotate(180deg) brightness(1.3)', dinoOpacity: '1' },
+        /* 9  */ { threshold: 2000, title: 'שלב 10: אוי לא, המנהל במסדרון!!! 🚨', bg: 'linear-gradient(to bottom, #ef4444, #7f1d1d)', gravity: 0.6, jumpForce: -10, flyChance: 0, bonusChance: 0, obsSet: ['👨‍💼', '👮‍♂️', '🛑', '🚨'], dinoEmoji: '🦖', dinoFilter: 'none', dinoOpacity: '1' },
+        /* 10 */ { threshold: 2500, title: 'שלב 11: ננעלת בבית ספר! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
+        /* 11 */ { threshold: 3100, title: 'שלב 12: החופש הגדול!!! (המורה עדיין רודפת אחריך 😱)', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.75, jumpForce: -12, flyChance: 0.45, flySet: ['✈️', '📓', '📝', '🛸'], bonusChance: 0.3, bonusSet: ['🍉', '🍦', '🍹'], obsSet: ['👩‍🏫', '📝', '⏰', '🏫', '🎈', '✈️'], dinoEmoji: '😎', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו פינוקים! 🍉🍦🍹' }
     ];
 
     if (!document.getElementById('dino-styles')) {
@@ -90,10 +90,7 @@
         document.head.appendChild(style);
     }
     
-    const isMobileSpeed = window.innerWidth < 768;
-    const GAME_SPEED_START = isMobileSpeed ? 6.5 : 5.0;
-    const MAX_SPEED_CAP = isMobileSpeed ? 8.5 : 7.5;
-    const ULTRA_SPEED_CAP = isMobileSpeed ? 9.5 : 8.8;
+    const GAME_SPEED_START = 5.0;
     const urlParams = new URLSearchParams(window.location.search);
     const isGodMode = false; // Disabled so you can actually lose and see jokes!
     
@@ -118,7 +115,6 @@
     let spawnTimer = 0;
     let frameCount = 0;
     let isGameOver = false;
-    let stage5AsteroidSpawned = false;
 
     // trigger button logic removed
 
@@ -217,7 +213,6 @@
         currentStageIndex = 0;
         gameSpeed = GAME_SPEED_START;
         obstaclesList = [];
-        stage5AsteroidSpawned = false;
         obstacleQueue = [];
         frameCount = 0;
         spawnTimer = 60; // Initial delay
@@ -396,7 +391,7 @@
         if (!isJumping) {
             isJumping = true;
             const stage = STAGES[currentStageIndex];
-            dinoVelocity = stage.jumpForce * (isMobileSpeed ? 1.0 : 1.06); // Slightly longer/higher jump on desktop PC
+            dinoVelocity = stage.jumpForce;
             if (navigator.vibrate) navigator.vibrate([15]);
             
             // Dust effect (flying to the right)
@@ -436,42 +431,6 @@
         }
         
         spawnEntity(type);
-    }
-
-    function spawnAsteroid() {
-        const el = document.createElement('div');
-        el.className = 'dino-element';
-        el.textContent = '☄️';
-        el.style.position = 'absolute';
-        const startY = Math.random() * 40; 
-        const endY = 175;
-        el.style.top = startY + 'px';
-        el.style.right = '-30px';
-        el.style.fontSize = '24px';
-        el.style.zIndex = '3';
-        el.style.transition = 'top 0.8s linear, right 0.8s linear';
-        el.style.pointerEvents = 'none';
-        gameContainer.appendChild(el);
-        el.offsetHeight;
-        const dropDist = Math.random() * 120 + 200;
-        el.style.top = endY + 'px';
-        el.style.right = dropDist + 'px';
-        setTimeout(() => {
-            if (el.parentNode) {
-                el.textContent = '💥';
-                el.style.fontSize = '35px';
-                el.style.transform = 'translate(10px, -15px)';
-                el.style.transition = 'opacity 0.6s ease-out';
-                setTimeout(() => {
-                    if (el.parentNode) {
-                        el.style.opacity = '0';
-                        setTimeout(() => {
-                            if (el.parentNode) el.remove();
-                        }, 600);
-                    }
-                }, 400);
-            }
-        }, 800);
     }
 
     function spawnEntity(type) {
@@ -530,17 +489,16 @@
         frameCount++;
 
         // Speed increases steadily but has a max limit so the final stages stay playable
-        if (gameSpeed < MAX_SPEED_CAP) {
+        if (gameSpeed < 7.5) {
             gameSpeed += 0.0004;
-        } else if (currentStageIndex === 11 && gameSpeed < ULTRA_SPEED_CAP) {
+        } else if (currentStageIndex === 11 && gameSpeed < 8.8) {
             // In the final stage, let it increase even further but very slowly to create a "survival" feel
             gameSpeed += 0.0001;
         }
 
         // Physics
         const stage = STAGES[currentStageIndex];
-        const effectiveGravity = isMobileSpeed ? stage.gravity : (stage.gravity * 0.92); // Weaker gravity on PC for longer jumps
-        dinoVelocity += effectiveGravity;
+        dinoVelocity += stage.gravity;
         dinoY += dinoVelocity;
 
         if (dinoY >= 0) {
@@ -611,10 +569,10 @@
                 spawnTimer = nextQueued.delay;
             } else {
                 const randCombo = Math.random();
-                const comboChance = isMobileSpeed ? 0.35 : 0.20; // Fewer combos on desktop PC
-                if (stage.flyChance > 0 && randCombo < comboChance) {
+                // 35% chance to spawn a combo if stage has flying elements
+                if (stage.flyChance > 0 && randCombo < 0.35) {
                     const isGroundFirst = Math.random() < 0.5;
-                    const delay = Math.floor(Math.random() * 15 + (isMobileSpeed ? 48 : 60)); // Larger gap on desktop PC
+                    const delay = Math.floor(Math.random() * 15 + 48); // 48-63 frames delay
                     
                     if (isGroundFirst) {
                         spawnEntity('obstacle');
@@ -631,12 +589,11 @@
                     const diffLevel = Math.min(5, currentStageIndex);
                     const jumpFrames = 2 * Math.abs(stage.jumpForce / stage.gravity);
                     
-                    let minGap = Math.max(Math.floor(jumpFrames + 5), 55 - Math.floor(gameSpeed * 2.5) - (diffLevel * 6));
-                    let maxGap = minGap + Math.max(5, 15 - diffLevel * 5) + Math.floor(Math.random() * 5);
+                    let minGap = Math.max(Math.floor(jumpFrames + 5), 70 - Math.floor(gameSpeed * 2.5) - (diffLevel * 6));
+                    let maxGap = minGap + Math.max(5, 20 - diffLevel * 5) + Math.floor(Math.random() * 5);
                     
                     // Adjust gap based on stage explicitly adding extra space if needed, but not reducing below jumpFrames+5
-                    if (currentStageIndex === 0) { minGap -= 10; maxGap -= 10; } 
-                    if (currentStageIndex === 1) { minGap -= 5; maxGap -= 5; }
+                    if (currentStageIndex === 0) { maxGap += 8; } 
                     if (currentStageIndex === 3) { minGap += 3; maxGap += 5; } 
                     if (currentStageIndex === 9) { minGap += 10; maxGap += 15; } 
                     if (currentStageIndex === 4) { minGap += 10; maxGap += 15; } 
@@ -649,12 +606,6 @@
                         maxGap -= shrink; 
                     } 
                     
-                    // Slightly fewer obstacles on desktop (PC): add extra frames between spawns
-                    if (!isMobileSpeed) {
-                        minGap += 22;
-                        maxGap += 35;
-                    }
-
                     // Enforce absolute fairness minimum
                     minGap = Math.max(Math.floor(jumpFrames + 5), minGap);
                     // Ensure maxGap is strictly >= minGap to prevent math errors
@@ -667,12 +618,6 @@
         // Randomly spawn clouds
         if (currentStageIndex !== 4 && currentStageIndex !== 5 && Math.random() < 0.015) {
             spawnEntity('cloud');
-        }
-
-        // Asteroids for stage 5 (School trip - dinosaur extinction reference)
-        if (currentStageIndex === 5 && !stage5AsteroidSpawned && Math.random() < 0.02) {
-            spawnAsteroid();
-            stage5AsteroidSpawned = true;
         }
 
         const dinoRect = dino.getBoundingClientRect();
@@ -776,9 +721,7 @@
                 "עלית לאוטובוס הלא נכון. עכשיו אתה בדרך לאזור תעשייה. 🚌",
                 "התיישבת ליד מישהו שחפר לך כל הדרך על שיעורי הבית במתמטיקה. 🚌",
                 "עמדת ליד הדלת והיא נסגרה עליך. הנהג אמר 'רק אל תבכה לי'. 🚌",
-                "הגעת לתחנה וראית את האוטובוס מתרחק, רצת חצי קילומטר והוא לא פתח לך. 🚌💨",
-                "הנהג סגר עליך את הדלת בכוונה כי ראה שיש לך כרטיסייה ישנה. 🚌",
-                "רצת כמו מטורף לאוטובוס, עלית, ושמת לב שזה בכלל יום שבת! 🚌"
+                "הגעת לתחנה וראית את האוטובוס מתרחק, רצת חצי קילומטר והוא לא פתח לך. 🚌💨"
             ],
             '🎒': [
                 "שכחת להוציא מהתיק את הסנדוויץ' משבוע שעבר... התעלפת מהריח. 🎒",
@@ -787,9 +730,7 @@
                 "לקחת את התיק של אחיך הקטן בטעות. יש שם רק מדבקות של פפה פיג. 🎒",
                 "שמת בקבוק מים שלא היה סגור טוב. עכשיו כל המחברות שלך הן עיסה רטובה. 🎒💧",
                 "ניסית להרים את התיק ופרקת כתף. התיק ניצח. 🎒",
-                "ילד מהכיתה עשה לך 'פתיחת תיק' מול כולם וכל הקלמר התפזר. 🎒",
-                "התיק שלך היה כל כך מלא בספרים מיותרים שהרצפה פשוט קרסה בגללך. 🎒",
-                "ניסית לזרוק את התיק לחבר, הוא פגע בך וחזרת הביתה מוקדם. 🎒"
+                "ילד מהכיתה עשה לך 'פתיחת תיק' מול כולם וכל הקלמר התפזר. 🎒"
             ],
             '⏰': [
                 "צלצול פתאומי!! קפצת מרוב בהלה, איבדת שיווי משקל ונפסלת. ⏰",
@@ -797,9 +738,7 @@
                 "כיוונת שעון ל-7:00 בערב במקום בבוקר. קלאסי. ⏰",
                 "החלטת לשים את השעון המעורר בצד השני של החדר, אבל פשוט זרקת עליו כרית והמשכת לישון. ⏰",
                 "השעון המעורר צלצל, כיבית אותו ברוגע ואז התעוררת ב-12 בצהריים. ⏰",
-                "חשבת לעצמך 'רק עוד 5 דקות' וקמת כשהלימודים כבר נגמרו. ⏰",
-                "השעון המעורר צלצל באמצע השיעור כי כיוונת אותו ל-10:00. המורה כעסה. ⏰",
-                "הבטרייה של השעון נגמרה. התעוררת מתישהו באוגוסט. ⏰"
+                "חשבת לעצמך 'רק עוד 5 דקות' וקמת כשהלימודים כבר נגמרו. ⏰"
             ],
             '📝': [
                 "הכלב באמת אכל לך את שיעורי הבית. ואף אחד לא מאמין לך. 📝",
@@ -808,67 +747,40 @@
                 "שכחת איזה יום היום ולא הכנת שיעורים. פאדיחה. 📝",
                 "חשבת שהמבחן מחר, אבל אז חילקו דפים. 📝😱",
                 "ניסית להעתיק מחבר ורשמת בטעות גם את השם שלו במבחן. 📝",
-                "המחק שלך נפל והתגלגל עד לצד השני של הכיתה. נאלצת להישאר עם טעויות. 📝",
-                "הכנת פתק ענקי לשליפה במבחן, אבל הוא עף לך מהכיס ישר לידיים של המורה. 📝",
-                "התחלת לכתוב את המבחן והעט הפסיק לעבוד. הלך הציון. 📝",
-                "רשמת את התשובות על היד אבל הזעת הכל מרוב לחץ. 📝"
+                "המחק שלך נפל והתגלגל עד לצד השני של הכיתה. נאלצת להישאר עם טעויות. 📝"
             ],
             '📋': [
                 "רכזת השכבה תפסה אותך במסדרון: 'לאן אתה חושב שאתה הולך?!' 📋",
                 "נרשמה לך הערת משמעת על 'חוסר ציוד'. הלך הציון בתעודה. 📋",
                 "שיבצו אותך לתורנות חצר בדיוק היום. איזה דיכאון. 📋",
                 "המורה לצרפתית תפסה אותך לובש חולצת בית ספר בצבע הלא נכון. 📋",
-                "נרשמת לסיור וביטלו אותו ברגע האחרון כי אף אחד לא שילם. 📋",
-                "תפסו אותך מסתובב בלי אישור יציאה לשירותים. 📋",
-                "נרשמת למועד ב' ואז גילית שהוא מחר בבוקר! נפסלת מרוב פאניקה. 📋"
+                "נרשמת לסיור וביטלו אותו ברגע האחרון כי אף אחד לא שילם. 📋"
             ],
             '📚': [
                 "מי מביא היום ספרים לבית ספר?! נמחצת מגב תפוס. 📚",
                 "פתחת את הספר בעמוד הלא נכון והמורה קלטה שאתה מעופף. 📚",
-                "הספרנית דרשה קנס של 50 שקלים על ספר משנה שעברה. 📚",
-                "הספר הנדסה פשוט נפל לך על הרגל. אתה מושבת לשבועיים. 📚",
-                "עשית מהספרים מגדל והוא קרס עליך מול כל הכיתה. 📚"
+                "הספרנית דרשה קנס של 50 שקלים על ספר משנה שעברה. 📚"
             ],
             '📐': [
                 "מי לעזאזל משתמש במד זווית מאז כיתה ג'? נפסלת. 📐",
-                "דקרת את עצמך בטעות עם המחוגה. קורה לכולם. 📐",
-                "ניסית לצייר משולש ויצא לך עיגול. המורה למתמטיקה בכתה. 📐"
+                "דקרת את עצמך בטעות עם המחוגה. קורה לכולם. 📐"
             ],
             '🗑️': [
                 "זרקת עטיפה של במבה ופספסת את הפח. נשלחת למנהל. 🗑️",
-                "המורה הכריחה אותך להרים לכלוך שמישהו אחר זרק. 🗑️",
-                "זרקת נייר לפח, פספסת, והמנקה ראה אותך... 🗑️",
-                "נשענת על הפח והוא נשבר, עכשיו אתה מסריח משאריות בננה. 🗑️"
+                "המורה הכריחה אותך להרים לכלוך שמישהו אחר זרק. 🗑️"
             ],
             '🪑': [
                 "רבת עם מישהו על כיסא כתר בקפיטריה והחלקת. 🪑",
                 "ניסית להתנדנד על הכיסא אחורה... ונפלת על הגב. 🪑",
-                "בדיוק כשישבת מישהו הזיז לך את הכיסא. 🪑",
-                "ישבת על כיסא והוא חרק בצורה שנשמעה כאילו הפלצת. ברחת הביתה מהבושה. 🪑",
-                "החלקת מהכיסא תוך כדי שניסית להרים עיפרון. 🪑"
+                "בדיוק כשישבת מישהו הזיז לך את הכיסא. 🪑"
             ],
             '🧹': [
                 "האב בית עשה ספונג'ה, החלקת על הרטוב מול כולם. 🧹",
-                "האב בית ביקש שתעזור לו לטאטא את הכיתה ונשארת בהפסקה. 🧹",
-                "השתמשת במטאטא כמו במיקרופון והמנהל עמד מאחוריך כל הזמן. 🧹"
+                "האב בית ביקש שתעזור לו לטאטא את הכיתה ונשארת בהפסקה. 🧹"
             ],
-            '📦': [
-                "קרטון של טרופיות נפל עליך. עכשיו אתה פשוט דביק. 📦",
-                "התחבאת בתוך קרטון כדי להבריז, אבל העבירו אותך למחסן. 📦"
-            ],
-            '🗄️': [
-                "המורה ביקשה להביא גיר מהארון, אבל הוא נפל עליך. 🗄️",
-                "פתחת מגירה והיא פשוט נשארה לך ביד. 🗄️"
-            ],
+            '📦': "קרטון של טרופיות נפל עליך. עכשיו אתה פשוט דביק. 📦",
+            '🗄️': "המורה ביקשה להביא גיר מהארון, אבל הוא נפל עליך. 🗄️",
             '🐟': "דג בברזייה?! משרד הבריאות חייב לדעת מזה. 🐟",
-            '⚽': "חטפת כדורגל לפרצוף כי הסתכלת בטלפון במגרש. ⚽",
-            '🏀': "ניסית להטביע ונתלית על הטבעת, אבל המכנסיים נפלו. 🏀",
-            '🌵': "מי שם קקטוס באמצע הדרך בטיול השנתי?! זה בטח המדריך. 🌵",
-            '🦇': "עטלף נתקע לך בשיער. לקחו אותך למיון ויש לך עכשיו קרחת. 🦇",
-            '👻': "רוח רפאים הפחידה אותך! ברחת החוצה והשארת את התיק. 👻",
-            '👩‍🏫': "המורה תפסה אותך בורח לחופש והחזירה אותך לכיתה! 👩‍🏫",
-            '👽': "חייזרים חטפו אותך באמצע בוחן פתע. איזה מזל! 👽",
-            '☄️': "מטאור נפל לך על הראש. דינוזאורים, זוכר? ☄️",
             '🌊': [
                 "מישהו סתם את הברזייה והשפריץ לך ישר לתוך העין. 🌊",
                 "לחצת חזק מדי על הלחצן והמים עפו לך על כל החולצה. פאדיחה. 🌊"
@@ -1062,7 +974,7 @@
         btnContainer.style.justifyContent = 'center';
         
         const playAgainBtn = document.createElement('button');
-        playAgainBtn.textContent = 'שחק שוב 🔄';
+        playAgainBtn.textContent = 'שחק מחדש 🔄';
         playAgainBtn.style.padding = '6px 14px';
         playAgainBtn.style.background = '#ef4444';
         playAgainBtn.style.color = '#ffffff';
@@ -1077,7 +989,24 @@
             startGame();
         };
 
+        const exitBtn = document.createElement('button');
+        exitBtn.textContent = 'יציאה 🚪';
+        exitBtn.style.padding = '6px 14px';
+        exitBtn.style.background = '#64748b';
+        exitBtn.style.color = '#ffffff';
+        exitBtn.style.border = 'none';
+        exitBtn.style.borderRadius = '8px';
+        exitBtn.style.fontWeight = 'bold';
+        exitBtn.style.cursor = 'pointer';
+        exitBtn.style.fontSize = '14px';
+        exitBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+        exitBtn.onclick = (e) => {
+            e.stopPropagation();
+            cleanupGame();
+        };
+
         btnContainer.appendChild(playAgainBtn);
+        btnContainer.appendChild(exitBtn);
         title.appendChild(btnContainer);
     }
 
