@@ -1,4 +1,4 @@
-﻿const CACHE_VERSION = 'v300';
+﻿const CACHE_VERSION = 'v301';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -72,4 +72,5 @@ self.addEventListener('fetch', e => {
     })
   );
 });
+
 

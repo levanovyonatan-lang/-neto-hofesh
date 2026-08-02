@@ -87,7 +87,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=300').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=301').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -1168,7 +1168,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=300';
+        script.src = 'assets/js/games/dino-school.js?v=301';
         document.body.appendChild(script);
     }
 
@@ -1637,4 +1637,5 @@ function triggerSurferAnimation() {
 }
 
 // Demo Site specific logic removed as requested by user.
+
 

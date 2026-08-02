@@ -508,11 +508,11 @@
         frameCount++;
 
         // Speed increases steadily but has a max limit so the final stages stay playable
-        if (gameSpeed < 7.5) {
-            gameSpeed += 0.0004 * timeScale;
-        } else if (currentStageIndex === 11 && gameSpeed < 8.8) {
+        if (gameSpeed < 8.0) {
+            gameSpeed += 0.00045 * timeScale;
+        } else if (currentStageIndex === 11 && gameSpeed < 9.4) {
             // In the final stage, let it increase even further but very slowly to create a "survival" feel
-            gameSpeed += 0.0001 * timeScale;
+            gameSpeed += 0.00012 * timeScale;
         }
 
         // Physics
@@ -608,16 +608,16 @@
                     const diffLevel = Math.min(5, currentStageIndex);
                     const jumpFrames = 2 * Math.abs(stage.jumpForce / stage.gravity);
                     
-                    let minGap = Math.max(Math.floor(jumpFrames + 5), 70 - Math.floor(gameSpeed * 2.5) - (diffLevel * 6));
-                    let maxGap = minGap + Math.max(5, 20 - diffLevel * 5) + Math.floor(Math.random() * 5);
+                    let minGap = Math.max(Math.floor(jumpFrames + 4), 65 - Math.floor(gameSpeed * 2.2) - (diffLevel * 5));
+                    let maxGap = minGap + Math.max(5, 18 - diffLevel * 4) + Math.floor(Math.random() * 5);
                     
-                    // Adjust gap based on stage explicitly adding extra space if needed, but not reducing below jumpFrames+5
-                    if (currentStageIndex === 0) { maxGap += 8; } 
-                    if (currentStageIndex === 3) { minGap += 3; maxGap += 5; } 
-                    if (currentStageIndex === 9) { minGap += 10; maxGap += 15; } 
-                    if (currentStageIndex === 4) { minGap += 10; maxGap += 15; } 
+                    // Adjust gap based on stage explicitly adding extra space if needed, but not reducing below jumpFrames+4
+                    if (currentStageIndex === 0) { maxGap += 4; } 
+                    if (currentStageIndex === 3) { minGap += 2; maxGap += 3; } 
+                    if (currentStageIndex === 9) { minGap += 8; maxGap += 12; } 
+                    if (currentStageIndex === 4) { minGap += 8; maxGap += 12; } 
                     // Give a bit more breathing room in stage 11
-                    if (currentStageIndex === 10) { minGap += 5; maxGap += 10; } 
+                    if (currentStageIndex === 10) { minGap += 4; maxGap += 8; } 
                     // Final stage is chaotic! Gradually gets harder the further you go
                     if (currentStageIndex === 11) { 
                         let progress = Math.max(0, score - 3100);
@@ -626,7 +626,7 @@
                     } 
                     
                     // Enforce absolute fairness minimum
-                    minGap = Math.max(Math.floor(jumpFrames + 5), minGap);
+                    minGap = Math.max(Math.floor(jumpFrames + 4), minGap);
                     // Ensure maxGap is strictly >= minGap to prevent math errors
                     maxGap = Math.max(minGap, maxGap);
                     spawnTimer = Math.floor(Math.random() * (maxGap - minGap + 1)) + minGap;
