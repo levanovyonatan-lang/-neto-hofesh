@@ -1,4 +1,4 @@
-﻿const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
+const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
 const tipsDataVersion = 'tips-file-v2';
 const dailyTipsStorageKey = `holiday_calc_daily_tips_${tipsDataVersion}`;
 const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
@@ -682,7 +682,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 
                     textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}`;
                     */
-                } else if (userConfig.schoolType === 'high') {
+                } else if (false && userConfig.schoolType === 'high') {
                     if (isNewlyClicked) trackEvent('view_tip_jobs_sponsor');
 
                     sponsorBanner.style.background = '';
@@ -714,7 +714,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
 
-            if (sponsorBanner && (userConfig.schoolType === 'high')) { // || userConfig.schoolType === 'elem'
+            if (false && sponsorBanner && (userConfig.schoolType === 'high')) { // || userConfig.schoolType === 'elem'
                 sponsorBanner.style.display = 'flex'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
                 sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
                 if (userConfig.schoolType === 'elem') {
@@ -1194,26 +1194,7 @@ function showMainScreen() {
     } else if (userConfig.schoolType === 'high') {
         if (demoBanner) demoBanner.style.display = 'none';
         if (avigailBanner) avigailBanner.style.display = 'none';
-        if (jobsBanner) {
-            jobsBanner.style.display = 'flex';
-            trackEvent('view_ad_jobs_sticky');
-
-            const isAndroid = /Android/i.test(navigator.userAgent);
-            const jobsLink = document.getElementById('jobs-banner-link');
-            const jobsImg = document.getElementById('jobs-banner-img');
-
-            if (jobsLink && jobsImg) {
-                if (isAndroid) {
-                    jobsLink.href = "https://play.google.com/store/apps/details?id=com.hagovistim.app";
-                    jobsImg.src = "assets/images/jobs-banner-android.jpeg?v=10";
-                    jobsLink.onclick = function () { trackEvent('click_ad_jobs_sticky'); trackEvent('click_ad_jobs_android'); };
-                } else {
-                    jobsLink.href = "https://chat.whatsapp.com/GbuLGylKq5216WxoKKDKWe";
-                    jobsImg.src = "assets/images/jobs-banner-iphone.jpg?v=10";
-                    jobsLink.onclick = function () { trackEvent('click_ad_jobs_sticky'); trackEvent('click_ad_jobs_iphone'); };
-                }
-            }
-        }
+        if (jobsBanner) jobsBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
     } else {
