@@ -655,7 +655,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         } else if (userConfig.schoolType === 'middle' || userConfig.schoolType === 'elem') {
             sponsorBanner.style.display = 'none';
         } else {
-            sponsorBanner.style.display = 'block';
+            sponsorBanner.style.display = 'none'; // Temporarily disabled
             const textElement = sponsorBanner.querySelector('.sponsor-text');
             if (textElement) {
                 if (userConfig.schoolType === 'elem') {
