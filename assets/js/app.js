@@ -87,7 +87,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=304').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=305').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -439,17 +439,11 @@ function attemptRegistration() {
 
 function handleSponsorClick() {
     if (userConfig.schoolType === 'elem') {
-        trackEvent('click_ad_avigail_tip');
-        window.location.href = "avigail-camp.html";
-    } else if (userConfig.schoolType === 'high') {
-        const isAndroid = /Android/i.test(navigator.userAgent);
-        trackEvent('click_tip_jobs_sponsor');
-        trackEvent(isAndroid ? 'click_tip_jobs_android' : 'click_tip_jobs_iphone');
-        if (isAndroid) {
-            window.location.href = "https://play.google.com/store/apps/details?id=com.hagovistim.app";
-        } else {
-            window.location.href = "https://chat.whatsapp.com/GbuLGylKq5216WxoKKDKWe";
-        }
+        trackEvent('click_tip_sponsor_elem');
+        window.location.href = "https://chat.whatsapp.com/D6TsQfLFkA072Xv6Q6pKDc";
+    } else {
+        trackEvent('click_tip_sponsor_main');
+        window.location.href = "https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF";
     }
 }
 
@@ -714,20 +708,20 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
 
-            if (false && sponsorBanner && (userConfig.schoolType === 'high')) { // || userConfig.schoolType === 'elem'
+            if (sponsorBanner) {
                 sponsorBanner.style.display = 'flex'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
                 sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
                 if (userConfig.schoolType === 'elem') {
-                    // trackEvent('view_ad_avigail_tip');
+                    trackEvent('view_tip_sponsor_elem');
                 } else {
-                    trackEvent('view_ad_vip_tip');
+                    trackEvent('view_tip_sponsor_main');
                 }
             }
             setTimeout(() => {
                 window.scrollBy({ top: 70, behavior: 'smooth' });
             }, 150);
         } else {
-            if (sponsorBanner) sponsorBanner.style.display = 'none';
+            if (sponsorBanner) sponsorBanner.style.display = 'flex';
         }
 
         if (currentState.clicks >= 2) { btn.disabled = true; btn.style.pointerEvents = 'none'; btn.setAttribute('aria-disabled', 'true'); }
@@ -1168,7 +1162,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=304';
+        script.src = 'assets/js/games/dino-school.js?v=305';
         document.body.appendChild(script);
     }
 
