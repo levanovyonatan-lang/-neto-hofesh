@@ -87,7 +87,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=311').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=312').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -440,10 +440,10 @@ function attemptRegistration() {
 function handleSponsorClick() {
     if (userConfig.schoolType === 'elem') {
         trackEvent('click_tip_community_elem');
-        window.location.href = "https://chat.whatsapp.com/D6TsQfLFkA072Xv6Q6pKDc";
+        window.open("https://chat.whatsapp.com/D6TsQfLFkA072Xv6Q6pKDc", "_blank");
     } else {
         trackEvent('click_tip_community_main');
-        window.location.href = "https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF";
+        window.open("https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF", "_blank");
     }
 }
 
@@ -1162,7 +1162,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=311';
+        script.src = 'assets/js/games/dino-school.js?v=312';
         document.body.appendChild(script);
     }
 
