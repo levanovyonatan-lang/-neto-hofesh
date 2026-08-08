@@ -1191,18 +1191,32 @@ function showMainScreen() {
 
         if (highSocial) highSocial.style.display = 'none';
         if (elemSocial) elemSocial.style.display = 'block';
+
+        const whatsappCommunityBtn = document.querySelector('.whatsapp-community-btn');
+        if (whatsappCommunityBtn) {
+            whatsappCommunityBtn.href = "https://chat.whatsapp.com/D6TsQfLFkA072Xv6Q6pKDc";
+        }
+
     } else if (userConfig.schoolType === 'high') {
         if (demoBanner) demoBanner.style.display = 'none';
         if (avigailBanner) avigailBanner.style.display = 'none';
         if (jobsBanner) jobsBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
+        const whatsappCommunityBtn = document.querySelector('.whatsapp-community-btn');
+        if (whatsappCommunityBtn) {
+            whatsappCommunityBtn.href = "https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF";
+        }
     } else {
         if (demoBanner) demoBanner.style.display = 'none';
         if (avigailBanner) avigailBanner.style.display = 'none';
         if (jobsBanner) jobsBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
+        const whatsappCommunityBtn = document.querySelector('.whatsapp-community-btn');
+        if (whatsappCommunityBtn) {
+            whatsappCommunityBtn.href = "https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF";
+        }
     }
 
     const summerHighObj = allTargets.find(t => t.id === 'summerHigh');

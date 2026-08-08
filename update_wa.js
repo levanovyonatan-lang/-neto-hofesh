@@ -1,5 +1,5 @@
 const fs = require('fs');
-const text = `מצאתי את הקייטנה הכי שווה לקיץ🤩 
+const text = `מצאתי את הקייטנה הכי שווה לקיץ 
 אני ממש רוצה ללכת, בבקשה תרשמו אותי!
 הנה הלינק לפרטים: https://www.funkid-k.com/קייטנת-אקשן-עם-אביגיל/`;
 const encoded = encodeURIComponent(text);
