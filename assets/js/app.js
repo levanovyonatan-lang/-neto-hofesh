@@ -1195,6 +1195,7 @@ function showMainScreen() {
         const whatsappCommunityBtn = document.querySelector('.whatsapp-community-btn');
         if (whatsappCommunityBtn) {
             whatsappCommunityBtn.href = "https://chat.whatsapp.com/D6TsQfLFkA072Xv6Q6pKDc";
+            whatsappCommunityBtn.setAttribute('onclick', "trackEvent('click_whatsapp_community_elem'); this.style.transform='scale(0.95)'; setTimeout(() => this.style.transform='', 200);");
         }
 
     } else if (userConfig.schoolType === 'high') {
@@ -1206,6 +1207,7 @@ function showMainScreen() {
         const whatsappCommunityBtn = document.querySelector('.whatsapp-community-btn');
         if (whatsappCommunityBtn) {
             whatsappCommunityBtn.href = "https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF";
+            whatsappCommunityBtn.setAttribute('onclick', "trackEvent('click_whatsapp_community_main'); this.style.transform='scale(0.95)'; setTimeout(() => this.style.transform='', 200);");
         }
     } else {
         if (demoBanner) demoBanner.style.display = 'none';
@@ -1216,6 +1218,7 @@ function showMainScreen() {
         const whatsappCommunityBtn = document.querySelector('.whatsapp-community-btn');
         if (whatsappCommunityBtn) {
             whatsappCommunityBtn.href = "https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF";
+            whatsappCommunityBtn.setAttribute('onclick', "trackEvent('click_whatsapp_community_main'); this.style.transform='scale(0.95)'; setTimeout(() => this.style.transform='', 200);");
         }
     }
 
