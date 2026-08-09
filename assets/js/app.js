@@ -87,7 +87,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=314').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=315').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -1162,7 +1162,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=314';
+        script.src = 'assets/js/games/dino-school.js?v=315';
         document.body.appendChild(script);
     }
 
