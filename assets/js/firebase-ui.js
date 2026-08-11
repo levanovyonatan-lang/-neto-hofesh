@@ -216,14 +216,11 @@ window.updateLeaderboardUI = function() {
     }
 }
 
-window.handleGoogleLogin = async function() {
+window.handleGoogleLogin = function() {
     if(window.firebaseSignIn) {
-        try {
-            await window.firebaseSignIn();
-            // Auth observer will handle the rest
-        } catch(e) {
-            alert("התחברות נכשלה. אנא נסה שוב.");
-        }
+        window.firebaseSignIn().catch(e => {
+            console.error("Login failed in UI", e);
+        });
     }
 }
 

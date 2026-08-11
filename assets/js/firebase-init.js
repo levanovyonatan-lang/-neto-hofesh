@@ -21,35 +21,20 @@ const db = getFirestore(app);
 const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider();
 
-// בדוק אם חזרנו מהתחברות דרך Redirect (למשל בספארי)
-getRedirectResult(auth).then((result) => {
-    if (result) {
-        window.isLoginActionActive = true;
-    }
-}).catch(console.error);
-
 // Expose Firebase functions globally for the app
 window.firebaseAuth = auth;
 window.firebaseDb = db;
-window.firebaseSignIn = async () => {
-    try {
-        window.isLoginActionActive = true;
-        const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
-        
-        if (isSafariOrIOS) {
-            await signInWithRedirect(auth, provider);
-        } else {
-            await signInWithPopup(auth, provider);
-        }
-    } catch (error) {
+window.firebaseSignIn = () => {
+    window.isLoginActionActive = true;
+    // עלינו לקרוא ל-signInWithPopup באופן סינכרוני לחלוטין כדי שספארי לא יחסום את הפופאפ
+    return signInWithPopup(auth, provider).catch((error) => {
+        window.isLoginActionActive = false;
+        console.error("Login failed", error);
         if (error.code === 'auth/popup-blocked') {
-            await signInWithRedirect(auth, provider);
-        } else {
-            window.isLoginActionActive = false;
-            console.error("Login failed", error);
-            throw error;
+            alert("ספארי חסם את חלון ההתחברות 🔒\nאנא אשר חלונות קופצים (Pop-ups) עבור האתר, או השתמש בדפדפן כרום.");
         }
-    }
+        throw error;
+    });
 };
 
 window.firebaseSignOut = () => {
