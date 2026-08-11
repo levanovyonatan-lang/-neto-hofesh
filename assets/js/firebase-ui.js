@@ -2,6 +2,17 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     injectFirebaseUI();
+    
+    // Auto-open leaderboard or game based on URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if(urlParams.get('openGame') === 'dino') {
+        window.pendingDinoGame = true;
+    }
+    
+    if(urlParams.get('openLogin') === 'true' && window.showLeaderboard) {
+        window.showLeaderboard();
+    }
 });
 
 function injectFirebaseUI() {
@@ -102,7 +113,7 @@ function injectFirebaseUI() {
                 <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: bold;">התחבר כדי לשמור את השיא שלך:</p>
                 <p style="font-size: 12px; color: #ef4444; margin-bottom: 15px;">דפדפן ספארי חוסם זמנית את אפשרות ההתחברות. אנא לחץ על הכפתור למטה כדי לפתוח את האתר בדפדפן גוגל כרום.</p>
                 
-                <a href="googlechromes://${window.location.host}${window.location.pathname}?openLogin=true" class="fb-btn google" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                <a href="googlechromes://${window.location.host}${window.location.pathname}?openLogin=true&openGame=dino" class="fb-btn google" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
                     פתיחה והתחברות ב-Chrome
                 </a>
@@ -159,6 +170,18 @@ function injectFirebaseUI() {
 window.closeModals = function() {
     document.getElementById('reg-modal').classList.remove('active');
     document.getElementById('lb-modal').classList.remove('active');
+    
+    if (window.pendingDinoGame) {
+        const tryStartDino = () => {
+            if (window.startDinoGame) {
+                window.startDinoGame();
+                window.pendingDinoGame = false;
+            } else {
+                setTimeout(tryStartDino, 100);
+            }
+        };
+        tryStartDino();
+    }
 }
 
 window.showRegistrationCompletionModal = function(user) {
