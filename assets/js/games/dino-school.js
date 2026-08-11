@@ -1010,9 +1010,11 @@
         gameContainer.removeEventListener('mousedown', handleInput);
 
         const btnContainer = document.createElement('div');
-        btnContainer.style.marginTop = '4px';
+        btnContainer.style.marginTop = '10px';
         btnContainer.style.display = 'flex';
+        btnContainer.style.flexDirection = 'column';
         btnContainer.style.gap = '8px';
+        btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
         const playAgainBtn = document.createElement('button');
@@ -1047,11 +1049,12 @@
             if(window.showLeaderboard) window.showLeaderboard();
         };
 
+        btnContainer.appendChild(playAgainBtn);
+        
         const isDemoMode = new URLSearchParams(window.location.search).get('show_demo') === 'true';
         if (isDemoMode) {
             btnContainer.appendChild(leaderboardBtn);
         }
-        btnContainer.appendChild(playAgainBtn);
         title.appendChild(btnContainer);
     }
 
