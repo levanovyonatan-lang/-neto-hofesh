@@ -127,6 +127,7 @@ window.closeModals = function() {
 }
 
 window.showRegistrationCompletionModal = function(user) {
+    document.getElementById('lb-modal').classList.remove('active');
     window.pendingFirebaseUser = user;
     document.getElementById('reg-modal').classList.add('active');
 }
