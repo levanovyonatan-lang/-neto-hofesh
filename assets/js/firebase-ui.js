@@ -90,6 +90,51 @@ function injectFirebaseUI() {
         </div>
     `;
 
+    const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
+    let authHTML = '';
+    if (isSafariOrIOS) {
+        authHTML = `
+            <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: bold;">התחברות מאובטחת לאייפון וספארי:</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <input type="email" id="auth-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 0; padding: 8px 12px; font-size: 14px;">
+                    <input type="password" id="auth-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 0; padding: 8px 12px; font-size: 14px;">
+                    <button class="fb-btn" style="padding: 8px; font-size: 15px;" onclick="handleEmailAuth()" id="email-auth-btn">התחבר / הירשם</button>
+                    <div id="auth-error" style="color: #ef4444; font-size: 12px; display: none;"></div>
+                </div>
+                
+                <p style="font-size: 12px; color: #94a3b8; margin: 15px 0 10px 0;">— או באמצעות Google (עלול להיחסם בספארי) —</p>
+                
+                <button class="fb-btn google" onclick="handleGoogleLogin()">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
+                    נסה להתחבר עם Google
+                </button>
+            </div>
+        `;
+    } else {
+        authHTML = `
+            <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">רוצה לשמור את השיא שלך לתמיד?</p>
+                
+                <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 10px;">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
+                    התחבר עם Google
+                </button>
+                
+                <p style="font-size: 12px; color: #94a3b8; margin: 10px 0;">— או באמצעות אימייל —</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <input type="email" id="auth-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 0; padding: 8px 12px; font-size: 14px;">
+                    <input type="password" id="auth-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 0; padding: 8px 12px; font-size: 14px;">
+                    <button class="fb-btn" style="padding: 8px; font-size: 15px;" onclick="handleEmailAuth()" id="email-auth-btn">התחבר / הירשם</button>
+                    <div id="auth-error" style="color: #ef4444; font-size: 12px; display: none;"></div>
+                </div>
+            </div>
+        `;
+    }
+
     // מודל טבלת שיאים והתחברות
     const lbModalHTML = `
         <div class="fb-modal-overlay" id="lb-modal">
@@ -100,23 +145,7 @@ function injectFirebaseUI() {
                     <div style="text-align: center; padding: 20px; color: #94a3b8;">טוען נתונים...</div>
                 </ul>
                 
-                <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
-                    <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">רוצה לשמור את השיא שלך לתמיד?</p>
-                    
-                    <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 10px;">
-                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
-                        התחבר עם Google
-                    </button>
-                    
-                    <p style="font-size: 12px; color: #94a3b8; margin: 10px 0;">— או באמצעות אימייל (מומלץ לאייפון) —</p>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <input type="email" id="auth-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 0; padding: 8px 12px; font-size: 14px;">
-                        <input type="password" id="auth-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 0; padding: 8px 12px; font-size: 14px;">
-                        <button class="fb-btn" style="padding: 8px; font-size: 15px;" onclick="handleEmailAuth()" id="email-auth-btn">התחבר / הירשם</button>
-                        <div id="auth-error" style="color: #ef4444; font-size: 12px; display: none;"></div>
-                    </div>
-                </div>
+                ${authHTML}
                 
                 <div id="lb-user-section" style="display: none; border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
                     <p style="font-size: 14px; font-weight: bold; color: #10b981;" id="lb-user-greeting">היי כינוי!</p>
