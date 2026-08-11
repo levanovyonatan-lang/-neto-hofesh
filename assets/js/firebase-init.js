@@ -60,9 +60,10 @@ onAuthStateChanged(auth, async (user) => {
                 window.currentUserProfile = null;
                 window.pendingFirebaseUser = user;
                 
-                if (window.isLoginActionActive) {
+                // תמיד נציג את השלמת ההרשמה אם הם התחברו לגוגל אבל עוד לא בחרו כינוי
+                // גם אם הם חזרו מדף התקנון והדף רוענן
+                if (window.showRegistrationCompletionModal) {
                     window.showRegistrationCompletionModal(user);
-                    window.isLoginActionActive = false;
                 }
             } else {
                 // משתמש קיים - נרענן את ה-UI או נשמור את הנתונים בזכרון
