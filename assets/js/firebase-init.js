@@ -41,17 +41,25 @@ window.firebaseSignOut = () => {
 // Listen for auth state changes
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        // משתמש מחובר - נוודא שקיים במסד הנתונים
-        const userDocRef = doc(db, "users", user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-        
-        if (!userDocSnap.exists()) {
-            // משתמש חדש - נציג לו את חלון ההשלמה (כינוי + ניוזלטר)
-            window.showRegistrationCompletionModal(user);
-        } else {
-            // משתמש קיים - נרענן את ה-UI או נשמור את הנתונים בזכרון
-            window.currentUserProfile = userDocSnap.data();
-            console.log("Welcome back, ", window.currentUserProfile.nickname);
+        try {
+            // משתמש מחובר - נוודא שקיים במסד הנתונים
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            
+            if (!userDocSnap.exists()) {
+                // משתמש חדש - נציג לו את חלון ההשלמה (כינוי + ניוזלטר)
+                window.showRegistrationCompletionModal(user);
+            } else {
+                // משתמש קיים - נרענן את ה-UI או נשמור את הנתונים בזכרון
+                window.currentUserProfile = userDocSnap.data();
+                console.log("Welcome back, ", window.currentUserProfile.nickname);
+                if(window.updateLeaderboardUI) window.updateLeaderboardUI();
+            }
+        } catch (error) {
+            console.error("Firestore error in auth state:", error);
+            alert("שגיאת התחברות למסד הנתונים (Firestore): נראה שיש חסימת הרשאות. בדוק את ה-Rules במסוף Firebase.");
+            // Reset UI since we couldn't load the user profile
+            window.currentUserProfile = null;
             if(window.updateLeaderboardUI) window.updateLeaderboardUI();
         }
     } else {
