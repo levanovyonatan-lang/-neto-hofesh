@@ -25,7 +25,8 @@ function injectFirebaseUI() {
             position: absolute; top: 15px; left: 15px; background: none; border: none;
             font-size: 24px; color: #94a3b8; cursor: pointer;
         }
-        .fb-title { color: #1e293b; font-size: 22px; font-weight: 800; margin-bottom: 15px; }
+        .fb-title { color: #1e293b; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+        .fb-subtitle { font-size: 14px; color: #64748b; margin-bottom: 20px; line-height: 1.4; }
         .fb-input {
             width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0;
             border-radius: 12px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box;
@@ -74,9 +75,9 @@ function injectFirebaseUI() {
         <div class="fb-modal-overlay" id="reg-modal">
             <div class="fb-modal">
                 <button class="fb-modal-close" onclick="closeModals()">×</button>
-                <div class="fb-title">ברוך הבא לאלופים! 🏆</div>
-                <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">בחר כינוי שיופיע בטבלת השיאים הארצית</p>
-                <input type="text" id="reg-nickname" class="fb-input" placeholder="למשל: DinoMaster99" maxlength="15">
+                <div class="fb-title">ברוכים הבאים לנטו חופש!</div>
+                <div class="fb-subtitle">בחר/י כינוי שילווה אותך באתר ויופיע בטבלאות השיאים הארציות:</div>
+                <input type="text" class="fb-input" id="reg-nickname" placeholder="לדוגמה: מלך_המשחקים_123" maxlength="15">
                 
                 <div class="fb-checkbox-wrap">
                     <input type="checkbox" id="reg-newsletter">
