@@ -153,6 +153,11 @@ window.submitRegistration = function() {
 }
 
 window.showLeaderboard = async function() {
+    if (window.pendingFirebaseUser && !window.currentUserProfile) {
+        window.showRegistrationCompletionModal(window.pendingFirebaseUser);
+        return;
+    }
+    
     document.getElementById('lb-modal').classList.add('active');
     window.updateLeaderboardUI();
     

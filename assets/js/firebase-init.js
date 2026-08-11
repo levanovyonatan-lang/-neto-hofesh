@@ -26,10 +26,11 @@ window.firebaseAuth = auth;
 window.firebaseDb = db;
 window.firebaseSignIn = async () => {
     try {
-        const result = await signInWithPopup(auth, provider);
-        return result.user;
+        window.isLoginActionActive = true;
+        await signInWithPopup(auth, provider);
     } catch (error) {
-        console.error("Error signing in with Google:", error);
+        window.isLoginActionActive = false;
+        console.error("Login failed", error);
         throw error;
     }
 };
@@ -47,8 +48,14 @@ onAuthStateChanged(auth, async (user) => {
             const userDocSnap = await getDoc(userDocRef);
             
             if (!userDocSnap.exists()) {
-                // משתמש חדש - נציג לו את חלון ההשלמה (כינוי + ניוזלטר)
-                window.showRegistrationCompletionModal(user);
+                // משתמש חדש שעדיין לא בחר כינוי
+                window.currentUserProfile = null;
+                window.pendingFirebaseUser = user;
+                
+                if (window.isLoginActionActive) {
+                    window.showRegistrationCompletionModal(user);
+                    window.isLoginActionActive = false;
+                }
             } else {
                 // משתמש קיים - נרענן את ה-UI או נשמור את הנתונים בזכרון
                 window.currentUserProfile = userDocSnap.data();
