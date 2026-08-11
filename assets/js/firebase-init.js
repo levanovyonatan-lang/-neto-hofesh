@@ -101,6 +101,20 @@ onAuthStateChanged(auth, async (user) => {
             } else {
                 // משתמש קיים - נרענן את ה-UI או נשמור את הנתונים בזכרון
                 window.currentUserProfile = userDocSnap.data();
+                
+                // סנכרון שיא הדינוזאור ל-localStorage (כדי שהמשחק ידע מה השיא)
+                const serverDinoScore = window.currentUserProfile.dinoHighScore || 0;
+                const localDinoScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
+                
+                if (serverDinoScore > localDinoScore) {
+                    localStorage.setItem('dinoHighScore', serverDinoScore);
+                } else if (localDinoScore > serverDinoScore) {
+                    // יש שיא מקומי גבוה יותר, נעדכן את השרת
+                    if (window.saveDinoHighScore) {
+                        window.saveDinoHighScore(localDinoScore);
+                    }
+                }
+                
                 console.log("Welcome back, ", window.currentUserProfile.nickname);
                 if(window.updateLeaderboardUI) window.updateLeaderboardUI();
             }

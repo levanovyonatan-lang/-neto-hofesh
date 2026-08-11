@@ -928,11 +928,18 @@
         let currentHighScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         let isNewRecord = false;
         if (score > currentHighScore) {
-            currentHighScore = score;
+            currentHighScore = Math.floor(score); // Ensure integer
             localStorage.setItem('dinoHighScore', currentHighScore);
             isNewRecord = true;
             const hsEl = document.getElementById('dino-high-score-val');
             if (hsEl) hsEl.textContent = currentHighScore;
+            
+            // אוטומטית שומר לשרת אם המשתמש מחובר ויש שיא חדש
+            if (window.currentUserProfile && window.saveDinoHighScore) {
+                if (currentHighScore > (window.currentUserProfile.dinoHighScore || 0)) {
+                    window.saveDinoHighScore(currentHighScore);
+                }
+            }
         }
 
         const funnyMessage = getGameOverMessage(currentStageIndex, killerEmoji);
