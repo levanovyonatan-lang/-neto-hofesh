@@ -26,18 +26,19 @@ window.firebaseAuth = auth;
 window.firebaseDb = db;
 window.firebaseSignIn = () => {
     window.isLoginActionActive = true;
-    const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
-    
-    if (isSafariOrIOS) {
-        return signInWithRedirect(auth, provider);
-    }
     
     return signInWithPopup(auth, provider).catch((error) => {
-        if (error.code === 'auth/popup-blocked') {
-            return signInWithRedirect(auth, provider);
-        }
         window.isLoginActionActive = false;
         console.error("Login failed", error);
+        
+        // מזהה אם מדובר בספארי או חסימת פופאפים
+        const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user' || isSafariOrIOS) {
+            alert("ספארי חוסם התחברות צד-שלישי (גוגל) כברירת מחדל בגלל הגדרות פרטיות מחמירות (ITP).\n\nכדי שזה יעבוד בספארי, נצטרך להגדיר בעתיד 'דומיין מותאם אישית' בשרתים.\nבינתיים, ההתחברות לטבלת השיאים עובדת בצורה מושלמת בדפדפן כרום (Chrome) או באנדרואיד!");
+        } else {
+            alert("התחברות נכשלה. אנא נסה שוב.");
+        }
         throw error;
     });
 };
