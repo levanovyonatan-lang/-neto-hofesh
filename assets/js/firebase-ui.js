@@ -109,7 +109,7 @@ function injectFirebaseUI() {
                     <span style="background:#fff; padding:0 10px; color:#94a3b8; font-size:12px;">או עבור לדפדפן Google</span>
                 </div>
                 
-                <a href="googleapps://${window.location.host}${window.location.pathname}?openLogin=true" class="fb-btn google" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                <a href="googlechromes://${window.location.host}${window.location.pathname}?openLogin=true" class="fb-btn google" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
                     פתיחה והתחברות בגוגל
                 </a>
