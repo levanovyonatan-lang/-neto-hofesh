@@ -1034,14 +1034,14 @@
         const leaderboardBtn = document.createElement('button');
         leaderboardBtn.textContent = '🏆 שיאים';
         leaderboardBtn.style.padding = '6px 14px';
-        leaderboardBtn.style.background = '#3b82f6';
-        leaderboardBtn.style.color = '#ffffff';
-        leaderboardBtn.style.border = 'none';
+        leaderboardBtn.style.background = '#f1f5f9';
+        leaderboardBtn.style.color = '#475569';
+        leaderboardBtn.style.border = '1px solid #cbd5e1';
         leaderboardBtn.style.borderRadius = '8px';
-        leaderboardBtn.style.fontWeight = 'bold';
+        leaderboardBtn.style.fontWeight = 'normal';
         leaderboardBtn.style.cursor = 'pointer';
         leaderboardBtn.style.fontSize = '14px';
-        leaderboardBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+        leaderboardBtn.style.boxShadow = 'none';
         leaderboardBtn.onclick = (e) => {
             e.stopPropagation();
             if(window.showLeaderboard) window.showLeaderboard();
