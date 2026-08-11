@@ -257,63 +257,9 @@ window.handleGoogleLogin = function() {
     }
 }
 
-window.handleEmailAuth = async function() {
-    const email = document.getElementById('auth-email').value.trim();
-    const password = document.getElementById('auth-password').value;
-    const errorEl = document.getElementById('auth-error');
-    const btn = document.getElementById('email-auth-btn');
-    
-    errorEl.style.display = 'none';
-    
-    if (!email || !email.includes('@')) {
-        errorEl.textContent = 'אנא הזן כתובת אימייל תקינה';
-        errorEl.style.display = 'block';
-        return;
-    }
-    
-    if (!password || password.length < 6) {
-        errorEl.textContent = 'הסיסמה חייבת להכיל לפחות 6 תווים';
-        errorEl.style.display = 'block';
-        return;
-    }
-    
-    if (window.firebaseEmailAuth) {
-        try {
-            btn.textContent = 'מתחבר...';
-            btn.disabled = true;
-            await window.firebaseEmailAuth(email, password);
-            btn.textContent = 'התחבר / הירשם';
-            btn.disabled = false;
-        } catch(e) {
-            btn.textContent = 'התחבר / הירשם';
-            btn.disabled = false;
-            console.error("Email auth failed", e);
-            if (e.code === 'auth/email-already-in-use' || e.code === 'auth/invalid-credential') {
-                errorEl.innerHTML = 'חשבון זה נוצר דרך התחברות גוגל ולכן אין לו סיסמה. <br>אנא פתח בדפדפן גוגל כרום, או <a href="#" onclick="window.handleResetPassword(\'' + email + '\'); return false;" style="color:#3b82f6; text-decoration:underline;">לחץ כאן ליצירת סיסמה לאימייל זה</a>.';
-            } else {
-                errorEl.textContent = 'אירעה שגיאה בהתחברות. נסה שוב.';
-            }
-            errorEl.style.display = 'block';
-        }
-    }
-}
-
 window.handleLogout = async function() {
     if(window.firebaseSignOut) {
         await window.firebaseSignOut();
         alert("התנתקת בהצלחה.");
-    }
-}
-
-window.handleResetPassword = async function(email) {
-    if (!email) return;
-    try {
-        if (window.firebaseResetPassword) {
-            await window.firebaseResetPassword(email);
-            alert('שלחנו לך אימייל עם קישור ליצירת סיסמה לחשבון! בדוק את תיבת הדואר הנכנס (וגם בספאם).');
-        }
-    } catch(e) {
-        console.error("Reset password failed", e);
-        alert('אירעה שגיאה בשליחת אימייל שחזור: ' + e.message);
     }
 }
