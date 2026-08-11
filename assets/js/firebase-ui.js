@@ -160,6 +160,15 @@ window.showLeaderboard = async function() {
         return;
     }
     
+    // סנכרון השיא המקומי לשרת במידה והוא גבוה יותר ממה ששמור בשרת
+    if (window.currentUserProfile && window.saveDinoHighScore) {
+        const localScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
+        const serverScore = window.currentUserProfile.dinoHighScore || 0;
+        if (localScore > serverScore) {
+            await window.saveDinoHighScore(localScore);
+        }
+    }
+    
     document.getElementById('lb-modal').classList.add('active');
     window.updateLeaderboardUI();
     
