@@ -298,8 +298,8 @@ window.handleEmailAuth = async function() {
             btn.textContent = 'התחבר / הירשם';
             btn.disabled = false;
             console.error("Email auth failed", e);
-            if (e.code === 'auth/email-already-in-use') {
-                errorEl.textContent = 'האימייל הזה כבר קיים במערכת, אבל הסיסמה שגויה.';
+            if (e.code === 'auth/email-already-in-use' || e.code === 'auth/invalid-credential') {
+                errorEl.innerHTML = 'חשבון זה נוצר דרך התחברות גוגל ולכן אין לו סיסמה. <br>אנא פתח בדפדפן גוגל כרום, או <a href="#" onclick="window.handleResetPassword(\'' + email + '\'); return false;" style="color:#3b82f6; text-decoration:underline;">לחץ כאן ליצירת סיסמה לאימייל זה</a>.';
             } else {
                 errorEl.textContent = 'אירעה שגיאה בהתחברות. נסה שוב.';
             }
@@ -312,5 +312,18 @@ window.handleLogout = async function() {
     if(window.firebaseSignOut) {
         await window.firebaseSignOut();
         alert("התנתקת בהצלחה.");
+    }
+}
+
+window.handleResetPassword = async function(email) {
+    if (!email) return;
+    try {
+        if (window.firebaseResetPassword) {
+            await window.firebaseResetPassword(email);
+            alert('שלחנו לך אימייל עם קישור ליצירת סיסמה לחשבון! בדוק את תיבת הדואר הנכנס (וגם בספאם).');
+        }
+    } catch(e) {
+        console.error("Reset password failed", e);
+        alert('אירעה שגיאה בשליחת אימייל שחזור: ' + e.message);
     }
 }
