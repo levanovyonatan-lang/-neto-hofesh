@@ -93,7 +93,6 @@ function injectFirebaseUI() {
     const lbModalHTML = `
         <div class="fb-modal-overlay" id="lb-modal">
             <div class="fb-modal">
-                <button class="fb-modal-close" onclick="closeModals()">×</button>
                 <div class="fb-title">🏆 טבלת האלופים 🏆</div>
                 
                 <ul class="leaderboard-list" id="lb-list">
@@ -110,7 +109,10 @@ function injectFirebaseUI() {
                 
                 <div id="lb-user-section" style="display: none; border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
                     <p style="font-size: 14px; font-weight: bold; color: #10b981;" id="lb-user-greeting">היי כינוי!</p>
-                    <button class="fb-btn" style="background: #e2e8f0; color: #475569; font-size: 14px; padding: 8px 0; margin-top: 5px;" onclick="handleLogout()">התנתק</button>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <button class="fb-btn" style="background: #e2e8f0; color: #475569; font-size: 14px; padding: 8px 0;" onclick="closeModals()">חזרה למשחק</button>
                 </div>
             </div>
         </div>
@@ -132,7 +134,7 @@ window.showRegistrationCompletionModal = function(user) {
     document.getElementById('reg-modal').classList.add('active');
 }
 
-window.submitRegistration = function() {
+window.submitRegistration = async function() {
     const nickname = document.getElementById('reg-nickname').value.trim();
     const optIn = document.getElementById('reg-newsletter').checked;
     
@@ -142,7 +144,7 @@ window.submitRegistration = function() {
     }
     
     if(window.pendingFirebaseUser && window.completeUserRegistration) {
-        window.completeUserRegistration(window.pendingFirebaseUser, nickname, optIn);
+        await window.completeUserRegistration(window.pendingFirebaseUser, nickname, optIn);
         closeModals();
         // Update any current high score they just achieved
         const currentHS = parseInt(localStorage.getItem('dinoHighScore')) || 0;
