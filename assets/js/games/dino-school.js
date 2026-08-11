@@ -987,7 +987,9 @@
             title.appendChild(recordEl);
             
             // Firebase Integration
-            const isDemoMode = new URLSearchParams(window.location.search).get('show_demo') === 'true';
+            const urlDemo = new URLSearchParams(window.location.search).get('show_demo') === 'true';
+            if (urlDemo) localStorage.setItem('isDemoMode', 'true');
+            const isDemoMode = urlDemo || localStorage.getItem('isDemoMode') === 'true';
             
             if (isDemoMode && window.currentUserProfile && window.saveDinoHighScore) {
                 window.saveDinoHighScore(currentHighScore);
@@ -1051,7 +1053,9 @@
 
         btnContainer.appendChild(playAgainBtn);
         
-        const isDemoMode = new URLSearchParams(window.location.search).get('show_demo') === 'true';
+        const urlDemo = new URLSearchParams(window.location.search).get('show_demo') === 'true';
+        if (urlDemo) localStorage.setItem('isDemoMode', 'true');
+        const isDemoMode = urlDemo || localStorage.getItem('isDemoMode') === 'true';
         if (isDemoMode) {
             btnContainer.appendChild(leaderboardBtn);
         }
