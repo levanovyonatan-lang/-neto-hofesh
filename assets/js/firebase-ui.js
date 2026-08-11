@@ -85,7 +85,7 @@ function injectFirebaseUI() {
                 </div>
                 
                 <button class="fb-btn" onclick="submitRegistration()">שמור כינוי וסיימנו</button>
-                <div class="terms-text">בלחיצה על שמירה אני מאשר/ת את <a href="terms.html" target="_blank" style="color: #3b82f6;">תקנון האתר ומדיניות הפרטיות</a>.</div>
+                <div class="terms-text">בלחיצה על שמירה אני מאשר/ת את <a href="terms.html" style="color: #3b82f6;">תקנון האתר ומדיניות הפרטיות</a>.</div>
             </div>
         </div>
     `;
