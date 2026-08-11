@@ -90,10 +90,10 @@ function injectFirebaseUI() {
         </div>
     `;
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isChromeIOS = /CriOS/.test(navigator.userAgent);
-    const isSafariMac = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    const isSafariOrIOS = (isIOS && !isChromeIOS) || isSafariMac;
+    const ua = navigator.userAgent;
+    const isIOS = /iPad|iPhone|iPod/i.test(ua);
+    const isChrome = /CriOS|Chrome/i.test(ua);
+    const isSafariOrIOS = (isIOS && !isChrome) || (/Safari/i.test(ua) && !isChrome && !/Android/i.test(ua));
     
     let authHTML = '';
     if (isSafariOrIOS) {
