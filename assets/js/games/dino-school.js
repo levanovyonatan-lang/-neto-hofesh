@@ -1034,10 +1034,10 @@
         };
 
         const leaderboardBtn = document.createElement('button');
-        leaderboardBtn.textContent = '🏆 צפה בטבלת השיאים';
+        leaderboardBtn.textContent = 'צפה בטבלת השיאים 🏆';
         leaderboardBtn.style.padding = '4px 8px';
         leaderboardBtn.style.background = 'transparent';
-        leaderboardBtn.style.color = '#64748b';
+        leaderboardBtn.style.color = '#ffffff';
         leaderboardBtn.style.border = 'none';
         leaderboardBtn.style.textDecoration = 'underline';
         leaderboardBtn.style.fontWeight = 'normal';
