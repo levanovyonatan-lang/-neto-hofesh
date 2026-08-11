@@ -987,9 +987,11 @@
             title.appendChild(recordEl);
             
             // Firebase Integration
-            if (window.currentUserProfile && window.saveDinoHighScore) {
+            const isDemoMode = new URLSearchParams(window.location.search).get('show_demo') === 'true';
+            
+            if (isDemoMode && window.currentUserProfile && window.saveDinoHighScore) {
                 window.saveDinoHighScore(currentHighScore);
-            } else if (!window.currentUserProfile && window.showRegistrationCompletionModal) {
+            } else if (isDemoMode && !window.currentUserProfile && window.showRegistrationCompletionModal) {
                 const savePrompt = document.createElement('div');
                 savePrompt.style.fontSize = '12px';
                 savePrompt.style.color = '#fbbf24';
@@ -1045,7 +1047,10 @@
             if(window.showLeaderboard) window.showLeaderboard();
         };
 
-        btnContainer.appendChild(leaderboardBtn);
+        const isDemoMode = new URLSearchParams(window.location.search).get('show_demo') === 'true';
+        if (isDemoMode) {
+            btnContainer.appendChild(leaderboardBtn);
+        }
         btnContainer.appendChild(playAgainBtn);
         title.appendChild(btnContainer);
     }
