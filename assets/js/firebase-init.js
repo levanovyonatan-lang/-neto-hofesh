@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
 
@@ -21,17 +21,34 @@ const db = getFirestore(app);
 const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider();
 
+// בדוק אם חזרנו מהתחברות דרך Redirect (למשל בספארי)
+getRedirectResult(auth).then((result) => {
+    if (result) {
+        window.isLoginActionActive = true;
+    }
+}).catch(console.error);
+
 // Expose Firebase functions globally for the app
 window.firebaseAuth = auth;
 window.firebaseDb = db;
 window.firebaseSignIn = async () => {
     try {
         window.isLoginActionActive = true;
-        await signInWithPopup(auth, provider);
+        const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        if (isSafariOrIOS) {
+            await signInWithRedirect(auth, provider);
+        } else {
+            await signInWithPopup(auth, provider);
+        }
     } catch (error) {
-        window.isLoginActionActive = false;
-        console.error("Login failed", error);
-        throw error;
+        if (error.code === 'auth/popup-blocked') {
+            await signInWithRedirect(auth, provider);
+        } else {
+            window.isLoginActionActive = false;
+            console.error("Login failed", error);
+            throw error;
+        }
     }
 };
 
