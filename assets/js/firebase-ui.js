@@ -3,10 +3,17 @@
 document.addEventListener("DOMContentLoaded", () => {
     injectFirebaseUI();
     
-    // Auto-open leaderboard or game based on URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    if(urlParams.get('openGame') === 'dino') {
+    if(urlParams.get('openGame') === 'dino_game_over') {
+        window.pendingDinoGameOver = {
+            score: urlParams.get('score'),
+            stage: urlParams.get('stage'),
+            killer: urlParams.get('killer')
+        };
+        const hash = urlParams.get('hash');
+        if (hash) {
+            window.location.hash = hash;
+        }
+    } else if(urlParams.get('openGame') === 'dino') {
         window.pendingDinoGame = true;
     }
     
@@ -181,6 +188,20 @@ window.closeModals = function() {
             }
         };
         tryStartDino();
+    } else if (window.pendingDinoGameOver) {
+        const tryGameOver = () => {
+            if (window.showDinoGameOver) {
+                window.showDinoGameOver(
+                    window.pendingDinoGameOver.score, 
+                    window.pendingDinoGameOver.stage,
+                    window.pendingDinoGameOver.killer
+                );
+                window.pendingDinoGameOver = null;
+            } else {
+                setTimeout(tryGameOver, 100);
+            }
+        };
+        tryGameOver();
     }
 }
 
@@ -210,7 +231,7 @@ window.submitRegistration = async function() {
     }
 }
 
-window.showLeaderboard = async function() {
+window.showLeaderboard = async function(score, stage, killer) {
     if (window.pendingFirebaseUser && !window.currentUserProfile) {
         window.showRegistrationCompletionModal(window.pendingFirebaseUser);
         return;
@@ -227,6 +248,27 @@ window.showLeaderboard = async function() {
     
     document.getElementById('lb-modal').classList.add('active');
     window.updateLeaderboardUI();
+    
+    // Update the google chrome link dynamically to preserve game state
+    const chromeLink = document.querySelector('#lb-auth-section .google');
+    if (chromeLink && chromeLink.tagName === 'A') {
+        let url = `googlechromes://${window.location.host}${window.location.pathname}?openLogin=true`;
+        if (score !== undefined) {
+            url += `&openGame=dino_game_over&score=${score}`;
+        } else {
+            url += `&openGame=dino`;
+        }
+        if (stage !== undefined) {
+            url += `&stage=${stage}`;
+        }
+        if (killer !== undefined) {
+            url += `&killer=${encodeURIComponent(killer)}`;
+        }
+        if (window.location.hash) {
+            url += `&hash=${encodeURIComponent(window.location.hash)}`;
+        }
+        chromeLink.href = url;
+    }
     
     if(window.getTopDinoScores) {
         const scores = await window.getTopDinoScores();

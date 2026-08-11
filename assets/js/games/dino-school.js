@@ -1055,7 +1055,7 @@
         leaderboardBtn.style.boxShadow = 'none';
         leaderboardBtn.onclick = (e) => {
             e.stopPropagation();
-            if(window.showLeaderboard) window.showLeaderboard();
+            if(window.showLeaderboard) window.showLeaderboard(score, currentStageIndex, killerEmoji);
         };
 
         btnContainer.appendChild(playAgainBtn);
@@ -1147,4 +1147,128 @@
 
     window.startDinoGame = startGame;
     window.cleanupDinoGame = cleanupGame;
+    
+    window.showDinoGameOver = function(savedScore, savedStage, killerEmoji) {
+        if (typeof trackEvent === 'function') trackEvent('dino_game_play');
+        const gameSponsorBanner = document.getElementById('game-sponsor-banner');
+        if (gameSponsorBanner) gameSponsorBanner.style.display = 'flex';
+
+        const appContainer = document.querySelector('.app-container');
+        if (appContainer) appContainer.style.zIndex = '1001';
+
+        let overlay = document.getElementById('game-lock-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'game-lock-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.zIndex = '999';
+            overlay.style.background = 'transparent';
+            overlay.style.transition = 'background 0.4s ease';
+            document.body.appendChild(overlay);
+        }
+        overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+
+        isGameActive = true;
+        isGameOver = true;
+        score = parseInt(savedScore) || 0;
+        currentStageIndex = parseInt(savedStage) || 0;
+        
+        const timerCard = document.getElementById('main-timer-bg');
+        if (!timerCard) { isGameActive = false; return; }
+
+        gameContainer = timerCard;
+        
+        const currentHeight = gameContainer.getBoundingClientRect().height;
+        gameContainer.dataset.hwPrevHeight = gameContainer.style.height || '';
+        
+        gameContainer.style.height = currentHeight + 'px';
+        gameContainer.offsetHeight; // force reflow
+        gameContainer.style.transition = 'height 0.4s ease, box-shadow 0.4s ease';
+        gameContainer.style.height = '200px';
+
+        gameContainer.style.position = 'relative';
+        gameContainer.style.overflow = 'hidden';
+        gameContainer.dataset.hwPrevZIndex = gameContainer.style.zIndex || '';
+        gameContainer.style.zIndex = '1000';
+
+        setTimeout(() => {
+            window.scrollTo({
+                top: gameContainer.getBoundingClientRect().top + window.scrollY - 15,
+                behavior: 'smooth'
+            });
+        }, 400);
+
+        // Hide original elements
+        const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor, .net-days, .absolute-timer, #excluding-label, #vacation-message, #main-target-title, .net-days-container, #total-days-label');
+        hiddenEls.forEach(el => { 
+            if(el.dataset.hwPrevDisplay === undefined) {
+                el.dataset.hwPrevDisplay = el.style.display || getComputedStyle(el).display; 
+            }
+            el.style.transition = 'opacity 0.2s ease';
+            el.style.opacity = '0'; 
+        });
+
+        setTimeout(() => {
+            hiddenEls.forEach(el => { 
+                el.style.display = 'none'; 
+                el.style.opacity = '';
+                el.style.transition = '';
+            });
+        }, 200);
+
+        // Block pointer events on other original elements
+        Array.from(gameContainer.children).forEach(el => {
+            if (!el.classList.contains('dino-element')) {
+                el.style.pointerEvents = 'none';
+            }
+        });
+
+        if (!dino) {
+            dino = document.createElement('div');
+            dino.id = 'dino';
+            dino.className = 'dino-element';
+            dino.style.position = 'absolute';
+            dino.style.bottom = '20px';
+            dino.style.left = '50px';
+            dino.style.fontSize = '35px';
+            dino.style.lineHeight = '1';
+            dino.style.transition = 'filter 0.5s ease, opacity 0.5s ease';
+            dino.style.zIndex = '20';
+            gameContainer.appendChild(dino);
+
+            const scoreDisplay = document.createElement('div');
+            scoreDisplay.id = 'dino-score';
+            scoreDisplay.className = 'dino-element';
+            scoreDisplay.style.position = 'absolute';
+            scoreDisplay.style.top = '10px';
+            scoreDisplay.style.right = '20px';
+            scoreDisplay.style.fontSize = '18px';
+            scoreDisplay.style.fontWeight = 'bold';
+            scoreDisplay.style.color = '#334155';
+            scoreDisplay.style.zIndex = '20';
+            scoreDisplay.style.fontFamily = 'monospace';
+            scoreDisplay.style.background = 'rgba(255,255,255,0.7)';
+            scoreDisplay.style.padding = '2px 8px';
+            scoreDisplay.style.borderRadius = '10px';
+            scoreDisplay.innerHTML = 'HI <span id="dino-high-score-val">' + (parseInt(localStorage.getItem('dinoHighScore'))||0) + '</span> | <span id="dino-score-val">0</span>';
+            gameContainer.appendChild(scoreDisplay);
+        }
+
+        const stageObj = STAGES[currentStageIndex] || STAGES[0];
+        gameContainer.style.background = stageObj.bg;
+        dino.innerHTML = `<span class="dino-inner">${stageObj.dinoEmoji || '🦖'}</span>`;
+        dino.style.filter = stageObj.dinoFilter || 'none';
+        dino.style.opacity = stageObj.dinoOpacity || '1';
+        dino.style.transform = `translateY(0px) rotate(-90deg)`;
+        
+        document.getElementById('dino-score-val').textContent = score;
+        
+        // Show game over UI directly
+        gameOver(killerEmoji || '💥');
+    };
 })();
