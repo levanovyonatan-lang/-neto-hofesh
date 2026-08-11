@@ -26,13 +26,18 @@ window.firebaseAuth = auth;
 window.firebaseDb = db;
 window.firebaseSignIn = () => {
     window.isLoginActionActive = true;
-    // עלינו לקרוא ל-signInWithPopup באופן סינכרוני לחלוטין כדי שספארי לא יחסום את הפופאפ
+    const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
+    if (isSafariOrIOS) {
+        return signInWithRedirect(auth, provider);
+    }
+    
     return signInWithPopup(auth, provider).catch((error) => {
+        if (error.code === 'auth/popup-blocked') {
+            return signInWithRedirect(auth, provider);
+        }
         window.isLoginActionActive = false;
         console.error("Login failed", error);
-        if (error.code === 'auth/popup-blocked') {
-            alert("ספארי חסם את חלון ההתחברות 🔒\nאנא אשר חלונות קופצים (Pop-ups) עבור האתר, או השתמש בדפדפן כרום.");
-        }
         throw error;
     });
 };
