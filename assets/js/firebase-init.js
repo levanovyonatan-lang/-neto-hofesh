@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
 
@@ -35,12 +35,36 @@ window.firebaseSignIn = () => {
         const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
         
         if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user' || isSafariOrIOS) {
-            alert("ספארי חוסם התחברות צד-שלישי (גוגל) כברירת מחדל בגלל הגדרות פרטיות מחמירות (ITP).\n\nכדי שזה יעבוד בספארי, נצטרך להגדיר בעתיד 'דומיין מותאם אישית' בשרתים.\nבינתיים, ההתחברות לטבלת השיאים עובדת בצורה מושלמת בדפדפן כרום (Chrome) או באנדרואיד!");
+            alert("ספארי חוסם התחברות צד-שלישי (גוגל). אנא השתמשו באפשרות ההתחברות באמצעות אימייל וסיסמה שמופיעה למטה, היא עובדת מעולה בספארי ובאייפונים!");
         } else {
             alert("התחברות נכשלה. אנא נסה שוב.");
         }
         throw error;
     });
+};
+
+window.firebaseEmailAuth = async (email, password) => {
+    window.isLoginActionActive = true;
+    try {
+        // מנסים להתחבר קודם
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        window.isLoginActionActive = false;
+        return userCredential;
+    } catch (error) {
+        // אם המשתמש לא קיים או שיש שגיאת פרטים, ננסה ליצור חשבון חדש
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-login-credentials') {
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                window.isLoginActionActive = false;
+                return userCredential;
+            } catch (createError) {
+                window.isLoginActionActive = false;
+                throw createError;
+            }
+        }
+        window.isLoginActionActive = false;
+        throw error;
+    }
 };
 
 window.firebaseSignOut = () => {
@@ -62,9 +86,14 @@ onAuthStateChanged(auth, async (user) => {
                 
                 // תמיד נציג את השלמת ההרשמה אם הם התחברו לגוגל אבל עוד לא בחרו כינוי
                 // גם אם הם חזרו מדף התקנון והדף רוענן
-                if (window.showRegistrationCompletionModal) {
-                    window.showRegistrationCompletionModal(user);
-                }
+                const tryShowModal = () => {
+                    if (window.showRegistrationCompletionModal) {
+                        window.showRegistrationCompletionModal(user);
+                    } else {
+                        setTimeout(tryShowModal, 100);
+                    }
+                };
+                tryShowModal();
             } else {
                 // משתמש קיים - נרענן את ה-UI או נשמור את הנתונים בזכרון
                 window.currentUserProfile = userDocSnap.data();

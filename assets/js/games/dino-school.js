@@ -1065,7 +1065,7 @@
 
 
     function cleanupGame() {
-        if (!gameContainer) return;
+        if (!isGameActive || !gameContainer) return;
         isGameActive = false;
         if (gameLoopId) cancelAnimationFrame(gameLoopId);
         

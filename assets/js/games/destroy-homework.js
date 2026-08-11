@@ -203,6 +203,7 @@
     }
 
     function endGame() {
+        if (!isGameActive) return;
         isGameActive = false;
         clearInterval(spawnInterval);
 

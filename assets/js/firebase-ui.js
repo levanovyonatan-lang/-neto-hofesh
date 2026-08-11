@@ -75,9 +75,9 @@ function injectFirebaseUI() {
         <div class="fb-modal-overlay" id="reg-modal">
             <div class="fb-modal">
                 <button class="fb-modal-close" onclick="closeModals()">×</button>
-                <div class="fb-title">ברוכים הבאים להרשמה</div>
-                <div class="fb-subtitle">בחר/י כינוי שילווה אותך באתר ויופיע בטבלאות השיאים הארציות:</div>
-                <input type="text" class="fb-input" id="reg-nickname" placeholder="לדוגמה: מלך_המשחקים_123" maxlength="15">
+                <div class="fb-title">הרשמה ובחירת כינוי לאתר</div>
+                <div class="fb-subtitle">הכינוי ישמש אותך בכל משחקי האתר, וישמר בטבלאות השיאים הארציות:</div>
+                <input type="text" class="fb-input" id="reg-nickname" placeholder="לדוגמה: אלוף_ישראל_123" maxlength="15">
                 
                 <div class="fb-checkbox-wrap">
                     <input type="checkbox" id="reg-newsletter">
@@ -102,10 +102,20 @@ function injectFirebaseUI() {
                 
                 <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
                     <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">רוצה לשמור את השיא שלך לתמיד?</p>
-                    <button class="fb-btn google" onclick="handleGoogleLogin()">
+                    
+                    <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 10px;">
                         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
                         התחבר עם Google
                     </button>
+                    
+                    <p style="font-size: 12px; color: #94a3b8; margin: 10px 0;">— או באמצעות אימייל (מומלץ לאייפון) —</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <input type="email" id="auth-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 0; padding: 8px 12px; font-size: 14px;">
+                        <input type="password" id="auth-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 0; padding: 8px 12px; font-size: 14px;">
+                        <button class="fb-btn" style="padding: 8px; font-size: 15px;" onclick="handleEmailAuth()" id="email-auth-btn">התחבר / הירשם</button>
+                        <div id="auth-error" style="color: #ef4444; font-size: 12px; display: none;"></div>
+                    </div>
                 </div>
                 
                 <div id="lb-user-section" style="display: none; border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
@@ -222,6 +232,47 @@ window.handleGoogleLogin = function() {
         window.firebaseSignIn().catch(e => {
             console.error("Login failed in UI", e);
         });
+    }
+}
+
+window.handleEmailAuth = async function() {
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+    const errorEl = document.getElementById('auth-error');
+    const btn = document.getElementById('email-auth-btn');
+    
+    errorEl.style.display = 'none';
+    
+    if (!email || !email.includes('@')) {
+        errorEl.textContent = 'אנא הזן כתובת אימייל תקינה';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    if (!password || password.length < 6) {
+        errorEl.textContent = 'הסיסמה חייבת להכיל לפחות 6 תווים';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    if (window.firebaseEmailAuth) {
+        try {
+            btn.textContent = 'מתחבר...';
+            btn.disabled = true;
+            await window.firebaseEmailAuth(email, password);
+            btn.textContent = 'התחבר / הירשם';
+            btn.disabled = false;
+        } catch(e) {
+            btn.textContent = 'התחבר / הירשם';
+            btn.disabled = false;
+            console.error("Email auth failed", e);
+            if (e.code === 'auth/email-already-in-use') {
+                errorEl.textContent = 'האימייל הזה כבר קיים במערכת, אבל הסיסמה שגויה.';
+            } else {
+                errorEl.textContent = 'אירעה שגיאה בהתחברות. נסה שוב.';
+            }
+            errorEl.style.display = 'block';
+        }
     }
 }
 
