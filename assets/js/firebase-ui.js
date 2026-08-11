@@ -93,7 +93,7 @@ function injectFirebaseUI() {
     const lbModalHTML = `
         <div class="fb-modal-overlay" id="lb-modal">
             <div class="fb-modal">
-                <div class="fb-title">🏆 טבלת האלופים 🏆</div>
+                <div class="fb-title">🏆 טבלת שיאים 🏆</div>
                 
                 <ul class="leaderboard-list" id="lb-list">
                     <div style="text-align: center; padding: 20px; color: #94a3b8;">טוען נתונים...</div>
