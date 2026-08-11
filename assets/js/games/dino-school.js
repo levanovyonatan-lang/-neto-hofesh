@@ -1034,15 +1034,15 @@
         };
 
         const leaderboardBtn = document.createElement('button');
-        leaderboardBtn.textContent = '🏆 שיאים';
-        leaderboardBtn.style.padding = '6px 14px';
-        leaderboardBtn.style.background = '#f1f5f9';
-        leaderboardBtn.style.color = '#475569';
-        leaderboardBtn.style.border = '1px solid #cbd5e1';
-        leaderboardBtn.style.borderRadius = '8px';
+        leaderboardBtn.textContent = '🏆 צפה בטבלת השיאים';
+        leaderboardBtn.style.padding = '4px 8px';
+        leaderboardBtn.style.background = 'transparent';
+        leaderboardBtn.style.color = '#64748b';
+        leaderboardBtn.style.border = 'none';
+        leaderboardBtn.style.textDecoration = 'underline';
         leaderboardBtn.style.fontWeight = 'normal';
         leaderboardBtn.style.cursor = 'pointer';
-        leaderboardBtn.style.fontSize = '14px';
+        leaderboardBtn.style.fontSize = '12px';
         leaderboardBtn.style.boxShadow = 'none';
         leaderboardBtn.onclick = (e) => {
             e.stopPropagation();
