@@ -75,7 +75,7 @@ function injectFirebaseUI() {
         <div class="fb-modal-overlay" id="reg-modal">
             <div class="fb-modal">
                 <button class="fb-modal-close" onclick="closeModals()">×</button>
-                <div class="fb-title">ברוכים הבאים לנטו חופש!</div>
+                <div class="fb-title">ברוכים הבאים להרשמה</div>
                 <div class="fb-subtitle">בחר/י כינוי שילווה אותך באתר ויופיע בטבלאות השיאים הארציות:</div>
                 <input type="text" class="fb-input" id="reg-nickname" placeholder="לדוגמה: מלך_המשחקים_123" maxlength="15">
                 
