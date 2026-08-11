@@ -106,12 +106,12 @@ function injectFirebaseUI() {
                 </div>
                 
                 <div style="text-align: center; border-bottom: 1px solid #e2e8f0; line-height: 0.1em; margin: 20px 0 15px 0;">
-                    <span style="background:#fff; padding:0 10px; color:#94a3b8; font-size:12px;">או עבור לדפדפן Chrome להתחברות בגוגל</span>
+                    <span style="background:#fff; padding:0 10px; color:#94a3b8; font-size:12px;">או עבור לדפדפן Google</span>
                 </div>
                 
                 <a href="googlechromes://${window.location.host}${window.location.pathname}?openLogin=true" class="fb-btn google" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
-                    פתיחה והתחברות ב-Chrome
+                    פתיחה והתחברות בגוגל
                 </a>
             </div>
         `;
@@ -124,17 +124,6 @@ function injectFirebaseUI() {
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
                     התחבר עם Google
                 </button>
-                
-                <div style="text-align: center; border-bottom: 1px solid #e2e8f0; line-height: 0.1em; margin: 20px 0 15px 0;">
-                    <span style="background:#fff; padding:0 10px; color:#94a3b8; font-size:12px;">או בעזרת אימייל</span>
-                </div>
-                
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <input type="email" id="auth-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 0; padding: 8px 12px; font-size: 14px;">
-                    <input type="password" id="auth-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 0; padding: 8px 12px; font-size: 14px;">
-                    <button class="fb-btn" style="padding: 8px; font-size: 15px; background: #64748b;" onclick="handleEmailAuth()" id="email-auth-btn">התחבר / הירשם באימייל</button>
-                    <div id="auth-error" style="color: #ef4444; font-size: 12px; display: none;"></div>
-                </div>
             </div>
         `;
     }
