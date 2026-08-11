@@ -985,6 +985,18 @@
             recordEl.style.fontWeight = 'bold';
             recordEl.innerHTML = '🏆 שיא חדש! 🏆';
             title.appendChild(recordEl);
+            
+            // Firebase Integration
+            if (window.currentUserProfile && window.saveDinoHighScore) {
+                window.saveDinoHighScore(currentHighScore);
+            } else if (!window.currentUserProfile && window.showRegistrationCompletionModal) {
+                const savePrompt = document.createElement('div');
+                savePrompt.style.fontSize = '12px';
+                savePrompt.style.color = '#fbbf24';
+                savePrompt.style.marginTop = '4px';
+                savePrompt.innerHTML = 'שברת שיא אישי! <u style="cursor:pointer;" onclick="showLeaderboard()">התחבר כדי לשמור אותו בטבלה</u>';
+                title.appendChild(savePrompt);
+            }
         }
 
         gameContainer.appendChild(title);
@@ -1017,6 +1029,23 @@
             startGame();
         };
 
+        const leaderboardBtn = document.createElement('button');
+        leaderboardBtn.textContent = '🏆 שיאים';
+        leaderboardBtn.style.padding = '6px 14px';
+        leaderboardBtn.style.background = '#3b82f6';
+        leaderboardBtn.style.color = '#ffffff';
+        leaderboardBtn.style.border = 'none';
+        leaderboardBtn.style.borderRadius = '8px';
+        leaderboardBtn.style.fontWeight = 'bold';
+        leaderboardBtn.style.cursor = 'pointer';
+        leaderboardBtn.style.fontSize = '14px';
+        leaderboardBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+        leaderboardBtn.onclick = (e) => {
+            e.stopPropagation();
+            if(window.showLeaderboard) window.showLeaderboard();
+        };
+
+        btnContainer.appendChild(leaderboardBtn);
         btnContainer.appendChild(playAgainBtn);
         title.appendChild(btnContainer);
     }

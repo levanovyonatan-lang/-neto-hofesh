@@ -1,0 +1,142 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+
+// TODO: החלף את הערכים האלו בנתוני הפרויקט שלך ב-Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDa9u68dZfImq4rKa56X1CqLPPhGQMXdVo",
+  authDomain: "neto-hofesh.firebaseapp.com",
+  projectId: "neto-hofesh",
+  storageBucket: "neto-hofesh.firebasestorage.app",
+  messagingSenderId: "82711180725",
+  appId: "1:82711180725:web:97b3a90a683d64d52cd5fc",
+  measurementId: "G-99S4VQZ1SL"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const analytics = getAnalytics(app);
+const provider = new GoogleAuthProvider();
+
+// Expose Firebase functions globally for the app
+window.firebaseAuth = auth;
+window.firebaseDb = db;
+window.firebaseSignIn = async () => {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        return result.user;
+    } catch (error) {
+        console.error("Error signing in with Google:", error);
+        throw error;
+    }
+};
+
+window.firebaseSignOut = () => {
+    return signOut(auth);
+};
+
+// Listen for auth state changes
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        // משתמש מחובר - נוודא שקיים במסד הנתונים
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        
+        if (!userDocSnap.exists()) {
+            // משתמש חדש - נציג לו את חלון ההשלמה (כינוי + ניוזלטר)
+            window.showRegistrationCompletionModal(user);
+        } else {
+            // משתמש קיים - נרענן את ה-UI או נשמור את הנתונים בזכרון
+            window.currentUserProfile = userDocSnap.data();
+            console.log("Welcome back, ", window.currentUserProfile.nickname);
+            if(window.updateLeaderboardUI) window.updateLeaderboardUI();
+        }
+    } else {
+        // משתמש לא מחובר
+        window.currentUserProfile = null;
+        if(window.updateLeaderboardUI) window.updateLeaderboardUI();
+    }
+});
+
+// פונקציה להשלמת הרשמה
+window.completeUserRegistration = async (user, nickname, optInNewsletter) => {
+    try {
+        // שאיבת שכבת הגיל מתוך האחסון המקומי
+        let userGrade = "לא נבחר";
+        try {
+            const savedState = localStorage.getItem('dailyTipsState');
+            if(savedState) {
+                const parsed = JSON.parse(savedState);
+                if(parsed.selectedCategory) userGrade = parsed.selectedCategory;
+            }
+        } catch(e) {}
+
+        const profileData = {
+            nickname: nickname,
+            email: user.email,
+            displayName: user.displayName,
+            grade: userGrade,
+            newsletterOptIn: optInNewsletter,
+            createdAt: new Date().toISOString(),
+            dinoHighScore: 0
+        };
+
+        const userDocRef = doc(db, "users", user.uid);
+        await setDoc(userDocRef, profileData);
+        window.currentUserProfile = profileData;
+        console.log("Registration completed successfully!");
+        if(window.updateLeaderboardUI) window.updateLeaderboardUI();
+    } catch (error) {
+        console.error("Error saving user profile:", error);
+        alert("אירעה שגיאה בשמירת הנתונים. נסה שוב.");
+    }
+};
+
+// פונקציה לשמירת שיא בדינוזאור
+window.saveDinoHighScore = async (score) => {
+    const user = auth.currentUser;
+    if (!user || !window.currentUserProfile) return false;
+
+    if (score > (window.currentUserProfile.dinoHighScore || 0)) {
+        try {
+            const userDocRef = doc(db, "users", user.uid);
+            await setDoc(userDocRef, { dinoHighScore: score }, { merge: true });
+            window.currentUserProfile.dinoHighScore = score;
+
+            // עדכון באוסף נפרד שמיועד רק לטבלת השיאים (לשליפה מהירה)
+            const scoreDocRef = doc(db, "dino_scores", user.uid);
+            await setDoc(scoreDocRef, {
+                nickname: window.currentUserProfile.nickname,
+                score: score,
+                updatedAt: new Date().toISOString()
+            });
+
+            return true;
+        } catch (error) {
+            console.error("Error saving high score:", error);
+            return false;
+        }
+    }
+    return false;
+};
+
+// פונקציה לשליפת טבלת השיאים
+window.getTopDinoScores = async () => {
+    try {
+        const scoresRef = collection(db, "dino_scores");
+        const q = query(scoresRef, orderBy("score", "desc"), limit(10));
+        const querySnapshot = await getDocs(q);
+        
+        let leaderboard = [];
+        querySnapshot.forEach((doc) => {
+            leaderboard.push(doc.data());
+        });
+        return leaderboard;
+    } catch (error) {
+        console.error("Error fetching leaderboard:", error);
+        return [];
+    }
+};
