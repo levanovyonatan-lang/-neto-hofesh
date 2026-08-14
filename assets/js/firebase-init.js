@@ -148,7 +148,7 @@ onAuthStateChanged(auth, async (user) => {
         // הצגת כפתור אזור אישי
         if (window.currentUserProfile) {
             const personalAreaBtn = document.getElementById('personal-area-btn');
-            if (personalAreaBtn) personalAreaBtn.style.display = 'flex';
+            if (personalAreaBtn) personalAreaBtn.style.display = 'inline-block';
         } else {
             const personalAreaBtn = document.getElementById('personal-area-btn');
             if (personalAreaBtn) personalAreaBtn.style.display = 'none';
