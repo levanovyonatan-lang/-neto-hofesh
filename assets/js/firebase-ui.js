@@ -268,11 +268,16 @@ function injectFirebaseUI() {
     renderEmojiGrid('reg-emoji-grid', 'reg-selected-emoji');
     renderEmojiGrid('pa-emoji-grid', 'pa-selected-emoji');
     
-    // בדיקה האם הגענו לכאן מקישור של "פתיחה בכרום"
-    if (window.location.search.includes('openLogin=true')) {
-        setTimeout(() => {
-            if (window.showLeaderboard) window.showLeaderboard();
-        }, 800); // Increased timeout to ensure app.js has initialized the main screen
+    // בדיקה האם הגענו לכאן מקישור של "פתיחה בכרום" או קישור שיתוף
+    if (window.location.search.includes('openLogin=true') || window.location.search.includes('playDino=true')) {
+        const tryOpenLeaderboard = () => {
+            if (window.showLeaderboard && window.getTopDinoScores) {
+                window.showLeaderboard();
+            } else {
+                setTimeout(tryOpenLeaderboard, 200);
+            }
+        };
+        setTimeout(tryOpenLeaderboard, 500);
     }
 }
 
