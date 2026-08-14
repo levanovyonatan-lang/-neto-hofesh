@@ -28,12 +28,7 @@ window.firebaseDb = db;
 window.firebaseSignIn = () => {
     window.isLoginActionActive = true;
     
-    // מזהה אם מדובר בספארי או אייפון
-    const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
-    
-    if (isSafariOrIOS) {
-        return signInWithRedirect(auth, provider);
-    }
+    // תמיד ננסה קודם פופ-אפ. העברה לדף אחר (Redirect) נכשלת לעיתים קרובות באייפון בגלל הגדרות פרטיות.
     
     return signInWithPopup(auth, provider).catch((error) => {
         if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
