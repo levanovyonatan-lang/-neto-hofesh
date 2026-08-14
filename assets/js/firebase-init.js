@@ -115,6 +115,15 @@ onAuthStateChanged(auth, async (user) => {
                     }
                 }
                 
+                // One-time sync to fix users whose scores didn't make it to the leaderboard
+                const maxScore = Math.max(serverDinoScore, localDinoScore);
+                if (!localStorage.getItem('forceSync_v1') && maxScore > 0) {
+                    if (window.saveDinoHighScore) {
+                        window.saveDinoHighScore(maxScore);
+                    }
+                    localStorage.setItem('forceSync_v1', 'true');
+                }
+                
                 console.log("Welcome back, ", window.currentUserProfile.nickname);
                 if(window.updateLeaderboardUI) window.updateLeaderboardUI();
             }
