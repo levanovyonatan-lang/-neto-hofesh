@@ -121,7 +121,7 @@ function injectFirebaseUI() {
 
     let authHTML = `
         <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
-            <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: bold;">התחבר כדי לשמור את השיא שלך:</p>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: bold;">התחבר בשביל לשמור על השיא שלך או להיכנס לטבלה:</p>
     `;
 
     if (!showEmailAuth) {
