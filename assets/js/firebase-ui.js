@@ -173,6 +173,7 @@ function injectFirebaseUI() {
                 
                 <div id="lb-user-section" style="display: none; border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
                     <p style="font-size: 14px; font-weight: bold; color: #10b981;" id="lb-user-greeting">היי כינוי!</p>
+                    <div id="lb-share-container" style="display: none; margin-top: 5px; justify-content: center;"></div>
                     <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
                         <button class="fb-btn" style="background: #3b82f6; color: white; font-size: 12px; padding: 6px 15px; width: auto;" onclick="if(window.openPersonalArea) { closeModals(); window.openPersonalArea(); }">👤 אזור אישי</button>
                     </div>
@@ -385,6 +386,8 @@ window.showLeaderboard = async function(score, stage, killer) {
         }
         
         const currentUid = (window.firebaseAuth && window.firebaseAuth.currentUser) ? window.firebaseAuth.currentUser.uid : null;
+        let userRank = null;
+        let userScore = null;
         
         scores.forEach((s, index) => {
             let rankStr = (index + 1) + ".";
@@ -393,6 +396,11 @@ window.showLeaderboard = async function(score, stage, killer) {
             if(index === 2) rankStr = "🥉";
             
             const isCurrentUser = currentUid && s.uid === currentUid;
+            if (isCurrentUser) {
+                userRank = index + 1;
+                userScore = s.score;
+            }
+            
             const liStyle = isCurrentUser ? 'border: 2px solid #34d399; background: rgba(52, 211, 153, 0.1);' : '';
             const liId = isCurrentUser ? 'id="current-user-lb-row"' : '';
             
@@ -413,6 +421,20 @@ window.showLeaderboard = async function(score, stage, killer) {
                 userRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }, 100);
+        
+        // הצגת כפתור שיתוף בוואטסאפ אם המשתמש בטבלה
+        const shareContainer = document.getElementById('lb-share-container');
+        if (shareContainer && userRank && userScore) {
+            const shareText = encodeURIComponent(`הגעתי למקום ה-${userRank} בדינוזאור של נטו חופש עם ${userScore.toLocaleString()} נקודות! בואו נראה אתכם עוקפים אותי 🦖 ${window.location.href}`);
+            shareContainer.innerHTML = `
+                <a href="https://api.whatsapp.com/send?text=${shareText}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-decoration: none; font-size: 14px; box-shadow: 0 4px 10px rgba(37,211,102,0.3); animation: subtle-pulse 2s infinite;">
+                    <span>📢 שתפו בוואטסאפ</span>
+                </a>
+            `;
+            shareContainer.style.display = 'flex';
+        } else if (shareContainer) {
+            shareContainer.style.display = 'none';
+        }
     }
 }
 
