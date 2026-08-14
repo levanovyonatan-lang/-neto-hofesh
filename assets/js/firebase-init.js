@@ -27,18 +27,22 @@ window.firebaseDb = db;
 window.firebaseSignIn = () => {
     window.isLoginActionActive = true;
     
+    // מזהה אם מדובר בספארי או אייפון
+    const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
+    if (isSafariOrIOS) {
+        return signInWithRedirect(auth, provider);
+    }
+    
     return signInWithPopup(auth, provider).catch((error) => {
+        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+            console.log("Popup blocked, falling back to redirect");
+            return signInWithRedirect(auth, provider);
+        }
+        
         window.isLoginActionActive = false;
         console.error("Login failed", error);
-        
-        // מזהה אם מדובר בספארי או חסימת פופאפים
-        const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
-        
-        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user' || isSafariOrIOS) {
-            alert("ספארי חוסם התחברות צד-שלישי (גוגל). אנא השתמשו באפשרות ההתחברות באמצעות אימייל וסיסמה שמופיעה למטה, היא עובדת מעולה בספארי ובאייפונים!");
-        } else {
-            alert("התחברות נכשלה. אנא נסה שוב.");
-        }
+        alert("התחברות נכשלה. אנא נסה שוב.");
         throw error;
     });
 };
@@ -211,3 +215,23 @@ window.getTopDinoScores = async () => {
         return [];
     }
 };
+
+// Handle redirect result for iOS/Safari logins
+getRedirectResult(auth).then((result) => {
+    if (result) {
+        console.log("Successfully logged in via redirect", result.user);
+        // If user already exists, maybe open the leaderboard so they see they are logged in
+        // (If new user, onAuthStateChanged will open the registration modal)
+        const tryShowLeaderboard = () => {
+            if (window.showLeaderboard) {
+                // We use a slight delay so onAuthStateChanged has a chance to set currentUserProfile
+                setTimeout(() => window.showLeaderboard(), 500);
+            } else {
+                setTimeout(tryShowLeaderboard, 100);
+            }
+        };
+        tryShowLeaderboard();
+    }
+}).catch((error) => {
+    console.error("Redirect login failed", error);
+});

@@ -108,36 +108,38 @@ function injectFirebaseUI() {
         </div>
     `;
 
-    const ua = navigator.userAgent;
-    const isIOS = /iPad|iPhone|iPod/i.test(ua);
-    const isChrome = /CriOS|Chrome/i.test(ua);
-    const isSafariOrIOS = (isIOS && !isChrome) || (/Safari/i.test(ua) && !isChrome && !/Android/i.test(ua));
-    
-    let authHTML = '';
-    if (isSafariOrIOS) {
-        authHTML = `
-            <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
-                <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: bold;">התחבר כדי לשמור את השיא שלך:</p>
-                <p style="font-size: 12px; color: #ef4444; margin-bottom: 15px;">דפדפן ספארי חוסם זמנית את אפשרות ההתחברות. אנא לחץ על הכפתור למטה כדי לפתוח את האתר בדפדפן גוגל כרום.</p>
-                
-                <a href="googlechromes://${window.location.host}${window.location.pathname}?openLogin=true&openGame=dino" class="fb-btn google" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
-                    פתיחה והתחברות ב-Chrome
-                </a>
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    const isDemo = currentUrlParams.get('show_demo') === 'true';
+
+    let authHTML = `
+        <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: bold;">התחבר כדי לשמור את השיא שלך:</p>
+            
+            <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 15px;">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
+                התחבר עם Google
+            </button>
+    `;
+
+    if (isDemo) {
+        authHTML += `
+            <div style="margin: 15px 0; display: flex; align-items: center; text-align: center; color: #94a3b8; font-size: 12px;">
+                <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
+                <span style="padding: 0 10px;">או עם אימייל (מומלץ לאייפון)</span>
+                <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
             </div>
-        `;
-    } else {
-        authHTML = `
-            <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
-                <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: bold;">התחבר כדי לשמור את השיא שלך:</p>
-                
-                <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 15px;">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
-                    התחבר עם Google
-                </button>
+            
+            <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="email">
+            <input type="password" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="current-password">
+            <div style="text-align: left; margin-bottom: 15px;">
+                <a href="javascript:void(0)" onclick="handleForgotPassword()" style="color: #3b82f6; font-size: 12px; text-decoration: none;">שכחת סיסמה?</a>
             </div>
+            <button class="fb-btn" id="lb-email-btn" onclick="handleEmailLogin()" style="font-size: 16px; padding: 10px 0;">התחבר / הירשם</button>
+            <div id="lb-email-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none;"></div>
         `;
     }
+
+    authHTML += `</div>`;
 
     // מודל טבלת שיאים והתחברות
     const lbModalHTML = `
@@ -249,27 +251,7 @@ window.showLeaderboard = async function(score, stage, killer) {
     document.getElementById('lb-modal').classList.add('active');
     window.updateLeaderboardUI();
     
-    // Update the google chrome link dynamically to preserve game state
-    const chromeLink = document.querySelector('#lb-auth-section .google');
-    if (chromeLink && chromeLink.tagName === 'A') {
-        let url = `googlechromes://${window.location.host}${window.location.pathname}?openLogin=true`;
-        if (score !== undefined) {
-            url += `&openGame=dino_game_over&score=${score}`;
-        } else {
-            url += `&openGame=dino`;
-        }
-        if (stage !== undefined) {
-            url += `&stage=${stage}`;
-        }
-        if (killer !== undefined) {
-            url += `&killer=${encodeURIComponent(killer)}`;
-        }
-        if (window.location.hash) {
-            url += `&hash=${encodeURIComponent(window.location.hash)}`;
-        }
-        chromeLink.href = url;
-    }
-    
+
     if(window.getTopDinoScores) {
         const scores = await window.getTopDinoScores();
         const listEl = document.getElementById('lb-list');
@@ -322,9 +304,77 @@ window.handleGoogleLogin = function() {
     }
 }
 
+window.handleEmailLogin = async function() {
+    const email = document.getElementById('lb-email').value.trim();
+    const password = document.getElementById('lb-password').value;
+    const errorEl = document.getElementById('lb-email-error');
+    
+    if(!email || !password || password.length < 6) {
+        errorEl.textContent = "אנא הזן אימייל תקין וסיסמה של 6 תווים לפחות.";
+        errorEl.style.display = "block";
+        return;
+    }
+    
+    const btn = document.getElementById('lb-email-btn');
+    const originalText = btn.textContent;
+    btn.textContent = "מתחבר...";
+    btn.disabled = true;
+    errorEl.style.display = "none";
+    
+    if(window.firebaseEmailAuth) {
+        try {
+            await window.firebaseEmailAuth(email, password);
+            // On success, onAuthStateChanged in init.js will handle the UI update
+        } catch(error) {
+            console.error("Email auth failed:", error);
+            errorEl.style.display = "block";
+            if (error.code === 'auth/email-already-in-use') {
+                errorEl.textContent = "האימייל כבר בשימוש עם חשבון אחר, אולי בחרת סיסמה שגויה?";
+            } else if (error.code === 'auth/invalid-email') {
+                errorEl.textContent = "כתובת האימייל אינה תקינה.";
+            } else if (error.code === 'auth/weak-password') {
+                errorEl.textContent = "הסיסמה חלשה מדי, בחר לפחות 6 תווים.";
+            } else {
+                errorEl.textContent = "שגיאה בהתחברות: נסה שוב";
+            }
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    }
+}
+
 window.handleLogout = async function() {
     if(window.firebaseSignOut) {
         await window.firebaseSignOut();
         alert("התנתקת בהצלחה.");
+    }
+}
+
+window.handleForgotPassword = async function() {
+    const email = document.getElementById('lb-email').value.trim();
+    const errorEl = document.getElementById('lb-email-error');
+    
+    if(!email) {
+        errorEl.textContent = "אנא הזן את האימייל שלך למעלה ואז לחץ 'שכחת סיסמה?'.";
+        errorEl.style.display = "block";
+        return;
+    }
+    
+    errorEl.style.display = "none";
+    if(window.firebaseResetPassword) {
+        try {
+            await window.firebaseResetPassword(email);
+            alert("נשלח אליך למייל קישור לאיפוס הסיסמה! בדוק את תיבת הדואר הנכנס (וגם בתיקיית הספאם).");
+        } catch(error) {
+            console.error("Password reset failed:", error);
+            errorEl.style.display = "block";
+            if (error.code === 'auth/user-not-found') {
+                errorEl.textContent = "לא נמצא משתמש עם האימייל הזה.";
+            } else if (error.code === 'auth/invalid-email') {
+                errorEl.textContent = "כתובת האימייל אינה תקינה.";
+            } else {
+                errorEl.textContent = "שגיאה בשליחת קישור האיפוס: נסה שוב";
+            }
+        }
     }
 }
