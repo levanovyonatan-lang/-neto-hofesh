@@ -126,7 +126,7 @@ function initPWA() {
     if (isInStandaloneMode()) {
         const subPages = ['/hanukkah', '/taanit-esther', '/purim', '/pesach', '/asru-chag', '/atzmaut', '/lag-baomer', '/shavuot', '/summer-high', '/summer'];
         if (subPages.some(p => window.location.pathname.includes(p))) {
-            window.location.replace('https://www.neto-hofesh.co.il/');
+            window.location.replace('https://www.neto-hofesh.co.il/' + window.location.search + window.location.hash);
             return;
         }
         const a2hsBtn = document.getElementById('a2hs-btn');
