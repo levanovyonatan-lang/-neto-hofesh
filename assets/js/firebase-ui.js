@@ -126,13 +126,15 @@ function injectFirebaseUI() {
         `;
     } else {
         authHTML += `
-            <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="email">
-            <input type="password" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="current-password">
-            <div style="text-align: right; margin-bottom: 15px; padding-right: 5px;">
-                <a href="javascript:void(0)" onclick="handleForgotPassword()" style="color: #3b82f6; font-size: 12px; text-decoration: none;">שכחת סיסמה?</a>
-            </div>
-            <button class="fb-btn" id="lb-email-btn" onclick="handleEmailLogin()" style="font-size: 16px; padding: 10px 0;">התחבר / הירשם</button>
-            <div id="lb-email-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none;"></div>
+            <form onsubmit="handleEmailLogin(event)">
+                <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="username email" required>
+                <input type="password" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="current-password" required>
+                <div style="text-align: right; margin-bottom: 15px; padding-right: 5px;">
+                    <a href="javascript:void(0)" onclick="handleForgotPassword()" style="color: #3b82f6; font-size: 12px; text-decoration: none;">שכחת סיסמה?</a>
+                </div>
+                <button type="submit" class="fb-btn" id="lb-email-btn" style="font-size: 16px; padding: 10px 0;">התחבר / הירשם</button>
+                <div id="lb-email-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none;"></div>
+            </form>
         `;
     }
 
@@ -302,7 +304,8 @@ window.handleGoogleLogin = function() {
     }
 }
 
-window.handleEmailLogin = async function() {
+window.handleEmailLogin = async function(event) {
+    if (event) event.preventDefault();
     const email = document.getElementById('lb-email').value.trim();
     const password = document.getElementById('lb-password').value;
     const errorEl = document.getElementById('lb-email-error');
