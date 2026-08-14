@@ -561,6 +561,9 @@ window.openPersonalArea = () => {
         const nickDisplay = document.getElementById('pa-nickname-display');
         if (nickDisplay) nickDisplay.textContent = window.currentUserProfile.nickname || 'משתמש אנונימי';
         
+        const emojiDisplay = document.getElementById('pa-emoji-display');
+        if (emojiDisplay) emojiDisplay.textContent = window.currentUserProfile.emoji || '👤';
+        
         const editContainer = document.getElementById('pa-nickname-edit-container');
         if (editContainer) editContainer.style.display = 'none';
         
