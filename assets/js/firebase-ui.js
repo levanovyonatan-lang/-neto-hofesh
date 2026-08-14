@@ -176,32 +176,27 @@ function injectFirebaseUI() {
 
     const personalAreaModalHTML = `
         <div id="personal-area-modal" class="fb-modal-overlay">
-            <div class="fb-modal" style="max-width: 400px; padding: 25px; position: relative;">
+            <div class="fb-modal" style="max-width: 400px; padding: 25px; position: relative; text-align: center;">
                 <button onclick="if(window.closePersonalArea) window.closePersonalArea()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b;">&times;</button>
-                <div class="fb-title" style="margin-top: 0; color: #0f172a; text-align: center;">האזור האישי 👤</div>
+                <div class="fb-title" style="margin-top: 0; color: #0f172a; margin-bottom: 20px;">האזור האישי 👤</div>
                 
-                <div style="background: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: center;">
-                    <div style="font-size: 14px; color: #64748b; margin-bottom: 5px;">הכינוי שלך:</div>
+                <div style="background: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 25px;">
+                    <div style="font-size: 14px; color: #64748b; margin-bottom: 5px;">הכינוי שלך בטבלה:</div>
                     <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                        <div id="pa-nickname-display" style="font-size: 22px; font-weight: 800; color: #3b82f6;"></div>
-                        <button onclick="if(window.editNicknameUI) window.editNicknameUI()" style="background: none; border: none; cursor: pointer; font-size: 16px;">✏️</button>
+                        <div id="pa-nickname-display" style="font-size: 24px; font-weight: 900; color: #3b82f6;"></div>
+                        <button onclick="if(window.editNicknameUI) window.editNicknameUI()" style="background: #e2e8f0; color: #334155; border: none; cursor: pointer; font-size: 14px; padding: 5px 10px; border-radius: 6px; font-weight: bold;">ערוך</button>
                     </div>
                     
-                    <div id="pa-nickname-edit-container" style="display: none; margin-top: 10px;">
+                    <div id="pa-nickname-edit-container" style="display: none; margin-top: 15px;">
                         <input type="text" id="pa-nickname-input" class="auth-input" maxlength="20" placeholder="כינוי חדש...">
-                        <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="auth-submit-btn" style="padding: 8px 15px; margin-top: 5px;">שמור שינויים</button>
+                        <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="auth-submit-btn" style="padding: 8px 15px; margin-top: 10px;">שמור שינויים</button>
                     </div>
-                    <div id="pa-error-msg" style="color: #ef4444; font-size: 13px; margin-top: 5px; font-weight: bold; display: none;"></div>
+                    <div id="pa-error-msg" style="color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: bold; display: none;"></div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 16px; background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                    <div><strong>שיא אישי:</strong> <span id="pa-highscore" style="color: #ea580c; font-weight: 900;"></span></div>
-                    <div><strong>כיתה:</strong> <span id="pa-grade" style="font-weight: bold;"></span></div>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <button onclick="if(window.handleLogout) window.handleLogout()" style="background: #e2e8f0; color: #334155; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: background 0.2s;">🚪 התנתק מהחשבון</button>
-                    <button onclick="if(window.handleDeleteAccount) window.handleDeleteAccount()" style="background: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: background 0.2s;">🗑️ מחק חשבון לצמיתות</button>
+                <div style="display: flex; justify-content: center; gap: 15px; font-size: 13px;">
+                    <button onclick="if(window.handleLogout) window.handleLogout()" style="background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline;">התנתק מהחשבון</button>
+                    <button onclick="if(window.handleDeleteAccount) window.handleDeleteAccount()" style="background: none; border: none; color: #ef4444; cursor: pointer; text-decoration: underline; opacity: 0.8;">מחק חשבון</button>
                 </div>
             </div>
         </div>
@@ -515,8 +510,10 @@ window.saveNewNickname = async () => {
         return;
     }
     
-    if (containsProfanity(newName) || containsLink(newName)) {
-        errorMsg.textContent = "הכינוי מכיל מילים אסורות או קישורים.";
+    const containsLink = /http|www|\.com|\.il|\.net|\.org|\.co/i.test(newName);
+    
+    if (containsLink) {
+        errorMsg.textContent = "הכינוי לא יכול להכיל קישורים.";
         errorMsg.style.display = 'block';
         return;
     }
@@ -539,13 +536,19 @@ window.saveNewNickname = async () => {
         
         document.getElementById('pa-nickname-display').textContent = newName;
         document.getElementById('pa-nickname-edit-container').style.display = 'none';
+        
+        // Hide error message on success
         errorMsg.style.display = 'none';
         
-        alert("הכינוי עודכן בהצלחה! 🎉");
+        // Show temporary success message
+        const editBtn = document.querySelector('#pa-nickname-edit-container button');
+        const originalBtnText = editBtn.textContent;
+        editBtn.textContent = "נשמר בהצלחה! ✔️";
+        setTimeout(() => {
+            editBtn.textContent = originalBtnText;
+        }, 2000);
         
-        if (window.updateLeaderboardUI) {
-            window.updateLeaderboardUI();
-        }
+        if (window.updateLeaderboardUI) window.updateLeaderboardUI();
         
     } catch (error) {
         console.error("Error updating nickname:", error);
