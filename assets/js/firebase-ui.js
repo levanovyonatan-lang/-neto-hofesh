@@ -127,7 +127,7 @@ function injectFirebaseUI() {
     } else {
         authHTML += `
             <form onsubmit="handleEmailLogin(event)">
-                <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="username email" required>
+                <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="username" required>
                 <input type="password" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="current-password" required>
                 <div style="text-align: right; margin-bottom: 15px; padding-right: 5px;">
                     <a href="javascript:void(0)" onclick="handleForgotPassword()" style="color: #3b82f6; font-size: 12px; text-decoration: none;">שכחת סיסמה?</a>
@@ -306,9 +306,15 @@ window.handleGoogleLogin = function() {
 
 window.handleEmailLogin = async function(event) {
     if (event) event.preventDefault();
-    const email = document.getElementById('lb-email').value.trim();
-    const password = document.getElementById('lb-password').value;
+    const emailField = document.getElementById('lb-email');
+    const passwordField = document.getElementById('lb-password');
+    const email = emailField.value.trim();
+    const password = passwordField.value;
     const errorEl = document.getElementById('lb-email-error');
+    
+    // Blur fields to help iOS Safari detect the end of typing and trigger the Save Password prompt
+    emailField.blur();
+    passwordField.blur();
     
     if(!email || !password || password.length < 6) {
         errorEl.textContent = "אנא הזן אימייל תקין וסיסמה של 6 תווים לפחות.";
