@@ -250,7 +250,11 @@ window.showLeaderboard = async function(score, stage, killer) {
     if (window.currentUserProfile && window.saveDinoHighScore) {
         const localScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         const serverScore = window.currentUserProfile.dinoHighScore || 0;
-        if (localScore > serverScore) {
+        const maxScore = Math.max(localScore, serverScore);
+        if (maxScore > 0 && !localStorage.getItem('forceSync_v1_modal')) {
+            await window.saveDinoHighScore(maxScore);
+            localStorage.setItem('forceSync_v1_modal', 'true');
+        } else if (localScore > serverScore) {
             await window.saveDinoHighScore(localScore);
         }
     }
