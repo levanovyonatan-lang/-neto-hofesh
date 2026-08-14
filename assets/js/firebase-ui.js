@@ -261,16 +261,7 @@ window.submitRegistration = async function() {
     }
     
     // סינון קללות וקישורים
-    const forbiddenWords = [
-        "זונה", "שרמוטה", "בן זונה", "בת זונה", "זין", "כוס", "מניאק", "הומו", "קוקסינל", 
-        "קחבה", "כלב", "כלבה", "חרא", "פיזדמט", "סעמק", "כוסאמק", "שרלילה", "שפיך", "זרע",
-        "בולבול", "שד", "ציצי", "תחת", "ישבן", "זדיין", "מזדיין", "מצוץ", "מוצץ", "שואה",
-        "נאצי", "היטלר", "מחבל", "פיגוע", "אונס", "פדופיל", "מטומטם", "מפגר", "אוטיסט",
-        "דפוק", "אידיוט", "טיפש", "מכוער", "שמן", "דבה", "גיי", "לסבית", "קוקי", "ערבי",
-        "יהודון", "רוסי", "אתיופי", "כושי", "ניגר", "זבל", "חמור", "קוף", "חזיר"
-    ];
-    
-    const hasForbiddenWord = forbiddenWords.some(word => nickname.toLowerCase().includes(word));
+    const hasForbiddenWord = window.containsProfanity(nickname);
     const hasLink = /(http|https|www\.|:\/\/)|\.(com|co\.il|org|net|me|xyz|io|gov)/i.test(nickname);
     
     if (hasForbiddenWord || hasLink) {
@@ -464,6 +455,22 @@ window.handleForgotPassword = async function() {
     }
 }
 
+// פונקציית עזר לסינון קללות
+window.containsProfanity = function(text) {
+    if (!text) return false;
+    const forbiddenWords = [
+        "זונה", "שרמוטה", "בן זונה", "בת זונה", "זין", "כוס", "מניאק", "הומו", "קוקסינל", 
+        "קחבה", "כלב", "כלבה", "חרא", "פיזדמט", "סעמק", "כוסאמק", "שרלילה", "שפיך", "זרע",
+        "בולבול", "שד", "ציצי", "תחת", "ישבן", "זדיין", "מזדיין", "מצוץ", "מוצץ", "שואה",
+        "נאצי", "היטלר", "מחבל", "פיגוע", "אונס", "פדופיל", "מטומטם", "מפגר", "אוטיסט",
+        "דפוק", "אידיוט", "טיפש", "מכוער", "שמן", "דבה", "גיי", "לסבית", "קוקי", "ערבי",
+        "יהודון", "רוסי", "אתיופי", "כושי", "ניגר", "זבל", "חמור", "קוף", "חזיר"
+    ];
+    
+    // בודק אם אחת מהמילים ברשימה נמצאת בטקסט (מתעלם מאותיות רישיות/קטנות אם זה באנגלית)
+    return forbiddenWords.some(word => text.toLowerCase().includes(word));
+}
+
 // פונקציות אזור אישי
 window.openPersonalArea = () => {
     const modal = document.getElementById('personal-area-modal');
@@ -507,7 +514,13 @@ window.saveNewNickname = async () => {
         return;
     }
     
-    const containsLink = /http|www|\.com|\.il|\.net|\.org|\.co/i.test(newName);
+    const containsLink = /(http|https|www\.|:\/\/)|\.(com|co\.il|org|net|me|xyz|io|gov)/i.test(newName);
+    
+    if (window.containsProfanity(newName)) {
+        errorMsg.textContent = "הכינוי מכיל מילים לא ראויות.";
+        errorMsg.style.display = 'block';
+        return;
+    }
     
     if (containsLink) {
         errorMsg.textContent = "הכינוי לא יכול להכיל קישורים.";
