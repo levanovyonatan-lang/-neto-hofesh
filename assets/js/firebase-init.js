@@ -114,6 +114,8 @@ onAuthStateChanged(auth, async (user) => {
                 
                 if (serverDinoScore > localDinoScore) {
                     localStorage.setItem('dinoHighScore', serverDinoScore);
+                    const hsEl = document.getElementById('dino-high-score-val');
+                    if (hsEl) hsEl.textContent = serverDinoScore;
                 } else if (localDinoScore > serverDinoScore) {
                     // יש שיא מקומי גבוה יותר, נעדכן את השרת
                     if (window.saveDinoHighScore) {
