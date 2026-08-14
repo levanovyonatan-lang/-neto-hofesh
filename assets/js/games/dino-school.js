@@ -1059,7 +1059,7 @@
         
         if (isDemoMode) {
             if (isNewRecord && !window.currentUserProfile) {
-                leaderboardBtn.textContent = 'התחבר כדי לשמור את השיא בטבלה';
+                leaderboardBtn.textContent = 'התחבר כדי להיכנס לטבלת השיאים';
                 leaderboardBtn.style.color = '#fbbf24'; // צבע זהב
                 leaderboardBtn.style.fontWeight = 'bold';
             }
