@@ -142,12 +142,6 @@ onAuthStateChanged(auth, async (user) => {
             alert("שגיאת התחברות למסד הנתונים (Firestore): נראה שיש חסימת הרשאות. בדוק את ה-Rules במסוף Firebase.");
         }
         
-        // כפתור אזור אישי לאתר ההדגמה בלבד
-        if (window.currentUserProfile && window.location.search.includes('show_demo=true')) {
-            const demoPaBtn = document.getElementById('demo-personal-area-btn');
-            if (demoPaBtn) demoPaBtn.style.display = 'inline-block';
-        }
-
         // ניקוי כפתור צד ישן שנשאר ב-Cache אצל חלק מהמשתמשים
         const oldPaBtn = document.getElementById('personal-area-btn');
         if (oldPaBtn) oldPaBtn.remove();
