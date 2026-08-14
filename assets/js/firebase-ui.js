@@ -427,6 +427,10 @@ window.showLeaderboard = async function(score, stage, killer) {
         if (shareContainer && userRank && userScore) {
             let urlObj = new URL(window.location.href);
             urlObj.searchParams.set('openLogin', 'true');
+            if (window.userConfig && window.userConfig.schoolType && window.userConfig.targetIntent) {
+                urlObj.searchParams.set('schoolType', window.userConfig.schoolType);
+                urlObj.searchParams.set('targetIntent', window.userConfig.targetIntent);
+            }
             const shareUrl = urlObj.toString();
             const shareText = encodeURIComponent(`הגעתי למקום ה-${userRank} בדינוזאור של נטו חופש עם ${userScore.toLocaleString()} נקודות! בואו נראה אתכם עוקפים אותי 🦖 ${shareUrl}`);
             shareContainer.innerHTML = `

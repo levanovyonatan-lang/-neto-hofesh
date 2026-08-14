@@ -965,6 +965,20 @@ window.onload = () => {
             document.getElementById('a11y-menu').style.display = 'none';
         }
     });
+
+    // תמיכה בשיתוף קישורים (Deep Linking)
+    const urlSchool = urlParams.get('schoolType');
+    const urlTarget = urlParams.get('targetIntent');
+    if (urlSchool && urlTarget) {
+        const radio = document.querySelector(`input[name="schoolType"][value="${urlSchool}"]`);
+        if (radio) {
+            radio.checked = true;
+            updateSchoolSelection(radio);
+        }
+        setTimeout(() => {
+            initApp(urlTarget);
+        }, 100);
+    }
 };
 
 function initApp(countdownTarget = 'summer') {
