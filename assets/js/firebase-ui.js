@@ -272,18 +272,7 @@ function injectFirebaseUI() {
     if (window.location.search.includes('openLogin=true')) {
         setTimeout(() => {
             if (window.showLeaderboard) window.showLeaderboard();
-        }, 500);
-    }
-    
-    if (window.location.search.includes('playDino=true')) {
-        const tryStartDinoURL = () => {
-            if (window.startDinoGame) {
-                window.startDinoGame();
-            } else {
-                setTimeout(tryStartDinoURL, 100);
-            }
-        };
-        setTimeout(tryStartDinoURL, 1000);
+        }, 800); // Increased timeout to ensure app.js has initialized the main screen
     }
 }
 
@@ -437,7 +426,7 @@ window.showLeaderboard = async function(score, stage, killer) {
         const shareContainer = document.getElementById('lb-share-container');
         if (shareContainer && userRank && userScore) {
             let urlObj = new URL(window.location.href);
-            urlObj.searchParams.set('playDino', 'true');
+            urlObj.searchParams.set('openLogin', 'true');
             if (window.userConfig && window.userConfig.schoolType && window.userConfig.targetIntent) {
                 urlObj.searchParams.set('schoolType', window.userConfig.schoolType);
                 urlObj.searchParams.set('targetIntent', window.userConfig.targetIntent);
