@@ -470,20 +470,17 @@ window.openPersonalArea = () => {
     if (!modal) return;
     
     if (window.currentUserProfile) {
-        document.getElementById('pa-nickname-display').textContent = window.currentUserProfile.nickname || 'משתמש אנונימי';
-        document.getElementById('pa-highscore').textContent = window.currentUserProfile.dinoHighScore || 0;
+        const nickDisplay = document.getElementById('pa-nickname-display');
+        if (nickDisplay) nickDisplay.textContent = window.currentUserProfile.nickname || 'משתמש אנונימי';
         
-        const gradeMap = {
-            'elem': 'יסודי 🎨',
-            'middle': 'חטיבה 🎒',
-            'high': 'תיכון 🎓'
-        };
-        document.getElementById('pa-grade').textContent = gradeMap[window.currentUserProfile.grade] || 'לא ידוע';
+        const editContainer = document.getElementById('pa-nickname-edit-container');
+        if (editContainer) editContainer.style.display = 'none';
         
-        document.getElementById('pa-nickname-edit-container').style.display = 'none';
-        document.getElementById('pa-error-msg').style.display = 'none';
-        document.getElementById('pa-nickname-input').value = window.currentUserProfile.nickname || '';
+        const errorMsg = document.getElementById('pa-error-msg');
+        if (errorMsg) errorMsg.style.display = 'none';
         
+        const inputField = document.getElementById('pa-nickname-input');
+        if (inputField) inputField.value = window.currentUserProfile.nickname || '';
         modal.classList.add('active');
     } else {
         alert("עליך להתחבר כדי לגשת לאזור האישי.");
