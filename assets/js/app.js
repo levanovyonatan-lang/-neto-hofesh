@@ -124,11 +124,6 @@ function initPWA() {
     const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
 
     if (isInStandaloneMode()) {
-        const subPages = ['/hanukkah', '/taanit-esther', '/purim', '/pesach', '/asru-chag', '/atzmaut', '/lag-baomer', '/shavuot', '/summer-high', '/summer'];
-        if (subPages.some(p => window.location.pathname.includes(p))) {
-            window.location.replace('https://www.neto-hofesh.co.il/' + window.location.search + window.location.hash);
-            return;
-        }
         const a2hsBtn = document.getElementById('a2hs-btn');
         if (a2hsBtn) a2hsBtn.style.display = 'none';
 
