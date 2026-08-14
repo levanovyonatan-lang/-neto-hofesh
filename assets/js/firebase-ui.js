@@ -291,20 +291,34 @@ window.showLeaderboard = async function(score, stage, killer) {
             return;
         }
         
+        const currentUid = (window.firebaseAuth && window.firebaseAuth.currentUser) ? window.firebaseAuth.currentUser.uid : null;
+        
         scores.forEach((s, index) => {
             let rankStr = (index + 1) + ".";
             if(index === 0) rankStr = "🥇";
             if(index === 1) rankStr = "🥈";
             if(index === 2) rankStr = "🥉";
             
+            const isCurrentUser = currentUid && s.uid === currentUid;
+            const liStyle = isCurrentUser ? 'border: 2px solid #34d399; background: rgba(52, 211, 153, 0.1);' : '';
+            const liId = isCurrentUser ? 'id="current-user-lb-row"' : '';
+            
             listEl.innerHTML += `
-                <li class="leaderboard-item">
+                <li class="leaderboard-item" ${liId} style="${liStyle}">
                     <span class="lb-rank">${rankStr}</span>
                     <span class="lb-name">${s.nickname || "אנונימי"}</span>
                     <span class="lb-score">${s.score}</span>
                 </li>
             `;
         });
+        
+        // גלילה לשורה של המשתמש
+        setTimeout(() => {
+            const userRow = document.getElementById('current-user-lb-row');
+            if (userRow) {
+                userRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
     }
 }
 

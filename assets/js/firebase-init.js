@@ -227,7 +227,7 @@ window.getTopDinoScores = async () => {
         
         let leaderboard = [];
         querySnapshot.forEach((doc) => {
-            leaderboard.push(doc.data());
+            leaderboard.push({ ...doc.data(), uid: doc.id });
         });
         return leaderboard;
     } catch (error) {
