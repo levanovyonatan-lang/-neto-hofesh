@@ -21,6 +21,8 @@
         /* 10 */ { threshold: 2500, title: 'שלב 11: ננעלת בבית ספר! 🌙👻', bg: 'linear-gradient(to bottom, #020617, #0f172a)', gravity: 0.6, jumpForce: -10, flyChance: 0.4, flySet: ['👻', '🦇', '💀', '👽', '🕷️', '🦉'], bonusChance: 0, obsSet: ['🚌', '🎒', '⏰', '📝', '📋', '📚', '📐', '👻', '🔦'], dinoEmoji: '🦖', dinoFilter: 'invert(1) opacity(0.6)', dinoOpacity: '0.6' },
         /* 11 */ { threshold: 3100, title: 'שלב 12: החופש הגדול!!! (המורה עדיין רודפת אחריך 😱)', bg: 'linear-gradient(to bottom, #f97316, #facc15)', gravity: 0.75, jumpForce: -12, flyChance: 0.45, flySet: ['✈️', '📓', '📝', '🛸', '👠'], bonusChance: 0.3, bonusSet: ['🍉', '🍦', '🍹'], obsSet: ['👩‍🏫', '📝', '⏰', '🏫', '🎈', '✈️'], dinoEmoji: '😎', dinoFilter: 'none', dinoOpacity: '1', objective: 'תאספו פינוקים! 🍉🍦🍹' }
     ];
+    
+    let gameStartTime = 0;
 
     if (!document.getElementById('dino-styles')) {
         const style = document.createElement('style');
@@ -207,6 +209,7 @@
             spawnTimer = 60;
             frameCount = 0;
             lastFrameTime = 0;
+            gameStartTime = Date.now();
             dinoY = 0;
             dinoVelocity = 0;
             isJumping = false;
@@ -245,6 +248,7 @@
         obstacleQueue = [];
         frameCount = 0;
         lastFrameTime = 0;
+        gameStartTime = Date.now();
         spawnTimer = 60; // Initial delay
 
         if (navigator.vibrate) navigator.vibrate([30]);
@@ -927,9 +931,29 @@
         
         let currentHighScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         let isNewRecord = false;
-        if (score > currentHighScore) {
+        
+        // Anti-cheat validation
+        const timeElapsed = Date.now() - gameStartTime;
+        // Max theoretical points per second is around 120 (accounting for high speeds + obstacles)
+        // If they exceed 150 points per second, they are cheating
+        const maxPossibleScore = (timeElapsed / 1000) * 150;
+        let isCheater = false;
+        if (score > 100 && score > maxPossibleScore) {
+            console.warn("Anti-Cheat: Impossible score detected. Score:", score, "Time(s):", timeElapsed/1000);
+            isCheater = true;
+            score = 0;
+        }
+
+        if (score > currentHighScore && !isCheater) {
             currentHighScore = Math.floor(score); // Ensure integer
             localStorage.setItem('dinoHighScore', currentHighScore);
+            
+            // Create Anti-Cheat Token
+            const tokenStr = currentHighScore + "_NETOHOFESH_" + timeElapsed;
+            const token = btoa(tokenStr);
+            localStorage.setItem('dinoHighScoreToken', token);
+            localStorage.setItem('dinoTimeElapsed', timeElapsed.toString());
+            
             isNewRecord = true;
             const hsEl = document.getElementById('dino-high-score-val');
             if (hsEl) hsEl.textContent = currentHighScore;
@@ -937,7 +961,7 @@
             // אוטומטית שומר לשרת אם המשתמש מחובר ויש שיא חדש
             if (window.currentUserProfile && window.saveDinoHighScore) {
                 if (currentHighScore > (window.currentUserProfile.dinoHighScore || 0)) {
-                    window.saveDinoHighScore(currentHighScore);
+                    window.saveDinoHighScore(currentHighScore, token, timeElapsed);
                 }
             }
         }

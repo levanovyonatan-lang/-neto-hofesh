@@ -269,11 +269,15 @@ window.showLeaderboard = async function(score, stage, killer) {
         const localScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         const serverScore = window.currentUserProfile.dinoHighScore || 0;
         const maxScore = Math.max(localScore, serverScore);
+        
+        const token = localStorage.getItem('dinoHighScoreToken');
+        const timeElapsed = localStorage.getItem('dinoTimeElapsed');
+        
         if (maxScore > 0 && !localStorage.getItem('forceSync_v1_modal')) {
-            await window.saveDinoHighScore(maxScore);
+            await window.saveDinoHighScore(maxScore, token, timeElapsed);
             localStorage.setItem('forceSync_v1_modal', 'true');
         } else if (localScore > serverScore) {
-            await window.saveDinoHighScore(localScore);
+            await window.saveDinoHighScore(localScore, token, timeElapsed);
         }
     }
     

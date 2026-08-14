@@ -119,7 +119,9 @@ onAuthStateChanged(auth, async (user) => {
                 } else if (localDinoScore > serverDinoScore) {
                     // יש שיא מקומי גבוה יותר, נעדכן את השרת
                     if (window.saveDinoHighScore) {
-                        window.saveDinoHighScore(localDinoScore);
+                        const token = localStorage.getItem('dinoHighScoreToken');
+                        const timeElapsed = localStorage.getItem('dinoTimeElapsed');
+                        window.saveDinoHighScore(localDinoScore, token, timeElapsed);
                     }
                 }
                 
@@ -180,7 +182,9 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter) => {
         console.log("Registration completed successfully!");
         
         if (localDinoScore > 0 && window.saveDinoHighScore) {
-            await window.saveDinoHighScore(localDinoScore);
+            const token = localStorage.getItem('dinoHighScoreToken');
+            const timeElapsed = localStorage.getItem('dinoTimeElapsed');
+            await window.saveDinoHighScore(localDinoScore, token, timeElapsed);
         }
         
         if(window.updateLeaderboardUI) window.updateLeaderboardUI();
@@ -191,9 +195,33 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter) => {
 };
 
 // פונקציה לשמירת שיא בדינוזאור
-window.saveDinoHighScore = async (score) => {
+window.saveDinoHighScore = async (score, token, timeElapsed) => {
     const user = auth.currentUser;
     if (!user || !window.currentUserProfile) return false;
+
+    // Anti-Cheat Validation
+    let isValid = false;
+    if (score <= 3000 && !token) {
+        // Legacy scores up to 3000 are allowed without token for smooth transition
+        isValid = true;
+    } else if (token && timeElapsed) {
+        const expectedTokenStr = score + "_NETOHOFESH_" + timeElapsed;
+        try {
+            if (btoa(expectedTokenStr) === token) {
+                const maxPossibleScore = (timeElapsed / 1000) * 150;
+                if (score <= maxPossibleScore || score <= 100) {
+                    isValid = true;
+                }
+            }
+        } catch(e) {}
+    }
+    
+    if (!isValid) {
+        console.warn("Anti-Cheat: Invalid score submission blocked.");
+        // Revert local storage to the legitimate server score
+        localStorage.setItem('dinoHighScore', window.currentUserProfile.dinoHighScore || 0);
+        return false;
+    }
 
     if (score >= (window.currentUserProfile.dinoHighScore || 0)) {
         try {
