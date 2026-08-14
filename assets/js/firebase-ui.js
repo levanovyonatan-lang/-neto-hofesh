@@ -108,9 +108,15 @@ function injectFirebaseUI() {
         </div>
     `;
 
-    const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || 
-                          (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
-                          (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+    const ua = navigator.userAgent;
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes('Mac') && 'ontouchend' in document);
+    const isChrome = /Chrome|CriOS/.test(ua);
+    const isGoogleApp = /GSA/.test(ua);
+    const isDesktopSafari = /^((?!chrome|android).)*safari/i.test(ua) && !isChrome;
+    
+    // Email Auth is for Safari (iOS or Desktop) or PWA. 
+    // Chrome and Google App on iOS will get Google Auth.
+    const isSafariOrIOS = (isIOS && !isChrome && !isGoogleApp) || isDesktopSafari;
 
     let authHTML = `
         <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
