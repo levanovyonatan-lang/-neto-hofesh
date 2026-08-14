@@ -28,9 +28,7 @@ function injectFirebaseUI() {
     style.innerHTML = `
         .fb-modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.85);
             display: flex; align-items: center; justify-content: center;
             z-index: 10000;
             opacity: 0; pointer-events: none; transition: 0.3s ease;
@@ -488,7 +486,7 @@ window.handleEmailLogin = async function(event) {
             btn.disabled = false;
         }
     }
-
+}
 
 window.handleForgotPassword = async function() {
     const email = document.getElementById('lb-email').value.trim();
