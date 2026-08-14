@@ -175,7 +175,6 @@ function injectFirebaseUI() {
                     <p style="font-size: 14px; font-weight: bold; color: #10b981;" id="lb-user-greeting">היי כינוי!</p>
                     <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
                         <button class="fb-btn" style="background: #3b82f6; color: white; font-size: 12px; padding: 6px 15px; width: auto;" onclick="if(window.openPersonalArea) { closeModals(); window.openPersonalArea(); }">👤 אזור אישי</button>
-                        <button class="fb-btn" style="background: #ef4444; color: white; font-size: 12px; padding: 6px 15px; width: auto;" onclick="handleLogout()">התנתק</button>
                     </div>
                 </div>
                 
