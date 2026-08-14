@@ -430,7 +430,35 @@ window.showLeaderboard = async function(score, stage, killer) {
         // הצגת כפתור שיתוף בוואטסאפ אם המשתמש בטבלה
         const shareContainer = document.getElementById('lb-share-container');
         if (shareContainer && userRank && userScore) {
-            let urlObj = new URL(window.location.href);
+            let sharePath = window.location.pathname;
+            
+            if (window.userConfig && window.userConfig.schoolType && window.userConfig.targetIntent) {
+                const intent = window.userConfig.targetIntent;
+                const school = window.userConfig.schoolType;
+                let targetSlug = null;
+                
+                if (intent.startsWith('summer')) {
+                    targetSlug = (school === 'high') ? 'summer-high' : 'summer';
+                } else if (intent.startsWith('hanukkah')) {
+                    targetSlug = 'hanukkah';
+                } else if (intent.startsWith('purim')) {
+                    targetSlug = 'purim';
+                } else if (intent.startsWith('pesach')) {
+                    targetSlug = 'pesach';
+                } else if (intent.startsWith('atzmaut')) {
+                    targetSlug = 'atzmaut';
+                } else if (intent.startsWith('lagbaomer')) {
+                    targetSlug = 'lag-baomer';
+                } else if (intent.startsWith('shavuot')) {
+                    targetSlug = 'shavuot';
+                }
+                
+                if (targetSlug) {
+                    sharePath = `/${targetSlug}/`;
+                }
+            }
+            
+            let urlObj = new URL(sharePath, window.location.origin);
             urlObj.searchParams.set('openLogin', 'true');
             if (window.userConfig && window.userConfig.schoolType && window.userConfig.targetIntent) {
                 urlObj.searchParams.set('schoolType', window.userConfig.schoolType);
