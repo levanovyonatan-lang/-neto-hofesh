@@ -134,8 +134,8 @@ function injectFirebaseUI() {
     } else {
         authHTML += `
             <form onsubmit="handleEmailLogin(event)">
-                <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="username" required>
-                <input type="password" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="current-password" required>
+                <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="off" required>
+                <input type="text" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="off" onfocus="this.type='password'" required>
                 <div style="text-align: right; margin-bottom: 15px; padding-right: 5px;">
                     <a href="javascript:void(0)" onclick="handleForgotPassword()" style="color: #3b82f6; font-size: 12px; text-decoration: none;">שכחת סיסמה?</a>
                 </div>
