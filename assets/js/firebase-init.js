@@ -142,6 +142,12 @@ onAuthStateChanged(auth, async (user) => {
             alert("שגיאת התחברות למסד הנתונים (Firestore): נראה שיש חסימת הרשאות. בדוק את ה-Rules במסוף Firebase.");
         }
         
+        // כפתור אזור אישי לאתר ההדגמה בלבד
+        if (window.currentUserProfile && window.location.search.includes('show_demo=true')) {
+            const demoPaBtn = document.getElementById('demo-personal-area-btn');
+            if (demoPaBtn) demoPaBtn.style.display = 'inline-block';
+        }
+        
     } else {
         window.currentUserProfile = null;
         if (window.updateLeaderboardUI) window.updateLeaderboardUI();
