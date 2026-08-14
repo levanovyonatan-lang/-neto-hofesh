@@ -300,34 +300,6 @@
 </head>
 
 <body class="splash-active">
-    <!-- אזור אישי (כפתור צף) -->
-    <style>
-        #personal-area-btn {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-            display: none; /* Only show when logged in */
-        }
-        #personal-area-btn:hover {
-            transform: scale(1.05);
-            border-color: #3b82f6;
-        }
-    </style>
-    <button id="personal-area-btn" onclick="if(window.openPersonalArea) window.openPersonalArea()" aria-label="אזור אישי">👤</button>
-
     <!-- מסך פתיחה אלגנטי ויפה -->
     <div id="neto-splash">
         <div
@@ -505,7 +477,10 @@
                 בחרו יעד לספירה:</h2>
             <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation"
                 aria-label="בחירת חגים"></div>
-            <center><button class="reset-btn" onclick="resetApp()">שינוי הגדרות</button></center>
+            
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                <button class="reset-btn" onclick="resetApp()">שינוי הגדרות</button>
+            </div>
 
             <div style="margin-top: 25px; text-align: center;">
                 <a href="https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF" target="_blank" rel="noopener noreferrer" class="whatsapp-community-btn" style="display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #25D366, #128C7E); color: white; padding: 14px 28px; border-radius: 50px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4); font-size: calc(16px * var(--text-scale, 1)); transition: transform 0.2s, box-shadow 0.2s;" onclick="trackEvent('click_whatsapp_community_main'); this.style.transform='scale(0.95)'; setTimeout(() => this.style.transform='', 200);">
