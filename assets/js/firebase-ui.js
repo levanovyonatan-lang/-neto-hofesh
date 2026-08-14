@@ -278,8 +278,6 @@ function injectFirebaseUI() {
 window.closeModals = function() {
     document.getElementById('reg-modal').classList.remove('active');
     document.getElementById('lb-modal').classList.remove('active');
-    document.body.style.removeProperty('overflow'); // החזרת גלילה בטוחה
-    document.documentElement.style.removeProperty('overflow');
     
     if (window.pendingDinoGame) {
         const tryStartDino = () => {
@@ -312,8 +310,6 @@ window.showRegistrationCompletionModal = function(user) {
     document.getElementById('lb-modal').classList.remove('active');
     window.pendingFirebaseUser = user;
     document.getElementById('reg-modal').classList.add('active');
-    document.body.style.overflow = 'hidden'; 
-    document.documentElement.style.overflow = 'hidden';
 }
 
 window.submitRegistration = async function() {
@@ -375,8 +371,6 @@ window.showLeaderboard = async function(score, stage, killer) {
     }
     
     document.getElementById('lb-modal').classList.add('active');
-    document.body.style.overflow = 'hidden'; 
-    document.documentElement.style.overflow = 'hidden';
     window.updateLeaderboardUI();
     
 
@@ -563,17 +557,6 @@ window.containsProfanity = function(text) {
 window.closePersonalArea = () => {
     const modal = document.getElementById('personal-area-modal');
     if (modal) modal.classList.remove('active');
-    
-    // הסרה מוחלטת של נעילת הגלילה כדי להבטיח שהמסך לא ייתקע לעולם
-    document.body.style.removeProperty('overflow');
-    document.documentElement.style.removeProperty('overflow');
-    
-    // אם טבלת השיאים פתוחה מתחת, נחזיר את הנעילה ספציפית אליה
-    const lbModal = document.getElementById('lb-modal');
-    if (lbModal && lbModal.classList.contains('active')) {
-        document.body.style.overflow = 'hidden';
-        document.documentElement.style.overflow = 'hidden';
-    }
 };
 
 // פונקציות אזור אישי
@@ -599,8 +582,6 @@ window.openPersonalArea = () => {
         if (window.renderEmojiGrid) window.renderEmojiGrid('pa-emoji-grid', 'pa-selected-emoji');
         
         modal.classList.add('active');
-        document.body.style.overflow = 'hidden'; 
-        document.documentElement.style.overflow = 'hidden';
     } else {
         alert("עליך להתחבר כדי לגשת לאזור האישי.");
     }
