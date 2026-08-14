@@ -83,8 +83,13 @@ function injectFirebaseUI() {
         .leaderboard-item:nth-child(2) { background: #e2e8f0; border-radius: 8px; }
         .leaderboard-item:nth-child(3) { background: #fed7aa; border-radius: 8px; }
         .lb-rank { font-weight: bold; color: #64748b; width: 25px; }
+        .lb-emoji { font-size: 20px; width: 30px; text-align: center; }
         .lb-name { flex-grow: 1; font-weight: 500; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .lb-score { font-weight: bold; color: #0f172a; }
+        .emoji-grid { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 10px; margin-bottom: 15px; }
+        .emoji-btn { background: #f1f5f9; border: 2px solid transparent; border-radius: 8px; font-size: 24px; padding: 5px; cursor: pointer; transition: 0.2s; }
+        .emoji-btn:hover { background: #e2e8f0; transform: scale(1.1); }
+        .emoji-btn.selected { border-color: #3b82f6; background: #bfdbfe; transform: scale(1.1); }
     `;
     document.head.appendChild(style);
 
@@ -96,6 +101,10 @@ function injectFirebaseUI() {
                 <div class="fb-title">הרשמה ובחירת כינוי לאתר</div>
                 <div class="fb-subtitle">הכינוי ישמש אותך בכל משחקי האתר, וישמר בטבלאות השיאים הארציות:</div>
                 <input type="text" class="fb-input" id="reg-nickname" placeholder="לדוגמה: אלוף_ישראל_123" maxlength="15">
+                
+                <div class="fb-subtitle" style="margin-top: 15px;">בחר/י דמות לפרופיל:</div>
+                <div class="emoji-grid" id="reg-emoji-grid"></div>
+                <input type="hidden" id="reg-selected-emoji" value="👤">
                 
                 <div class="fb-checkbox-wrap">
                     <input type="checkbox" id="reg-newsletter">
@@ -178,9 +187,10 @@ function injectFirebaseUI() {
         <div id="personal-area-modal" class="fb-modal-overlay">
             <div class="fb-modal" style="max-width: 400px; padding: 25px; position: relative; text-align: center;">
                 <button onclick="if(window.closePersonalArea) window.closePersonalArea()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b;">&times;</button>
-                <div class="fb-title" style="margin-top: 0; color: #0f172a; margin-bottom: 20px;">האזור האישי 👤</div>
+                <div class="fb-title" style="margin-top: 0; color: #0f172a; margin-bottom: 20px;">האזור האישי</div>
                 
                 <div style="background: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 25px;">
+                    <div id="pa-emoji-display" style="font-size: 50px; margin-bottom: 10px;">👤</div>
                     <div style="font-size: 14px; color: #64748b; margin-bottom: 5px;">הכינוי שלך בטבלה:</div>
                     <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
                         <div id="pa-nickname-display" style="font-size: 24px; font-weight: 900; color: #3b82f6;"></div>
@@ -189,6 +199,10 @@ function injectFirebaseUI() {
                     
                     <div id="pa-nickname-edit-container" style="display: none; margin-top: 15px;">
                         <input type="text" id="pa-nickname-input" class="auth-input" maxlength="20" placeholder="כינוי חדש...">
+                        <div style="margin-top: 10px; font-size: 12px; font-weight: bold; color: #64748b;">בחר דמות חדשה:</div>
+                        <div class="emoji-grid" id="pa-emoji-grid"></div>
+                        <input type="hidden" id="pa-selected-emoji" value="👤">
+                        
                         <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="auth-submit-btn" style="padding: 8px 15px; margin-top: 10px;">שמור שינויים</button>
                     </div>
                     <div id="pa-error-msg" style="color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: bold; display: none;"></div>
@@ -205,6 +219,42 @@ function injectFirebaseUI() {
     const container = document.createElement('div');
     container.innerHTML = regModalHTML + lbModalHTML + personalAreaModalHTML;
     document.body.appendChild(container);
+    
+    // רשימת האימוג'ים הזמינים לפרופיל
+    window.availableProfileEmojis = [
+        "👤", "🦁", "🐯", "🐻", "🐼", "🐨", "🐸", "🐙", "🦄", "🦊",
+        "👾", "🤖", "👻", "👽", "🤠", "😎", "🤓", "🦸‍♂️", "🧚", "🧜‍♂️"
+    ];
+    
+    window.renderEmojiGrid = function(containerId, inputId) {
+        const grid = document.getElementById(containerId);
+        if (!grid) return;
+        grid.innerHTML = '';
+        
+        window.availableProfileEmojis.forEach(emoji => {
+            const btn = document.createElement('button');
+            btn.className = 'emoji-btn';
+            btn.textContent = emoji;
+            btn.type = 'button';
+            
+            // הגדרת ברירת מחדל
+            if (emoji === document.getElementById(inputId).value) {
+                btn.classList.add('selected');
+            }
+            
+            btn.onclick = () => {
+                document.querySelectorAll(`#${containerId} .emoji-btn`).forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                document.getElementById(inputId).value = emoji;
+            };
+            
+            grid.appendChild(btn);
+        });
+    };
+    
+    // אתחול רשתות האימוג'י
+    renderEmojiGrid('reg-emoji-grid', 'reg-selected-emoji');
+    renderEmojiGrid('pa-emoji-grid', 'pa-selected-emoji');
     
     // בדיקה האם הגענו לכאן מקישור של "פתיחה בכרום"
     if (window.location.search.includes('openLogin=true')) {
@@ -254,6 +304,7 @@ window.showRegistrationCompletionModal = function(user) {
 window.submitRegistration = async function() {
     const nickname = document.getElementById('reg-nickname').value.trim();
     const optIn = document.getElementById('reg-newsletter').checked;
+    const emoji = document.getElementById('reg-selected-emoji').value || "👤";
     
     if(!nickname || nickname.length < 2) {
         alert("אנא הזן כינוי באורך 2 תווים לפחות.");
@@ -269,15 +320,20 @@ window.submitRegistration = async function() {
         return;
     }
     
-    if(window.pendingFirebaseUser && window.completeUserRegistration) {
-        await window.completeUserRegistration(window.pendingFirebaseUser, nickname, optIn);
-        closeModals();
+    const btn = document.querySelector('#reg-modal .fb-btn');
+    btn.textContent = "שומר...";
+    btn.disabled = true;
+    
+    if(window.completeUserRegistration) {
+        await window.completeUserRegistration(window.pendingFirebaseUser, nickname, optIn, emoji);
+    }
+    
+    closeModals();
         // Update any current high score they just achieved
         const currentHS = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         if(currentHS > 0 && window.saveDinoHighScore) {
             window.saveDinoHighScore(currentHS);
         }
-    }
 }
 
 window.showLeaderboard = async function(score, stage, killer) {
@@ -332,6 +388,7 @@ window.showLeaderboard = async function(score, stage, killer) {
             listEl.innerHTML += `
                 <li class="leaderboard-item" ${liId} style="${liStyle}">
                     <span class="lb-rank">${rankStr}</span>
+                    <span class="lb-emoji">${s.emoji || '👤'}</span>
                     <span class="lb-name">${s.nickname || "אנונימי"}</span>
                     <span class="lb-score">${s.score}</span>
                 </li>
@@ -521,6 +578,7 @@ window.editNicknameUI = () => {
 
 window.saveNewNickname = async () => {
     const newName = document.getElementById('pa-nickname-input').value.trim();
+    const newEmoji = document.getElementById('pa-selected-emoji').value || '👤';
     const errorMsg = document.getElementById('pa-error-msg');
     
     if (newName.length < 2) {
@@ -550,16 +608,18 @@ window.saveNewNickname = async () => {
         const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
         
         const userDocRef = doc(window.firebaseDb, "users", user.uid);
-        await setDoc(userDocRef, { nickname: newName }, { merge: true });
+        await setDoc(userDocRef, { nickname: newName, emoji: newEmoji }, { merge: true });
         
         const scoreDocRef = doc(window.firebaseDb, "dino_scores", user.uid);
-        await setDoc(scoreDocRef, { nickname: newName }, { merge: true });
+        await setDoc(scoreDocRef, { nickname: newName, emoji: newEmoji }, { merge: true });
         
         if (window.currentUserProfile) {
             window.currentUserProfile.nickname = newName;
+            window.currentUserProfile.emoji = newEmoji;
         }
         
         document.getElementById('pa-nickname-display').textContent = newName;
+        document.getElementById('pa-emoji-display').textContent = newEmoji;
         document.getElementById('pa-nickname-edit-container').style.display = 'none';
         
         // Hide error message on success

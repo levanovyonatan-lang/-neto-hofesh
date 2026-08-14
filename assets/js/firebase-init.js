@@ -153,7 +153,7 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // פונקציה להשלמת הרשמה
-window.completeUserRegistration = async (user, nickname, optInNewsletter) => {
+window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji = '👤') => {
     try {
         // שאיבת שכבת הגיל מתוך האחסון המקומי
         let userGrade = "לא נבחר";
@@ -169,6 +169,7 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter) => {
         
         const profileData = {
             nickname: nickname,
+            emoji: emoji,
             email: user.email,
             displayName: user.displayName,
             grade: userGrade,
@@ -234,6 +235,7 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
             const scoreDocRef = doc(db, "dino_scores", user.uid);
             await setDoc(scoreDocRef, {
                 nickname: window.currentUserProfile.nickname,
+                emoji: window.currentUserProfile.emoji || '👤',
                 score: score,
                 updatedAt: new Date().toISOString()
             });
