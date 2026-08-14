@@ -229,6 +229,24 @@ window.submitRegistration = async function() {
         return;
     }
     
+    // סינון קללות וקישורים
+    const forbiddenWords = [
+        "זונה", "שרמוטה", "בן זונה", "בת זונה", "זין", "כוס", "מניאק", "הומו", "קוקסינל", 
+        "קחבה", "כלב", "כלבה", "חרא", "פיזדמט", "סעמק", "כוסאמק", "שרלילה", "שפיך", "זרע",
+        "בולבול", "שד", "ציצי", "תחת", "ישבן", "זדיין", "מזדיין", "מצוץ", "מוצץ", "שואה",
+        "נאצי", "היטלר", "מחבל", "פיגוע", "אונס", "פדופיל", "מטומטם", "מפגר", "אוטיסט",
+        "דפוק", "אידיוט", "טיפש", "מכוער", "שמן", "דבה", "גיי", "לסבית", "קוקי", "ערבי",
+        "יהודון", "רוסי", "אתיופי", "כושי", "ניגר", "זבל", "חמור", "קוף", "חזיר"
+    ];
+    
+    const hasForbiddenWord = forbiddenWords.some(word => nickname.toLowerCase().includes(word));
+    const hasLink = /(http|https|www\.|:\/\/)|\.(com|co\.il|org|net|me|xyz|io|gov)/i.test(nickname);
+    
+    if (hasForbiddenWord || hasLink) {
+        alert("הכינוי מכיל מילים לא ראויות או קישורים. אנא בחר כינוי אחר.");
+        return;
+    }
+    
     if(window.pendingFirebaseUser && window.completeUserRegistration) {
         await window.completeUserRegistration(window.pendingFirebaseUser, nickname, optIn);
         closeModals();
