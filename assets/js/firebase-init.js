@@ -140,27 +140,11 @@ onAuthStateChanged(auth, async (user) => {
         } catch (error) {
             console.error("Firestore error in auth state:", error);
             alert("שגיאת התחברות למסד הנתונים (Firestore): נראה שיש חסימת הרשאות. בדוק את ה-Rules במסוף Firebase.");
-            // Reset UI since we couldn't load the user profile
-            window.currentUserProfile = null;
-            if (window.updateLeaderboardUI) window.updateLeaderboardUI();
-        }
-        
-        // הצגת כפתור אזור אישי
-        if (window.currentUserProfile) {
-            const personalAreaBtn = document.getElementById('personal-area-btn');
-            if (personalAreaBtn) personalAreaBtn.style.display = 'inline-block';
-        } else {
-            const personalAreaBtn = document.getElementById('personal-area-btn');
-            if (personalAreaBtn) personalAreaBtn.style.display = 'none';
         }
         
     } else {
         window.currentUserProfile = null;
         if (window.updateLeaderboardUI) window.updateLeaderboardUI();
-        
-        // הסתרת כפתור אזור אישי
-        const personalAreaBtn = document.getElementById('personal-area-btn');
-        if (personalAreaBtn) personalAreaBtn.style.display = 'none';
     }
 });
 

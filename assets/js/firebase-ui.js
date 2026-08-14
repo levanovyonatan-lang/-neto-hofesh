@@ -161,7 +161,10 @@ function injectFirebaseUI() {
                 
                 <div id="lb-user-section" style="display: none; border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
                     <p style="font-size: 14px; font-weight: bold; color: #10b981;" id="lb-user-greeting">היי כינוי!</p>
-                    <button class="fb-btn" style="background: #ef4444; color: white; font-size: 12px; padding: 6px 0; margin-top: 10px; width: auto; padding: 6px 15px;" onclick="handleLogout()">התנתק</button>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
+                        <button class="fb-btn" style="background: #3b82f6; color: white; font-size: 12px; padding: 6px 15px; width: auto;" onclick="if(window.openPersonalArea) { closeModals(); window.openPersonalArea(); }">👤 אזור אישי</button>
+                        <button class="fb-btn" style="background: #ef4444; color: white; font-size: 12px; padding: 6px 15px; width: auto;" onclick="handleLogout()">התנתק</button>
+                    </div>
                 </div>
                 
                 <div style="margin-top: 15px;">
