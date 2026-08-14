@@ -175,10 +175,10 @@ function injectFirebaseUI() {
     `;
 
     const personalAreaModalHTML = `
-        <div id="personal-area-modal" class="leaderboard-modal">
-            <div class="leaderboard-content" style="max-width: 400px; padding: 25px;">
-                <button class="close-leaderboard" onclick="if(window.closePersonalArea) window.closePersonalArea()">&times;</button>
-                <h2 style="margin-top: 0; color: #0f172a; text-align: center;">האזור האישי 👤</h2>
+        <div id="personal-area-modal" class="fb-modal-overlay">
+            <div class="fb-modal" style="max-width: 400px; padding: 25px; position: relative;">
+                <button onclick="if(window.closePersonalArea) window.closePersonalArea()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b;">&times;</button>
+                <div class="fb-title" style="margin-top: 0; color: #0f172a; text-align: center;">האזור האישי 👤</div>
                 
                 <div style="background: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: center;">
                     <div style="font-size: 14px; color: #64748b; margin-bottom: 5px;">הכינוי שלך:</div>
