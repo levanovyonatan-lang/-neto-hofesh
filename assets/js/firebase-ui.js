@@ -210,7 +210,7 @@ function injectFirebaseUI() {
                     <div id="pa-error-msg" style="color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: bold; display: none;"></div>
                 </div>
 
-                <div style="display: flex; justify-content: center; gap: 15px; font-size: 13px;">
+                <div id="pa-account-actions" style="display: flex; justify-content: center; gap: 15px; font-size: 13px;">
                     <button onclick="if(window.handleLogout) window.handleLogout()" style="background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline;">התנתק מהחשבון</button>
                     <button onclick="if(window.handleDeleteAccount) window.handleDeleteAccount()" style="background: none; border: none; color: #ef4444; cursor: pointer; text-decoration: underline; opacity: 0.8;">מחק חשבון</button>
                 </div>
@@ -574,6 +574,9 @@ window.openPersonalArea = () => {
         if (emojiField) emojiField.value = window.currentUserProfile.emoji || '👤';
         if (window.renderEmojiGrid) window.renderEmojiGrid('pa-emoji-grid', 'pa-selected-emoji');
         
+        const accountActions = document.getElementById('pa-account-actions');
+        if (accountActions) accountActions.style.display = 'flex';
+        
         modal.classList.add('active');
     } else {
         alert("עליך להתחבר כדי לגשת לאזור האישי.");
@@ -587,6 +590,8 @@ window.closePersonalArea = () => {
 
 window.editNicknameUI = () => {
     document.getElementById('pa-nickname-edit-container').style.display = 'block';
+    const accountActions = document.getElementById('pa-account-actions');
+    if (accountActions) accountActions.style.display = 'none';
     document.getElementById('pa-nickname-input').focus();
 };
 
@@ -635,6 +640,9 @@ window.saveNewNickname = async () => {
         document.getElementById('pa-nickname-display').textContent = newName;
         document.getElementById('pa-emoji-display').textContent = newEmoji;
         document.getElementById('pa-nickname-edit-container').style.display = 'none';
+        
+        const accountActions = document.getElementById('pa-account-actions');
+        if (accountActions) accountActions.style.display = 'flex';
         
         // Hide error message on success
         errorMsg.style.display = 'none';
