@@ -17,6 +17,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+auth.languageCode = 'he'; // Set language to Hebrew for emails and Action URL pages
 const db = getFirestore(app);
 const analytics = getAnalytics(app);
 const provider = new GoogleAuthProvider();
