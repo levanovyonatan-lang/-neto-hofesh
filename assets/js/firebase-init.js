@@ -145,6 +145,8 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter) => {
             }
         } catch(e) {}
 
+        const localDinoScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
+        
         const profileData = {
             nickname: nickname,
             email: user.email,
@@ -152,13 +154,18 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter) => {
             grade: userGrade,
             newsletterOptIn: optInNewsletter,
             createdAt: new Date().toISOString(),
-            dinoHighScore: 0
+            dinoHighScore: localDinoScore
         };
 
         const userDocRef = doc(db, "users", user.uid);
         await setDoc(userDocRef, profileData);
         window.currentUserProfile = profileData;
         console.log("Registration completed successfully!");
+        
+        if (localDinoScore > 0 && window.saveDinoHighScore) {
+            await window.saveDinoHighScore(localDinoScore);
+        }
+        
         if(window.updateLeaderboardUI) window.updateLeaderboardUI();
     } catch (error) {
         console.error("Error saving user profile:", error);
