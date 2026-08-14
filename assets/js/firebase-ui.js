@@ -432,3 +432,88 @@ window.handleForgotPassword = async function() {
         }
     }
 }
+
+// פונקציות אזור אישי
+window.openPersonalArea = () => {
+    const modal = document.getElementById('personal-area-modal');
+    if (!modal) return;
+    
+    if (window.currentUserProfile) {
+        document.getElementById('pa-nickname-display').textContent = window.currentUserProfile.nickname || 'משתמש אנונימי';
+        document.getElementById('pa-highscore').textContent = window.currentUserProfile.dinoHighScore || 0;
+        
+        const gradeMap = {
+            'elem': 'יסודי 🎨',
+            'middle': 'חטיבה 🎒',
+            'high': 'תיכון 🎓'
+        };
+        document.getElementById('pa-grade').textContent = gradeMap[window.currentUserProfile.grade] || 'לא ידוע';
+        
+        document.getElementById('pa-nickname-edit-container').style.display = 'none';
+        document.getElementById('pa-error-msg').style.display = 'none';
+        document.getElementById('pa-nickname-input').value = window.currentUserProfile.nickname || '';
+        
+        modal.classList.add('active');
+    } else {
+        alert("עליך להתחבר כדי לגשת לאזור האישי.");
+    }
+};
+
+window.closePersonalArea = () => {
+    const modal = document.getElementById('personal-area-modal');
+    if (modal) modal.classList.remove('active');
+};
+
+window.editNicknameUI = () => {
+    document.getElementById('pa-nickname-edit-container').style.display = 'block';
+    document.getElementById('pa-nickname-input').focus();
+};
+
+window.saveNewNickname = async () => {
+    const newName = document.getElementById('pa-nickname-input').value.trim();
+    const errorMsg = document.getElementById('pa-error-msg');
+    
+    if (newName.length < 2) {
+        errorMsg.textContent = "הכינוי קצר מדי.";
+        errorMsg.style.display = 'block';
+        return;
+    }
+    
+    if (containsProfanity(newName) || containsLink(newName)) {
+        errorMsg.textContent = "הכינוי מכיל מילים אסורות או קישורים.";
+        errorMsg.style.display = 'block';
+        return;
+    }
+    
+    try {
+        const user = window.firebaseAuth.currentUser;
+        if (!user) return;
+        
+        const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
+        
+        const userDocRef = doc(window.firebaseDb, "users", user.uid);
+        await setDoc(userDocRef, { nickname: newName }, { merge: true });
+        
+        const scoreDocRef = doc(window.firebaseDb, "dino_scores", user.uid);
+        await setDoc(scoreDocRef, { nickname: newName }, { merge: true });
+        
+        if (window.currentUserProfile) {
+            window.currentUserProfile.nickname = newName;
+        }
+        
+        document.getElementById('pa-nickname-display').textContent = newName;
+        document.getElementById('pa-nickname-edit-container').style.display = 'none';
+        errorMsg.style.display = 'none';
+        
+        alert("הכינוי עודכן בהצלחה! 🎉");
+        
+        if (window.updateLeaderboardUI) {
+            window.updateLeaderboardUI();
+        }
+        
+    } catch (error) {
+        console.error("Error updating nickname:", error);
+        errorMsg.textContent = "שגיאה בשמירת הכינוי.";
+        errorMsg.style.display = 'block';
+    }
+};

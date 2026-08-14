@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, deleteUser, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
 
 // TODO: החלף את הערכים האלו בנתוני הפרויקט שלך ב-Firebase
@@ -142,12 +142,25 @@ onAuthStateChanged(auth, async (user) => {
             alert("שגיאת התחברות למסד הנתונים (Firestore): נראה שיש חסימת הרשאות. בדוק את ה-Rules במסוף Firebase.");
             // Reset UI since we couldn't load the user profile
             window.currentUserProfile = null;
-            if(window.updateLeaderboardUI) window.updateLeaderboardUI();
+            if (window.updateLeaderboardUI) window.updateLeaderboardUI();
         }
+        
+        // הצגת כפתור אזור אישי
+        if (window.currentUserProfile) {
+            const personalAreaBtn = document.getElementById('personal-area-btn');
+            if (personalAreaBtn) personalAreaBtn.style.display = 'flex';
+        } else {
+            const personalAreaBtn = document.getElementById('personal-area-btn');
+            if (personalAreaBtn) personalAreaBtn.style.display = 'none';
+        }
+        
     } else {
-        // משתמש לא מחובר
         window.currentUserProfile = null;
-        if(window.updateLeaderboardUI) window.updateLeaderboardUI();
+        if (window.updateLeaderboardUI) window.updateLeaderboardUI();
+        
+        // הסתרת כפתור אזור אישי
+        const personalAreaBtn = document.getElementById('personal-area-btn');
+        if (personalAreaBtn) personalAreaBtn.style.display = 'none';
     }
 });
 
@@ -283,3 +296,46 @@ getRedirectResult(auth).then((result) => {
 }).catch((error) => {
     console.error("Redirect login failed", error);
 });
+
+// פונקציות ניהול אזור אישי
+window.handleLogout = async () => {
+    if (confirm("בטוח שאתה רוצה להתנתק?")) {
+        try {
+            await signOut(auth);
+            if(window.closePersonalArea) window.closePersonalArea();
+            alert("התנתקת בהצלחה. להתראות! 👋");
+            window.location.reload();
+        } catch (error) {
+            console.error("Error signing out:", error);
+            alert("שגיאה בהתנתקות.");
+        }
+    }
+};
+
+window.handleDeleteAccount = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    
+    if (confirm("⚠️ אזהרה: פעולה זו תמחק את החשבון שלך ואת כל השיאים שלך לצמיתות! האם אתה בטוח?")) {
+        if (confirm("בטוח ב-100%? אי אפשר לשחזר את הנתונים!")) {
+            try {
+                // מחיקת מסמך המשתמש
+                await deleteDoc(doc(db, "users", user.uid));
+                // מחיקת מסמך שיאים
+                await deleteDoc(doc(db, "dino_scores", user.uid));
+                // מחיקת חשבון מפיירבייס
+                await deleteUser(user);
+                
+                alert("החשבון נמחק לצמיתות. 🗑️");
+                window.location.reload();
+            } catch (error) {
+                console.error("Error deleting user:", error);
+                if (error.code === 'auth/requires-recent-login') {
+                    alert("בשביל למחוק חשבון אתה צריך להתחבר מחדש (מטעמי אבטחה). התנתק, התחבר שוב ונסה שוב.");
+                } else {
+                    alert("שגיאה במחיקת החשבון: " + error.message);
+                }
+            }
+        }
+    }
+};
