@@ -147,6 +147,10 @@ onAuthStateChanged(auth, async (user) => {
             const demoPaBtn = document.getElementById('demo-personal-area-btn');
             if (demoPaBtn) demoPaBtn.style.display = 'inline-block';
         }
+
+        // ניקוי כפתור צד ישן שנשאר ב-Cache אצל חלק מהמשתמשים
+        const oldPaBtn = document.getElementById('personal-area-btn');
+        if (oldPaBtn) oldPaBtn.remove();
         
     } else {
         window.currentUserProfile = null;
