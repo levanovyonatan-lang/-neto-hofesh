@@ -108,30 +108,27 @@ function injectFirebaseUI() {
         </div>
     `;
 
-    const currentUrlParams = new URLSearchParams(window.location.search);
-    const isDemo = currentUrlParams.get('show_demo') === 'true';
+    const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || 
+                          (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
+                          (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
 
     let authHTML = `
         <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
             <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: bold;">התחבר כדי לשמור את השיא שלך:</p>
-            
+    `;
+
+    if (!isSafariOrIOS) {
+        authHTML += `
             <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 15px;">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
                 התחבר עם Google
             </button>
-    `;
-
-    if (isDemo) {
+        `;
+    } else {
         authHTML += `
-            <div style="margin: 15px 0; display: flex; align-items: center; text-align: center; color: #94a3b8; font-size: 12px;">
-                <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
-                <span style="padding: 0 10px;">או עם אימייל (מומלץ לאייפון)</span>
-                <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
-            </div>
-            
             <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="email">
             <input type="password" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="current-password">
-            <div style="text-align: left; margin-bottom: 15px;">
+            <div style="text-align: right; margin-bottom: 15px; padding-right: 5px;">
                 <a href="javascript:void(0)" onclick="handleForgotPassword()" style="color: #3b82f6; font-size: 12px; text-decoration: none;">שכחת סיסמה?</a>
             </div>
             <button class="fb-btn" id="lb-email-btn" onclick="handleEmailLogin()" style="font-size: 16px; padding: 10px 0;">התחבר / הירשם</button>
