@@ -178,7 +178,7 @@ window.saveDinoHighScore = async (score) => {
     const user = auth.currentUser;
     if (!user || !window.currentUserProfile) return false;
 
-    if (score > (window.currentUserProfile.dinoHighScore || 0)) {
+    if (score >= (window.currentUserProfile.dinoHighScore || 0)) {
         try {
             const userDocRef = doc(db, "users", user.uid);
             await setDoc(userDocRef, { dinoHighScore: score }, { merge: true });
@@ -205,7 +205,7 @@ window.saveDinoHighScore = async (score) => {
 window.getTopDinoScores = async () => {
     try {
         const scoresRef = collection(db, "dino_scores");
-        const q = query(scoresRef, orderBy("score", "desc"), limit(10));
+        const q = query(scoresRef, orderBy("score", "desc"), limit(100));
         const querySnapshot = await getDocs(q);
         
         let leaderboard = [];
