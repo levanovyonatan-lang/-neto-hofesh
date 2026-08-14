@@ -110,20 +110,18 @@ function injectFirebaseUI() {
 
     const ua = navigator.userAgent;
     const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes('Mac') && 'ontouchend' in document);
-    const isChrome = /Chrome|CriOS/.test(ua);
-    const isGoogleApp = /GSA/.test(ua);
-    const isDesktopSafari = /^((?!chrome|android).)*safari/i.test(ua) && !isChrome;
+    const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
     
-    // Email Auth is for Safari (iOS or Desktop) or PWA. 
-    // Chrome and Google App on iOS will get Google Auth.
-    const isSafariOrIOS = (isIOS && !isChrome && !isGoogleApp) || isDesktopSafari;
+    // Show Email Auth ONLY if it's the installed App (PWA) on iOS.
+    // Otherwise (Chrome, Safari, PC, Android), show Google Auth.
+    const showEmailAuth = isIOS && isStandalone;
 
     let authHTML = `
         <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
             <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: bold;">התחבר כדי לשמור את השיא שלך:</p>
     `;
 
-    if (!isSafariOrIOS) {
+    if (!showEmailAuth) {
         authHTML += `
             <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 15px;">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
