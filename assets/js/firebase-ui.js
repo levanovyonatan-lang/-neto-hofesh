@@ -86,7 +86,9 @@ function injectFirebaseUI() {
         .lb-emoji { font-size: 20px; width: 30px; text-align: center; }
         .lb-name { flex-grow: 1; font-weight: 500; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .lb-score { font-weight: bold; color: #0f172a; }
-        .emoji-grid { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 10px; margin-bottom: 15px; }
+        .emoji-grid { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 10px; margin-bottom: 15px; max-height: 150px; overflow-y: auto; padding: 5px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
+        .emoji-grid::-webkit-scrollbar { width: 6px; }
+        .emoji-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .emoji-btn { background: #f1f5f9; border: 2px solid transparent; border-radius: 8px; font-size: 24px; padding: 5px; cursor: pointer; transition: 0.2s; }
         .emoji-btn:hover { background: #e2e8f0; transform: scale(1.1); }
         .emoji-btn.selected { border-color: #3b82f6; background: #bfdbfe; transform: scale(1.1); }
@@ -223,7 +225,11 @@ function injectFirebaseUI() {
     // רשימת האימוג'ים הזמינים לפרופיל
     window.availableProfileEmojis = [
         "👤", "🦁", "🐯", "🐻", "🐼", "🐨", "🐸", "🐙", "🦄", "🦊",
-        "👾", "🤖", "👻", "👽", "🤠", "😎", "🤓", "🦸‍♂️", "🧚", "🧜‍♂️"
+        "👾", "🤖", "👻", "👽", "🤠", "😎", "🤓", "🦸‍♂️", "🧚", "🧜‍♂️",
+        "💣", "💩", "🤡", "😈", "💀", "🦖", "🐒", "🦍", "🦧", "🐧",
+        "🦉", "🦇", "🐺", "🐗", "🍔", "🍕", "🍟", "🍩", "🍦", "🍭",
+        "⚽", "🏀", "🏈", "🎸", "🎧", "🚀", "🛸", "🚁", "🏎️", "🎮",
+        "🎲", "🎯", "🏆", "🥇", "🔥", "⚡", "✨", "🌟", "👑", "💎"
     ];
     
     window.renderEmojiGrid = function(containerId, inputId) {
@@ -267,6 +273,7 @@ function injectFirebaseUI() {
 window.closeModals = function() {
     document.getElementById('reg-modal').classList.remove('active');
     document.getElementById('lb-modal').classList.remove('active');
+    document.body.style.overflow = ''; // החזרת גלילה לרקע
     
     if (window.pendingDinoGame) {
         const tryStartDino = () => {
@@ -299,6 +306,7 @@ window.showRegistrationCompletionModal = function(user) {
     document.getElementById('lb-modal').classList.remove('active');
     window.pendingFirebaseUser = user;
     document.getElementById('reg-modal').classList.add('active');
+    document.body.style.overflow = 'hidden'; // ביטול גלילה ברקע
 }
 
 window.submitRegistration = async function() {
@@ -360,6 +368,7 @@ window.showLeaderboard = async function(score, stage, killer) {
     }
     
     document.getElementById('lb-modal').classList.add('active');
+    document.body.style.overflow = 'hidden'; // ביטול גלילה ברקע
     window.updateLeaderboardUI();
     
 
@@ -543,6 +552,17 @@ window.containsProfanity = function(text) {
     return forbiddenWords.some(word => text.toLowerCase().includes(word));
 }
 
+window.closePersonalArea = () => {
+    const modal = document.getElementById('personal-area-modal');
+    if (modal) modal.classList.remove('active');
+    
+    // אם טבלת השיאים לא פתוחה, נחזיר את הגלילה לרקע
+    const lbModal = document.getElementById('lb-modal');
+    if (!lbModal || !lbModal.classList.contains('active')) {
+        document.body.style.overflow = ''; 
+    }
+};
+
 // פונקציות אזור אישי
 window.openPersonalArea = () => {
     const modal = document.getElementById('personal-area-modal');
@@ -560,7 +580,13 @@ window.openPersonalArea = () => {
         
         const inputField = document.getElementById('pa-nickname-input');
         if (inputField) inputField.value = window.currentUserProfile.nickname || '';
+        
+        const emojiField = document.getElementById('pa-selected-emoji');
+        if (emojiField) emojiField.value = window.currentUserProfile.emoji || '👤';
+        if (window.renderEmojiGrid) window.renderEmojiGrid('pa-emoji-grid', 'pa-selected-emoji');
+        
         modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // ביטול גלילה ברקע
     } else {
         alert("עליך להתחבר כדי לגשת לאזור האישי.");
     }
