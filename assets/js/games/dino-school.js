@@ -990,7 +990,7 @@
             recordEl.style.fontSize = '13px';
             recordEl.style.color = '#34d399';
             recordEl.style.fontWeight = 'bold';
-            recordEl.innerHTML = '🏆 שיא חדש! 🏆';
+            recordEl.innerHTML = '🏆 שיא אישי חדש! 🏆';
             title.appendChild(recordEl);
             
             // Firebase Integration
@@ -1000,13 +1000,6 @@
             
             if (isDemoMode && window.currentUserProfile && window.saveDinoHighScore) {
                 window.saveDinoHighScore(currentHighScore);
-            } else if (isDemoMode && !window.currentUserProfile && window.showRegistrationCompletionModal) {
-                const savePrompt = document.createElement('div');
-                savePrompt.style.fontSize = '12px';
-                savePrompt.style.color = '#fbbf24';
-                savePrompt.style.marginTop = '4px';
-                savePrompt.innerHTML = 'שברת שיא אישי! <u style="cursor:pointer;" onclick="showLeaderboard()">התחבר כדי לשמור אותו בטבלה</u>';
-                title.appendChild(savePrompt);
             }
         }
 
@@ -1063,7 +1056,13 @@
         const urlDemo = new URLSearchParams(window.location.search).get('show_demo') === 'true';
         if (urlDemo) localStorage.setItem('isDemoMode', 'true');
         const isDemoMode = urlDemo || localStorage.getItem('isDemoMode') === 'true';
+        
         if (isDemoMode) {
+            if (isNewRecord && !window.currentUserProfile) {
+                leaderboardBtn.textContent = 'התחבר כדי לשמור את השיא בטבלה';
+                leaderboardBtn.style.color = '#fbbf24'; // צבע זהב
+                leaderboardBtn.style.fontWeight = 'bold';
+            }
             btnContainer.appendChild(leaderboardBtn);
         }
         title.appendChild(btnContainer);
