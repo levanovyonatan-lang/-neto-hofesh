@@ -332,6 +332,7 @@ window.submitRegistration = async function() {
     
     if(window.completeUserRegistration) {
         await window.completeUserRegistration(window.pendingFirebaseUser, nickname, optIn, emoji);
+        if (window.trackEvent) window.trackEvent('user_registration');
     }
     
     closeModals();
@@ -349,6 +350,7 @@ window.showLeaderboard = async function(score, stage, killer) {
     }
     
     // סנכרון השיא המקומי לשרת במידה והוא גבוה יותר ממה ששמור בשרת
+    if (window.trackEvent) window.trackEvent('view_leaderboard');
     if (window.currentUserProfile && window.saveDinoHighScore) {
         const localScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         const serverScore = window.currentUserProfile.dinoHighScore || 0;
