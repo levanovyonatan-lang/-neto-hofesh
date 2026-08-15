@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניהול רשימת תפוצה | נטו חופש</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin-top: 40px;
+        }
+
+        .auth-card, .admin-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        p.subtitle {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .pin-input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .pin-input:focus {
+            border-color: #6366f1;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            width: auto;
+            padding: 12px 24px;
+        }
+
+        .btn-green:hover {
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #38bdf8;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        th {
+            background: rgba(30, 41, 59, 0.9);
+            color: #cbd5e1;
+            padding: 14px 16px;
+            font-weight: 600;
+            border-bottom: 1px solid #334155;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+            color: #e2e8f0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 8px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Auth Screen -->
+        <div id="auth-screen" class="auth-card" style="max-width: 400px; margin: 60px auto 0;">
+            <h1>🔐 כניסת מנהל</h1>
+            <p class="subtitle">הזן קוד גישה לצפייה וייצוא רשימת התפוצה</p>
+            <input type="password" id="pin-code" class="pin-input" placeholder="••••" maxlength="10">
+            <button class="btn" onclick="checkPin()">התחבר למערכת</button>
+            <div id="pin-error" class="error-msg">קוד שגוי. נסה שוב.</div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="admin-screen" class="admin-card" style="display: none;">
+            <div class="header-actions">
+                <div>
+                    <h1>📧 ניהול רשימת תפוצה</h1>
+                    <p class="subtitle">רשימת המשתמשים שאישרו לקבל תכנים ועדכונים (מתוחזק בזמן אמת)</p>
+                </div>
+                <button class="btn btn-green" onclick="exportToCSV()">
+                    📊 הורד קובץ אקסל (CSV)
+                </button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div id="stat-subscribers" class="stat-value">0</div>
+                    <div class="stat-label">אישרו רשימת תפוצה (Opt-In)</div>
+                </div>
+                <div class="stat-box">
+                    <div id="stat-total" class="stat-value">0</div>
+                    <div class="stat-label">סך הכל נרשמים במערכת</div>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>כינוי</th>
+                            <th>דואר אלקטרוני</th>
+                            <th>שכבת גיל</th>
+                            <th>תאריך הרשמה</th>
+                            <th>סטטוס</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subscribers-table-body">
+                        <tr>
+                            <td colspan="6" class="empty-state">טוען נתונים מ-Firebase...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Script Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDa9u68dZfImq4rKa56X1CqLPPhGQMXdVo",
+            authDomain: "neto-hofesh.firebaseapp.com",
+            projectId: "neto-hofesh",
+            storageBucket: "neto-hofesh.firebasestorage.app",
+            messagingSenderId: "82711180725",
+            appId: "1:82711180725:web:97b3a90a683d64d52cd5fc"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let subscribersList = [];
+
+        window.checkPin = function() {
+            const pin = document.getElementById('pin-code').value.trim();
+            const errorEl = document.getElementById('pin-error');
+            // Default PIN is 1234 or neto1234
+            if (pin === '1234' || pin === 'neto1234' || pin === 'netohofesh') {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('admin-screen').style.display = 'block';
+                loadSubscribersData();
+            } else {
+                errorEl.style.display = 'block';
+            }
+        };
+
+        document.getElementById('pin-code')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') window.checkPin();
+        });
+
+        async function loadSubscribersData() {
+            const tbody = document.getElementById('subscribers-table-body');
+            try {
+                const querySnapshot = await getDocs(collection(db, "users"));
+                let totalUsers = 0;
+                subscribersList = [];
+
+                querySnapshot.forEach((doc) => {
+                    totalUsers++;
+                    const data = doc.data();
+                    if (data.newsletterOptIn === true && data.email) {
+                        subscribersList.push({
+                            nickname: data.nickname || data.displayName || 'משתמש',
+                            email: data.email,
+                            grade: data.grade || 'לא צוין',
+                            createdAt: data.createdAt ? new Date(data.createdAt).toLocaleDateString('he-IL') : 'לא צוין'
+                        });
+                    }
+                });
+
+                document.getElementById('stat-total').textContent = totalUsers;
+                document.getElementById('stat-subscribers').textContent = subscribersList.length;
+
+                if (subscribersList.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="empty-state">לא נמצאו מנויים ברשימת התפוצה.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = subscribersList.map((sub, idx) => `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td>${escapeHtml(sub.nickname)}</td>
+                        <td style="direction: ltr; text-align: right;">${escapeHtml(sub.email)}</td>
+                        <td>${escapeHtml(sub.grade)}</td>
+                        <td>${escapeHtml(sub.createdAt)}</td>
+                        <td><span class="badge">אישר דיוור ✔️</span></td>
+                    </tr>
+                `).join('');
+
+            } catch (error) {
+                console.error("Error loading subscribers:", error);
+                tbody.innerHTML = `<tr><td colspan="6" class="empty-state" style="color: #ef4444;">שגיאה בטעינת הנתונים: ${error.message}</td></tr>`;
+            }
+        }
+
+        window.exportToCSV = function() {
+            if (!subscribersList || subscribersList.length === 0) {
+                alert("אין מנויים לייצוא!");
+                return;
+            }
+
+            // UTF-8 BOM for Excel Hebrew compatibility
+            let csvContent = "\uFEFF";
+            csvContent += "מספר,אימייל,כינוי,שכבת גיל,תאריך הרשמה\n";
+
+            subscribersList.forEach((sub, index) => {
+                const row = [
+                    index + 1,
+                    `"${sub.email.replace(/"/g, '""')}"`,
+                    `"${sub.nickname.replace(/"/g, '""')}"`,
+                    `"${sub.grade.replace(/"/g, '""')}"`,
+                    `"${sub.createdAt.replace(/"/g, '""')}"`
+                ];
+                csvContent += row.join(",") + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `neto_hofesh_subscribers_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+    </script>
+</body>
+</html>

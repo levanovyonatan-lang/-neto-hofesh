@@ -210,6 +210,14 @@ function injectFirebaseUI() {
                     <div id="pa-error-msg" style="color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: bold; display: none;"></div>
                 </div>
 
+                <div style="background: #f8fafc; border-radius: 12px; padding: 12px 15px; margin-bottom: 20px; text-align: right;">
+                    <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-size: 13px; font-weight: bold; color: #334155;">
+                        <span>📧 קבלת עדכונים וחדשות למייל</span>
+                        <input type="checkbox" id="pa-newsletter-checkbox" onchange="if(window.toggleNewsletterOptIn) window.toggleNewsletterOptIn(this.checked)" style="width: 18px; height: 18px; cursor: pointer; accent-color: #3b82f6;">
+                    </label>
+                    <div id="pa-newsletter-status" style="font-size: 11px; color: #64748b; margin-top: 4px;">אישרת קבלת עדכונים (ניתן לבטל בכל עת)</div>
+                </div>
+
                 <div id="pa-account-actions" style="display: flex; justify-content: center; gap: 15px; font-size: 13px;">
                     <button onclick="if(window.handleLogout) window.handleLogout()" style="background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline;">התנתק מהחשבון</button>
                     <button onclick="if(window.handleDeleteAccount) window.handleDeleteAccount()" style="background: none; border: none; color: #ef4444; cursor: pointer; text-decoration: underline; opacity: 0.8;">מחק חשבון</button>
@@ -629,9 +637,41 @@ window.openPersonalArea = () => {
         const accountActions = document.getElementById('pa-account-actions');
         if (accountActions) accountActions.style.display = 'flex';
         
+        const newsletterCheckbox = document.getElementById('pa-newsletter-checkbox');
+        const newsletterStatus = document.getElementById('pa-newsletter-status');
+        if (newsletterCheckbox) {
+            const isOptIn = !!window.currentUserProfile.newsletterOptIn;
+            newsletterCheckbox.checked = isOptIn;
+            if (newsletterStatus) {
+                newsletterStatus.textContent = isOptIn ? 'אישרת קבלת עדכונים (ניתן לבטל בכל עת)' : 'לא מאושר קבלת עדכונים למייל';
+            }
+        }
+
         modal.classList.add('active');
     } else {
         alert("עליך להתחבר כדי לגשת לאזור האישי.");
+    }
+};
+
+window.toggleNewsletterOptIn = async (isChecked) => {
+    try {
+        const user = window.firebaseAuth.currentUser;
+        if (!user) return;
+        
+        const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
+        const userDocRef = doc(window.firebaseDb, "users", user.uid);
+        await setDoc(userDocRef, { newsletterOptIn: isChecked }, { merge: true });
+        
+        if (window.currentUserProfile) {
+            window.currentUserProfile.newsletterOptIn = isChecked;
+        }
+        
+        const statusEl = document.getElementById('pa-newsletter-status');
+        if (statusEl) {
+            statusEl.textContent = isChecked ? 'אישרת קבלת עדכונים (ניתן לבטל בכל עת)' : 'לא מאושר קבלת עדכונים למייל';
+        }
+    } catch (error) {
+        console.error("Error updating newsletter preference:", error);
     }
 };
 
