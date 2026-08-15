@@ -268,7 +268,7 @@ function injectFirebaseUI() {
     renderEmojiGrid('pa-emoji-grid', 'pa-selected-emoji');
     
     // בדיקה האם הגענו לכאן מקישור של "פתיחה בכרום" או קישור שיתוף
-    if (window.location.search.includes('openLogin=true')) {
+    if (window.location.search.includes('openLogin=true') || window.location.search.includes('playDino=true')) {
         const tryOpenLeaderboard = () => {
             if (window.showLeaderboard && window.getTopDinoScores) {
                 window.showLeaderboard();
@@ -448,11 +448,6 @@ window.showLeaderboard = async function(score, stage, killer) {
             }
             
             let urlObj = new URL(sharePath, window.location.origin);
-            urlObj.searchParams.set('playDino', 'true');
-            if (typeof userConfig !== 'undefined' && userConfig.schoolType && userConfig.targetIntent) {
-                urlObj.searchParams.set('schoolType', userConfig.schoolType);
-                urlObj.searchParams.set('targetIntent', userConfig.targetIntent);
-            }
             const shareUrl = urlObj.toString();
             const shareText = encodeURIComponent(`הגעתי למקום ה-${userRank} בדינוזאור של נטו חופש עם ${userScore.toLocaleString()} נקודות! בואו נראה אתכם עוקפים אותי 🦖 ${shareUrl}`);
             shareContainer.innerHTML = `
