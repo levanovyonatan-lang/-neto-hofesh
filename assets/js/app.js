@@ -1017,6 +1017,7 @@ function resetApp() {
         }
         return;
     }
+    if (window.cleanupDinoGame) window.cleanupDinoGame();
     if (timerInterval) clearInterval(timerInterval);
     userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' }; confettiFired = false;
     document.getElementById('main-screen').style.display = 'none'; document.getElementById('setup-screen').style.display = 'flex';

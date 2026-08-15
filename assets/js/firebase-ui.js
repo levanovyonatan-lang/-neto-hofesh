@@ -14,8 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (hash) {
             window.location.hash = hash;
         }
-    } else if(uiUrlParams.get('openGame') === 'dino') {
-        window.pendingDinoGame = true;
     }
     
     if(uiUrlParams.get('openLogin') === 'true' && window.showLeaderboard) {
@@ -285,16 +283,8 @@ function injectFirebaseUI() {
 window.closeModals = function() {
     document.getElementById('reg-modal').classList.remove('active');
     document.getElementById('lb-modal').classList.remove('active');
-    
-    if (window.pendingDinoGame) {
-        const tryStartDino = () => {
-            if (window.startDinoGame) {
-                window.startDinoGame();
-            }
-            window.pendingDinoGame = false;
-        };
-        tryStartDino();
-    } else if (window.pendingDinoGameOver) {
+
+    if (window.pendingDinoGameOver) {
         const tryGameOver = () => {
             if (window.showDinoGameOver) {
                 window.showDinoGameOver(
@@ -431,9 +421,9 @@ window.showLeaderboard = async function(score, stage, killer) {
         if (shareContainer && userRank && userScore) {
             let sharePath = window.location.pathname;
             
-            if (window.userConfig && window.userConfig.schoolType && window.userConfig.targetIntent) {
-                const intent = window.userConfig.targetIntent;
-                const school = window.userConfig.schoolType;
+            if (typeof userConfig !== 'undefined' && userConfig.schoolType && userConfig.targetIntent) {
+                const intent = userConfig.targetIntent;
+                const school = userConfig.schoolType;
                 let targetSlug = null;
                 
                 if (intent.startsWith('summer')) {
@@ -458,12 +448,6 @@ window.showLeaderboard = async function(score, stage, killer) {
             }
             
             let urlObj = new URL(sharePath, window.location.origin);
-            urlObj.searchParams.set('openLogin', 'true');
-            urlObj.searchParams.set('openGame', 'dino');
-            if (window.userConfig && window.userConfig.schoolType && window.userConfig.targetIntent) {
-                urlObj.searchParams.set('schoolType', window.userConfig.schoolType);
-                urlObj.searchParams.set('targetIntent', window.userConfig.targetIntent);
-            }
             const shareUrl = urlObj.toString();
             const shareText = encodeURIComponent(`הגעתי למקום ה-${userRank} בדינוזאור של נטו חופש עם ${userScore.toLocaleString()} נקודות! בואו נראה אתכם עוקפים אותי 🦖 ${shareUrl}`);
             shareContainer.innerHTML = `
