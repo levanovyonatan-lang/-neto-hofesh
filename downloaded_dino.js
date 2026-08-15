@@ -1077,12 +1077,18 @@
 
         btnContainer.appendChild(playAgainBtn);
 
-        if (isNewRecord && !window.currentUserProfile) {
-            leaderboardBtn.textContent = 'התחבר כדי להיכנס לטבלת השיאים';
-            leaderboardBtn.style.color = '#fbbf24'; // צבע זהב
-            leaderboardBtn.style.fontWeight = 'bold';
+        const urlDemo = new URLSearchParams(window.location.search).get('show_demo') === 'true';
+        if (urlDemo) localStorage.setItem('isDemoMode', 'true');
+        const isDemoMode = urlDemo || localStorage.getItem('isDemoMode') === 'true';
+        
+        if (isDemoMode) {
+            if (isNewRecord && !window.currentUserProfile) {
+                leaderboardBtn.textContent = 'התחבר כדי להיכנס לטבלת השיאים';
+                leaderboardBtn.style.color = '#fbbf24'; // צבע זהב
+                leaderboardBtn.style.fontWeight = 'bold';
+            }
+            btnContainer.appendChild(leaderboardBtn);
         }
-        btnContainer.appendChild(leaderboardBtn);
         title.appendChild(btnContainer);
     }
 
