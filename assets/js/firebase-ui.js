@@ -333,6 +333,7 @@ window.submitRegistration = async function() {
     if(window.completeUserRegistration) {
         await window.completeUserRegistration(window.pendingFirebaseUser, nickname, optIn, emoji);
         if (window.trackEvent) window.trackEvent('user_registration');
+        if (optIn && window.trackEvent) window.trackEvent('newsletter_opt_in');
     }
     
     closeModals();
