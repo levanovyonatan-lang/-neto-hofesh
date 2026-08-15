@@ -79,9 +79,9 @@ function injectFirebaseUI() {
             display: flex; justify-content: space-between; padding: 10px 15px;
             border-bottom: 1px solid #f1f5f9; align-items: center;
         }
-        .leaderboard-item:nth-child(1) { background: #fef08a; font-weight: bold; border-radius: 8px; }
-        .leaderboard-item:nth-child(2) { background: #e2e8f0; border-radius: 8px; }
-        .leaderboard-item:nth-child(3) { background: #fed7aa; border-radius: 8px; }
+        .leaderboard-item:nth-child(1) { background: linear-gradient(135deg, #fef08a 0%, #fde047 100%); font-weight: bold; border-radius: 8px; border: 1px solid #eab308; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.35); }
+        .leaderboard-item:nth-child(2) { background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%); font-weight: bold; border-radius: 8px; border: 1px solid #94a3b8; }
+        .leaderboard-item:nth-child(3) { background: linear-gradient(135deg, #ffedd5 0%, #fdba74 100%); font-weight: bold; border-radius: 8px; border: 1px solid #f97316; }
         .lb-rank { font-weight: bold; color: #64748b; width: 25px; }
         .lb-emoji { font-size: 20px; width: 30px; text-align: center; }
         .lb-name { flex-grow: 1; font-weight: 500; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -138,7 +138,7 @@ function injectFirebaseUI() {
 
     let authHTML = `
         <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
-            <p style="font-size: 13px; color: #64748b; margin-bottom: 10px; font-weight: bold;">התחבר בשביל לשמור על השיא שלך או להיכנס לטבלה:</p>
+            <p style="font-size: 15px; color: #4f46e5; margin-bottom: 12px; font-weight: 800; text-align: center;">התחבר בשביל להיכנס לטבלה</p>
     `;
 
     if (!showEmailAuth) {
@@ -249,7 +249,7 @@ function injectFirebaseUI() {
         "🧛", "🧟", "🧝", "🦈", "🐊", "🐍", "🐢", "🦥", "🦝", "🦩",
         "🌮", "🍣", "🥩", "🍉", "🍓", "💯", "💸", "🔮", "🧿", "🎭",
         "🪀", "🛹", "🏍️", "🚜", "🚽", "☠️", "🤘", "✌️", "👊", "💪", 
-        "🧠", "👀", "👅", "🧊", "🇮🇱", "🇺🇸"
+        "🧠", "👀", "👅", "🧊", "🇮🇱", "🇩🇰", "🇺🇸", "🇬🇧", "🇫🇷", "🇩🇪", "🇪🇸", "🇯🇵", "🇧🇷"
     ];
     
     window.renderEmojiGrid = function(containerId, inputId) {
