@@ -1078,7 +1078,7 @@
         btnContainer.appendChild(playAgainBtn);
 
         if (isNewRecord && !window.currentUserProfile) {
-            leaderboardBtn.textContent = 'התחבר כדי להיכנס לטבלת השיאים';
+            leaderboardBtn.textContent = 'התחבר בשביל להיכנס לטבלה';
             leaderboardBtn.style.color = '#fbbf24'; // צבע זהב
             leaderboardBtn.style.fontWeight = 'bold';
         }
