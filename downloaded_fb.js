@@ -454,7 +454,7 @@ window.showLeaderboard = async function(score, stage, killer) {
             const shareUrl = urlObj.toString();
             const shareText = encodeURIComponent(`הגעתי למקום ה-${userRank} בדינוזאור של נטו חופש עם ${userScore.toLocaleString()} נקודות! בואו נראה אתכם עוקפים אותי 🦖 ${shareUrl}`);
             shareContainer.innerHTML = `
-                <a href="https://api.whatsapp.com/send?text=${shareText}" target="_blank" onclick="if(window.trackEvent) window.trackEvent('share_dino_score');" class="fb-btn" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; background: #25D366; color: white; font-size: 12px; padding: 6px 15px; width: auto; margin-bottom: 0; text-decoration: none; box-shadow: 0 4px 10px rgba(37,211,102,0.3); animation: subtle-pulse 2s infinite;">
+                <a href="https://api.whatsapp.com/send?text=${shareText}" target="_blank" class="fb-btn" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; background: #25D366; color: white; font-size: 12px; padding: 6px 15px; width: auto; margin-bottom: 0; text-decoration: none; box-shadow: 0 4px 10px rgba(37,211,102,0.3); animation: subtle-pulse 2s infinite;">
                     📢 שתפו שיא
                 </a>
             `;
