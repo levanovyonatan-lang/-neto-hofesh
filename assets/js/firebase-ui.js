@@ -3,21 +3,22 @@
 document.addEventListener("DOMContentLoaded", () => {
     injectFirebaseUI();
     
-    if(urlParams.get('openGame') === 'dino_game_over') {
+    const uiUrlParams = new URLSearchParams(window.location.search);
+    if(uiUrlParams.get('openGame') === 'dino_game_over') {
         window.pendingDinoGameOver = {
-            score: urlParams.get('score'),
-            stage: urlParams.get('stage'),
-            killer: urlParams.get('killer')
+            score: uiUrlParams.get('score'),
+            stage: uiUrlParams.get('stage'),
+            killer: uiUrlParams.get('killer')
         };
-        const hash = urlParams.get('hash');
+        const hash = uiUrlParams.get('hash');
         if (hash) {
             window.location.hash = hash;
         }
-    } else if(urlParams.get('openGame') === 'dino') {
+    } else if(uiUrlParams.get('openGame') === 'dino') {
         window.pendingDinoGame = true;
     }
     
-    if(urlParams.get('openLogin') === 'true' && window.showLeaderboard) {
+    if(uiUrlParams.get('openLogin') === 'true' && window.showLeaderboard) {
         window.showLeaderboard();
     }
 });
@@ -289,10 +290,8 @@ window.closeModals = function() {
         const tryStartDino = () => {
             if (window.startDinoGame) {
                 window.startDinoGame();
-                window.pendingDinoGame = false;
-            } else {
-                setTimeout(tryStartDino, 100);
             }
+            window.pendingDinoGame = false;
         };
         tryStartDino();
     } else if (window.pendingDinoGameOver) {
@@ -460,6 +459,7 @@ window.showLeaderboard = async function(score, stage, killer) {
             
             let urlObj = new URL(sharePath, window.location.origin);
             urlObj.searchParams.set('openLogin', 'true');
+            urlObj.searchParams.set('openGame', 'dino');
             if (window.userConfig && window.userConfig.schoolType && window.userConfig.targetIntent) {
                 urlObj.searchParams.set('schoolType', window.userConfig.schoolType);
                 urlObj.searchParams.set('targetIntent', window.userConfig.targetIntent);
