@@ -972,6 +972,17 @@ window.onload = () => {
         }
         setTimeout(() => {
             initApp(urlTarget);
+            
+            if (urlParams.get('playDino') === 'true') {
+                const tryStart = () => {
+                    if (typeof window.startDinoGame === 'function') {
+                        window.startDinoGame();
+                    } else {
+                        setTimeout(tryStart, 100);
+                    }
+                };
+                tryStart();
+            }
         }, 100);
     }
 };
