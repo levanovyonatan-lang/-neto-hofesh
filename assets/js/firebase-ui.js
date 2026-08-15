@@ -79,9 +79,9 @@ function injectFirebaseUI() {
             display: flex; justify-content: space-between; padding: 10px 15px;
             border-bottom: 1px solid #f1f5f9; align-items: center;
         }
-        .leaderboard-item:nth-child(1) { background: linear-gradient(135deg, #fef08a 0%, #fde047 100%); font-weight: bold; border-radius: 8px; border: 1px solid #eab308; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.35); }
-        .leaderboard-item:nth-child(2) { background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%); font-weight: bold; border-radius: 8px; border: 1px solid #94a3b8; }
-        .leaderboard-item:nth-child(3) { background: linear-gradient(135deg, #ffedd5 0%, #fdba74 100%); font-weight: bold; border-radius: 8px; border: 1px solid #f97316; }
+        .leaderboard-item:nth-child(1) { background: #fef08a; font-weight: bold; border-radius: 8px; }
+        .leaderboard-item:nth-child(2) { background: #e2e8f0; font-weight: bold; border-radius: 8px; }
+        .leaderboard-item:nth-child(3) { background: #fed7aa; font-weight: bold; border-radius: 8px; }
         .lb-rank { font-weight: bold; color: #64748b; width: 25px; }
         .lb-emoji { font-size: 20px; width: 30px; text-align: center; }
         .lb-name { flex-grow: 1; font-weight: 500; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -224,7 +224,7 @@ function injectFirebaseUI() {
                 </div>
 
                 <div id="pa-account-actions" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; font-size: 13px;">
-                    <button id="pa-unsubscribe-btn" onclick="if(window.toggleNewsletterOptIn) window.toggleNewsletterOptIn(false)" style="background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline; display: none;">הסר מרשימת התפוצה</button>
+                    <button id="pa-unsubscribe-btn" onclick="if(window.toggleNewsletterOptIn) window.toggleNewsletterOptIn(false)" style="background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline; display: none;">הסר מקבלת עדכונים</button>
                     <button onclick="if(window.handleLogout) window.handleLogout()" style="background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline;">התנתק מהחשבון</button>
                     <button onclick="if(window.handleDeleteAccount) window.handleDeleteAccount()" style="background: none; border: none; color: #ef4444; cursor: pointer; text-decoration: underline; opacity: 0.8;">מחק חשבון</button>
                 </div>
@@ -669,6 +669,11 @@ window.openPersonalArea = () => {
 };
 
 window.toggleNewsletterOptIn = async (isChecked) => {
+    if (!isChecked) {
+        const confirmUnsub = confirm("בטוח שאתה רוצה להסיר את עצמך מקבלת עדכונים, הפתעות ושיאים?");
+        if (!confirmUnsub) return;
+    }
+
     try {
         const user = window.firebaseAuth.currentUser;
         if (!user) return;
@@ -689,7 +694,7 @@ window.toggleNewsletterOptIn = async (isChecked) => {
             if (newsletterBox) newsletterBox.style.display = 'none';
             if (unsubscribeBtn) unsubscribeBtn.style.display = 'inline-block';
         } else {
-            alert("הוסרת מרשימת התפוצה.");
+            alert("הוסרת מקבלת העדכונים.");
             if (newsletterBox) newsletterBox.style.display = 'block';
             if (unsubscribeBtn) unsubscribeBtn.style.display = 'none';
         }
