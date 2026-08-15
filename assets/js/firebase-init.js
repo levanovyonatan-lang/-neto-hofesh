@@ -153,17 +153,19 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // פונקציה להשלמת הרשמה
-window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji = '👤') => {
+window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji = '👤', customGrade = null) => {
     try {
-        // שאיבת שכבת הגיל מתוך האחסון המקומי
-        let userGrade = "לא נבחר";
-        try {
-            const savedState = localStorage.getItem('dailyTipsState');
-            if(savedState) {
-                const parsed = JSON.parse(savedState);
-                if(parsed.selectedCategory) userGrade = parsed.selectedCategory;
-            }
-        } catch(e) {}
+        // שאיבת שכבת הגיל מתוך ה-parameter או מתוך האחסון המקומי
+        let userGrade = customGrade || "לא נבחר";
+        if (!customGrade || customGrade === "לא נבחר") {
+            try {
+                const savedState = localStorage.getItem('dailyTipsState');
+                if(savedState) {
+                    const parsed = JSON.parse(savedState);
+                    if(parsed.selectedCategory) userGrade = parsed.selectedCategory;
+                }
+            } catch(e) {}
+        }
 
         const localDinoScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         

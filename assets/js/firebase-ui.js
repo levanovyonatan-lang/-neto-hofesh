@@ -106,8 +106,14 @@ function injectFirebaseUI() {
                 
                 <div class="fb-subtitle" style="margin-top: 15px;">בחר/י דמות לפרופיל:</div>
                 <div class="emoji-grid" id="reg-emoji-grid"></div>
-                <input type="hidden" id="reg-selected-emoji" value="👤">
-                
+                <div class="fb-subtitle" style="margin-top: 12px; margin-bottom: 4px;">שכבת גיל / מוסד לימודים:</div>
+                <select class="fb-input" id="reg-grade" style="background: #fff; cursor: pointer; padding: 10px; margin-bottom: 12px;">
+                    <option value="יסודי">🏫 יסודי (כיתות א'-ו')</option>
+                    <option value="חטיבת ביניים">🎒 חטיבת ביניים (כיתות ז'-ט')</option>
+                    <option value="תיכון">🎓 תיכון (כיתות י'-י"ב)</option>
+                    <option value="אחר">👨‍🏫 מורה / הורה / אחר</option>
+                </select>
+
                 <div class="fb-checkbox-wrap">
                     <input type="checkbox" id="reg-newsletter">
                     <label for="reg-newsletter">אני מאשר/ת קבלת עדכונים, הפתעות ופרסומות למייל מנטו חופש.</label>
@@ -198,6 +204,7 @@ function injectFirebaseUI() {
                         <div id="pa-nickname-display" style="font-size: 24px; font-weight: 900; color: #3b82f6;"></div>
                         <button onclick="if(window.editNicknameUI) window.editNicknameUI()" style="background: #e2e8f0; color: #334155; border: none; cursor: pointer; font-size: 14px; padding: 5px 10px; border-radius: 6px; font-weight: bold;">ערוך</button>
                     </div>
+                    <div id="pa-grade-display" style="font-size: 13px; color: #64748b; margin-top: 6px;">שכבת גיל: <span id="pa-grade-val" style="font-weight: bold; color: #0f172a;">לא צוין</span></div>
                     
                     <div id="pa-nickname-edit-container" style="display: none; margin-top: 15px;">
                         <input type="text" id="pa-nickname-input" class="auth-input" maxlength="20" placeholder="כינוי חדש...">
@@ -312,6 +319,22 @@ window.closeModals = function() {
 window.showRegistrationCompletionModal = function(user) {
     document.getElementById('lb-modal').classList.remove('active');
     window.pendingFirebaseUser = user;
+
+    // Auto-select grade from localStorage if available
+    try {
+        const savedState = localStorage.getItem('dailyTipsState');
+        if (savedState) {
+            const parsed = JSON.parse(savedState);
+            const gradeSelect = document.getElementById('reg-grade');
+            if (parsed.selectedCategory && gradeSelect) {
+                const cat = parsed.selectedCategory;
+                if (cat.includes('יסודי')) gradeSelect.value = 'יסודי';
+                else if (cat.includes('חטיב')) gradeSelect.value = 'חטיבת ביניים';
+                else if (cat.includes('תיכון')) gradeSelect.value = 'תיכון';
+            }
+        }
+    } catch(e) {}
+
     document.getElementById('reg-modal').classList.add('active');
 }
 
@@ -319,6 +342,8 @@ window.submitRegistration = async function() {
     const nickname = document.getElementById('reg-nickname').value.trim();
     const optIn = document.getElementById('reg-newsletter').checked;
     const emoji = document.getElementById('reg-selected-emoji').value || "👤";
+    const gradeSelect = document.getElementById('reg-grade');
+    const grade = gradeSelect ? gradeSelect.value : "לא צוין";
     
     if(!nickname || nickname.length < 2) {
         alert("אנא הזן כינוי באורך 2 תווים לפחות.");
@@ -339,7 +364,7 @@ window.submitRegistration = async function() {
     btn.disabled = true;
     
     if(window.completeUserRegistration) {
-        await window.completeUserRegistration(window.pendingFirebaseUser, nickname, optIn, emoji);
+        await window.completeUserRegistration(window.pendingFirebaseUser, nickname, optIn, emoji, grade);
         if (window.trackEvent) window.trackEvent('user_registration');
         if (optIn && window.trackEvent) window.trackEvent('newsletter_opt_in');
     }
@@ -620,6 +645,9 @@ window.openPersonalArea = () => {
         
         const emojiDisplay = document.getElementById('pa-emoji-display');
         if (emojiDisplay) emojiDisplay.textContent = window.currentUserProfile.emoji || '👤';
+        
+        const gradeVal = document.getElementById('pa-grade-val');
+        if (gradeVal) gradeVal.textContent = window.currentUserProfile.grade || 'לא צוין';
         
         const editContainer = document.getElementById('pa-nickname-edit-container');
         if (editContainer) editContainer.style.display = 'none';
