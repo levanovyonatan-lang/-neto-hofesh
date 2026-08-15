@@ -1076,25 +1076,7 @@
         };
 
         btnContainer.appendChild(playAgainBtn);
-        
-        const closeBtn = document.createElement('button');
-        closeBtn.textContent = 'חזור לספירה 🔙';
-        closeBtn.style.padding = '4px 8px';
-        closeBtn.style.background = '#4b5563';
-        closeBtn.style.color = '#ffffff';
-        closeBtn.style.border = 'none';
-        closeBtn.style.borderRadius = '8px';
-        closeBtn.style.fontWeight = 'bold';
-        closeBtn.style.cursor = 'pointer';
-        closeBtn.style.fontSize = '12px';
-        closeBtn.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-        closeBtn.style.marginTop = '4px';
-        closeBtn.onclick = (e) => {
-            e.stopPropagation();
-            cleanupGame();
-        };
-        btnContainer.appendChild(closeBtn);
-        
+
         const urlDemo = new URLSearchParams(window.location.search).get('show_demo') === 'true';
         if (urlDemo) localStorage.setItem('isDemoMode', 'true');
         const isDemoMode = urlDemo || localStorage.getItem('isDemoMode') === 'true';
