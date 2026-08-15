@@ -655,6 +655,15 @@ function showMainScreen() {
     const urlParams = new URLSearchParams(window.location.search);
     const forceShowBanner = urlParams.get('show_demo') === 'true';
 
+    // Highlight settings button on demo
+    if (forceShowBanner) {
+        const resetBtn = document.querySelector('.reset-btn');
+        if (resetBtn) {
+            resetBtn.style.backgroundColor = 'gold';
+            resetBtn.style.color = 'black';
+        }
+    }
+
     if (userConfig.schoolType === 'elem') {
         if (vipBtn) vipBtn.style.display = 'none';
         if (vipWrapper) vipWrapper.style.display = 'none';
