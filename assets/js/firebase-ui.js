@@ -204,8 +204,6 @@ function injectFirebaseUI() {
                         <div id="pa-nickname-display" style="font-size: 24px; font-weight: 900; color: #3b82f6;"></div>
                         <button onclick="if(window.editNicknameUI) window.editNicknameUI()" style="background: #e2e8f0; color: #334155; border: none; cursor: pointer; font-size: 14px; padding: 5px 10px; border-radius: 6px; font-weight: bold;">ערוך</button>
                     </div>
-                    <div id="pa-grade-display" style="font-size: 13px; color: #64748b; margin-top: 6px;">שכבת גיל: <span id="pa-grade-val" style="font-weight: bold; color: #0f172a;">לא צוין</span></div>
-                    
                     <div id="pa-nickname-edit-container" style="display: none; margin-top: 15px;">
                         <input type="text" id="pa-nickname-input" class="auth-input" maxlength="20" placeholder="כינוי חדש...">
                         <div style="margin-top: 10px; font-size: 12px; font-weight: bold; color: #64748b;">בחר דמות חדשה:</div>
@@ -217,15 +215,16 @@ function injectFirebaseUI() {
                     <div id="pa-error-msg" style="color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: bold; display: none;"></div>
                 </div>
 
-                <div style="background: #f8fafc; border-radius: 12px; padding: 12px 15px; margin-bottom: 20px; text-align: right;">
+                <div id="pa-newsletter-box" style="background: #f8fafc; border-radius: 12px; padding: 12px 15px; margin-bottom: 20px; text-align: right; display: none;">
                     <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-size: 13px; font-weight: bold; color: #334155;">
                         <span>📧 קבלת עדכונים וחדשות למייל</span>
                         <input type="checkbox" id="pa-newsletter-checkbox" onchange="if(window.toggleNewsletterOptIn) window.toggleNewsletterOptIn(this.checked)" style="width: 18px; height: 18px; cursor: pointer; accent-color: #3b82f6;">
                     </label>
-                    <div id="pa-newsletter-status" style="font-size: 11px; color: #64748b; margin-top: 4px;">אישרת קבלת עדכונים (ניתן לבטל בכל עת)</div>
+                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">אשר לקבלת עדכונים, הפתעות ושיאים למייל</div>
                 </div>
 
-                <div id="pa-account-actions" style="display: flex; justify-content: center; gap: 15px; font-size: 13px;">
+                <div id="pa-account-actions" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; font-size: 13px;">
+                    <button id="pa-unsubscribe-btn" onclick="if(window.toggleNewsletterOptIn) window.toggleNewsletterOptIn(false)" style="background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline; display: none;">הסר מרשימת התפוצה</button>
                     <button onclick="if(window.handleLogout) window.handleLogout()" style="background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline;">התנתק מהחשבון</button>
                     <button onclick="if(window.handleDeleteAccount) window.handleDeleteAccount()" style="background: none; border: none; color: #ef4444; cursor: pointer; text-decoration: underline; opacity: 0.8;">מחק חשבון</button>
                 </div>
@@ -646,33 +645,21 @@ window.openPersonalArea = () => {
         const emojiDisplay = document.getElementById('pa-emoji-display');
         if (emojiDisplay) emojiDisplay.textContent = window.currentUserProfile.emoji || '👤';
         
-        const gradeVal = document.getElementById('pa-grade-val');
-        if (gradeVal) gradeVal.textContent = window.currentUserProfile.grade || 'לא צוין';
-        
-        const editContainer = document.getElementById('pa-nickname-edit-container');
-        if (editContainer) editContainer.style.display = 'none';
-        
-        const errorMsg = document.getElementById('pa-error-msg');
-        if (errorMsg) errorMsg.style.display = 'none';
-        
-        const inputField = document.getElementById('pa-nickname-input');
-        if (inputField) inputField.value = window.currentUserProfile.nickname || '';
-        
-        const emojiField = document.getElementById('pa-selected-emoji');
-        if (emojiField) emojiField.value = window.currentUserProfile.emoji || '👤';
-        if (window.renderEmojiGrid) window.renderEmojiGrid('pa-emoji-grid', 'pa-selected-emoji');
-        
         const accountActions = document.getElementById('pa-account-actions');
         if (accountActions) accountActions.style.display = 'flex';
         
+        const isOptIn = !!window.currentUserProfile.newsletterOptIn;
+        const newsletterBox = document.getElementById('pa-newsletter-box');
+        const unsubscribeBtn = document.getElementById('pa-unsubscribe-btn');
         const newsletterCheckbox = document.getElementById('pa-newsletter-checkbox');
-        const newsletterStatus = document.getElementById('pa-newsletter-status');
-        if (newsletterCheckbox) {
-            const isOptIn = !!window.currentUserProfile.newsletterOptIn;
-            newsletterCheckbox.checked = isOptIn;
-            if (newsletterStatus) {
-                newsletterStatus.textContent = isOptIn ? 'אישרת קבלת עדכונים (ניתן לבטל בכל עת)' : 'לא מאושר קבלת עדכונים למייל';
-            }
+
+        if (isOptIn) {
+            if (newsletterBox) newsletterBox.style.display = 'none';
+            if (unsubscribeBtn) unsubscribeBtn.style.display = 'inline-block';
+        } else {
+            if (newsletterBox) newsletterBox.style.display = 'block';
+            if (newsletterCheckbox) newsletterCheckbox.checked = false;
+            if (unsubscribeBtn) unsubscribeBtn.style.display = 'none';
         }
 
         modal.classList.add('active');
@@ -694,9 +681,17 @@ window.toggleNewsletterOptIn = async (isChecked) => {
             window.currentUserProfile.newsletterOptIn = isChecked;
         }
         
-        const statusEl = document.getElementById('pa-newsletter-status');
-        if (statusEl) {
-            statusEl.textContent = isChecked ? 'אישרת קבלת עדכונים (ניתן לבטל בכל עת)' : 'לא מאושר קבלת עדכונים למייל';
+        const newsletterBox = document.getElementById('pa-newsletter-box');
+        const unsubscribeBtn = document.getElementById('pa-unsubscribe-btn');
+        
+        if (isChecked) {
+            alert("נרשמת בהצלחה לקבלת עדכונים וחדשות למייל! 🎉");
+            if (newsletterBox) newsletterBox.style.display = 'none';
+            if (unsubscribeBtn) unsubscribeBtn.style.display = 'inline-block';
+        } else {
+            alert("הוסרת מרשימת התפוצה.");
+            if (newsletterBox) newsletterBox.style.display = 'block';
+            if (unsubscribeBtn) unsubscribeBtn.style.display = 'none';
         }
     } catch (error) {
         console.error("Error updating newsletter preference:", error);
