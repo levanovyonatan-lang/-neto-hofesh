@@ -106,13 +106,6 @@ function injectFirebaseUI() {
                 
                 <div class="fb-subtitle" style="margin-top: 15px;">בחר/י דמות לפרופיל:</div>
                 <div class="emoji-grid" id="reg-emoji-grid"></div>
-                <div class="fb-subtitle" style="margin-top: 12px; margin-bottom: 4px;">שכבת גיל / מוסד לימודים:</div>
-                <select class="fb-input" id="reg-grade" style="background: #fff; cursor: pointer; padding: 10px; margin-bottom: 12px;">
-                    <option value="יסודי">🏫 יסודי (כיתות א'-ו')</option>
-                    <option value="חטיבת ביניים">🎒 חטיבת ביניים (כיתות ז'-ט')</option>
-                    <option value="תיכון">🎓 תיכון (כיתות י'-י"ב)</option>
-                    <option value="אחר">👨‍🏫 מורה / הורה / אחר</option>
-                </select>
 
                 <div class="fb-checkbox-wrap">
                     <input type="checkbox" id="reg-newsletter">
@@ -341,8 +334,13 @@ window.submitRegistration = async function() {
     const nickname = document.getElementById('reg-nickname').value.trim();
     const optIn = document.getElementById('reg-newsletter').checked;
     const emoji = document.getElementById('reg-selected-emoji').value || "👤";
-    const gradeSelect = document.getElementById('reg-grade');
-    const grade = gradeSelect ? gradeSelect.value : "לא צוין";
+    
+    let grade = "לא צוין";
+    if (window.userConfig && window.userConfig.schoolType) {
+        if (window.userConfig.schoolType === 'elem') grade = "יסודי";
+        else if (window.userConfig.schoolType === 'middle') grade = "חטיבת ביניים";
+        else if (window.userConfig.schoolType === 'high') grade = "תיכון";
+    }
     
     if(!nickname || nickname.length < 2) {
         alert("אנא הזן כינוי באורך 2 תווים לפחות.");
