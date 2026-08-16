@@ -106,6 +106,7 @@ function injectFirebaseUI() {
                 
                 <div class="fb-subtitle" style="margin-top: 15px;">בחר/י דמות לפרופיל:</div>
                 <div class="emoji-grid" id="reg-emoji-grid"></div>
+                <input type="hidden" id="reg-selected-emoji" value="👤">
 
                 <div class="fb-checkbox-wrap">
                     <input type="checkbox" id="reg-newsletter">
