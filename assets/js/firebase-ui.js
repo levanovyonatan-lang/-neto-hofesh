@@ -116,7 +116,7 @@ function injectFirebaseUI() {
 
                 <div class="fb-checkbox-wrap">
                     <input type="checkbox" id="reg-newsletter">
-                    <label for="reg-newsletter">אני מאשר/ת קבלת עדכונים, הפתעות ופרסומות למייל מנטו חופש.</label>
+                    <label for="reg-newsletter">אני מאשר/ת קבלת עדכונים והפתעות למייל מנטו חופש.</label>
                 </div>
                 
                 <button class="fb-btn" onclick="submitRegistration()">שמור כינוי וסיימנו</button>
