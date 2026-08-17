@@ -517,6 +517,12 @@ window.updateLeaderboardUI = function() {
             userSec.style.display = 'block';
             greeting.textContent = "היי " + window.currentUserProfile.nickname + "! השיא שלך: " + (window.currentUserProfile.dinoHighScore || 0);
         }
+        
+        // Remove blur immediately from the list
+        document.querySelectorAll('.lb-blurred').forEach(item => {
+            item.classList.remove('lb-blurred');
+        });
+        
     } else {
         if(authSec) authSec.style.display = 'block';
         if(userSec) userSec.style.display = 'none';
