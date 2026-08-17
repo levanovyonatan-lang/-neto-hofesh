@@ -98,6 +98,7 @@ function injectFirebaseUI() {
             background: linear-gradient(to top, rgba(255,255,255,1) 60%, rgba(255,255,255,0.8) 80%, rgba(255,255,255,0));
             padding: 40px 20px 20px 20px; z-index: 10;
         }
+    `;
     document.head.appendChild(style);
 
     // מודל השלמת הרשמה
