@@ -92,7 +92,12 @@ function injectFirebaseUI() {
         .emoji-btn { background: #f1f5f9; border: 2px solid transparent; border-radius: 8px; font-size: 24px; padding: 5px; cursor: pointer; transition: 0.2s; }
         .emoji-btn:hover { background: #e2e8f0; transform: scale(1.1); }
         .emoji-btn.selected { border-color: #3b82f6; background: #bfdbfe; transform: scale(1.1); }
-    `;
+        .lb-blurred { filter: blur(6px); opacity: 0.6; pointer-events: none; user-select: none; }
+        .lb-overlay-auth {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(255,255,255,1) 60%, rgba(255,255,255,0.8) 80%, rgba(255,255,255,0));
+            padding: 40px 20px 20px 20px; z-index: 10;
+        }
     document.head.appendChild(style);
 
     // מודל השלמת הרשמה
@@ -131,8 +136,9 @@ function injectFirebaseUI() {
     const showEmailAuth = (isStandalone && isIOS) || isSafari;
 
     let authHTML = `
-        <div id="lb-auth-section" style="border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
-            <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">התחבר בשביל להיכנס לטבלה</p>
+        <div id="lb-auth-section" class="lb-overlay-auth">
+            <div style="font-size: 35px; text-align: center; margin-bottom: 5px;">🔒</div>
+            <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">התחבר כדי לראות את כל הרשימה ולהכניס את השיא שלך!</p>
     `;
 
     if (!showEmailAuth) {
@@ -164,11 +170,12 @@ function injectFirebaseUI() {
             <div class="fb-modal">
                 <div class="fb-title">🏆 טבלת השיאים 🏆</div>
                 
-                <ul class="leaderboard-list" id="lb-list">
-                    <div style="text-align: center; padding: 20px; color: #94a3b8;">טוען נתונים...</div>
-                </ul>
-                
-                ${authHTML}
+                <div style="position: relative;">
+                    <ul class="leaderboard-list" id="lb-list">
+                        <div style="text-align: center; padding: 20px; color: #94a3b8;">טוען נתונים...</div>
+                    </ul>
+                    ${authHTML}
+                </div>
                 
                 <div id="lb-user-section" style="display: none; border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
                     <p style="font-size: 14px; font-weight: bold; color: #10b981;" id="lb-user-greeting">היי כינוי!</p>
@@ -429,11 +436,13 @@ window.showLeaderboard = async function(score, stage, killer) {
                 userScore = s.score;
             }
             
+            const isBlurred = !currentUid && index >= 3;
+            const blurClass = isBlurred ? 'lb-blurred' : '';
             const liStyle = isCurrentUser ? 'border: 2px solid #34d399; background: rgba(52, 211, 153, 0.1);' : '';
             const liId = isCurrentUser ? 'id="current-user-lb-row"' : '';
             
             listEl.innerHTML += `
-                <li class="leaderboard-item" ${liId} style="${liStyle}">
+                <li class="leaderboard-item ${blurClass}" ${liId} style="${liStyle}">
                     <span class="lb-rank">${rankStr}</span>
                     <span class="lb-emoji">${s.emoji || '👤'}</span>
                     <span class="lb-name">${s.nickname || "אנונימי"}</span>
