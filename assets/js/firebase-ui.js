@@ -399,7 +399,8 @@ window.showLeaderboard = async function(score, stage, killer) {
             return;
         }
         
-        const currentUid = (window.firebaseAuth && window.firebaseAuth.currentUser) ? window.firebaseAuth.currentUser.uid : null;
+        const localUid = localStorage.getItem('local_uid');
+        const currentUid = (window.firebaseAuth && window.firebaseAuth.currentUser) ? window.firebaseAuth.currentUser.uid : localUid;
         let userRank = null;
         let userScore = null;
         
@@ -416,7 +417,7 @@ window.showLeaderboard = async function(score, stage, killer) {
             }
             
             const blurClass = '';
-            const liStyle = isCurrentUser ? 'border: 2px solid #34d399; background: rgba(52, 211, 153, 0.1);' : '';
+            const liStyle = isCurrentUser ? 'border: 2px solid #facc15; background: rgba(250, 204, 21, 0.1);' : '';
             const liId = isCurrentUser ? 'id="current-user-lb-row"' : '';
             
             listEl.innerHTML += `
