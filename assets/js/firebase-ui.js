@@ -781,15 +781,24 @@ window.saveNewNickname = async () => {
     }
     
     try {
-        const user = window.firebaseAuth.currentUser;
-        if (!user) return;
+        const user = window.firebaseAuth ? window.firebaseAuth.currentUser : null;
+        const localUid = localStorage.getItem('local_uid');
+        
+        if (!user && !localUid) return;
+        
+        const uidToUpdate = user ? user.uid : localUid;
+        
+        if (!user && localUid) {
+            localStorage.setItem('local_nickname', newName);
+            localStorage.setItem('local_emoji', newEmoji);
+        }
         
         const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
         
-        const userDocRef = doc(window.firebaseDb, "users", user.uid);
+        const userDocRef = doc(window.firebaseDb, "users", uidToUpdate);
         await setDoc(userDocRef, { nickname: newName, emoji: newEmoji }, { merge: true });
         
-        const scoreDocRef = doc(window.firebaseDb, "dino_scores", user.uid);
+        const scoreDocRef = doc(window.firebaseDb, "dino_scores", uidToUpdate);
         await setDoc(scoreDocRef, { nickname: newName, emoji: newEmoji }, { merge: true });
         
         if (window.currentUserProfile) {
