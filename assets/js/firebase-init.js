@@ -104,20 +104,9 @@ onAuthStateChanged(auth, async (user) => {
             const userDocSnap = await getDoc(userDocRef);
             
             if (!userDocSnap.exists()) {
-                // משתמש חדש שעדיין לא בחר כינוי
+                // משתמש גוגל שאין לו פרופיל. נתנתק אותו כדי שיעבור להזדהות המקומית החדשה.
                 window.currentUserProfile = null;
-                window.pendingFirebaseUser = user;
-                
-                // תמיד נציג את השלמת ההרשמה אם הם התחברו לגוגל אבל עוד לא בחרו כינוי
-                // גם אם הם חזרו מדף התקנון והדף רוענן
-                const tryShowModal = () => {
-                    if (window.showRegistrationCompletionModal) {
-                        window.showRegistrationCompletionModal(user);
-                    } else {
-                        setTimeout(tryShowModal, 100);
-                    }
-                };
-                tryShowModal();
+                signOut(auth).catch(e => console.error(e));
             } else {
                 // משתמש קיים - נרענן את ה-UI או נשמור את הנתונים בזכרון
                 window.currentUserProfile = userDocSnap.data();
