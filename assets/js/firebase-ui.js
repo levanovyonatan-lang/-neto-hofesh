@@ -205,6 +205,8 @@ function injectFirebaseUI() {
                     
                     <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="fb-btn" style="padding: 12px 20px; font-size: 18px; width: 100%; max-width: 250px;">שמור שינויים</button>
                     
+                    <button onclick="if(window.deleteUserAccount) window.deleteUserAccount()" style="margin-top: 15px; background: none; border: none; color: #ef4444; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: underline;">מחק משתמש לצמיתות</button>
+                    
                     <div id="pa-error-msg" style="color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: bold; display: none;"></div>
                 </div>
             </div>
@@ -831,5 +833,44 @@ window.saveNewNickname = async () => {
         console.error("Error updating nickname:", error);
         errorMsg.textContent = "שגיאה בשמירת הכינוי.";
         errorMsg.style.display = 'block';
+    }
+};
+
+window.deleteUserAccount = async () => {
+    if (!confirm("האם אתה בטוח שברצונך למחוק את המשתמש שלך לצמיתות? פעולה זו תמחוק את הכינוי והשיא שלך מהטבלה ולא ניתנת לביטול.")) {
+        return;
+    }
+    
+    try {
+        const user = window.firebaseAuth ? window.firebaseAuth.currentUser : null;
+        const localUid = localStorage.getItem('local_uid');
+        const uidToDelete = user ? user.uid : localUid;
+        
+        if (!uidToDelete) return;
+        
+        const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
+        
+        // Delete from Firestore
+        await deleteDoc(doc(window.firebaseDb, "users", uidToDelete));
+        await deleteDoc(doc(window.firebaseDb, "dino_scores", uidToDelete));
+        
+        // Clear local storage
+        localStorage.removeItem('local_uid');
+        localStorage.removeItem('local_nickname');
+        localStorage.removeItem('local_emoji');
+        localStorage.removeItem('dinoHighScore');
+        
+        window.currentUserProfile = null;
+        window.skippedRegistration = false;
+        
+        alert("המשתמש נמחק בהצלחה.");
+        
+        // Close modal and reload page to reset state
+        if (window.closePersonalArea) window.closePersonalArea();
+        window.location.reload();
+        
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        alert("אירעה שגיאה בעת מחיקת המשתמש.");
     }
 };
