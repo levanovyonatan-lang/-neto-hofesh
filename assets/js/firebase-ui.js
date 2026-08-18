@@ -34,7 +34,7 @@ function injectFirebaseUI() {
         }
         .fb-modal-overlay.active { opacity: 1; pointer-events: all; }
         .fb-modal {
-            background: #ffffff; border-radius: 20px; width: 90%; max-width: 400px;
+            background: #ffffff; border-radius: 20px; width: 95%; max-width: 500px;
             padding: 30px 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             text-align: center; position: relative; transform: scale(0.9); transition: 0.3s ease;
         }
@@ -73,7 +73,7 @@ function injectFirebaseUI() {
         
         .leaderboard-list {
             list-style: none; padding: 0; margin: 0 0 20px 0; text-align: right;
-            max-height: 300px; overflow-y: auto;
+            max-height: 400px; overflow-y: auto;
         }
         .leaderboard-item {
             display: flex; justify-content: space-between; padding: 10px 15px;
@@ -86,10 +86,10 @@ function injectFirebaseUI() {
         .lb-emoji { font-size: 20px; width: 30px; text-align: center; }
         .lb-name { flex-grow: 1; font-weight: 500; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .lb-score { font-weight: bold; color: #0f172a; }
-        .emoji-grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 10px; margin-bottom: 15px; max-height: 200px; overflow-y: auto; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
+        .emoji-grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 10px; margin-bottom: 15px; max-height: 250px; overflow-y: auto; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
         .emoji-grid::-webkit-scrollbar { width: 6px; }
         .emoji-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .emoji-btn { background: #f1f5f9; border: 2px solid transparent; border-radius: 8px; font-size: 32px; padding: 8px; cursor: pointer; transition: 0.2s; }
+        .emoji-btn { background: #f1f5f9; border: 2px solid transparent; border-radius: 8px; font-size: 24px; padding: 5px; cursor: pointer; transition: 0.2s; }
         .emoji-btn:hover { background: #e2e8f0; transform: scale(1.1); }
         .emoji-btn.selected { border-color: #3b82f6; background: #bfdbfe; transform: scale(1.1); }
         .lb-blurred { filter: blur(6px); opacity: 0.6; pointer-events: none; user-select: none; }
@@ -142,7 +142,7 @@ function injectFirebaseUI() {
             
             <input type="text" id="local-nickname-input" class="fb-input" placeholder="בחר כינוי (לדוגמה: אלוף_ישראל)..." maxlength="15" style="margin-bottom: 15px; width: 100%; max-width: 250px; text-align: center; font-size: 16px;">
             
-            <div class="emoji-grid" id="local-emoji-grid" style="margin-bottom: 20px; width: 100%; max-width: 320px; justify-content: center;"></div>
+            <div class="emoji-grid" id="local-emoji-grid" style="margin-bottom: 20px; width: 100%; max-width: 450px; justify-content: center;"></div>
             <input type="hidden" id="local-selected-emoji" value="👤">
             
             <button class="fb-btn" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="padding: 12px 20px; font-size: 18px; margin-bottom: 15px; width: 100%; max-width: 250px;">
