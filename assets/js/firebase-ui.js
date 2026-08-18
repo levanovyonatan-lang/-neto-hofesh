@@ -540,6 +540,14 @@ window.updateLeaderboardUI = function() {
     }
 }
 
+window.handleAnonymousLogin = function() {
+    if(window.firebaseAnonymousSignIn) {
+        window.firebaseAnonymousSignIn().catch(e => {
+            console.error("Login failed in UI", e);
+        });
+    }
+}
+
 window.handleGoogleLogin = function() {
     if(window.firebaseSignIn) {
         window.firebaseSignIn().catch(e => {
