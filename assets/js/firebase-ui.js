@@ -130,37 +130,48 @@ function injectFirebaseUI() {
     const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
     
     // בדוק אם זה דפדפן ספארי אמיתי (שולל כרום ואפליקציית גוגל)
-    const isChromeOrGoogle = /Chrome|CriOS|GSA/i.test(ua);
-    const isSafari = /Safari/i.test(ua) && !isChromeOrGoogle && !/Android/i.test(ua);
+    const showEmailAuth = true;
+    const isDemo = window.location.search.includes('show_demo=true');
+
+    let authHTML = '';
     
-    // הצג התחברות באימייל רק אם מדובר באפליקציית מסך בית באייפון (PWA) או בדפדפן ספארי
-    const showEmailAuth = (isStandalone && isIOS) || isSafari;
-
-    let authHTML = `
-        <div id="lb-auth-section" class="lb-overlay-auth">
-            <div style="font-size: 35px; text-align: center; margin-bottom: 5px;">🔒</div>
-            <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">התחבר בחינם כדי לראות את כל הרשימה ולהכניס את השיא שלך!</p>
-    `;
-
-    if (!showEmailAuth) {
-        authHTML += `
-            <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 15px;">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
-                התחבר עם Google
-            </button>
+    if (isDemo) {
+        authHTML = `
+            <div id="lb-auth-section" class="lb-overlay-auth">
+                <div style="font-size: 35px; text-align: center; margin-bottom: 5px;">🚀</div>
+                <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">היכנס בחינם כדי לראות את כל הרשימה ולהכניס את השיא שלך!</p>
+                <button class="fb-btn" onclick="handleAnonymousLogin()" style="margin-bottom: 15px; font-size: 18px; padding: 12px 0;">
+                    היכנס לטבלת השיאים
+                </button>
+            </div>
         `;
     } else {
-        authHTML += `
-            <form onsubmit="handleEmailLogin(event)">
-                <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="off" required>
-                <input type="text" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="off" onfocus="this.type='password'" required>
-                <div style="text-align: right; margin-bottom: 15px; padding-right: 5px;">
-                    <a href="javascript:void(0)" onclick="handleForgotPassword()" style="color: #3b82f6; font-size: 12px; text-decoration: none;">שכחת סיסמה?</a>
-                </div>
-                <button type="submit" class="fb-btn" id="lb-email-btn" style="font-size: 16px; padding: 10px 0;">התחבר / הירשם</button>
-                <div id="lb-email-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none;"></div>
-            </form>
+        authHTML = `
+            <div id="lb-auth-section" class="lb-overlay-auth">
+                <div style="font-size: 35px; text-align: center; margin-bottom: 5px;">🔒</div>
+                <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">התחבר בחינם כדי לראות את כל הרשימה ולהכניס את השיא שלך!</p>
         `;
+
+        if (!showEmailAuth) {
+            authHTML += `
+                <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 15px;">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
+                    התחבר עם Google
+                </button>
+            `;
+        } else {
+            authHTML += `
+                <form onsubmit="handleEmailLogin(event)">
+                    <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="off" required>
+                    <input type="text" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="off" onfocus="this.type='password'" required>
+                    <div style="text-align: right; margin-bottom: 15px; padding-right: 5px;">
+                        <a href="javascript:void(0)" onclick="handleForgotPassword()" style="color: #3b82f6; font-size: 12px; text-decoration: none;">שכחת סיסמה?</a>
+                    </div>
+                    <button type="submit" class="fb-btn" id="lb-email-btn" style="font-size: 16px; padding: 10px 0;">התחבר / הירשם</button>
+                    <div id="lb-email-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none;"></div>
+                </form>
+            `;
+        }
     }
 
     authHTML += `</div>`;
