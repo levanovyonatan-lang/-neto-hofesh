@@ -809,14 +809,17 @@ window.saveNewNickname = async () => {
         // Hide error message on success
         errorMsg.style.display = 'none';
         
-        // Show temporary success message
+        // Show temporary success message and close modal
         const editBtn = document.querySelector('#personal-area-modal button.fb-btn');
         if (editBtn) {
             const originalBtnText = editBtn.textContent;
             editBtn.textContent = "נשמר בהצלחה! ✔️";
             setTimeout(() => {
                 editBtn.textContent = originalBtnText;
-            }, 2000);
+                if (window.closePersonalArea) window.closePersonalArea();
+            }, 1000);
+        } else {
+            if (window.closePersonalArea) window.closePersonalArea();
         }
         
         if (window.updateLeaderboardUI) window.updateLeaderboardUI();
