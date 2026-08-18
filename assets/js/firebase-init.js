@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, deleteUser, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, setPersistence, browserLocalPersistence, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, deleteUser, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
 
@@ -31,18 +31,22 @@ const provider = new GoogleAuthProvider();
 // Expose Firebase functions globally for the app
 window.firebaseAuth = auth;
 window.firebaseDb = db;
-window.firebaseAnonymousSignIn = async () => {
+window.firebaseSignIn = () => {
     window.isLoginActionActive = true;
-    try {
-        const userCredential = await signInAnonymously(auth);
+    
+    // תמיד ננסה קודם פופ-אפ. העברה לדף אחר (Redirect) נכשלת לעיתים קרובות באייפון בגלל הגדרות פרטיות.
+    
+    return signInWithPopup(auth, provider).catch((error) => {
+        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+            console.log("Popup blocked, falling back to redirect");
+            return signInWithRedirect(auth, provider);
+        }
+        
         window.isLoginActionActive = false;
-        return userCredential;
-    } catch (error) {
-        window.isLoginActionActive = false;
-        console.error("Anonymous login failed", error);
+        console.error("Login failed", error);
         alert("התחברות נכשלה. אנא נסה שוב.");
         throw error;
-    }
+    });
 };
 
 window.firebaseEmailAuth = async (email, password) => {

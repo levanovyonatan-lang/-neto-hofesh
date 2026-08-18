@@ -138,13 +138,32 @@ function injectFirebaseUI() {
 
     let authHTML = `
         <div id="lb-auth-section" class="lb-overlay-auth">
-            <div style="font-size: 35px; text-align: center; margin-bottom: 5px;">🚀</div>
-            <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">היכנס בחינם כדי לראות את כל הרשימה ולהכניס את השיא שלך!</p>
-            <button class="fb-btn" onclick="handleAnonymousLogin()" style="margin-bottom: 15px; font-size: 18px; padding: 12px 0;">
-                היכנס לטבלת השיאים
-            </button>
-        </div>
+            <div style="font-size: 35px; text-align: center; margin-bottom: 5px;">🔒</div>
+            <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">התחבר בחינם כדי לראות את כל הרשימה ולהכניס את השיא שלך!</p>
     `;
+
+    if (!showEmailAuth) {
+        authHTML += `
+            <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 15px;">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
+                התחבר עם Google
+            </button>
+        `;
+    } else {
+        authHTML += `
+            <form onsubmit="handleEmailLogin(event)">
+                <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="off" required>
+                <input type="text" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="off" onfocus="this.type='password'" required>
+                <div style="text-align: right; margin-bottom: 15px; padding-right: 5px;">
+                    <a href="javascript:void(0)" onclick="handleForgotPassword()" style="color: #3b82f6; font-size: 12px; text-decoration: none;">שכחת סיסמה?</a>
+                </div>
+                <button type="submit" class="fb-btn" id="lb-email-btn" style="font-size: 16px; padding: 10px 0;">התחבר / הירשם</button>
+                <div id="lb-email-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none;"></div>
+            </form>
+        `;
+    }
+
+    authHTML += `</div>`;
 
     // מודל טבלת שיאים והתחברות
     const lbModalHTML = `
@@ -510,11 +529,86 @@ window.updateLeaderboardUI = function() {
     }
 }
 
-window.handleAnonymousLogin = function() {
-    if(window.firebaseAnonymousSignIn) {
-        window.firebaseAnonymousSignIn().catch(e => {
+window.handleGoogleLogin = function() {
+    if(window.firebaseSignIn) {
+        window.firebaseSignIn().catch(e => {
             console.error("Login failed in UI", e);
         });
+    }
+}
+
+window.handleEmailLogin = async function(event) {
+    if (event) event.preventDefault();
+    const emailField = document.getElementById('lb-email');
+    const passwordField = document.getElementById('lb-password');
+    const email = emailField.value.trim();
+    const password = passwordField.value;
+    const errorEl = document.getElementById('lb-email-error');
+    
+    // Blur fields to help iOS Safari detect the end of typing and trigger the Save Password prompt
+    emailField.blur();
+    passwordField.blur();
+    
+    if(!email || !password || password.length < 6) {
+        errorEl.textContent = "אנא הזן אימייל תקין וסיסמה של 6 תווים לפחות.";
+        errorEl.style.display = "block";
+        return;
+    }
+    
+    const btn = document.getElementById('lb-email-btn');
+    const originalText = btn.textContent;
+    btn.textContent = "מתחבר...";
+    btn.disabled = true;
+    errorEl.style.display = "none";
+    
+    if(window.firebaseEmailAuth) {
+        try {
+            await window.firebaseEmailAuth(email, password);
+            // On success, onAuthStateChanged in init.js will handle the UI update
+        } catch(error) {
+            console.error("Email auth failed:", error);
+            errorEl.style.display = "block";
+            if (error.code === 'auth/email-already-in-use') {
+                errorEl.textContent = "האימייל כבר בשימוש עם חשבון אחר, אולי בחרת סיסמה שגויה?";
+            } else if (error.code === 'auth/invalid-email') {
+                errorEl.textContent = "כתובת האימייל אינה תקינה.";
+            } else if (error.code === 'auth/weak-password') {
+                errorEl.textContent = "הסיסמה חלשה מדי, בחר לפחות 6 תווים.";
+            } else {
+                errorEl.textContent = "שגיאה בהתחברות: נסה שוב";
+            }
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    }
+}
+
+window.handleForgotPassword = async function() {
+    const email = document.getElementById('lb-email').value.trim();
+    const errorEl = document.getElementById('lb-email-error');
+    
+    if(!email) {
+        errorEl.textContent = "אנא הזן את האימייל שלך למעלה ואז לחץ 'שכחת סיסמה?'.";
+        errorEl.style.display = "block";
+        return;
+    }
+    
+    errorEl.style.display = "none";
+    if(window.firebaseResetPassword) {
+        try {
+            await window.firebaseResetPassword(email);
+            alert("נשלח אליך למייל קישור לאיפוס הסיסמה! בדוק את תיבת הדואר הנכנס (וגם בתיקיית הספאם).");
+        } catch(error) {
+            console.error("Password reset failed:", error);
+            errorEl.style.display = "block";
+            if (error.code === 'auth/user-not-found') {
+                errorEl.textContent = "לא נמצא משתמש עם האימייל הזה.";
+            } else if (error.code === 'auth/invalid-email') {
+                errorEl.textContent = "כתובת האימייל אינה תקינה.";
+            } else {
+                errorEl.textContent = "שגיאה בשליחת קישור האיפוס: נסה שוב";
+            }
+        }
     }
 }
 
