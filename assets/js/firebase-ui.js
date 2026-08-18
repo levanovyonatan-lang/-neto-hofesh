@@ -213,19 +213,6 @@ function injectFirebaseUI() {
                     <div id="pa-error-msg" style="color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: bold; display: none;"></div>
                 </div>
 
-                <div id="pa-newsletter-box" style="background: #f8fafc; border-radius: 12px; padding: 12px 15px; margin-bottom: 20px; text-align: right; display: none;">
-                    <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-size: 13px; font-weight: bold; color: #334155;">
-                        <span>📧 קבלת עדכונים וחדשות למייל</span>
-                        <input type="checkbox" id="pa-newsletter-checkbox" onchange="if(window.toggleNewsletterOptIn) window.toggleNewsletterOptIn(this.checked)" style="width: 18px; height: 18px; cursor: pointer; accent-color: #3b82f6;">
-                    </label>
-                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">אשר לקבלת עדכונים, הפתעות ושיאים למייל</div>
-                </div>
-
-                <div id="pa-account-actions" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; font-size: 13px;">
-                    <button id="pa-unsubscribe-btn" onclick="if(window.toggleNewsletterOptIn) window.toggleNewsletterOptIn(false)" style="background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline; display: none;">הסר מקבלת עדכונים</button>
-                    <button onclick="if(window.handleLogout) window.handleLogout()" style="background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline;">התנתק מהחשבון</button>
-                    <button onclick="if(window.handleDeleteAccount) window.handleDeleteAccount()" style="background: none; border: none; color: #ef4444; cursor: pointer; text-decoration: underline; opacity: 0.8;">מחק חשבון</button>
-                </div>
             </div>
         </div>
     `;
