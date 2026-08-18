@@ -148,7 +148,7 @@ function injectFirebaseUI() {
             <button class="fb-btn" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="padding: 12px 20px; font-size: 18px; margin-bottom: 15px; width: 100%; max-width: 250px;">
                 היכנס לטבלה 🚀
             </button>
-            <button onclick="window.skippedRegistration=true; document.getElementById('lb-auth-section').style.display='none';" style="background: none; border: none; color: #94a3b8; font-size: 15px; text-decoration: underline; cursor: pointer; padding: 5px; font-weight: bold;">
+            <button onclick="window.skippedRegistration=true; if(window.updateLeaderboardUI) window.updateLeaderboardUI();" style="background: none; border: none; color: #94a3b8; font-size: 15px; text-decoration: underline; cursor: pointer; padding: 5px; font-weight: bold;">
                 דלג וצפה בטבלה
             </button>
             
@@ -174,6 +174,11 @@ function injectFirebaseUI() {
                         <div id="lb-share-container" style="display: none;"></div>
                         <button class="fb-btn" style="background: #3b82f6; color: white; font-size: 12px; padding: 6px 15px; width: auto; margin-bottom: 0;" onclick="if(window.openPersonalArea) { closeModals(); window.openPersonalArea(); }">👤 אזור אישי</button>
                     </div>
+                </div>
+                
+                <div id="lb-guest-section" style="display: none; border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
+                    <p style="font-size: 13px; font-weight: bold; color: #64748b; margin-bottom: 10px;">עדיין לא נרשמת לטבלה?</p>
+                    <button class="fb-btn" style="background: #10b981; color: white; font-size: 13px; padding: 8px 15px; width: auto; margin: 0 auto; margin-bottom: 0;" onclick="window.skippedRegistration=false; if(window.updateLeaderboardUI) window.updateLeaderboardUI();">הירשם עכשיו ושמור את השיא!</button>
                 </div>
                 
                 <div style="margin-top: 15px;">
@@ -500,6 +505,7 @@ window.showLeaderboard = async function(score, stage, killer) {
 window.updateLeaderboardUI = function() {
     const authSec = document.getElementById('lb-auth-section');
     const userSec = document.getElementById('lb-user-section');
+    const guestSec = document.getElementById('lb-guest-section');
     const greeting = document.getElementById('lb-user-greeting');
     
     if(window.currentUserProfile) {
@@ -508,6 +514,7 @@ window.updateLeaderboardUI = function() {
             userSec.style.display = 'block';
             greeting.textContent = "היי " + window.currentUserProfile.nickname + "! השיא שלך: " + (window.currentUserProfile.dinoHighScore || 0);
         }
+        if(guestSec) guestSec.style.display = 'none';
         
         // Remove blur immediately from the list
         document.querySelectorAll('.lb-blurred').forEach(item => {
@@ -518,8 +525,10 @@ window.updateLeaderboardUI = function() {
         if(authSec) {
             if (window.skippedRegistration) {
                 authSec.style.display = 'none';
+                if(guestSec) guestSec.style.display = 'block';
             } else {
                 authSec.style.display = 'flex';
+                if(guestSec) guestSec.style.display = 'none';
             }
         }
         if(userSec) userSec.style.display = 'none';
