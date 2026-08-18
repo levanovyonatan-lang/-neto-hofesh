@@ -134,24 +134,25 @@ function injectFirebaseUI() {
     const isDemo = window.location.search.includes('show_demo=true');
 
     let authHTML = `
-        <div id="lb-auth-section" class="lb-overlay-auth" style="padding-top: 20px; background: rgba(255,255,255,0.95); border-top: 1px solid #e2e8f0; display: none;">
+        <div id="lb-auth-section" class="lb-overlay-auth" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.98); z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; border-radius: 12px; display: none;">
             
-            <div id="local-login-prompt">
-                <div style="font-size: 35px; text-align: center; margin-bottom: 5px;">🚀</div>
-                <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">היכנס בחינם כדי לראות את כל הרשימה ולהכניס את השיא שלך!</p>
-                <button class="fb-btn" onclick="document.getElementById('local-login-prompt').style.display='none'; document.getElementById('local-login-form').style.display='block';" style="margin-bottom: 15px; font-size: 18px; padding: 12px 0;">
-                    היכנס לטבלת השיאים
-                </button>
-            </div>
-
-            <div id="local-login-form" style="display: none;">
-                <p style="font-size: 15px; color: #d97706; margin-bottom: 10px; font-weight: 800; text-align: center;">הזן שם ואימוג'י כדי לשמור את השיא שלך בטבלה!</p>
-                <input type="text" id="local-nickname-input" class="fb-input" placeholder="בחר כינוי (לדוגמה: אלוף_ישראל)..." maxlength="15" style="margin-bottom: 10px;">
-                <div class="emoji-grid" id="local-emoji-grid" style="max-height: 80px; margin-bottom: 10px;"></div>
-                <input type="hidden" id="local-selected-emoji" value="👤">
-                <button class="fb-btn" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="padding: 10px 0; font-size: 16px;">היכנס לטבלה 🚀</button>
-                <div id="local-login-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none; text-align: center; font-weight: bold;"></div>
-            </div>
+            <div style="font-size: 45px; margin-bottom: 10px;">🏆</div>
+            <h2 style="color: #d97706; margin-bottom: 5px; text-align: center; font-size: 22px;">הצטרף לטבלת השיאים!</h2>
+            <p style="font-size: 15px; color: #64748b; margin-bottom: 20px; text-align: center; max-width: 280px; font-weight: bold;">הזן שם ואימוג'י כדי שנוכל לשמור את השיא שלך.</p>
+            
+            <input type="text" id="local-nickname-input" class="fb-input" placeholder="בחר כינוי (לדוגמה: אלוף_ישראל)..." maxlength="15" style="margin-bottom: 15px; width: 100%; max-width: 250px; text-align: center; font-size: 16px;">
+            
+            <div class="emoji-grid" id="local-emoji-grid" style="max-height: 100px; margin-bottom: 20px; width: 100%; max-width: 280px; justify-content: center;"></div>
+            <input type="hidden" id="local-selected-emoji" value="👤">
+            
+            <button class="fb-btn" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="padding: 12px 20px; font-size: 18px; margin-bottom: 15px; width: 100%; max-width: 250px;">
+                היכנס לטבלה 🚀
+            </button>
+            <button onclick="window.skippedRegistration=true; document.getElementById('lb-auth-section').style.display='none';" style="background: none; border: none; color: #94a3b8; font-size: 15px; text-decoration: underline; cursor: pointer; padding: 5px; font-weight: bold;">
+                דלג וצפה בטבלה
+            </button>
+            
+            <div id="local-login-error" style="color: #ef4444; font-size: 13px; margin-top: 10px; display: none; text-align: center; font-weight: bold;"></div>
             
         </div>
     `;
@@ -516,7 +517,13 @@ window.updateLeaderboardUI = function() {
         });
         
     } else {
-        if(authSec) authSec.style.display = 'block';
+        if(authSec) {
+            if (window.skippedRegistration) {
+                authSec.style.display = 'none';
+            } else {
+                authSec.style.display = 'flex';
+            }
+        }
         if(userSec) userSec.style.display = 'none';
     }
 }
