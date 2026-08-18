@@ -161,7 +161,43 @@ onAuthStateChanged(auth, async (user) => {
         if (oldPaBtn) oldPaBtn.remove();
         
     } else {
-        window.currentUserProfile = null;
+        // מזהה מקומי למשתמש ללא חשבון גוגל
+        let localUid = localStorage.getItem('local_uid');
+        if (!localUid) {
+            localUid = 'device_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            localStorage.setItem('local_uid', localUid);
+        }
+        window.currentUid = localUid;
+
+        try {
+            const userDocRef = doc(db, "users", localUid);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                window.currentUserProfile = userDocSnap.data();
+                
+                // סנכרון שיא
+                const serverDinoScore = window.currentUserProfile.dinoHighScore || 0;
+                const localDinoScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
+                
+                if (serverDinoScore > localDinoScore) {
+                    localStorage.setItem('dinoHighScore', serverDinoScore);
+                    const hsEl = document.getElementById('dino-high-score-val');
+                    if (hsEl) hsEl.textContent = serverDinoScore;
+                } else if (localDinoScore > serverDinoScore) {
+                    if (window.saveDinoHighScore) {
+                        const token = localStorage.getItem('dinoHighScoreToken');
+                        const timeElapsed = localStorage.getItem('dinoTimeElapsed');
+                        window.saveDinoHighScore(localDinoScore, token, timeElapsed);
+                    }
+                }
+            } else {
+                window.currentUserProfile = null;
+            }
+        } catch (error) {
+            console.error("Error fetching local profile:", error);
+            window.currentUserProfile = null;
+        }
+
         if (window.updateLeaderboardUI) window.updateLeaderboardUI();
     }
 });
@@ -169,6 +205,12 @@ onAuthStateChanged(auth, async (user) => {
 // פונקציה להשלמת הרשמה
 window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji = '👤', customGrade = null) => {
     try {
+        const uid = user ? user.uid : window.currentUid;
+        if (!uid) {
+            alert("שגיאה במזהה משתמש");
+            return;
+        }
+        
         // שאיבת שכבת הגיל מתוך ה-parameter או מתוך האחסון המקומי
         let userGrade = customGrade || "לא נבחר";
         if (!customGrade || customGrade === "לא נבחר") {
@@ -186,15 +228,15 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
         const profileData = {
             nickname: nickname,
             emoji: emoji,
-            email: user.email,
-            displayName: user.displayName,
+            email: user ? user.email : null,
+            displayName: user ? user.displayName : null,
             grade: userGrade,
             newsletterOptIn: optInNewsletter,
             createdAt: new Date().toISOString(),
             dinoHighScore: localDinoScore
         };
 
-        const userDocRef = doc(db, "users", user.uid);
+        const userDocRef = doc(db, "users", uid);
         await setDoc(userDocRef, profileData);
         window.currentUserProfile = profileData;
         console.log("Registration completed successfully!");
@@ -215,7 +257,8 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
 // פונקציה לשמירת שיא בדינוזאור
 window.saveDinoHighScore = async (score, token, timeElapsed) => {
     const user = auth.currentUser;
-    if (!user || !window.currentUserProfile) return false;
+    const uid = user ? user.uid : window.currentUid;
+    if (!uid || !window.currentUserProfile) return false;
 
     // Anti-Cheat Validation
     let isValid = false;
@@ -243,12 +286,12 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
 
     if (score >= (window.currentUserProfile.dinoHighScore || 0)) {
         try {
-            const userDocRef = doc(db, "users", user.uid);
+            const userDocRef = doc(db, "users", uid);
             await setDoc(userDocRef, { dinoHighScore: score }, { merge: true });
             window.currentUserProfile.dinoHighScore = score;
 
             // עדכון באוסף נפרד שמיועד רק לטבלת השיאים (לשליפה מהירה)
-            const scoreDocRef = doc(db, "dino_scores", user.uid);
+            const scoreDocRef = doc(db, "dino_scores", uid);
             await setDoc(scoreDocRef, {
                 nickname: window.currentUserProfile.nickname,
                 emoji: window.currentUserProfile.emoji || '👤',

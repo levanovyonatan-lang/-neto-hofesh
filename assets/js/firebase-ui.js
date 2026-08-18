@@ -133,48 +133,16 @@ function injectFirebaseUI() {
     const showEmailAuth = true;
     const isDemo = window.location.search.includes('show_demo=true');
 
-    let authHTML = '';
-    
-    if (isDemo) {
-        authHTML = `
-            <div id="lb-auth-section" class="lb-overlay-auth">
-                <div style="font-size: 35px; text-align: center; margin-bottom: 5px;">🚀</div>
-                <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">היכנס בחינם כדי לראות את כל הרשימה ולהכניס את השיא שלך!</p>
-                <button class="fb-btn" onclick="handleAnonymousLogin()" style="margin-bottom: 15px; font-size: 18px; padding: 12px 0;">
-                    היכנס לטבלת השיאים
-                </button>
-            </div>
-        `;
-    } else {
-        authHTML = `
-            <div id="lb-auth-section" class="lb-overlay-auth">
-                <div style="font-size: 35px; text-align: center; margin-bottom: 5px;">🔒</div>
-                <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">התחבר בחינם כדי לראות את כל הרשימה ולהכניס את השיא שלך!</p>
-        `;
-
-        if (!showEmailAuth) {
-            authHTML += `
-                <button class="fb-btn google" onclick="handleGoogleLogin()" style="margin-bottom: 15px;">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20">
-                    התחבר עם Google
-                </button>
-            `;
-        } else {
-            authHTML += `
-                <form onsubmit="handleEmailLogin(event)">
-                    <input type="email" id="lb-email" class="fb-input" placeholder="אימייל" style="margin-bottom: 8px;" autocomplete="off" required>
-                    <input type="text" id="lb-password" class="fb-input" placeholder="סיסמה (6 תווים לפחות)" style="margin-bottom: 5px;" autocomplete="off" onfocus="this.type='password'" required>
-                    <div style="text-align: right; margin-bottom: 15px; padding-right: 5px;">
-                        <a href="javascript:void(0)" onclick="handleForgotPassword()" style="color: #3b82f6; font-size: 12px; text-decoration: none;">שכחת סיסמה?</a>
-                    </div>
-                    <button type="submit" class="fb-btn" id="lb-email-btn" style="font-size: 16px; padding: 10px 0;">התחבר / הירשם</button>
-                    <div id="lb-email-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none;"></div>
-                </form>
-            `;
-        }
-    }
-
-    authHTML += `</div>`;
+    let authHTML = `
+        <div id="lb-auth-section" class="lb-overlay-auth" style="padding-top: 20px; background: rgba(255,255,255,0.95); border-top: 1px solid #e2e8f0; display: none;">
+            <p style="font-size: 15px; color: #d97706; margin-bottom: 10px; font-weight: 800; text-align: center;">הזן שם ואימוג'י כדי לשמור את השיא שלך בטבלה!</p>
+            <input type="text" id="local-nickname-input" class="fb-input" placeholder="בחר כינוי (לדוגמה: אלוף_ישראל)..." maxlength="15" style="margin-bottom: 10px;">
+            <div class="emoji-grid" id="local-emoji-grid" style="max-height: 80px; margin-bottom: 10px;"></div>
+            <input type="hidden" id="local-selected-emoji" value="👤">
+            <button class="fb-btn" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="padding: 10px 0; font-size: 16px;">היכנס לטבלה 🚀</button>
+            <div id="local-login-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none; text-align: center; font-weight: bold;"></div>
+        </div>
+    `;
 
     // מודל טבלת שיאים והתחברות
     const lbModalHTML = `
@@ -293,6 +261,7 @@ function injectFirebaseUI() {
     // אתחול רשתות האימוג'י
     renderEmojiGrid('reg-emoji-grid', 'reg-selected-emoji');
     renderEmojiGrid('pa-emoji-grid', 'pa-selected-emoji');
+    renderEmojiGrid('local-emoji-grid', 'local-selected-emoji');
     
     // בדיקה האם הגענו לכאן מקישור של "פתיחה בכרום" או קישור שיתוף
     if (window.location.search.includes('openLogin=true') || window.location.search.includes('playDino=true')) {
@@ -540,11 +509,43 @@ window.updateLeaderboardUI = function() {
     }
 }
 
-window.handleAnonymousLogin = function() {
-    if(window.firebaseAnonymousSignIn) {
-        window.firebaseAnonymousSignIn().catch(e => {
-            console.error("Login failed in UI", e);
-        });
+window.handleLocalLogin = async function() {
+    const nickname = document.getElementById('local-nickname-input').value.trim();
+    const emoji = document.getElementById('local-selected-emoji').value || "👤";
+    const errorEl = document.getElementById('local-login-error');
+    
+    if(!nickname || nickname.length < 2) {
+        errorEl.textContent = "אנא הזן כינוי באורך 2 תווים לפחות.";
+        errorEl.style.display = "block";
+        return;
+    }
+    
+    if (window.containsProfanity(nickname) || /(http|https|www\.|:\/\/)|\.(com|co\.il|org|net|me|xyz|io|gov)/i.test(nickname)) {
+        errorEl.textContent = "הכינוי מכיל מילים לא ראויות או קישורים. אנא בחר כינוי אחר.";
+        errorEl.style.display = "block";
+        return;
+    }
+    
+    errorEl.style.display = "none";
+    const btn = document.querySelector('#lb-auth-section .fb-btn');
+    btn.textContent = "שומר...";
+    btn.disabled = true;
+    
+    if (window.completeUserRegistration) {
+        // user parameter is null for local auth
+        await window.completeUserRegistration(null, nickname, false, emoji, null);
+        if (window.trackEvent) window.trackEvent('local_registration');
+    }
+    
+    btn.textContent = "היכנס לטבלה 🚀";
+    btn.disabled = false;
+    
+    // Update any current high score they just achieved
+    const currentHS = parseInt(localStorage.getItem('dinoHighScore')) || 0;
+    if(currentHS > 0 && window.saveDinoHighScore) {
+        const token = localStorage.getItem('dinoHighScoreToken');
+        const timeElapsed = localStorage.getItem('dinoTimeElapsed');
+        window.saveDinoHighScore(currentHS, token, timeElapsed);
     }
 }
 
