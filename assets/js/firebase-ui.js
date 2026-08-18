@@ -134,7 +134,7 @@ function injectFirebaseUI() {
     const isDemo = window.location.search.includes('show_demo=true');
 
     let authHTML = `
-        <div id="lb-auth-section" class="lb-overlay-auth" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.98); z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; border-radius: 12px; display: none;">
+        <div id="lb-auth-section" class="lb-overlay-auth" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.99); z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; border-radius: 20px; display: none; overflow-y: auto;">
             
             <div style="font-size: 45px; margin-bottom: 10px;">🏆</div>
             <h2 style="color: #d97706; margin-bottom: 5px; text-align: center; font-size: 22px;">הצטרף לטבלת השיאים!</h2>
@@ -162,12 +162,10 @@ function injectFirebaseUI() {
         <div class="fb-modal-overlay" id="lb-modal">
             <div class="fb-modal">
                 <div class="fb-title">🏆 טבלת השיאים 🏆</div>
-                
                 <div style="position: relative;">
                     <ul class="leaderboard-list" id="lb-list">
                         <div style="text-align: center; padding: 20px; color: #94a3b8;">טוען נתונים...</div>
                     </ul>
-                    ${authHTML}
                 </div>
                 
                 <div id="lb-user-section" style="display: none; border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
@@ -181,6 +179,7 @@ function injectFirebaseUI() {
                 <div style="margin-top: 15px;">
                     <button class="fb-btn" style="background: #e2e8f0; color: #475569; font-size: 14px; padding: 8px 0;" onclick="closeModals()">חזרה למשחק</button>
                 </div>
+                ${authHTML}
             </div>
         </div>
     `;
