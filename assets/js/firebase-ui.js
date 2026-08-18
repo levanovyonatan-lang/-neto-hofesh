@@ -196,23 +196,17 @@ function injectFirebaseUI() {
                 <div class="fb-title" style="margin-top: 0; color: #0f172a; margin-bottom: 20px;">האזור האישי</div>
                 
                 <div style="background: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 25px;">
-                    <div id="pa-emoji-display" style="font-size: 50px; margin-bottom: 10px;">👤</div>
-                    <div style="font-size: 14px; color: #64748b; margin-bottom: 5px;">הכינוי שלך בטבלה:</div>
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                        <div id="pa-nickname-display" style="font-size: 24px; font-weight: 900; color: #3b82f6;"></div>
-                        <button onclick="if(window.editNicknameUI) window.editNicknameUI()" style="background: #e2e8f0; color: #334155; border: none; cursor: pointer; font-size: 14px; padding: 5px 10px; border-radius: 6px; font-weight: bold;">ערוך</button>
-                    </div>
-                    <div id="pa-nickname-edit-container" style="display: none; margin-top: 15px;">
-                        <input type="text" id="pa-nickname-input" class="auth-input" maxlength="20" placeholder="כינוי חדש...">
-                        <div style="margin-top: 10px; font-size: 12px; font-weight: bold; color: #64748b;">בחר דמות חדשה:</div>
-                        <div class="emoji-grid" id="pa-emoji-grid"></div>
-                        <input type="hidden" id="pa-selected-emoji" value="👤">
-                        
-                        <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="auth-submit-btn" style="padding: 8px 15px; margin-top: 10px;">שמור שינויים</button>
-                    </div>
+                    <div style="font-size: 14px; color: #64748b; margin-bottom: 5px; font-weight: bold;">הכינוי שלך בטבלה:</div>
+                    <input type="text" id="pa-nickname-input" class="fb-input" maxlength="20" placeholder="כינוי חדש..." style="margin-bottom: 15px; width: 100%; max-width: 250px; text-align: center; font-size: 18px; font-weight: bold; color: #3b82f6;">
+                    
+                    <div style="margin-top: 10px; font-size: 14px; font-weight: bold; color: #64748b; margin-bottom: 5px;">בחר אימוג'י חדש:</div>
+                    <div class="emoji-grid" id="pa-emoji-grid" style="margin-bottom: 20px; width: 100%; max-width: 320px; margin-left: auto; margin-right: auto;"></div>
+                    <input type="hidden" id="pa-selected-emoji" value="👤">
+                    
+                    <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="fb-btn" style="padding: 12px 20px; font-size: 18px; width: 100%; max-width: 250px;">שמור שינויים</button>
+                    
                     <div id="pa-error-msg" style="color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: bold; display: none;"></div>
                 </div>
-
             </div>
         </div>
     `;
@@ -681,34 +675,37 @@ window.closePersonalArea = () => {
     if (modal) modal.classList.remove('active');
 };
 
-// פונקציות אזור אישי
 window.openPersonalArea = () => {
     const modal = document.getElementById('personal-area-modal');
     if (!modal) return;
     
     if (window.currentUserProfile) {
-        const nickDisplay = document.getElementById('pa-nickname-display');
-        if (nickDisplay) nickDisplay.textContent = window.currentUserProfile.nickname || 'משתמש אנונימי';
+        const input = document.getElementById('pa-nickname-input');
+        if (input) input.value = window.currentUserProfile.nickname || '';
         
-        const emojiDisplay = document.getElementById('pa-emoji-display');
-        if (emojiDisplay) emojiDisplay.textContent = window.currentUserProfile.emoji || '👤';
+        const emojiInput = document.getElementById('pa-selected-emoji');
+        const currentEmoji = window.currentUserProfile.emoji || '👤';
+        if (emojiInput) emojiInput.value = currentEmoji;
         
-        const accountActions = document.getElementById('pa-account-actions');
-        if (accountActions) accountActions.style.display = 'flex';
-        
-        const isOptIn = !!window.currentUserProfile.newsletterOptIn;
-        const newsletterBox = document.getElementById('pa-newsletter-box');
-        const unsubscribeBtn = document.getElementById('pa-unsubscribe-btn');
-        const newsletterCheckbox = document.getElementById('pa-newsletter-checkbox');
-
-        if (isOptIn) {
-            if (newsletterBox) newsletterBox.style.display = 'none';
-            if (unsubscribeBtn) unsubscribeBtn.style.display = 'inline-block';
-        } else {
-            if (newsletterBox) newsletterBox.style.display = 'block';
-            if (newsletterCheckbox) newsletterCheckbox.checked = false;
-            if (unsubscribeBtn) unsubscribeBtn.style.display = 'none';
+        // Render the emoji grid directly
+        const grid = document.getElementById('pa-emoji-grid');
+        if (grid) {
+            grid.innerHTML = '';
+            window.availableProfileEmojis.forEach(emoji => {
+                const btn = document.createElement('button');
+                btn.className = 'emoji-btn' + (emoji === currentEmoji ? ' selected' : '');
+                btn.textContent = emoji;
+                btn.onclick = () => {
+                    document.querySelectorAll('#pa-emoji-grid .emoji-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    emojiInput.value = emoji;
+                };
+                grid.appendChild(btn);
+            });
         }
+        
+        const errorMsg = document.getElementById('pa-error-msg');
+        if (errorMsg) errorMsg.style.display = 'none';
 
         modal.classList.add('active');
     } else {
@@ -756,12 +753,7 @@ window.closePersonalArea = () => {
     if (modal) modal.classList.remove('active');
 };
 
-window.editNicknameUI = () => {
-    document.getElementById('pa-nickname-edit-container').style.display = 'block';
-    const accountActions = document.getElementById('pa-account-actions');
-    if (accountActions) accountActions.style.display = 'none';
-    document.getElementById('pa-nickname-input').focus();
-};
+
 
 window.saveNewNickname = async () => {
     const newName = document.getElementById('pa-nickname-input').value.trim();
@@ -805,23 +797,18 @@ window.saveNewNickname = async () => {
             window.currentUserProfile.emoji = newEmoji;
         }
         
-        document.getElementById('pa-nickname-display').textContent = newName;
-        document.getElementById('pa-emoji-display').textContent = newEmoji;
-        document.getElementById('pa-nickname-edit-container').style.display = 'none';
-        
-        const accountActions = document.getElementById('pa-account-actions');
-        if (accountActions) accountActions.style.display = 'flex';
-        
         // Hide error message on success
         errorMsg.style.display = 'none';
         
         // Show temporary success message
-        const editBtn = document.querySelector('#pa-nickname-edit-container button');
-        const originalBtnText = editBtn.textContent;
-        editBtn.textContent = "נשמר בהצלחה! ✔️";
-        setTimeout(() => {
-            editBtn.textContent = originalBtnText;
-        }, 2000);
+        const editBtn = document.querySelector('#personal-area-modal button.fb-btn');
+        if (editBtn) {
+            const originalBtnText = editBtn.textContent;
+            editBtn.textContent = "נשמר בהצלחה! ✔️";
+            setTimeout(() => {
+                editBtn.textContent = originalBtnText;
+            }, 2000);
+        }
         
         if (window.updateLeaderboardUI) window.updateLeaderboardUI();
         
