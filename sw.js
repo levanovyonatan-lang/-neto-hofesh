@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v404';
+const CACHE_VERSION = 'v405';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

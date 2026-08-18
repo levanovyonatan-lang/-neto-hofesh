@@ -817,9 +817,11 @@ window.saveNewNickname = async () => {
             setTimeout(() => {
                 editBtn.textContent = originalBtnText;
                 if (window.closePersonalArea) window.closePersonalArea();
+                if (window.showLeaderboard) window.showLeaderboard();
             }, 1000);
         } else {
             if (window.closePersonalArea) window.closePersonalArea();
+            if (window.showLeaderboard) window.showLeaderboard();
         }
         
         if (window.updateLeaderboardUI) window.updateLeaderboardUI();
