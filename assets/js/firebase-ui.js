@@ -135,12 +135,24 @@ function injectFirebaseUI() {
 
     let authHTML = `
         <div id="lb-auth-section" class="lb-overlay-auth" style="padding-top: 20px; background: rgba(255,255,255,0.95); border-top: 1px solid #e2e8f0; display: none;">
-            <p style="font-size: 15px; color: #d97706; margin-bottom: 10px; font-weight: 800; text-align: center;">הזן שם ואימוג'י כדי לשמור את השיא שלך בטבלה!</p>
-            <input type="text" id="local-nickname-input" class="fb-input" placeholder="בחר כינוי (לדוגמה: אלוף_ישראל)..." maxlength="15" style="margin-bottom: 10px;">
-            <div class="emoji-grid" id="local-emoji-grid" style="max-height: 80px; margin-bottom: 10px;"></div>
-            <input type="hidden" id="local-selected-emoji" value="👤">
-            <button class="fb-btn" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="padding: 10px 0; font-size: 16px;">היכנס לטבלה 🚀</button>
-            <div id="local-login-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none; text-align: center; font-weight: bold;"></div>
+            
+            <div id="local-login-prompt">
+                <div style="font-size: 35px; text-align: center; margin-bottom: 5px;">🚀</div>
+                <p style="font-size: 15px; color: #d97706; margin-bottom: 12px; font-weight: 800; text-align: center;">היכנס בחינם כדי לראות את כל הרשימה ולהכניס את השיא שלך!</p>
+                <button class="fb-btn" onclick="document.getElementById('local-login-prompt').style.display='none'; document.getElementById('local-login-form').style.display='block';" style="margin-bottom: 15px; font-size: 18px; padding: 12px 0;">
+                    היכנס לטבלת השיאים
+                </button>
+            </div>
+
+            <div id="local-login-form" style="display: none;">
+                <p style="font-size: 15px; color: #d97706; margin-bottom: 10px; font-weight: 800; text-align: center;">הזן שם ואימוג'י כדי לשמור את השיא שלך בטבלה!</p>
+                <input type="text" id="local-nickname-input" class="fb-input" placeholder="בחר כינוי (לדוגמה: אלוף_ישראל)..." maxlength="15" style="margin-bottom: 10px;">
+                <div class="emoji-grid" id="local-emoji-grid" style="max-height: 80px; margin-bottom: 10px;"></div>
+                <input type="hidden" id="local-selected-emoji" value="👤">
+                <button class="fb-btn" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="padding: 10px 0; font-size: 16px;">היכנס לטבלה 🚀</button>
+                <div id="local-login-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none; text-align: center; font-weight: bold;"></div>
+            </div>
+            
         </div>
     `;
 
