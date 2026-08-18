@@ -429,8 +429,7 @@ window.showLeaderboard = async function(score, stage, killer) {
                 userScore = s.score;
             }
             
-            const isBlurred = !currentUid && index >= 3;
-            const blurClass = isBlurred ? 'lb-blurred' : '';
+            const blurClass = '';
             const liStyle = isCurrentUser ? 'border: 2px solid #34d399; background: rgba(52, 211, 153, 0.1);' : '';
             const liId = isCurrentUser ? 'id="current-user-lb-row"' : '';
             
