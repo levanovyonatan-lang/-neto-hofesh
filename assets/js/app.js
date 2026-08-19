@@ -1458,15 +1458,11 @@ function updateDashboard() {
 function shareWhatsApp(event) {
     event.preventDefault(); trackEvent('share_whatsapp_click');
     const activeHolidayId = window.NETO_ACTIVE_HOLIDAY || userConfig.activeTargetId || getActiveHolidayFromUrlOrWindow();
-    let text = `מצאתי אתר שמראה כמה ימי לימוד נטו נשארו עד החופש! 🏖️😱\nכנסו לבדוק >> https://www.neto-hofesh.co.il/`;
+    let shareUrl = 'https://www.neto-hofesh.co.il/';
+    
     if (activeHolidayId) {
         const targetObj = activeEventsList.find(t => t.id === activeHolidayId) || allTargets.find(t => t.id === activeHolidayId) || targets2027.find(t => t.id === activeHolidayId);
         if (targetObj) {
-            const currentDaysElem = document.getElementById('main-net-days');
-            const currentDays = currentDaysElem ? currentDaysElem.textContent.trim() : '';
-            const daysText = (currentDays && currentDays !== '-' && !isNaN(currentDays))
-                ? `נשארו רק *${currentDays} ימי לימודים נטו* לחופש ${targetObj.name}!! 😱`
-                : `כמה ימי לימודים נטו נשארו לחופש ${targetObj.name}? 😱`;
             const slugMap = {
                 'hanukkah2026': 'hanukkah',
                 'purim2027': 'purim',
@@ -1482,10 +1478,13 @@ function shareWhatsApp(event) {
                 'summerElem': 'summer'
             };
             const slug = slugMap[targetObj.id] || window.NETO_ACTIVE_HOLIDAY_SLUG || '';
-            const shareUrl = slug ? `https://www.neto-hofesh.co.il/${slug}/` : `https://www.neto-hofesh.co.il/`;
-            text = `חבר'ה קלטתם?? 😱 ${daysText} (בלי שבתות וחגים)\nבדקו כמה ימים נשארו לכם בנטו חופש ${targetObj.icon || '🏖️'} >> ${shareUrl}`;
+            if (slug) {
+                shareUrl = `https://www.neto-hofesh.co.il/${slug}/`;
+            }
         }
     }
+    
+    const text = `אמאל'ה, קלטתם כמה ימי לימוד נשארו עד החופש? 😱🏃‍♂️ כנסו דחוף לראות את הספירה לאחור >> ${shareUrl}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 }
 
