@@ -34,7 +34,7 @@ function injectFirebaseUI() {
         }
         .fb-modal-overlay.active { opacity: 1; pointer-events: all; }
         .fb-modal {
-            background: #ffffff; border-radius: 20px; width: 95%; max-width: 500px;
+            background: #ffffff; border-radius: 20px; width: 95%; max-width: 600px;
             padding: 30px 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             text-align: center; position: relative; transform: scale(0.9); transition: 0.3s ease;
         }
@@ -138,14 +138,14 @@ function injectFirebaseUI() {
             
             <div style="font-size: 45px; margin-bottom: 10px;">🏆</div>
             <h2 style="color: #d97706; margin-bottom: 5px; text-align: center; font-size: 22px;">הצטרף לטבלת השיאים!</h2>
-            <p style="font-size: 15px; color: #64748b; margin-bottom: 20px; text-align: center; max-width: 280px; font-weight: bold;">הזן שם ואימוג'י כדי שנוכל לשמור את השיא שלך.</p>
+            <p style="font-size: 15px; color: #64748b; margin-bottom: 20px; text-align: center; max-width: 350px; font-weight: bold;">הזן שם ואימוג'י כדי שנוכל לשמור את השיא שלך.</p>
             
-            <input type="text" id="local-nickname-input" class="fb-input" placeholder="בחר כינוי (לדוגמה: אלוף_ישראל)..." maxlength="15" style="margin-bottom: 15px; width: 100%; max-width: 250px; text-align: center; font-size: 16px;">
+            <input type="text" id="local-nickname-input" class="fb-input" placeholder="בחר כינוי (לדוגמה: אלוף_ישראל)..." maxlength="15" style="margin-bottom: 15px; width: 100%; max-width: 300px; text-align: center; font-size: 16px;">
             
-            <div class="emoji-grid" id="local-emoji-grid" style="margin-bottom: 20px; width: 100%; max-width: 450px; justify-content: center;"></div>
+            <div class="emoji-grid" id="local-emoji-grid" style="margin-bottom: 20px; width: 100%; max-width: 500px; justify-content: center;"></div>
             <input type="hidden" id="local-selected-emoji" value="👤">
             
-            <button class="fb-btn" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="padding: 12px 20px; font-size: 18px; margin-bottom: 15px; width: 100%; max-width: 250px;">
+            <button class="fb-btn" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="padding: 12px 20px; font-size: 18px; margin-bottom: 15px; width: 100%; max-width: 300px;">
                 היכנס לטבלה 🚀
             </button>
             <button onclick="window.skippedRegistration=true; if(window.updateLeaderboardUI) window.updateLeaderboardUI();" style="background: none; border: none; color: #94a3b8; font-size: 15px; text-decoration: underline; cursor: pointer; padding: 5px; font-weight: bold;">
