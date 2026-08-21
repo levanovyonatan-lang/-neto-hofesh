@@ -904,18 +904,18 @@
         </div>
     </div>
     <!-- WhatsApp Registration Modal -->
-    <div id="whatsapp-modal" class="ios-modal-overlay" style="align-items: center; z-index: 10000; display: none;" role="dialog" aria-modal="true" aria-label="הצטרפות לוואטסאפ">
-        <div class="ios-modal-content" style="max-width: 90%; width: 400px; padding: 30px 20px; text-align: center; position: relative;">
-            <button onclick="document.getElementById('whatsapp-modal').style.display='none'" aria-label="סגור" style="position: absolute; top: 15px; left: 15px; background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer;">✖</button>
+    <div id="whatsapp-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px); flex-direction: column;" onclick="this.style.display='none'">
+        <div style="background: linear-gradient(135deg, #fef9c3 0%, #fde047 100%); padding: 35px 25px; border-radius: 20px; text-align: center; max-width: 90%; width: 400px; position: relative; box-shadow: 0 10px 30px rgba(253, 224, 71, 0.5); border: 2px solid #facc15;" onclick="event.stopPropagation()">
+            <button onclick="document.getElementById('whatsapp-modal').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #713f12; font-size: 28px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
             
             <div style="font-size: 40px; margin-bottom: 10px;">💬</div>
-            <h3 style="font-size: 22px; font-weight: 900; color: #1e293b; margin-bottom: 15px;">הצטרפות לקהילת נטו חופש!</h3>
-            <p style="color: #64748b; font-size: 15px; margin-bottom: 20px; line-height: 1.5;">בדיחות, עדכונים, מבצעים והגרלות על פרסים שווים במיוחד!</p>
+            <h3 style="font-size: 22px; font-weight: 900; color: #713f12; margin-bottom: 15px;">הצטרפות לקהילת נטו חופש!</h3>
+            <p style="color: #854d0e; font-size: 15px; margin-bottom: 20px; line-height: 1.5; font-weight: bold;">בדיחות, עדכונים, מבצעים והגרלות על פרסים שווים במיוחד!</p>
             
-            <div style="margin: 0 0 20px 0; font-size: 13px; color: #64748b; line-height: 1.5; background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; text-align: right;">
+            <div style="margin: 0 0 20px 0; font-size: 13px; color: #713f12; line-height: 1.5; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(250, 204, 21, 0.5); text-align: right;">
                 <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
                     <input type="checkbox" id="modal-wa-consent" onchange="document.getElementById('modal-whatsapp-join-btn').style.pointerEvents = this.checked ? 'auto' : 'none'; document.getElementById('modal-whatsapp-join-btn').style.opacity = this.checked ? '1' : '0.5';" style="margin-top: 4px; width: 18px; height: 18px; flex-shrink: 0; cursor: pointer;">
-                    <span>אני מאשר כי אני מצטרף לקבוצה באישור הורה, וכי קראתי והסכמתי ל<a href="javascript:void(0)" onclick="openLegalModal('terms'); event.stopPropagation();" style="color: #0ea5e9; text-decoration: underline;">תקנון האתר</a> ול<a href="javascript:void(0)" onclick="openLegalModal('privacy'); event.stopPropagation();" style="color: #0ea5e9; text-decoration: underline;">מדיניות הפרטיות</a> המפרטים את תנאי קבלת העדכונים, ההטבות והתכנים השיווקיים והפרסומיים.</span>
+                    <span>אני מאשר כי אני מצטרף לקבוצה באישור הורה, וכי קראתי והסכמתי ל<a href="javascript:void(0)" onclick="openLegalModal('terms'); event.stopPropagation();" style="color: #0284c7; text-decoration: underline; font-weight: bold;">תקנון האתר</a> ול<a href="javascript:void(0)" onclick="openLegalModal('privacy'); event.stopPropagation();" style="color: #0284c7; text-decoration: underline; font-weight: bold;">מדיניות הפרטיות</a> המפרטים את תנאי קבלת העדכונים, ההטבות והתכנים השיווקיים והפרסומיים.</span>
                 </label>
             </div>
 
