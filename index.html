@@ -845,10 +845,12 @@
             <p style="color: #854d0e; font-size: 15px; margin-bottom: 20px; line-height: 1.5; font-weight: bold;">בדיחות, עדכונים, מבצעים והגרלות על פרסים שווים במיוחד!</p>
             
             <div style="margin: 0 0 20px 0; font-size: 13px; color: #713f12; line-height: 1.5; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(250, 204, 21, 0.5); text-align: right;">
-                <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                <div style="display: flex; align-items: flex-start; gap: 10px;">
                     <input type="checkbox" id="modal-wa-consent" onchange="document.getElementById('modal-whatsapp-join-btn').style.pointerEvents = this.checked ? 'auto' : 'none'; document.getElementById('modal-whatsapp-join-btn').style.opacity = this.checked ? '1' : '0.5';" style="margin-top: 4px; width: 18px; height: 18px; flex-shrink: 0; cursor: pointer;">
-                    <span>אני מאשר כי אני מצטרף לקבוצה באישור הורה, וכי קראתי והסכמתי ל<a href="javascript:void(0)" onclick="openLegalModal('terms'); event.stopPropagation(); event.preventDefault();" style="color: #0284c7; text-decoration: underline; font-weight: bold;">תקנון האתר</a> ול<a href="javascript:void(0)" onclick="openLegalModal('privacy'); event.stopPropagation(); event.preventDefault();" style="color: #0284c7; text-decoration: underline; font-weight: bold;">מדיניות הפרטיות</a> המפרטים את תנאי קבלת העדכונים, ההטבות והתכנים השיווקיים והפרסומיים.</span>
-                </label>
+                    <span style="display: inline;">
+                        <label for="modal-wa-consent" style="cursor: pointer; display: inline;">אני מאשר כי אני מצטרף לקבוצה באישור הורה, וכי קראתי והסכמתי ל</label><a href="javascript:void(0)" onclick="openLegalModal('terms');" style="color: #0284c7; text-decoration: underline; font-weight: bold; cursor: pointer;">תקנון האתר</a> ול<a href="javascript:void(0)" onclick="openLegalModal('privacy');" style="color: #0284c7; text-decoration: underline; font-weight: bold; cursor: pointer;">מדיניות הפרטיות</a><label for="modal-wa-consent" style="cursor: pointer; display: inline;"> המפרטים את תנאי קבלת העדכונים, ההטבות והתכנים השיווקיים והפרסומיים.</label>
+                    </span>
+                </div>
             </div>
 
             <a href="https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF" target="_blank" rel="noopener noreferrer" id="modal-whatsapp-join-btn" style="display: inline-flex; align-items: center; justify-content: center; width: 100%; background: linear-gradient(135deg, #25D366, #128C7E); color: white; padding: 14px 20px; border-radius: 16px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4); font-size: 18px; transition: transform 0.2s, opacity 0.3s; opacity: 0.5; pointer-events: none;" onclick="document.getElementById('whatsapp-modal').style.display='none';">
