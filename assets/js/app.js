@@ -1500,6 +1500,12 @@ function shareWhatsApp(event) {
 
 // --- מנגנון חלוניות משפטיות והצהרת נגישות תקנית ---
 function openLegalModal(type) {
+    const waModal = document.getElementById('whatsapp-modal');
+    if (waModal && waModal.style.display !== 'none') {
+        waModal.dataset.wasOpen = 'true';
+        waModal.style.display = 'none';
+    }
+
     const content = document.getElementById('legal-content');
     let html = '';
 
@@ -1544,6 +1550,11 @@ function openLegalModal(type) {
 
 function closeLegalModal() {
     document.getElementById('legal-modal').style.display = 'none';
+    const waModal = document.getElementById('whatsapp-modal');
+    if (waModal && waModal.dataset.wasOpen === 'true') {
+        waModal.style.display = 'flex';
+        waModal.dataset.wasOpen = 'false';
+    }
 }
 
 // חסימת מקשים (למניעת העתקה)
