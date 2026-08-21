@@ -637,7 +637,7 @@
 
 
         <!-- חלונית משפטית (אוניברסלית לכל הדפים) -->
-        <div id="legal-modal" class="ios-modal-overlay" style="align-items: center; z-index: 10000;" role="dialog"
+        <div id="legal-modal" class="ios-modal-overlay" style="align-items: center; z-index: 10005;" role="dialog"
             aria-modal="true" aria-label="מידע משפטי">
             <div class="ios-modal-content"
                 style="max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: right; padding: 30px;">
@@ -915,7 +915,7 @@
             <div style="margin: 0 0 20px 0; font-size: 13px; color: #713f12; line-height: 1.5; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(250, 204, 21, 0.5); text-align: right;">
                 <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
                     <input type="checkbox" id="modal-wa-consent" onchange="document.getElementById('modal-whatsapp-join-btn').style.pointerEvents = this.checked ? 'auto' : 'none'; document.getElementById('modal-whatsapp-join-btn').style.opacity = this.checked ? '1' : '0.5';" style="margin-top: 4px; width: 18px; height: 18px; flex-shrink: 0; cursor: pointer;">
-                    <span>אני מאשר כי אני מצטרף לקבוצה באישור הורה, וכי קראתי והסכמתי ל<a href="javascript:void(0)" onclick="openLegalModal('terms'); event.stopPropagation();" style="color: #0284c7; text-decoration: underline; font-weight: bold;">תקנון האתר</a> ול<a href="javascript:void(0)" onclick="openLegalModal('privacy'); event.stopPropagation();" style="color: #0284c7; text-decoration: underline; font-weight: bold;">מדיניות הפרטיות</a> המפרטים את תנאי קבלת העדכונים, ההטבות והתכנים השיווקיים והפרסומיים.</span>
+                    <span>אני מאשר כי אני מצטרף לקבוצה באישור הורה, וכי קראתי והסכמתי ל<a href="javascript:void(0)" onclick="openLegalModal('terms'); event.stopPropagation(); event.preventDefault();" style="color: #0284c7; text-decoration: underline; font-weight: bold;">תקנון האתר</a> ול<a href="javascript:void(0)" onclick="openLegalModal('privacy'); event.stopPropagation(); event.preventDefault();" style="color: #0284c7; text-decoration: underline; font-weight: bold;">מדיניות הפרטיות</a> המפרטים את תנאי קבלת העדכונים, ההטבות והתכנים השיווקיים והפרסומיים.</span>
                 </label>
             </div>
 
