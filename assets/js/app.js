@@ -938,47 +938,6 @@ window.onload = () => {
             resetBtn.style.color = '#523009';
             resetBtn.style.boxShadow = '0 6px 15px rgba(255, 215, 0, 0.3)';
         }
-
-        setTimeout(() => {
-            const sunImages = document.querySelectorAll('img[src*="official-sun-neto"]');
-            sunImages.forEach(imgElem => {
-                if (imgElem.dataset.recolored) return;
-                
-                const processImg = () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = imgElem.naturalWidth || imgElem.width || 120;
-                    canvas.height = imgElem.naturalHeight || imgElem.height || 120;
-                    
-                    if (canvas.width === 0 || canvas.height === 0) return;
-
-                    ctx.drawImage(imgElem, 0, 0, canvas.width, canvas.height);
-                    try {
-                        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                        const data = imgData.data;
-                        for (let i = 0; i < data.length; i += 4) {
-                            // Target black/dark pixels
-                            if (data[i] < 60 && data[i+1] < 60 && data[i+2] < 60 && data[i+3] > 50) {
-                                data[i] = 128;   // R
-                                data[i+1] = 0;   // G
-                                data[i+2] = 255; // B (Purple)
-                            }
-                        }
-                        ctx.putImageData(imgData, 0, 0);
-                        imgElem.src = canvas.toDataURL();
-                        imgElem.dataset.recolored = "true";
-                    } catch (e) {
-                        console.error("Canvas taint error, unable to recolor sun", e);
-                    }
-                };
-
-                if (imgElem.complete) {
-                    processImg();
-                } else {
-                    imgElem.onload = processImg;
-                }
-            });
-        }, 100);
         
         const seoFooterH2 = document.querySelector('.seo-footer h2');
         if (seoFooterH2) seoFooterH2.textContent = "מתי באמת החופש 2026? ספירה לאחור - נטו חופש";
