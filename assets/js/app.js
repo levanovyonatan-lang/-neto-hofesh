@@ -931,13 +931,6 @@ window.onload = () => {
         document.title = "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש";
         const ogTitle = document.querySelector('meta[property="og:title"]');
         if (ogTitle) ogTitle.setAttribute("content", "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש");
-
-        const resetBtn = document.querySelector('.reset-btn');
-        if (resetBtn) {
-            resetBtn.style.background = 'linear-gradient(135deg, #ffd700, #ffb300)';
-            resetBtn.style.color = '#523009';
-            resetBtn.style.boxShadow = '0 6px 15px rgba(255, 215, 0, 0.3)';
-        }
         
         const seoFooterH2 = document.querySelector('.seo-footer h2');
         if (seoFooterH2) seoFooterH2.textContent = "מתי באמת החופש 2026? ספירה לאחור - נטו חופש";
