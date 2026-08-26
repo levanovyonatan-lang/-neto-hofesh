@@ -206,34 +206,34 @@ input:checked + .smiley-handle::after { content: "☹️"; }
     font-weight: 900;
 }
 
-/* --- Premium Countdown Mode (Demo Only) --- */
-.main-timer-card.demo-premium-mode {
+/* --- Premium Countdown Mode (Regular Countdown) --- */
+.main-timer-card.premium-countdown {
     border: 1px solid rgba(255, 255, 255, 0.6) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), inset 0 0 20px rgba(255, 255, 255, 0.5) !important;
 }
 
-.main-timer-card.demo-premium-mode .net-days-container {
-    background: rgba(255, 255, 255, 0.5);
+.main-timer-card.premium-countdown .net-days-container {
+    background: rgba(255, 255, 255, 0.65);
     padding: 20px;
     border-radius: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
 }
 
-.main-timer-card.demo-premium-mode .net-days {
+.main-timer-card.premium-countdown .net-days {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: none;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
     transform: scale(1.02);
     display: inline-block;
 }
 
-.main-timer-card.demo-premium-mode .absolute-timer {
-    background: rgba(255, 255, 255, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+.main-timer-card.premium-countdown .absolute-timer {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
 .net-days { font-size: calc(85px * var(--text-scale, 1)); font-weight: 900; line-height: 1; margin: 10px 0; letter-spacing: -2px; }

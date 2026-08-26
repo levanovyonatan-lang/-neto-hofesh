@@ -1373,7 +1373,7 @@ function selectTarget(id, shouldScroll = true) {
     if (target.isHappeningNow) {
         timerBg.style.background = '#fefce8';
         timerBg.classList.add('vacation-mode');
-        timerBg.classList.remove('demo-premium-mode');
+        timerBg.classList.remove('premium-countdown');
         document.getElementById('main-target-title').textContent = `${target.name} כבר כאן! ${target.icon}`;
         if (netDaysPrefix) {
             netDaysPrefix.style.display = 'block';
@@ -1388,13 +1388,7 @@ function selectTarget(id, shouldScroll = true) {
     } else {
         timerBg.style.background = target.bg;
         timerBg.classList.remove('vacation-mode');
-        
-        const isDemoSite = new URLSearchParams(window.location.search).get('show_demo') === 'true' || window.location.hostname.includes('github.io');
-        if (isDemoSite) {
-            timerBg.classList.add('demo-premium-mode');
-        } else {
-            timerBg.classList.remove('demo-premium-mode');
-        }
+        timerBg.classList.add('premium-countdown');
 
         document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
         if (netDaysPrefix) {
