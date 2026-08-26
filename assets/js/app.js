@@ -246,7 +246,7 @@ function copySiteUrlForSafari(btn) {
         try { document.execCommand("copy"); } catch (e) { }
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(installUrl).catch(() => {});
+        navigator.clipboard.writeText(installUrl).catch(() => { });
     }
     trackEvent('copied_url_for_safari');
     btn.innerHTML = "הועתק! ✅";
@@ -265,10 +265,10 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=284&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses.png?v=284&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-white.png?v=284&cb=' + cb, { cache: 'reload' }).catch(() => {});
-        fetch('icon-neto-sunglasses-transparent.png?v=284&cb=' + cb, { cache: 'reload' }).catch(() => {});
+        fetch('manifest.json?v=284&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses.png?v=284&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-white.png?v=284&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-transparent.png?v=284&cb=' + cb, { cache: 'reload' }).catch(() => { });
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
@@ -878,18 +878,18 @@ function updateNextVacationButtonText() {
     const btn = document.getElementById('btn-next-vacation');
     const demoBtn = document.getElementById('btn-demo-next-vacation');
     if (!btn && !demoBtn) return;
-    
+
     const choice = document.querySelector('input[name="schoolType"]:checked');
     const schoolType = choice ? choice.value : 'elem';
-    
+
     const now = Date.now();
     const currentTargets = [...allTargets, ...targets2027];
-    
+
     let isVacationNow = false;
     for (const e of currentTargets) {
         if (e.type && e.type !== schoolType && !(schoolType === 'middle' && e.id.startsWith('summerHigh'))) continue;
         if (e.id === 'summerMiddlePrep' || e.id === 'summerElemLow' || e.id.startsWith('atzmaut') || e.id.startsWith('lagbaomer')) continue;
-        
+
         if (e.isSummer) {
             const summerEnd = new Date(e.date.getFullYear(), 8, 1);
             if (e.date.getTime() <= now && now < summerEnd.getTime()) {
@@ -911,7 +911,7 @@ function updateNextVacationButtonText() {
             }
         }
     }
-    
+
     if (isVacationNow) {
         if (btn) btn.innerHTML = 'כמה ימים נשאר עד תחילת הלימודים? <span aria-hidden="true" style="font-size: 1.15em;">⏳</span>';
         if (demoBtn) demoBtn.innerHTML = 'תחילת הלימודים ⏳';
@@ -926,20 +926,20 @@ window.onload = () => {
     initPWA();
     setupManualCopyListener();
     const urlParams = new URLSearchParams(window.location.search);
-    
+
     if (urlParams.get('show_demo') === 'true') {
         document.title = "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש";
         const ogTitle = document.querySelector('meta[property="og:title"]');
         if (ogTitle) ogTitle.setAttribute("content", "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש");
-        
+
         const seoFooterH2 = document.querySelector('.seo-footer h2');
         if (seoFooterH2) seoFooterH2.textContent = "מתי באמת החופש 2026? ספירה לאחור - נטו חופש";
-        
+
         const setupSteps = document.querySelectorAll('.setup-step');
         if (setupSteps.length >= 2) {
             setupSteps[1].style.marginTop = '2px';
         }
-        
+
         const defaultBtns = document.getElementById('default-action-buttons');
         const demoBtns = document.getElementById('demo-action-buttons');
         if (defaultBtns && demoBtns) {
@@ -1211,7 +1211,7 @@ function showMainScreen() {
         if (jobsBanner) jobsBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
-        
+
         const modalWhatsappBtn = document.getElementById('modal-whatsapp-join-btn');
         if (modalWhatsappBtn) modalWhatsappBtn.href = "https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF";
 
@@ -1225,7 +1225,7 @@ function showMainScreen() {
         if (jobsBanner) jobsBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
-        
+
         const modalWhatsappBtn = document.getElementById('modal-whatsapp-join-btn');
         if (modalWhatsappBtn) modalWhatsappBtn.href = "https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF";
 
@@ -1287,8 +1287,8 @@ function showMainScreen() {
         if (userConfig.schoolType === 'high') return e.type === 'high';
         return false;
     });
-    activeEventsList.sort((a, b) => a.date - b.date); 
-    
+    activeEventsList.sort((a, b) => a.date - b.date);
+
     const activeHolidayFromUrl = window.NETO_ACTIVE_HOLIDAY || getActiveHolidayFromUrlOrWindow();
     if (activeHolidayFromUrl && activeEventsList.some(t => t.id === activeHolidayFromUrl)) {
         userConfig.activeTargetId = activeHolidayFromUrl;
@@ -1296,10 +1296,10 @@ function showMainScreen() {
     } else if (userConfig.targetIntent) {
         let selectedId = '';
         if (userConfig.targetIntent === 'next') {
-            const nextVacation = activeEventsList.find(t => 
-                !t.id.startsWith('atzmaut') && 
-                !t.id.startsWith('lagbaomer') && 
-                t.id !== 'summerMiddlePrep' && 
+            const nextVacation = activeEventsList.find(t =>
+                !t.id.startsWith('atzmaut') &&
+                !t.id.startsWith('lagbaomer') &&
+                t.id !== 'summerMiddlePrep' &&
                 t.id !== 'summerElemLow'
             );
             selectedId = nextVacation ? nextVacation.id : activeEventsList[0].id;
@@ -1315,7 +1315,7 @@ function showMainScreen() {
         userConfig.targetIntent = null;
     }
 
-    renderHolidays(); 
+    renderHolidays();
     selectTarget(userConfig.activeTargetId || activeEventsList[0].id, false);
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
 }
@@ -1427,7 +1427,7 @@ function selectTarget(id, shouldScroll = true) {
     } else {
         targetDaysForAnim = calculateNetDays(target.date, target.noFriday, target.id);
     }
-    animateNetDays(targetDaysForAnim); 
+    animateNetDays(targetDaysForAnim);
     updateDashboard();
 }
 
@@ -1468,7 +1468,7 @@ function shareWhatsApp(event) {
     event.preventDefault(); trackEvent('share_whatsapp_click');
     const activeHolidayId = window.NETO_ACTIVE_HOLIDAY || userConfig.activeTargetId || getActiveHolidayFromUrlOrWindow();
     let shareUrl = 'https://www.neto-hofesh.co.il/';
-    
+
     if (activeHolidayId) {
         const targetObj = activeEventsList.find(t => t.id === activeHolidayId) || allTargets.find(t => t.id === activeHolidayId) || targets2027.find(t => t.id === activeHolidayId);
         if (targetObj) {
@@ -1492,7 +1492,7 @@ function shareWhatsApp(event) {
             }
         }
     }
-    
+
     const text = `אמאל'ה, קלטתם כמה ימי לימוד נשארו עד החופש? 😱🏃‍♂️ כנסו דחוף לראות את הספירה לאחור >> ${shareUrl}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 }

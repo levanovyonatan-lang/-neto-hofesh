@@ -206,6 +206,36 @@ input:checked + .smiley-handle::after { content: "☹️"; }
     font-weight: 900;
 }
 
+/* --- Premium Countdown Mode (Demo Only) --- */
+.main-timer-card.demo-premium-mode {
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), inset 0 0 20px rgba(255, 255, 255, 0.5) !important;
+}
+
+.main-timer-card.demo-premium-mode .net-days-container {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+.main-timer-card.demo-premium-mode .net-days {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transform: scale(1.02);
+    display: inline-block;
+}
+
+.main-timer-card.demo-premium-mode .absolute-timer {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
 .net-days { font-size: calc(85px * var(--text-scale, 1)); font-weight: 900; line-height: 1; margin: 10px 0; letter-spacing: -2px; }
 .absolute-timer {
     display: flex; justify-content: center; gap: 12px; background: rgba(0,0,0,0.04); padding: 16px; border-radius: 22px; margin-top: 18px;
