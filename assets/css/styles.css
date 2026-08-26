@@ -221,11 +221,11 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 }
 
 .main-timer-card.premium-countdown .net-days {
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: none;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
     transform: scale(1.02);
     display: inline-block;
 }
