@@ -221,7 +221,7 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 }
 
 .main-timer-card.premium-countdown .net-days {
-    background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
+    background: linear-gradient(135deg, #facc15 0%, #d97706 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: none;
