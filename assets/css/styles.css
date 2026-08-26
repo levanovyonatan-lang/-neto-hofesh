@@ -172,11 +172,11 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 }
 
 .main-timer-card.vacation-mode .net-days {
-    background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: none;
-    filter: drop-shadow(0 4px 6px rgba(161, 98, 7, 0.4));
+    filter: drop-shadow(0 4px 6px rgba(234, 88, 12, 0.4));
     transform: scale(1.05);
     display: inline-block;
 }
