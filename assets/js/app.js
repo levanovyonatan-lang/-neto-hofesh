@@ -1371,7 +1371,9 @@ function selectTarget(id, shouldScroll = true) {
     const totalDaysLabel = document.getElementById('total-days-label');
 
     if (target.isHappeningNow) {
+        timerBg.style.background = '#fefce8';
         timerBg.classList.add('vacation-mode');
+        timerBg.classList.remove('demo-premium-mode');
         document.getElementById('main-target-title').textContent = `${target.name} כבר כאן! ${target.icon}`;
         if (netDaysPrefix) {
             netDaysPrefix.style.display = 'block';
@@ -1384,7 +1386,16 @@ function selectTarget(id, shouldScroll = true) {
         if (totalDaysLabel) totalDaysLabel.style.display = 'none';
         if (vacationMessage) vacationMessage.style.display = 'block';
     } else {
+        timerBg.style.background = target.bg;
         timerBg.classList.remove('vacation-mode');
+        
+        const isDemoSite = new URLSearchParams(window.location.search).get('show_demo') === 'true' || window.location.hostname.includes('github.io');
+        if (isDemoSite) {
+            timerBg.classList.add('demo-premium-mode');
+        } else {
+            timerBg.classList.remove('demo-premium-mode');
+        }
+
         document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
         if (netDaysPrefix) {
             netDaysPrefix.style.display = 'block';
