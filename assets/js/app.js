@@ -1672,6 +1672,7 @@ function triggerSurferAnimation() {
 
 
 
+
 function updateSponsorTexts() {
     const sponsorOptions = [
         "מרגיש שאתה יכול יותר? 💪<br><b><span style='color: #166534;'>בוא לפרוץ את הגבולות שלך עם אימוני כוח מטורפים</span></b>",
