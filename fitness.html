@@ -16,7 +16,7 @@
         };
 
         window.addEventListener('DOMContentLoaded', function() {
-            window.trackEvent('view_avigail_camp_page');
+            window.trackEvent('view_fitness_page');
         });
     </script>
 
@@ -378,7 +378,7 @@
 
     <!-- Main Video Hero -->
     <div class="video-container" style="position: relative;">
-        <video id="avigail-vid" playsinline controls poster="assets/images/fitness-bg.jpg">
+        <video id="fitness-vid" playsinline controls poster="assets/images/fitness-bg.jpg">
             <source src="assets/videos/fitness.html.mp4" type="video/mp4">
         </video>
 
@@ -393,7 +393,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const video = document.getElementById('avigail-vid');
+            const video = document.getElementById('fitness-vid');
             const overlay = document.getElementById('play-overlay');
             const playText = document.getElementById('play-text');
             
@@ -422,7 +422,6 @@
 
                 // Track when video finishes
                 video.addEventListener('ended', function() {
-                    if(window.trackEvent) window.trackEvent('finish_watch_fitness_video');
                     overlay.style.display = 'flex';
                     if (playText) playText.innerText = "לחצו לצפייה חוזרת";
                 });
