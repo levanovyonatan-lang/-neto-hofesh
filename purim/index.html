@@ -157,10 +157,19 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            /* Handle iOS Safari scroll gap by bleeding white background downward */
-            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 200px);
-            margin-bottom: -200px;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
             box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sticky-banner-container::after {
+            content: '';
+            position: absolute;
+            top: 99%; /* slightly overlap to prevent seam */
+            left: 0;
+            width: 100%;
+            height: 50vh;
+            background: #fff;
+            z-index: -1;
         }
 
         #jobs-banner {
