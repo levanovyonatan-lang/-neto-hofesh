@@ -1,4 +1,4 @@
-const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
+﻿const loadingPhrases = ["׳˜׳•׳¢׳ ׳₪׳׳ ׳¥' ׳׳•׳—׳¥... נ₪–", "׳׳—׳©׳‘ ׳׳ ׳¨׳’׳™׳•׳× ׳׳§׳™׳¥... ג˜€ן¸", "׳׳—׳₪׳© ׳›׳•׳— ׳¨׳¦׳•׳... נ”"];
 const tipsDataVersion = 'tips-file-v2';
 const dailyTipsStorageKey = `holiday_calc_daily_tips_${tipsDataVersion}`;
 const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
@@ -28,9 +28,9 @@ const shouldOpenInstallVideo = (() => {
     } catch (e) { return false; }
 })();
 
-// שמירת ה-Prompt להתקנה אוטומטית באנדרואיד
+// ׳©׳׳™׳¨׳× ׳”-Prompt ׳׳”׳×׳§׳ ׳” ׳׳•׳˜׳•׳׳˜׳™׳× ׳‘׳׳ ׳“׳¨׳•׳׳™׳“
 window.addEventListener('beforeinstallprompt', (e) => {
-    // הסרנו את e.preventDefault() כדי לאפשר לדפדפן להקפיץ את הפס הלבן האוטומטי בתחתית המסך
+    // ׳”׳¡׳¨׳ ׳• ׳׳× e.preventDefault() ׳›׳“׳™ ׳׳׳₪׳©׳¨ ׳׳“׳₪׳“׳₪׳ ׳׳”׳§׳₪׳™׳¥ ׳׳× ׳”׳₪׳¡ ׳”׳׳‘׳ ׳”׳׳•׳˜׳•׳׳˜׳™ ׳‘׳×׳—׳×׳™׳× ׳”׳׳¡׳
     deferredPrompt = e;
 });
 
@@ -51,36 +51,36 @@ function trackEvent(eventName, params = {}) {
 let activeHolidays = ['2026-04-22', '2026-05-05', '2026-05-21', '2026-05-22'];
 
 const holidays2027 = [
-    '2026-09-11', '2026-09-13', // ראש השנה
-    '2026-09-20', '2026-09-21', '2026-09-22', '2026-09-23', '2026-09-24', '2026-09-25', '2026-09-27', '2026-09-28', '2026-09-29', '2026-09-30', '2026-10-01', '2026-10-02', // כיפור וסוכות
-    '2026-12-06', '2026-12-07', '2026-12-08', '2026-12-09', '2026-12-10', '2026-12-11', // חנוכה
-    '2027-03-23', '2027-03-24', // פורים
-    '2027-04-13', '2027-04-14', '2027-04-15', '2027-04-16', '2027-04-18', '2027-04-19', '2027-04-20', '2027-04-21', '2027-04-22', '2027-04-23', '2027-04-25', '2027-04-26', '2027-04-27', '2027-04-28', // פסח
-    '2027-05-12', '2027-05-25', // יום העצמאות ול"ג בעומר
-    '2027-06-10', '2027-06-11' // שבועות
+    '2026-09-11', '2026-09-13', // ׳¨׳׳© ׳”׳©׳ ׳”
+    '2026-09-20', '2026-09-21', '2026-09-22', '2026-09-23', '2026-09-24', '2026-09-25', '2026-09-27', '2026-09-28', '2026-09-29', '2026-09-30', '2026-10-01', '2026-10-02', // ׳›׳™׳₪׳•׳¨ ׳•׳¡׳•׳›׳•׳×
+    '2026-12-06', '2026-12-07', '2026-12-08', '2026-12-09', '2026-12-10', '2026-12-11', // ׳—׳ ׳•׳›׳”
+    '2027-03-23', '2027-03-24', // ׳₪׳•׳¨׳™׳
+    '2027-04-13', '2027-04-14', '2027-04-15', '2027-04-16', '2027-04-18', '2027-04-19', '2027-04-20', '2027-04-21', '2027-04-22', '2027-04-23', '2027-04-25', '2027-04-26', '2027-04-27', '2027-04-28', // ׳₪׳¡׳—
+    '2027-05-12', '2027-05-25', // ׳™׳•׳ ׳”׳¢׳¦׳׳׳•׳× ׳•׳"׳’ ׳‘׳¢׳•׳׳¨
+    '2027-06-10', '2027-06-11' // ׳©׳‘׳•׳¢׳•׳×
 ];
 
 const targets2027 = [
-    { id: 'roshHashana2026', name: 'ראש השנה', date: new Date('2026-09-11T08:15:00'), icon: '🍯', bg: '#fef3c7', lengthText: '<b>שלושה ימים</b> כולל שישי-שבת' },
-    { id: 'kippurSukkot2026', name: 'כיפור וסוכות', date: new Date('2026-09-20T08:15:00'), icon: '🛖', bg: '#ecfdf5', lengthText: '<b>שבועיים רצופים!</b>' },
-    { id: 'hanukkah2026', name: 'חנוכה', date: new Date('2026-12-06T08:15:00'), icon: '🍩', bg: '#eff6ff', lengthText: '<b>שבוע שלם</b>' },
-    { id: 'purim2027', name: 'פורים', date: new Date('2027-03-23T08:15:00'), icon: '🎭', bg: '#fdf4ff', lengthText: '<b>יומיים</b> מטורפים' },
-    { id: 'pesach2027', name: 'פסח', date: new Date('2027-04-13T08:15:00'), icon: '🍷', bg: '#fff7ed', lengthText: '<b>16 ימים!</b>' },
-    { id: 'atzmaut2027', name: 'יום העצמאות', date: new Date('2027-05-12T08:15:00'), icon: '🇮🇱', bg: '#f0f9ff', lengthText: '<b>יום אחד</b>' },
-    { id: 'lagbaomer', name: 'ל"ג בעומר', date: new Date('2027-05-25T08:15:00'), icon: '🔥', bg: '#fff7ed', lengthText: '<b>יום אחד</b>' },
-    { id: 'shavuot2027', name: 'שבועות', date: new Date('2027-06-10T08:15:00'), icon: '🧀', bg: '#f0fdf4', lengthText: '<b>שלושה ימים</b> כולל שישי-שבת' },
-    { id: 'summerHigh2027', name: 'החופש הגדול', date: new Date('2027-06-21T08:15:00'), isSummer: true, type: 'high', icon: '🏖️', bg: '#fefce8' },
-    { id: 'summerElem2027', name: 'החופש הגדול', date: new Date('2027-07-01T08:15:00'), isSummer: true, type: 'elem', icon: '🍉', bg: '#fefce8' }
+    { id: 'roshHashana2026', name: '׳¨׳׳© ׳”׳©׳ ׳”', date: new Date('2026-09-11T08:15:00'), icon: 'נ¯', bg: '#fef3c7', lengthText: '<b>׳©׳׳•׳©׳” ׳™׳׳™׳</b> ׳›׳•׳׳ ׳©׳™׳©׳™-׳©׳‘׳×' },
+    { id: 'kippurSukkot2026', name: '׳›׳™׳₪׳•׳¨ ׳•׳¡׳•׳›׳•׳×', date: new Date('2026-09-20T08:15:00'), icon: 'נ›–', bg: '#ecfdf5', lengthText: '<b>׳©׳‘׳•׳¢׳™׳™׳ ׳¨׳¦׳•׳₪׳™׳!</b>' },
+    { id: 'hanukkah2026', name: '׳—׳ ׳•׳›׳”', date: new Date('2026-12-06T08:15:00'), icon: 'נ©', bg: '#eff6ff', lengthText: '<b>׳©׳‘׳•׳¢ ׳©׳׳</b>' },
+    { id: 'purim2027', name: '׳₪׳•׳¨׳™׳', date: new Date('2027-03-23T08:15:00'), icon: 'נ­', bg: '#fdf4ff', lengthText: '<b>׳™׳•׳׳™׳™׳</b> ׳׳˜׳•׳¨׳₪׳™׳' },
+    { id: 'pesach2027', name: '׳₪׳¡׳—', date: new Date('2027-04-13T08:15:00'), icon: 'נ·', bg: '#fff7ed', lengthText: '<b>16 ׳™׳׳™׳!</b>' },
+    { id: 'atzmaut2027', name: '׳™׳•׳ ׳”׳¢׳¦׳׳׳•׳×', date: new Date('2027-05-12T08:15:00'), icon: 'נ‡®נ‡±', bg: '#f0f9ff', lengthText: '<b>׳™׳•׳ ׳׳—׳“</b>' },
+    { id: 'lagbaomer', name: '׳"׳’ ׳‘׳¢׳•׳׳¨', date: new Date('2027-05-25T08:15:00'), icon: 'נ”¥', bg: '#fff7ed', lengthText: '<b>׳™׳•׳ ׳׳—׳“</b>' },
+    { id: 'shavuot2027', name: '׳©׳‘׳•׳¢׳•׳×', date: new Date('2027-06-10T08:15:00'), icon: 'נ§€', bg: '#f0fdf4', lengthText: '<b>׳©׳׳•׳©׳” ׳™׳׳™׳</b> ׳›׳•׳׳ ׳©׳™׳©׳™-׳©׳‘׳×' },
+    { id: 'summerHigh2027', name: '׳”׳—׳•׳₪׳© ׳”׳’׳“׳•׳', date: new Date('2027-06-21T08:15:00'), isSummer: true, type: 'high', icon: 'נ–ן¸', bg: '#fefce8' },
+    { id: 'summerElem2027', name: '׳”׳—׳•׳₪׳© ׳”׳’׳“׳•׳', date: new Date('2027-07-01T08:15:00'), isSummer: true, type: 'elem', icon: 'נ‰', bg: '#fefce8' }
 ];
 
 const allTargets = [
-    { id: 'atzmaut', name: 'יום העצמאות', date: new Date('2026-04-22T08:15:00'), icon: '🇮🇱', bg: '#f0f9ff', lengthText: '<b>יום אחד</b>' },
-    { id: 'lagbaomer', name: 'ל"ג בעומר', date: new Date('2026-05-05T08:15:00'), icon: '🔥', bg: '#fff7ed', lengthText: '<b>יום אחד</b>' },
-    { id: 'shavuot', name: 'שבועות', date: new Date('2026-05-21T08:15:00'), icon: '🧀', bg: '#f0fdf4', lengthText: '<b>שלושה ימים</b> כולל שישי-שבת' },
-    { id: 'summerHigh', name: 'החופש הגדול', date: new Date('2026-06-19T08:15:00'), isSummer: true, type: 'high', icon: '🏖️', bg: '#fefce8' },
-    { id: 'summerMiddlePrep', name: 'מכינת קיץ', date: new Date('2026-07-01T08:15:00'), type: 'middle', icon: '🤖', bg: '#eff6ff', noFriday: true, description: 'לכיתות ז\'-ט\' (לא חובה). לומדים עד ה-30.6', lengthText: '<b>62 ימים</b>' },
-    { id: 'summerElemLow', name: 'ביה"ס של החופש הגדול (א\'-ג\')', date: new Date('2026-07-31T08:15:00'), type: 'elem', icon: '🎒', bg: '#fdf4ff', description: 'לומדים עד ה-30.7 (לא חובה)', noFriday: true, lengthText: '<b>32 ימים</b>' },
-    { id: 'summerElem', name: 'החופש הגדול', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'elem', icon: '🍉', bg: '#fefce8' }
+    { id: 'atzmaut', name: '׳™׳•׳ ׳”׳¢׳¦׳׳׳•׳×', date: new Date('2026-04-22T08:15:00'), icon: 'נ‡®נ‡±', bg: '#f0f9ff', lengthText: '<b>׳™׳•׳ ׳׳—׳“</b>' },
+    { id: 'lagbaomer', name: '׳"׳’ ׳‘׳¢׳•׳׳¨', date: new Date('2026-05-05T08:15:00'), icon: 'נ”¥', bg: '#fff7ed', lengthText: '<b>׳™׳•׳ ׳׳—׳“</b>' },
+    { id: 'shavuot', name: '׳©׳‘׳•׳¢׳•׳×', date: new Date('2026-05-21T08:15:00'), icon: 'נ§€', bg: '#f0fdf4', lengthText: '<b>׳©׳׳•׳©׳” ׳™׳׳™׳</b> ׳›׳•׳׳ ׳©׳™׳©׳™-׳©׳‘׳×' },
+    { id: 'summerHigh', name: '׳”׳—׳•׳₪׳© ׳”׳’׳“׳•׳', date: new Date('2026-06-19T08:15:00'), isSummer: true, type: 'high', icon: 'נ–ן¸', bg: '#fefce8' },
+    { id: 'summerMiddlePrep', name: '׳׳›׳™׳ ׳× ׳§׳™׳¥', date: new Date('2026-07-01T08:15:00'), type: 'middle', icon: 'נ₪–', bg: '#eff6ff', noFriday: true, description: '׳׳›׳™׳×׳•׳× ׳–\'-׳˜\' (׳׳ ׳—׳•׳‘׳”). ׳׳•׳׳“׳™׳ ׳¢׳“ ׳”-30.6', lengthText: '<b>62 ׳™׳׳™׳</b>' },
+    { id: 'summerElemLow', name: '׳‘׳™׳”"׳¡ ׳©׳ ׳”׳—׳•׳₪׳© ׳”׳’׳“׳•׳ (׳\'-׳’\')', date: new Date('2026-07-31T08:15:00'), type: 'elem', icon: 'נ’', bg: '#fdf4ff', description: '׳׳•׳׳“׳™׳ ׳¢׳“ ׳”-30.7 (׳׳ ׳—׳•׳‘׳”)', noFriday: true, lengthText: '<b>32 ׳™׳׳™׳</b>' },
+    { id: 'summerElem', name: '׳”׳—׳•׳₪׳© ׳”׳’׳“׳•׳', date: new Date('2026-07-01T08:15:00'), isSummer: true, type: 'elem', icon: 'נ‰', bg: '#fefce8' }
 ];
 
 function initPWA() {
@@ -97,7 +97,7 @@ function initPWA() {
         }).catch(() => { });
 
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-            // בPWA ממסך הבית - לעולם לא לעשות reload כדי למנוע הבהוב כפול
+            // ׳‘PWA ׳׳׳¡׳ ׳”׳‘׳™׳× - ׳׳¢׳•׳׳ ׳׳ ׳׳¢׳©׳•׳× reload ׳›׳“׳™ ׳׳׳ ׳•׳¢ ׳”׳‘׳”׳•׳‘ ׳›׳₪׳•׳
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
             if (isStandalone) return;
 
@@ -128,7 +128,7 @@ function initPWA() {
         const a2hsBtn = document.getElementById('a2hs-btn');
         if (a2hsBtn) a2hsBtn.style.display = 'none';
 
-        // מעקב התקנה ופתיחה ב-IOS
+        // ׳׳¢׳§׳‘ ׳”׳×׳§׳ ׳” ׳•׳₪׳×׳™׳—׳” ׳‘-IOS
         const isIOS = /iPad|iPhone|iPod/.test(window.navigator.userAgent) && !window.MSStream;
         if (isIOS) {
             if (!localStorage.getItem('ios_pwa_installed_tracked')) {
@@ -173,7 +173,7 @@ function openSafariInstallVideoModal() {
 
         if (videoContainer) videoContainer.style.display = 'block';
         if (writtenContent) writtenContent.style.display = 'none';
-        if (toggleBtn) toggleBtn.innerHTML = 'הסבר כתוב 📝';
+        if (toggleBtn) toggleBtn.innerHTML = '׳”׳¡׳‘׳¨ ׳›׳×׳•׳‘ נ“';
 
         const video = videoContainer ? videoContainer.querySelector('video') : null;
         if (video) {
@@ -249,9 +249,9 @@ function copySiteUrlForSafari(btn) {
         navigator.clipboard.writeText(installUrl).catch(() => { });
     }
     trackEvent('copied_url_for_safari');
-    btn.innerHTML = "הועתק! ✅";
+    btn.innerHTML = "׳”׳•׳¢׳×׳§! ג…";
     btn.style.background = "#dcfce7"; btn.style.color = "#166534"; btn.style.borderColor = "#86efac";
-    setTimeout(() => { btn.innerHTML = "העתק קישור 📋"; btn.style.background = "#fef08a"; btn.style.color = "#854d0e"; btn.style.borderColor = "#fde047"; }, 3000);
+    setTimeout(() => { btn.innerHTML = "׳”׳¢׳×׳§ ׳§׳™׳©׳•׳¨ נ“‹"; btn.style.background = "#fef08a"; btn.style.color = "#854d0e"; btn.style.borderColor = "#fde047"; }, 3000);
 }
 
 function closeIosModal() {
@@ -291,14 +291,14 @@ function toggleInstructionMode() {
         // Switch to written
         videoContainer.style.display = 'none';
         writtenInstructions.style.display = 'block';
-        toggleBtn.innerHTML = 'סרטון הסבר 🎬';
+        toggleBtn.innerHTML = '׳¡׳¨׳˜׳•׳ ׳”׳¡׳‘׳¨ נ¬';
         if (video) video.pause();
         trackEvent('switch_to_written_instructions');
     } else {
         // Switch to video
         videoContainer.style.display = 'block';
         writtenInstructions.style.display = 'none';
-        toggleBtn.innerHTML = 'הסבר כתוב 📝';
+        toggleBtn.innerHTML = '׳”׳¡׳‘׳¨ ׳›׳×׳•׳‘ נ“';
         if (video) {
             video.currentTime = 0;
             video.play().catch(() => { });
@@ -317,7 +317,7 @@ function openVipModal() {
 
     const copyBtn = document.getElementById('dedicated-copy-btn');
     if (copyBtn) {
-        copyBtn.innerHTML = "העתק 📋";
+        copyBtn.innerHTML = "׳”׳¢׳×׳§ נ“‹";
         copyBtn.style.background = "#fef08a"; copyBtn.style.color = "#854d0e"; copyBtn.style.borderColor = "#fde047";
         copyBtn.classList.remove('copied'); copyBtn.classList.remove('video-ended-highlight');
     }
@@ -392,7 +392,7 @@ function highlightCopyButton() {
 
 function copyPromoCode(btnElement) {
     const tempInput = document.createElement("input");
-    tempInput.value = 'חופש';
+    tempInput.value = '׳—׳•׳₪׳©';
     document.body.appendChild(tempInput);
     tempInput.select();
     document.execCommand("copy");
@@ -401,7 +401,7 @@ function copyPromoCode(btnElement) {
     hasCopiedPromoCode = true; trackEvent('copied_promo_code_via_btn');
 
     btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied');
-    btnElement.innerHTML = "הועתק! ✅"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac";
+    btnElement.innerHTML = "׳”׳•׳¢׳×׳§! ג…"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac";
 }
 
 function setupManualCopyListener() {
@@ -410,7 +410,7 @@ function setupManualCopyListener() {
         promoTextElement.addEventListener('copy', function () {
             hasCopiedPromoCode = true; trackEvent('copied_promo_code_manually');
             const btnElement = document.getElementById('dedicated-copy-btn');
-            if (btnElement) { btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied'); btnElement.innerHTML = "הועתק! ✅"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac"; }
+            if (btnElement) { btnElement.classList.remove('video-ended-highlight'); btnElement.classList.add('copied'); btnElement.innerHTML = "׳”׳•׳¢׳×׳§! ג…"; btnElement.style.background = "#dcfce7"; btnElement.style.color = "#166534"; btnElement.style.borderColor = "#86efac"; }
         });
     }
 }
@@ -422,7 +422,7 @@ function attemptRegistration() {
     } else {
         trackEvent('success_reg_without_copy');
     }
-    // הקישור נפתח מיד בכל מצב
+    // ׳”׳§׳™׳©׳•׳¨ ׳ ׳₪׳×׳— ׳׳™׳“ ׳‘׳›׳ ׳׳¦׳‘
     const a = document.createElement('a');
     a.href = registrationLink;
     a.target = '_blank';
@@ -654,11 +654,11 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 
     if (currentState.clicks > 0 && currentState.texts && currentState.texts.length > 0) {
         const latestTip = currentState.texts[currentState.texts.length - 1];
-        const title = currentState.clicks === 1 ? (isVacation ? "המשימה היומית" : "הטיפ היומי") : "טיפ נוסף";
-        const secondTipText = isVacation ? "לחצו לטיפ אופטימיות יומי ✨" : "לחצו כאן לטיפ נוסף ✨";
-        let extraHTML = currentState.clicks === 1 ? `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover); margin-top: 8px; display: block;">${secondTipText}</span>` : `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--text-muted); margin-top: 8px; display: block;">טיפ חדש יופיע מחר ✨</span>`;
+        const title = currentState.clicks === 1 ? (isVacation ? "׳”׳׳©׳™׳׳” ׳”׳™׳•׳׳™׳×" : "׳”׳˜׳™׳₪ ׳”׳™׳•׳׳™") : "׳˜׳™׳₪ ׳ ׳•׳¡׳£";
+        const secondTipText = isVacation ? "׳׳—׳¦׳• ׳׳˜׳™׳₪ ׳׳•׳₪׳˜׳™׳׳™׳•׳× ׳™׳•׳׳™ ג¨" : "׳׳—׳¦׳• ׳›׳׳ ׳׳˜׳™׳₪ ׳ ׳•׳¡׳£ ג¨";
+        let extraHTML = currentState.clicks === 1 ? `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover); margin-top: 8px; display: block;">${secondTipText}</span>` : `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--text-muted); margin-top: 8px; display: block;">׳˜׳™׳₪ ׳—׳“׳© ׳™׳•׳₪׳™׳¢ ׳׳—׳¨ ג¨</span>`;
 
-        const titleIcon = isVacation && currentState.clicks === 1 ? "⚡" : "✨";
+        const titleIcon = isVacation && currentState.clicks === 1 ? "ג¡" : "ג¨";
         btnText.innerHTML = `<b style="color: var(--text-main); font-size: calc(16px * var(--text-scale, 1));">${title} ${titleIcon}</b><br><span style="color: var(--text-main); font-weight: 600;">${latestTip}</span>${extraHTML}`;
         btn.classList.add('has-tip');
 
@@ -668,7 +668,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
 
             if (sponsorBanner) {
-                sponsorBanner.style.display = 'none'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
+                sponsorBanner.style.display = 'block'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
                 sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
                 if (userConfig.schoolType === 'elem') {
                     trackEvent('view_tip_sponsor_elem');
@@ -680,15 +680,15 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                 window.scrollBy({ top: 70, behavior: 'smooth' });
             }, 150);
         } else {
-            if (sponsorBanner) sponsorBanner.style.display = 'none';
+            if (sponsorBanner) sponsorBanner.style.display = 'block';
         }
 
         if (currentState.clicks >= 2) { btn.disabled = true; btn.style.pointerEvents = 'none'; btn.setAttribute('aria-disabled', 'true'); }
         else { btn.disabled = false; btn.style.pointerEvents = 'auto'; btn.removeAttribute('aria-disabled'); }
     } else {
-        btnText.innerHTML = isVacation ? "לחצו למשימה היומית ⚡" : "לחצו לטיפ אופטימיות יומי ✨";
+        btnText.innerHTML = isVacation ? "׳׳—׳¦׳• ׳׳׳©׳™׳׳” ׳”׳™׳•׳׳™׳× ג¡" : "׳׳—׳¦׳• ׳׳˜׳™׳₪ ׳׳•׳₪׳˜׳™׳׳™׳•׳× ׳™׳•׳׳™ ג¨";
         btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
-        if (sponsorBanner) sponsorBanner.style.display = 'none';
+        if (sponsorBanner) sponsorBanner.style.display = 'block';
     }
 }
 
@@ -698,10 +698,10 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
         const _il = new Date(_d.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
         const _str = `${_il.getFullYear()}-${String(_il.getMonth() + 1).padStart(2, '0')}-${String(_il.getDate()).padStart(2, '0')}`;
         if (_str === '2026-06-27') {
-            return "המורה אמרה “נשאר לנו רק נושא קטן” ואז התחילה סופת שלגים של סיכומים, דפים ומבטי ייאוש. 📚😵💫";
+            return "׳”׳׳•׳¨׳” ׳׳׳¨׳” ג€׳ ׳©׳׳¨ ׳׳ ׳• ׳¨׳§ ׳ ׳•׳©׳ ׳§׳˜׳ג€ ׳•׳׳– ׳”׳×׳—׳™׳׳” ׳¡׳•׳₪׳× ׳©׳׳’׳™׳ ׳©׳ ׳¡׳™׳›׳•׳׳™׳, ׳“׳₪׳™׳ ׳•׳׳‘׳˜׳™ ׳™׳™׳׳•׳©. נ“נ˜µנ’«";
         }
         if (_str === '2026-06-28') {
-            return "המזגן בכיתה עובד כאילו הוא קיבל משימה אישית להפוך את יוני לסופת שלגים. 🥶☀️";
+            return "׳”׳׳–׳’׳ ׳‘׳›׳™׳×׳” ׳¢׳•׳‘׳“ ׳›׳׳™׳׳• ׳”׳•׳ ׳§׳™׳‘׳ ׳׳©׳™׳׳” ׳׳™׳©׳™׳× ׳׳”׳₪׳•׳ ׳׳× ׳™׳•׳ ׳™ ׳׳¡׳•׳₪׳× ׳©׳׳’׳™׳. נ¥¶ג˜€ן¸";
         }
     }
 
@@ -755,13 +755,13 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
 
     if (!pool.length) throw new Error('No tips are available for the selected context');
 
-    // יצירת אינדקס דטרמיניסטי לפי התאריך (מאופס מהיום כדי שטיפים חדשים יופיעו קודם)
+    // ׳™׳¦׳™׳¨׳× ׳׳™׳ ׳“׳§׳¡ ׳“׳˜׳¨׳׳™׳ ׳™׳¡׳˜׳™ ׳׳₪׳™ ׳”׳×׳׳¨׳™׳ (׳׳׳•׳₪׳¡ ׳׳”׳™׳•׳ ׳›׳“׳™ ׳©׳˜׳™׳₪׳™׳ ׳—׳“׳©׳™׳ ׳™׳•׳₪׳™׳¢׳• ׳§׳•׳“׳)
     const now = new Date();
     const start = new Date('2026-05-16');
     let dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
     if (dayIndex < 0) dayIndex = 0;
 
-    // בחירת אינדקס בצורה עוקבת כדי למנוע חזרות ככל הניתן
+    // ׳‘׳—׳™׳¨׳× ׳׳™׳ ׳“׳§׳¡ ׳‘׳¦׳•׳¨׳” ׳¢׳•׳§׳‘׳× ׳›׳“׳™ ׳׳׳ ׳•׳¢ ׳—׳–׳¨׳•׳× ׳›׳›׳ ׳”׳ ׳™׳×׳
     let finalIndex;
     if (poolKeyOverride && tipsDb[poolKeyOverride]) {
         if (isCountdown) {
@@ -780,7 +780,7 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
             // Advance regular pool by 1 per day instead of 2.
             finalIndex = dayIndex % pool.length;
         } else {
-            // כל יום "מתקדמים" ב-2 טיפים בתוך המאגר
+            // ׳›׳ ׳™׳•׳ "׳׳×׳§׳“׳׳™׳" ׳‘-2 ׳˜׳™׳₪׳™׳ ׳‘׳×׳•׳ ׳”׳׳׳’׳¨
             finalIndex = (dayIndex * 2 + (tipNumber - 1)) % pool.length;
         }
     }
@@ -806,7 +806,7 @@ function handleAiTip() {
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
     const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
 
-    // שליחת אירוע עם שם ייחודי באנגלית
+    // ׳©׳׳™׳—׳× ׳׳™׳¨׳•׳¢ ׳¢׳ ׳©׳ ׳™׳™׳—׳•׳“׳™ ׳‘׳׳ ׳’׳׳™׳×
     const descriptiveEventName = `tip_${currentState.clicks + 1}_${schoolNameEng}`;
     trackEvent(descriptiveEventName, {
         'target_id': target.id,
@@ -815,7 +815,7 @@ function handleAiTip() {
         'tip_label': `Tip ${currentState.clicks + 1} ${schoolNameEng}`
     });
 
-    // גיבוי עם השם הכללי
+    // ׳’׳™׳‘׳•׳™ ׳¢׳ ׳”׳©׳ ׳”׳›׳׳׳™
     trackEvent('click_ai_tip', {
         'school_type': schoolNameEng,
         'tip_number': currentState.clicks + 1
@@ -830,7 +830,7 @@ function handleAiTip() {
         } catch (error) {
             console.error(error);
             trackEvent('tip_load_failed', { 'target_id': target.id });
-            btnText.innerHTML = "לא הצלחנו לטעון טיפ כרגע. נסו שוב עוד רגע ✨";
+            btnText.innerHTML = "׳׳ ׳”׳¦׳׳—׳ ׳• ׳׳˜׳¢׳•׳ ׳˜׳™׳₪ ׳›׳¨׳’׳¢. ׳ ׳¡׳• ׳©׳•׳‘ ׳¢׳•׳“ ׳¨׳’׳¢ ג¨";
             btn.disabled = false; btn.style.pointerEvents = 'auto'; btn.removeAttribute('aria-disabled');
         } finally {
             btn.style.opacity = '1'; btn.style.transform = 'scale(1)'; loader.style.display = 'none';
@@ -876,11 +876,11 @@ function updateNextVacationButtonText() {
     }
 
     if (isVacationNow) {
-        if (btn) btn.innerHTML = 'כמה ימים נשאר עד תחילת הלימודים? <span aria-hidden="true" style="font-size: 1.15em;">⏳</span>';
-        if (demoBtn) demoBtn.innerHTML = 'תחילת הלימודים ⏳';
+        if (btn) btn.innerHTML = '׳›׳׳” ׳™׳׳™׳ ׳ ׳©׳׳¨ ׳¢׳“ ׳×׳—׳™׳׳× ׳”׳׳™׳׳•׳“׳™׳? <span aria-hidden="true" style="font-size: 1.15em;">ג³</span>';
+        if (demoBtn) demoBtn.innerHTML = '׳×׳—׳™׳׳× ׳”׳׳™׳׳•׳“׳™׳ ג³';
     } else {
-        if (btn) btn.innerHTML = 'התחל ספירה לחופש הקרוב <span aria-hidden="true" style="font-size: 1.15em;">🚀</span>';
-        if (demoBtn) demoBtn.innerHTML = 'לחופש הקרוב 🚀';
+        if (btn) btn.innerHTML = '׳”׳×׳—׳ ׳¡׳₪׳™׳¨׳” ׳׳—׳•׳₪׳© ׳”׳§׳¨׳•׳‘ <span aria-hidden="true" style="font-size: 1.15em;">נ€</span>';
+        if (demoBtn) demoBtn.innerHTML = '׳׳—׳•׳₪׳© ׳”׳§׳¨׳•׳‘ נ€';
     }
 }
 
@@ -892,12 +892,12 @@ window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
 
     if (urlParams.get('show_demo') === 'true') {
-        document.title = "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש";
+        document.title = "׳׳×׳™ ׳‘׳׳׳× ׳”׳—׳•׳₪׳©? ׳¡׳₪׳™׳¨׳” ׳׳׳—׳•׳¨ ׳‘׳׳™ ׳©׳‘׳×׳•׳× ׳©׳™׳©׳™ ׳•׳—׳’׳™׳ | ׳ ׳˜׳• ׳—׳•׳₪׳©";
         const ogTitle = document.querySelector('meta[property="og:title"]');
-        if (ogTitle) ogTitle.setAttribute("content", "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש");
+        if (ogTitle) ogTitle.setAttribute("content", "׳׳×׳™ ׳‘׳׳׳× ׳”׳—׳•׳₪׳©? ׳¡׳₪׳™׳¨׳” ׳׳׳—׳•׳¨ ׳‘׳׳™ ׳©׳‘׳×׳•׳× ׳©׳™׳©׳™ ׳•׳—׳’׳™׳ | ׳ ׳˜׳• ׳—׳•׳₪׳©");
 
         const seoFooterH2 = document.querySelector('.seo-footer h2');
-        if (seoFooterH2) seoFooterH2.textContent = "מתי באמת החופש 2026? ספירה לאחור - נטו חופש";
+        if (seoFooterH2) seoFooterH2.textContent = "׳׳×׳™ ׳‘׳׳׳× ׳”׳—׳•׳₪׳© 2026? ׳¡׳₪׳™׳¨׳” ׳׳׳—׳•׳¨ - ׳ ׳˜׳• ׳—׳•׳₪׳©";
 
         const setupSteps = document.querySelectorAll('.setup-step');
         if (setupSteps.length >= 2) {
@@ -916,7 +916,7 @@ window.onload = () => {
         openSafariInstallVideoModal();
     }
 
-    // תמיכה במקלדת ונגישות לסגירת חלונות
+    // ׳×׳׳™׳›׳” ׳‘׳׳§׳׳“׳× ׳•׳ ׳’׳™׳©׳•׳× ׳׳¡׳’׳™׳¨׳× ׳—׳׳•׳ ׳•׳×
     document.addEventListener('keydown', function (event) {
         if (event.key === "Escape") {
             closeIosModal();
@@ -926,7 +926,7 @@ window.onload = () => {
         }
     });
 
-    // תמיכה בשיתוף קישורים (Deep Linking)
+    // ׳×׳׳™׳›׳” ׳‘׳©׳™׳×׳•׳£ ׳§׳™׳©׳•׳¨׳™׳ (Deep Linking)
     const urlSchool = urlParams.get('schoolType');
     const urlTarget = urlParams.get('targetIntent');
     if (urlSchool && urlTarget) {
@@ -952,11 +952,11 @@ function initApp(countdownTarget = 'summer') {
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
     const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
 
-    // שליחת אירוע ספציפי לסוג בית הספר (באנגלית)
+    // ׳©׳׳™׳—׳× ׳׳™׳¨׳•׳¢ ׳¡׳₪׳¦׳™׳₪׳™ ׳׳¡׳•׳’ ׳‘׳™׳× ׳”׳¡׳₪׳¨ (׳‘׳׳ ׳’׳׳™׳×)
     trackEvent('start_' + schoolNameEng);
     trackEvent('start_countdown_' + countdownTarget);
 
-    // אירוע כללי עם פרמטרים לניתוח קל יותר
+    // ׳׳™׳¨׳•׳¢ ׳›׳׳׳™ ׳¢׳ ׳₪׳¨׳׳˜׳¨׳™׳ ׳׳ ׳™׳×׳•׳— ׳§׳ ׳™׳•׳×׳¨
     trackEvent('app_start', {
         'school_type': schoolNameEng,
         'study_friday': userConfig.studyFriday ? 'yes' : 'no',
@@ -964,7 +964,7 @@ function initApp(countdownTarget = 'summer') {
     });
 
     showMainScreen();
-    // גלילה קלה למטה כדי שיראו את ה"בחרו יעד ספירה" והבאנר לא יסתיר
+    // ׳’׳׳™׳׳” ׳§׳׳” ׳׳׳˜׳” ׳›׳“׳™ ׳©׳™׳¨׳׳• ׳׳× ׳”"׳‘׳—׳¨׳• ׳™׳¢׳“ ׳¡׳₪׳™׳¨׳”" ׳•׳”׳‘׳׳ ׳¨ ׳׳ ׳™׳¡׳×׳™׳¨
     setTimeout(() => {
         const isAndroid = /Android/i.test(navigator.userAgent);
         window.scrollTo({ top: isAndroid ? 15 : 50, behavior: 'smooth' });
@@ -987,9 +987,9 @@ function resetApp() {
     userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' }; confettiFired = false;
     document.getElementById('main-screen').style.display = 'none'; document.getElementById('setup-screen').style.display = 'flex';
 
-    const btn = document.getElementById('main-ai-btn'); document.getElementById('ai-btn-text').innerHTML = "לחצו לטיפ אופטימיות יומי ✨";
+    const btn = document.getElementById('main-ai-btn'); document.getElementById('ai-btn-text').innerHTML = "׳׳—׳¦׳• ׳׳˜׳™׳₪ ׳׳•׳₪׳˜׳™׳׳™׳•׳× ׳™׳•׳׳™ ג¨";
     btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
-    const sponsorBanner = document.getElementById('tip-sponsor-banner'); if (sponsorBanner) sponsorBanner.style.display = 'none';
+    const sponsorBanner = document.getElementById('tip-sponsor-banner'); if (sponsorBanner) sponsorBanner.style.display = 'block';
     const elemSocial = document.getElementById('social-elem-banner'); if (elemSocial) elemSocial.style.display = 'none';
     const highSocial = document.getElementById('social-high-banner'); if (highSocial) highSocial.style.display = 'none';
     const demoBanner = document.getElementById('demo-banner'); if (demoBanner) demoBanner.style.display = 'none';
@@ -1007,7 +1007,7 @@ function updateSchoolSelection(radio) {
 function updateFridayToggle() {
     const toggle = document.getElementById('friday-toggle'); trackEvent('toggle_friday', { 'study_friday': toggle.checked });
     const hint = document.getElementById('friday-hint-text');
-    hint.textContent = toggle.checked ? 'כן, יש לנו לימודים בשישי ☹️' : 'לא, אצלנו שישי זה חופש 😊';
+    hint.textContent = toggle.checked ? '׳›׳, ׳™׳© ׳׳ ׳• ׳׳™׳׳•׳“׳™׳ ׳‘׳©׳™׳©׳™ ג˜¹ן¸' : '׳׳, ׳׳¦׳׳ ׳• ׳©׳™׳©׳™ ׳–׳” ׳—׳•׳₪׳© נ˜';
     hint.style.color = toggle.checked ? '#ef4444' : 'var(--text-muted)';
 }
 
@@ -1018,11 +1018,11 @@ function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
     const cacheKey = `${targetDate.getTime()}_${userConfig.schoolType}_${userConfig.studyFriday}_${forceNoFriday}_${targetId}_${now.toDateString()}_${now.getHours() >= 15 ? 'pm' : 'am'}`;
     if (netDaysCache[cacheKey] !== undefined) return netDaysCache[cacheKey];
     let count = 0, current = new Date(now);
-    // אם השעה 15:00 ומעלה, היום הנוכחי כבר לא נחשב כיום לימודים (התלמידים סיימו)
+    // ׳׳ ׳”׳©׳¢׳” 15:00 ׳•׳׳¢׳׳”, ׳”׳™׳•׳ ׳”׳ ׳•׳›׳—׳™ ׳›׳‘׳¨ ׳׳ ׳ ׳—׳©׳‘ ׳›׳™׳•׳ ׳׳™׳׳•׳“׳™׳ (׳”׳×׳׳׳™׳“׳™׳ ׳¡׳™׳™׳׳•)
     if (now.getHours() >= 15) current.setDate(current.getDate() + 1);
     current.setHours(0, 0, 0, 0);
 
-    // מאפסים את שעת יעד הספירה לחצות כדי שיום תחילת החופש עצמו לא ייספר כיום לימודים
+    // ׳׳׳₪׳¡׳™׳ ׳׳× ׳©׳¢׳× ׳™׳¢׳“ ׳”׳¡׳₪׳™׳¨׳” ׳׳—׳¦׳•׳× ׳›׳“׳™ ׳©׳™׳•׳ ׳×׳—׳™׳׳× ׳”׳—׳•׳₪׳© ׳¢׳¦׳׳• ׳׳ ׳™׳™׳¡׳₪׳¨ ׳›׳™׳•׳ ׳׳™׳׳•׳“׳™׳
     const targetNormalized = new Date(targetDate);
     targetNormalized.setHours(0, 0, 0, 0);
 
@@ -1042,7 +1042,7 @@ function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
             continue;
         }
 
-        // ימי שישי של בית הספר של החופש הגדול ביולי אינם נלמדים (גם אם לומדים בשישי בשגרת הלימודים)
+        // ׳™׳׳™ ׳©׳™׳©׳™ ׳©׳ ׳‘׳™׳× ׳”׳¡׳₪׳¨ ׳©׳ ׳”׳—׳•׳₪׳© ׳”׳’׳“׳•׳ ׳‘׳™׳•׳׳™ ׳׳™׳ ׳ ׳ ׳׳׳“׳™׳ (׳’׳ ׳׳ ׳׳•׳׳“׳™׳ ׳‘׳©׳™׳©׳™ ׳‘׳©׳’׳¨׳× ׳”׳׳™׳׳•׳“׳™׳)
         const isJulyOrLater = current.getMonth() >= 6; // 6 = July
         const isFridayStudy = userConfig.studyFriday && !(forceNoFriday && isJulyOrLater);
         if (current.getDay() !== 6 && (current.getDay() !== 5 || isFridayStudy) && !activeHolidays.includes(dStr)) count++;
@@ -1054,7 +1054,7 @@ function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
 
 function animateNetDays(finalValue) {
     if (netDaysAnimationId) { cancelAnimationFrame(netDaysAnimationId); netDaysAnimationId = null; }
-    if (typeof finalValue !== 'number' || finalValue <= 0) { document.getElementById('main-net-days').textContent = finalValue <= 0 ? "הגיע!" : finalValue; isAnimatingNetDays = false; return; }
+    if (typeof finalValue !== 'number' || finalValue <= 0) { document.getElementById('main-net-days').textContent = finalValue <= 0 ? "׳”׳’׳™׳¢!" : finalValue; isAnimatingNetDays = false; return; }
 
     isAnimatingNetDays = true; const obj = document.getElementById('main-net-days');
     const startValue = finalValue + 75; const duration = 1500; let startTimestamp = null;
@@ -1103,11 +1103,11 @@ function applyHolidayLandingPageMode() {
             if (holidayObj) {
                 const btnNext = document.getElementById('btn-demo-next-vacation');
                 if (btnNext) {
-                    btnNext.innerHTML = `ספירה לאחור ל${holidayObj.name} ${holidayObj.icon || '⏳'}`;
+                    btnNext.innerHTML = `׳¡׳₪׳™׳¨׳” ׳׳׳—׳•׳¨ ׳${holidayObj.name} ${holidayObj.icon || 'ג³'}`;
                 }
                 const demoTitle = document.querySelector('.demo-buttons-title');
                 if (demoTitle) {
-                    demoTitle.textContent = 'התחל ספירה לאחור עד:';
+                    demoTitle.textContent = '׳”׳×׳—׳ ׳¡׳₪׳™׳¨׳” ׳׳׳—׳•׳¨ ׳¢׳“:';
                 }
                 if (activeHolidayId === 'summerHigh2027' || activeHolidayId === 'summerHigh') {
                     const radioHigh = document.querySelector('input[name="schoolType"][value="high"]');
@@ -1123,7 +1123,7 @@ function applyHolidayLandingPageMode() {
 
 function showMainScreen() {
     document.getElementById('setup-screen').style.display = 'none'; document.getElementById('main-screen').style.display = 'flex';
-    document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
+    document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(׳‘׳ ׳™׳›׳•׳™ ׳—׳’׳™׳ ׳•׳©׳‘׳×׳•׳×)" : "(׳‘׳ ׳™׳›׳•׳™ ׳—׳’׳™׳, ׳©׳™׳©׳™ ׳•׳©׳‘׳×)";
 
     const demoBanner = document.getElementById('demo-banner');
     const avigailBanner = document.getElementById('avigail-banner');
@@ -1314,11 +1314,11 @@ function renderHolidays() {
         card.className = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
         card.onclick = () => selectTarget(ev.id);
 
-        let subText = `ב-${ev.date.toLocaleDateString('he-IL')}`;
+        let subText = `׳‘-${ev.date.toLocaleDateString('he-IL')}`;
         if (ev.description) subText = ev.description;
 
         card.innerHTML = `<div><b>${ev.name} <span aria-hidden="true">${ev.icon}</span></b><br><small>${subText}</small></div>`;
-        card.setAttribute('aria-label', `ספירה לחג ${ev.name}`);
+        card.setAttribute('aria-label', `׳¡׳₪׳™׳¨׳” ׳׳—׳’ ${ev.name}`);
         container.appendChild(card);
     });
 }
@@ -1346,12 +1346,12 @@ function selectTarget(id, shouldScroll = true) {
         timerBg.style.background = '#fefce8';
         timerBg.classList.add('vacation-mode');
         timerBg.classList.remove('premium-countdown');
-        document.getElementById('main-target-title').textContent = `${target.name} כבר כאן! ${target.icon}`;
+        document.getElementById('main-target-title').textContent = `${target.name} ׳›׳‘׳¨ ׳›׳׳! ${target.icon}`;
         if (netDaysPrefix) {
             netDaysPrefix.style.display = 'block';
-            netDaysPrefix.textContent = 'נשארו:';
+            netDaysPrefix.textContent = '׳ ׳©׳׳¨׳•:';
         }
-        if (netDaysSuffix) netDaysSuffix.textContent = 'ימים עד חזרה ללימודים';
+        if (netDaysSuffix) netDaysSuffix.textContent = '׳™׳׳™׳ ׳¢׳“ ׳—׳–׳¨׳” ׳׳׳™׳׳•׳“׳™׳';
         if (excludingLabel) excludingLabel.style.display = 'none';
         if (vacationBox) vacationBox.style.display = 'none';
         if (absoluteTimer) absoluteTimer.style.display = 'none';
@@ -1368,30 +1368,30 @@ function selectTarget(id, shouldScroll = true) {
             timerBg.classList.remove('premium-countdown');
         }
 
-        document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
+        document.getElementById('main-target-title').textContent = `׳¢׳“ ${target.name} ${target.icon}`;
         if (netDaysPrefix) {
             netDaysPrefix.style.display = 'block';
-            netDaysPrefix.textContent = 'נשארו רק:';
+            netDaysPrefix.textContent = '׳ ׳©׳׳¨׳• ׳¨׳§:';
         }
-        if (netDaysSuffix) netDaysSuffix.textContent = 'ימי לימוד נטו!';
+        if (netDaysSuffix) netDaysSuffix.textContent = '׳™׳׳™ ׳׳™׳׳•׳“ ׳ ׳˜׳•!';
         if (excludingLabel) {
             excludingLabel.style.display = 'block';
             if (target.noFriday) {
-                excludingLabel.textContent = userConfig.studyFriday ? "(בניכוי חגים, שבתות, וימי שישי של קייטנת הקיץ)" : "(בניכוי חגים, שישי ושבת)";
+                excludingLabel.textContent = userConfig.studyFriday ? "(׳‘׳ ׳™׳›׳•׳™ ׳—׳’׳™׳, ׳©׳‘׳×׳•׳×, ׳•׳™׳׳™ ׳©׳™׳©׳™ ׳©׳ ׳§׳™׳™׳˜׳ ׳× ׳”׳§׳™׳¥)" : "(׳‘׳ ׳™׳›׳•׳™ ׳—׳’׳™׳, ׳©׳™׳©׳™ ׳•׳©׳‘׳×)";
             } else {
-                excludingLabel.textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
+                excludingLabel.textContent = userConfig.studyFriday ? "(׳‘׳ ׳™׳›׳•׳™ ׳—׳’׳™׳ ׳•׳©׳‘׳×׳•׳×)" : "(׳‘׳ ׳™׳›׳•׳™ ׳—׳’׳™׳, ׳©׳™׳©׳™ ׳•׳©׳‘׳×)";
             }
         }
         if (vacationBox) {
             let lengthText = '';
             if (target.isSummer) {
                 const endOfSchool = new Date(target.date); endOfSchool.setHours(0, 0, 0, 0); const startOfSchool = new Date(target.date.getFullYear(), 8, 1);
-                lengthText = `<b>${Math.round((startOfSchool - endOfSchool) / 86400000)} ימים</b>`;
+                lengthText = `<b>${Math.round((startOfSchool - endOfSchool) / 86400000)} ׳™׳׳™׳</b>`;
             } else if (target.lengthText) {
                 lengthText = target.lengthText;
             }
             if (lengthText) {
-                document.getElementById('vacation-days-count').innerHTML = `החופש יימשך ${lengthText}`;
+                document.getElementById('vacation-days-count').innerHTML = `׳”׳—׳•׳₪׳© ׳™׳™׳׳©׳ ${lengthText}`;
                 vacationBox.style.display = 'inline-block';
             } else {
                 vacationBox.style.display = 'none';
@@ -1430,7 +1430,7 @@ function updateDashboard() {
     }
 
     if (diff <= 0) {
-        setDomText('main-net-days', "הגיע!");
+        setDomText('main-net-days', "׳”׳’׳™׳¢!");
         if (!event.isHappeningNow && !confettiFired) { confettiFired = true; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
     } else {
         setDomText('abs-days', Math.floor(diff / 86400000));
@@ -1476,12 +1476,12 @@ function shareWhatsApp(event) {
         }
     }
 
-    const text = `אמאל'ה, קלטתם כמה ימי לימוד נשארו עד החופש? 😱🏃‍♂️ כנסו דחוף לראות את הספירה לאחור >> ${shareUrl}`;
+    const text = `׳׳׳׳'׳”, ׳§׳׳˜׳×׳ ׳›׳׳” ׳™׳׳™ ׳׳™׳׳•׳“ ׳ ׳©׳׳¨׳• ׳¢׳“ ׳”׳—׳•׳₪׳©? נ˜±נƒג€ג™‚ן¸ ׳›׳ ׳¡׳• ׳“׳—׳•׳£ ׳׳¨׳׳•׳× ׳׳× ׳”׳¡׳₪׳™׳¨׳” ׳׳׳—׳•׳¨ >> ${shareUrl}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 }
 
 
-// --- מנגנון חלוניות משפטיות והצהרת נגישות תקנית ---
+// --- ׳׳ ׳’׳ ׳•׳ ׳—׳׳•׳ ׳™׳•׳× ׳׳©׳₪׳˜׳™׳•׳× ׳•׳”׳¦׳”׳¨׳× ׳ ׳’׳™׳©׳•׳× ׳×׳§׳ ׳™׳× ---
 function openLegalModal(type) {
     const waModal = document.getElementById('whatsapp-modal');
     if (waModal && waModal.style.display !== 'none') {
@@ -1493,60 +1493,60 @@ function openLegalModal(type) {
     let html = '';
 
     if (type === 'terms') {
-        html = `<h2 style="font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 15px; color: #1e293b;">תקנון תנאי שימוש ומדיניות פרטיות</h2>
+        html = `<h2 style="font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 15px; color: #1e293b;">׳×׳§׳ ׳•׳ ׳×׳ ׳׳™ ׳©׳™׳׳•׳© ׳•׳׳“׳™׳ ׳™׳•׳× ׳₪׳¨׳˜׳™׳•׳×</h2>
             <div style="font-size: calc(14px * var(--text-scale, 1)); color: #475569; line-height: 1.6;">
-                <p>ברוכים הבאים לאתר "נטו חופש". השימוש באתר ובשירותים המוצעים בו, לרבות משחקים וטבלאות שיאים, כפוף לתנאים המפורטים להלן. בעצם ההרשמה או השימוש באתר, הנך מסכים לתנאים אלו.</p>
-                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">1. שימוש באתר וקטינים</h3>
-                <p>השימוש באתר פתוח לכל גיל. עם זאת, אם הנך מתחת לגיל 18, בעצם שימושך באתר והרשמתך אליו, הנך מצהיר ומאשר כי קיבלת את הסכמת הוריך או האפוטרופוס החוקי שלך למסירת פרטיך לטובת יצירת החשבון והשימוש בו, לרבות שמירת נתונים וקבלת דיוור במקרה של אישור. <b>בנוסף, הצטרפות לקבוצות הוואטסאפ של האתר מותרת אך ורק באישור, פיקוח ושימוש במכשיר של הורה או אפוטרופוס חוקי.</b></p>
+                <p>׳‘׳¨׳•׳›׳™׳ ׳”׳‘׳׳™׳ ׳׳׳×׳¨ "׳ ׳˜׳• ׳—׳•׳₪׳©". ׳”׳©׳™׳׳•׳© ׳‘׳׳×׳¨ ׳•׳‘׳©׳™׳¨׳•׳×׳™׳ ׳”׳׳•׳¦׳¢׳™׳ ׳‘׳•, ׳׳¨׳‘׳•׳× ׳׳©׳—׳§׳™׳ ׳•׳˜׳‘׳׳׳•׳× ׳©׳™׳׳™׳, ׳›׳₪׳•׳£ ׳׳×׳ ׳׳™׳ ׳”׳׳₪׳•׳¨׳˜׳™׳ ׳׳”׳׳. ׳‘׳¢׳¦׳ ׳”׳”׳¨׳©׳׳” ׳׳• ׳”׳©׳™׳׳•׳© ׳‘׳׳×׳¨, ׳”׳ ׳ ׳׳¡׳›׳™׳ ׳׳×׳ ׳׳™׳ ׳׳׳•.</p>
+                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">1. ׳©׳™׳׳•׳© ׳‘׳׳×׳¨ ׳•׳§׳˜׳™׳ ׳™׳</h3>
+                <p>׳”׳©׳™׳׳•׳© ׳‘׳׳×׳¨ ׳₪׳×׳•׳— ׳׳›׳ ׳’׳™׳. ׳¢׳ ׳–׳׳×, ׳׳ ׳”׳ ׳ ׳׳×׳—׳× ׳׳’׳™׳ 18, ׳‘׳¢׳¦׳ ׳©׳™׳׳•׳©׳ ׳‘׳׳×׳¨ ׳•׳”׳¨׳©׳׳×׳ ׳׳׳™׳•, ׳”׳ ׳ ׳׳¦׳”׳™׳¨ ׳•׳׳׳©׳¨ ׳›׳™ ׳§׳™׳‘׳׳× ׳׳× ׳”׳¡׳›׳׳× ׳”׳•׳¨׳™׳ ׳׳• ׳”׳׳₪׳•׳˜׳¨׳•׳₪׳•׳¡ ׳”׳—׳•׳§׳™ ׳©׳׳ ׳׳׳¡׳™׳¨׳× ׳₪׳¨׳˜׳™׳ ׳׳˜׳•׳‘׳× ׳™׳¦׳™׳¨׳× ׳”׳—׳©׳‘׳•׳ ׳•׳”׳©׳™׳׳•׳© ׳‘׳•, ׳׳¨׳‘׳•׳× ׳©׳׳™׳¨׳× ׳ ׳×׳•׳ ׳™׳ ׳•׳§׳‘׳׳× ׳“׳™׳•׳•׳¨ ׳‘׳׳§׳¨׳” ׳©׳ ׳׳™׳©׳•׳¨. <b>׳‘׳ ׳•׳¡׳£, ׳”׳¦׳˜׳¨׳₪׳•׳× ׳׳§׳‘׳•׳¦׳•׳× ׳”׳•׳•׳׳˜׳¡׳׳₪ ׳©׳ ׳”׳׳×׳¨ ׳׳•׳×׳¨׳× ׳׳ ׳•׳¨׳§ ׳‘׳׳™׳©׳•׳¨, ׳₪׳™׳§׳•׳— ׳•׳©׳™׳׳•׳© ׳‘׳׳›׳©׳™׳¨ ׳©׳ ׳”׳•׳¨׳” ׳׳• ׳׳₪׳•׳˜׳¨׳•׳₪׳•׳¡ ׳—׳•׳§׳™.</b></p>
                 
-                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">2. איסוף נתונים (מדיניות פרטיות)</h3>
-                <p>בעת ההתחברות לאתר באמצעות חשבון Google, אנו מקבלים ושומרים את פרטיך הבסיסיים המאושרים על ידך (כגון שם, כתובת אימייל, ותמונת פרופיל). אנו עשויים לשמור את כינויך שבחרת עבור טבלת השיאים ואת ההעדפות שהזנת באתר.</p>
-                <p>האתר לא יעביר את פרטיך האישיים לצדדים שלישיים ללא אישורך, למעט מקרים בהם הדבר נדרש על פי חוק.</p>
+                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">2. ׳׳™׳¡׳•׳£ ׳ ׳×׳•׳ ׳™׳ (׳׳“׳™׳ ׳™׳•׳× ׳₪׳¨׳˜׳™׳•׳×)</h3>
+                <p>׳‘׳¢׳× ׳”׳”׳×׳—׳‘׳¨׳•׳× ׳׳׳×׳¨ ׳‘׳׳׳¦׳¢׳•׳× ׳—׳©׳‘׳•׳ Google, ׳׳ ׳• ׳׳§׳‘׳׳™׳ ׳•׳©׳•׳׳¨׳™׳ ׳׳× ׳₪׳¨׳˜׳™׳ ׳”׳‘׳¡׳™׳¡׳™׳™׳ ׳”׳׳׳•׳©׳¨׳™׳ ׳¢׳ ׳™׳“׳ (׳›׳’׳•׳ ׳©׳, ׳›׳×׳•׳‘׳× ׳׳™׳׳™׳™׳, ׳•׳×׳׳•׳ ׳× ׳₪׳¨׳•׳₪׳™׳). ׳׳ ׳• ׳¢׳©׳•׳™׳™׳ ׳׳©׳׳•׳¨ ׳׳× ׳›׳™׳ ׳•׳™׳ ׳©׳‘׳—׳¨׳× ׳¢׳‘׳•׳¨ ׳˜׳‘׳׳× ׳”׳©׳™׳׳™׳ ׳•׳׳× ׳”׳”׳¢׳“׳₪׳•׳× ׳©׳”׳–׳ ׳× ׳‘׳׳×׳¨.</p>
+                <p>׳”׳׳×׳¨ ׳׳ ׳™׳¢׳‘׳™׳¨ ׳׳× ׳₪׳¨׳˜׳™׳ ׳”׳׳™׳©׳™׳™׳ ׳׳¦׳“׳“׳™׳ ׳©׳׳™׳©׳™׳™׳ ׳׳׳ ׳׳™׳©׳•׳¨׳, ׳׳׳¢׳˜ ׳׳§׳¨׳™׳ ׳‘׳”׳ ׳”׳“׳‘׳¨ ׳ ׳“׳¨׳© ׳¢׳ ׳₪׳™ ׳—׳•׳§.</p>
                 
-                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">3. רשימת תפוצה ודיוור (חוק הספאם)</h3>
-                <p>במידה וסימנת את התיבה המאשרת קבלת עדכונים במהלך ההרשמה, אנו נהיה רשאים לשלוח לכתובת המייל שלך עדכונים הקשורים לפעילות האתר ומידע על חופשים והפתעות. הנך רשאי בכל עת להסיר את עצמך מרשימת התפוצה.</p>
+                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">3. ׳¨׳©׳™׳׳× ׳×׳₪׳•׳¦׳” ׳•׳“׳™׳•׳•׳¨ (׳—׳•׳§ ׳”׳¡׳₪׳׳)</h3>
+                <p>׳‘׳׳™׳“׳” ׳•׳¡׳™׳׳ ׳× ׳׳× ׳”׳×׳™׳‘׳” ׳”׳׳׳©׳¨׳× ׳§׳‘׳׳× ׳¢׳“׳›׳•׳ ׳™׳ ׳‘׳׳”׳׳ ׳”׳”׳¨׳©׳׳”, ׳׳ ׳• ׳ ׳”׳™׳” ׳¨׳©׳׳™׳ ׳׳©׳׳•׳— ׳׳›׳×׳•׳‘׳× ׳”׳׳™׳™׳ ׳©׳׳ ׳¢׳“׳›׳•׳ ׳™׳ ׳”׳§׳©׳•׳¨׳™׳ ׳׳₪׳¢׳™׳׳•׳× ׳”׳׳×׳¨ ׳•׳׳™׳“׳¢ ׳¢׳ ׳—׳•׳₪׳©׳™׳ ׳•׳”׳₪׳×׳¢׳•׳×. ׳”׳ ׳ ׳¨׳©׳׳™ ׳‘׳›׳ ׳¢׳× ׳׳”׳¡׳™׳¨ ׳׳× ׳¢׳¦׳׳ ׳׳¨׳©׳™׳׳× ׳”׳×׳₪׳•׳¦׳”.</p>
 
-                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">4. טבלת השיאים ותוכן גולשים</h3>
-                <p>הכינוי שתבחר בעת ההרשמה מוצג בטבלאות שיאים ציבוריות באתר. <strong>האחריות הבלעדית על תוכן הכינוי חלה על המשתמש שבחר בו.</strong> הנהלת האתר אינה נושאת באחריות לכינויים פוגעניים שהוזנו על ידי משתמשים, אך שומרת לעצמה את הזכות למחוק כל כינוי פוגעני ללא הודעה מוקדמת.</p>
+                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">4. ׳˜׳‘׳׳× ׳”׳©׳™׳׳™׳ ׳•׳×׳•׳›׳ ׳’׳•׳׳©׳™׳</h3>
+                <p>׳”׳›׳™׳ ׳•׳™ ׳©׳×׳‘׳—׳¨ ׳‘׳¢׳× ׳”׳”׳¨׳©׳׳” ׳׳•׳¦׳’ ׳‘׳˜׳‘׳׳׳•׳× ׳©׳™׳׳™׳ ׳¦׳™׳‘׳•׳¨׳™׳•׳× ׳‘׳׳×׳¨. <strong>׳”׳׳—׳¨׳™׳•׳× ׳”׳‘׳׳¢׳“׳™׳× ׳¢׳ ׳×׳•׳›׳ ׳”׳›׳™׳ ׳•׳™ ׳—׳׳” ׳¢׳ ׳”׳׳©׳×׳׳© ׳©׳‘׳—׳¨ ׳‘׳•.</strong> ׳”׳ ׳”׳׳× ׳”׳׳×׳¨ ׳׳™׳ ׳” ׳ ׳•׳©׳׳× ׳‘׳׳—׳¨׳™׳•׳× ׳׳›׳™׳ ׳•׳™׳™׳ ׳₪׳•׳’׳¢׳ ׳™׳™׳ ׳©׳”׳•׳–׳ ׳• ׳¢׳ ׳™׳“׳™ ׳׳©׳×׳׳©׳™׳, ׳׳ ׳©׳•׳׳¨׳× ׳׳¢׳¦׳׳” ׳׳× ׳”׳–׳›׳•׳× ׳׳׳—׳•׳§ ׳›׳ ׳›׳™׳ ׳•׳™ ׳₪׳•׳’׳¢׳ ׳™ ׳׳׳ ׳”׳•׳“׳¢׳” ׳׳•׳§׳“׳׳×.</p>
 
-                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">5. קניין רוחני והגבלת אחריות</h3>
-                <p>כל זכויות היוצרים והקניין הרוחני באתר שייכים בלעדית ל"נטו חופש". האתר מוצע לשימוש כפי שהוא (As-Is). מפעיל האתר לא ישא באחריות לכל נזק שייגרם למשתמש עקב תקלות טכניות, איבוד נתונים או מחיקת שיאים. האתר מציג המלצות, קישורים ממומנים ותוכן צד ג' (כגון הרשמה לפאנל סקרים / מפרסמים). האתר אינו אחראי לתוכן זה.</p>
+                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">5. ׳§׳ ׳™׳™׳ ׳¨׳•׳—׳ ׳™ ׳•׳”׳’׳‘׳׳× ׳׳—׳¨׳™׳•׳×</h3>
+                <p>׳›׳ ׳–׳›׳•׳™׳•׳× ׳”׳™׳•׳¦׳¨׳™׳ ׳•׳”׳§׳ ׳™׳™׳ ׳”׳¨׳•׳—׳ ׳™ ׳‘׳׳×׳¨ ׳©׳™׳™׳›׳™׳ ׳‘׳׳¢׳“׳™׳× ׳"׳ ׳˜׳• ׳—׳•׳₪׳©". ׳”׳׳×׳¨ ׳׳•׳¦׳¢ ׳׳©׳™׳׳•׳© ׳›׳₪׳™ ׳©׳”׳•׳ (As-Is). ׳׳₪׳¢׳™׳ ׳”׳׳×׳¨ ׳׳ ׳™׳©׳ ׳‘׳׳—׳¨׳™׳•׳× ׳׳›׳ ׳ ׳–׳§ ׳©׳™׳™׳’׳¨׳ ׳׳׳©׳×׳׳© ׳¢׳§׳‘ ׳×׳§׳׳•׳× ׳˜׳›׳ ׳™׳•׳×, ׳׳™׳‘׳•׳“ ׳ ׳×׳•׳ ׳™׳ ׳׳• ׳׳—׳™׳§׳× ׳©׳™׳׳™׳. ׳”׳׳×׳¨ ׳׳¦׳™׳’ ׳”׳׳׳¦׳•׳×, ׳§׳™׳©׳•׳¨׳™׳ ׳׳׳•׳׳ ׳™׳ ׳•׳×׳•׳›׳ ׳¦׳“ ׳’' (׳›׳’׳•׳ ׳”׳¨׳©׳׳” ׳׳₪׳׳ ׳ ׳¡׳§׳¨׳™׳ / ׳׳₪׳¨׳¡׳׳™׳). ׳”׳׳×׳¨ ׳׳™׳ ׳• ׳׳—׳¨׳׳™ ׳׳×׳•׳›׳ ׳–׳”.</p>
                 
-                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">6. סמכות שיפוט</h3>
-                <p>על תקנון זה ועל השימוש באתר יחולו דיני מדינת ישראל בלבד. סמכות השיפוט הבלעדית הנתונה לבתי המשפט המוסמכים במחוז תל אביב.</p>
+                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">6. ׳¡׳׳›׳•׳× ׳©׳™׳₪׳•׳˜</h3>
+                <p>׳¢׳ ׳×׳§׳ ׳•׳ ׳–׳” ׳•׳¢׳ ׳”׳©׳™׳׳•׳© ׳‘׳׳×׳¨ ׳™׳—׳•׳׳• ׳“׳™׳ ׳™ ׳׳“׳™׳ ׳× ׳™׳©׳¨׳׳ ׳‘׳׳‘׳“. ׳¡׳׳›׳•׳× ׳”׳©׳™׳₪׳•׳˜ ׳”׳‘׳׳¢׳“׳™׳× ׳”׳ ׳×׳•׳ ׳” ׳׳‘׳×׳™ ׳”׳׳©׳₪׳˜ ׳”׳׳•׳¡׳׳›׳™׳ ׳‘׳׳—׳•׳– ׳×׳ ׳׳‘׳™׳‘.</p>
             </div>`;
     } else if (type === 'privacy') {
-        html = `<h2 style="font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 15px; color: #1e293b;">מדיניות פרטיות</h2>
+        html = `<h2 style="font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 15px; color: #1e293b;">׳׳“׳™׳ ׳™׳•׳× ׳₪׳¨׳˜׳™׳•׳×</h2>
             <div style="font-size: calc(14px * var(--text-scale, 1)); color: #475569; line-height: 1.6;">
-                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">1. איסוף נתונים אנונימיים</h3>
-                <p>האתר משתמש ב-Google Analytics וב-Firebase לשם איסוף נתונים סטטיסטיים אנונימיים (כגון סוג דפדפן, דפים נצפים). איננו אוספים מידע אישי מזהה ללא הסכמתך.</p>
+                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">1. ׳׳™׳¡׳•׳£ ׳ ׳×׳•׳ ׳™׳ ׳׳ ׳•׳ ׳™׳׳™׳™׳</h3>
+                <p>׳”׳׳×׳¨ ׳׳©׳×׳׳© ׳‘-Google Analytics ׳•׳‘-Firebase ׳׳©׳ ׳׳™׳¡׳•׳£ ׳ ׳×׳•׳ ׳™׳ ׳¡׳˜׳˜׳™׳¡׳˜׳™׳™׳ ׳׳ ׳•׳ ׳™׳׳™׳™׳ (׳›׳’׳•׳ ׳¡׳•׳’ ׳“׳₪׳“׳₪׳, ׳“׳₪׳™׳ ׳ ׳¦׳₪׳™׳). ׳׳™׳ ׳ ׳• ׳׳•׳¡׳₪׳™׳ ׳׳™׳“׳¢ ׳׳™׳©׳™ ׳׳–׳”׳” ׳׳׳ ׳”׳¡׳›׳׳×׳.</p>
                 
-                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">2. התחברות לחשבון (Google Login)</h3>
-                <p>בעת ההתחברות לאתר, אנו מקבלים ושומרים את פרטיך הבסיסיים המאושרים על ידך (כגון שם, כתובת אימייל, ותמונת פרופיל). הנתונים משמשים לשמירת ניקוד בטבלאות השיאים, התאמת החוויה למשתמש, והצגת תוכן המותאם לשכבת הגיל.</p>
+                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">2. ׳”׳×׳—׳‘׳¨׳•׳× ׳׳—׳©׳‘׳•׳ (Google Login)</h3>
+                <p>׳‘׳¢׳× ׳”׳”׳×׳—׳‘׳¨׳•׳× ׳׳׳×׳¨, ׳׳ ׳• ׳׳§׳‘׳׳™׳ ׳•׳©׳•׳׳¨׳™׳ ׳׳× ׳₪׳¨׳˜׳™׳ ׳”׳‘׳¡׳™׳¡׳™׳™׳ ׳”׳׳׳•׳©׳¨׳™׳ ׳¢׳ ׳™׳“׳ (׳›׳’׳•׳ ׳©׳, ׳›׳×׳•׳‘׳× ׳׳™׳׳™׳™׳, ׳•׳×׳׳•׳ ׳× ׳₪׳¨׳•׳₪׳™׳). ׳”׳ ׳×׳•׳ ׳™׳ ׳׳©׳׳©׳™׳ ׳׳©׳׳™׳¨׳× ׳ ׳™׳§׳•׳“ ׳‘׳˜׳‘׳׳׳•׳× ׳”׳©׳™׳׳™׳, ׳”׳×׳׳׳× ׳”׳—׳•׳•׳™׳” ׳׳׳©׳×׳׳©, ׳•׳”׳¦׳’׳× ׳×׳•׳›׳ ׳”׳׳•׳×׳׳ ׳׳©׳›׳‘׳× ׳”׳’׳™׳.</p>
                 
-                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">3. שימוש ב'עוגיות' (Cookies) ושירותי צד שלישי</h3>
-                <p>האתר עושה שימוש בקבצי 'עוגיות' (Cookies) ובכלים של צדדים שלישיים לצורך תפעולו השוטף, אימות פרטים, אבטחת מידע, ניתוח נתוני גלישה והתאמת פרסומות. שירותים אלו פועלים על פי מדיניות הפרטיות שלהם.</p>
+                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">3. ׳©׳™׳׳•׳© ׳‘'׳¢׳•׳’׳™׳•׳×' (Cookies) ׳•׳©׳™׳¨׳•׳×׳™ ׳¦׳“ ׳©׳׳™׳©׳™</h3>
+                <p>׳”׳׳×׳¨ ׳¢׳•׳©׳” ׳©׳™׳׳•׳© ׳‘׳§׳‘׳¦׳™ '׳¢׳•׳’׳™׳•׳×' (Cookies) ׳•׳‘׳›׳׳™׳ ׳©׳ ׳¦׳“׳“׳™׳ ׳©׳׳™׳©׳™׳™׳ ׳׳¦׳•׳¨׳ ׳×׳₪׳¢׳•׳׳• ׳”׳©׳•׳˜׳£, ׳׳™׳׳•׳× ׳₪׳¨׳˜׳™׳, ׳׳‘׳˜׳—׳× ׳׳™׳“׳¢, ׳ ׳™׳×׳•׳— ׳ ׳×׳•׳ ׳™ ׳’׳׳™׳©׳” ׳•׳”׳×׳׳׳× ׳₪׳¨׳¡׳•׳׳•׳×. ׳©׳™׳¨׳•׳×׳™׳ ׳׳׳• ׳₪׳•׳¢׳׳™׳ ׳¢׳ ׳₪׳™ ׳׳“׳™׳ ׳™׳•׳× ׳”׳₪׳¨׳˜׳™׳•׳× ׳©׳׳”׳.</p>
                 
-                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">4. זכות עיון, תיקון ומחיקת מידע</h3>
-                <p>בהתאם לחוק הגנת הפרטיות, התשמ"א-1981, כל משתמש זכאי לדרוש לעיין במידע שנאסף עליו, ולבקש לתקן אותו או למחוק אותו לחלוטין ממאגרי האתר. בקשות כאלו יש להפנות אלינו לכתובת levanov.yonatan@gmail.com.</p>
+                <h3 style="color: #1e40af; margin-top: 15px; margin-bottom: 5px; font-size: 1.1rem;">4. ׳–׳›׳•׳× ׳¢׳™׳•׳, ׳×׳™׳§׳•׳ ׳•׳׳—׳™׳§׳× ׳׳™׳“׳¢</h3>
+                <p>׳‘׳”׳×׳׳ ׳׳—׳•׳§ ׳”׳’׳ ׳× ׳”׳₪׳¨׳˜׳™׳•׳×, ׳”׳×׳©׳"׳-1981, ׳›׳ ׳׳©׳×׳׳© ׳–׳›׳׳™ ׳׳“׳¨׳•׳© ׳׳¢׳™׳™׳ ׳‘׳׳™׳“׳¢ ׳©׳ ׳׳¡׳£ ׳¢׳׳™׳•, ׳•׳׳‘׳§׳© ׳׳×׳§׳ ׳׳•׳×׳• ׳׳• ׳׳׳—׳•׳§ ׳׳•׳×׳• ׳׳—׳׳•׳˜׳™׳ ׳׳׳׳’׳¨׳™ ׳”׳׳×׳¨. ׳‘׳§׳©׳•׳× ׳›׳׳׳• ׳™׳© ׳׳”׳₪׳ ׳•׳× ׳׳׳™׳ ׳• ׳׳›׳×׳•׳‘׳× levanov.yonatan@gmail.com.</p>
             </div>`;
     } else if (type === 'accessibility') {
-        html = `<h2 style="font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 15px; color: #1e293b;">הצהרת נגישות משפטית</h2>
+        html = `<h2 style="font-size: calc(20px * var(--text-scale, 1)); margin-bottom: 15px; color: #1e293b;">׳”׳¦׳”׳¨׳× ׳ ׳’׳™׳©׳•׳× ׳׳©׳₪׳˜׳™׳×</h2>
             <div style="font-size: calc(14px * var(--text-scale, 1)); color: #475569; line-height: 1.6;">
-                <p>מפעיל האתר רואה חשיבות עליונה בהנגשת האתר לאנשים עם מוגבלויות, בהתאם להוראות חוק שוויון זכויות לאנשים עם מוגבלות ותקן ישראלי 5568 (ברמת AA).</p>
-                <p><b>התאמות שבוצעו באתר:</b><br>
-                ✔ כפתור נגישות ייעודי להגדלת פונט, ניגודיות גבוהה והדגשת קישורים.<br>
-                ✔ תמיכה מלאה בניווט מקלדת (מקש Tab ומקש Escape לסגירת חלונות).<br>
-                ✔ התאמה לקוראי מסך (הסתרת אלמנטים גרפיים עם aria-hidden והוספת aria-labels).<br>
-                ✔ עיצוב רספונסיבי המותאם לכל סוגי המסכים.</p>
-                <p><b>הגבלת אחריות לתוכן צד שלישי:</b><br>
-                יודגש כי האתר כולל הפניות, המלצות ופרסומות של צדדים שלישיים (כגון אתרי סקרים ומועדוני צרכנות). תכנים אלו מופעלים על ידי גורמים חיצוניים, <b>ונגישותם הינה באחריות המפרסמים בלבד</b>. מפעיל האתר אינו אחראי לנגישות של אתרים חיצוניים אלו.</p>
-                <p><b>הסדרי נגישות פיזיים:</b><br>
-                האתר משמש כפלטפורמה דיגיטלית בלבד ואין למפעיל האתר משרדים או סניפים המקבלים קהל פרונטלית. לפיכך, לא קיימים הסדרי נגישות פיזיים.</p>
-                <p><b>דיווח על תקלות ופרטי רכז נגישות:</b><br>
-                אנו ממשיכים במאמצים לשפר את נגישות האתר כחלק ממחויבותנו לאפשר שימוש בו עבור כלל האוכלוסייה, כולל אנשים עם מוגבלויות. אם נתקלתם בבעיית נגישות כלשהי באתר עצמו, נשמח אם תפנו אלינו כדי שנוכל לתקן זאת בהקדם. <br>
-                <b>פרטי רכז הנגישות:</b> יונתן לבנוב | דוא"ל: <a href="mailto:levanov.yonatan@gmail.com" style="color:#0ea5e9;">levanov.yonatan@gmail.com</a>.</p>
-                <p><small>תאריך עדכון הצהרת נגישות: אוגוסט 2026</small></p>
+                <p>׳׳₪׳¢׳™׳ ׳”׳׳×׳¨ ׳¨׳•׳׳” ׳—׳©׳™׳‘׳•׳× ׳¢׳׳™׳•׳ ׳” ׳‘׳”׳ ׳’׳©׳× ׳”׳׳×׳¨ ׳׳׳ ׳©׳™׳ ׳¢׳ ׳׳•׳’׳‘׳׳•׳™׳•׳×, ׳‘׳”׳×׳׳ ׳׳”׳•׳¨׳׳•׳× ׳—׳•׳§ ׳©׳•׳•׳™׳•׳ ׳–׳›׳•׳™׳•׳× ׳׳׳ ׳©׳™׳ ׳¢׳ ׳׳•׳’׳‘׳׳•׳× ׳•׳×׳§׳ ׳™׳©׳¨׳׳׳™ 5568 (׳‘׳¨׳׳× AA).</p>
+                <p><b>׳”׳×׳׳׳•׳× ׳©׳‘׳•׳¦׳¢׳• ׳‘׳׳×׳¨:</b><br>
+                ג” ׳›׳₪׳×׳•׳¨ ׳ ׳’׳™׳©׳•׳× ׳™׳™׳¢׳•׳“׳™ ׳׳”׳’׳“׳׳× ׳₪׳•׳ ׳˜, ׳ ׳™׳’׳•׳“׳™׳•׳× ׳’׳‘׳•׳”׳” ׳•׳”׳“׳’׳©׳× ׳§׳™׳©׳•׳¨׳™׳.<br>
+                ג” ׳×׳׳™׳›׳” ׳׳׳׳” ׳‘׳ ׳™׳•׳•׳˜ ׳׳§׳׳“׳× (׳׳§׳© Tab ׳•׳׳§׳© Escape ׳׳¡׳’׳™׳¨׳× ׳—׳׳•׳ ׳•׳×).<br>
+                ג” ׳”׳×׳׳׳” ׳׳§׳•׳¨׳׳™ ׳׳¡׳ (׳”׳¡׳×׳¨׳× ׳׳׳׳ ׳˜׳™׳ ׳’׳¨׳₪׳™׳™׳ ׳¢׳ aria-hidden ׳•׳”׳•׳¡׳₪׳× aria-labels).<br>
+                ג” ׳¢׳™׳¦׳•׳‘ ׳¨׳¡׳₪׳•׳ ׳¡׳™׳‘׳™ ׳”׳׳•׳×׳׳ ׳׳›׳ ׳¡׳•׳’׳™ ׳”׳׳¡׳›׳™׳.</p>
+                <p><b>׳”׳’׳‘׳׳× ׳׳—׳¨׳™׳•׳× ׳׳×׳•׳›׳ ׳¦׳“ ׳©׳׳™׳©׳™:</b><br>
+                ׳™׳•׳“׳’׳© ׳›׳™ ׳”׳׳×׳¨ ׳›׳•׳׳ ׳”׳₪׳ ׳™׳•׳×, ׳”׳׳׳¦׳•׳× ׳•׳₪׳¨׳¡׳•׳׳•׳× ׳©׳ ׳¦׳“׳“׳™׳ ׳©׳׳™׳©׳™׳™׳ (׳›׳’׳•׳ ׳׳×׳¨׳™ ׳¡׳§׳¨׳™׳ ׳•׳׳•׳¢׳“׳•׳ ׳™ ׳¦׳¨׳›׳ ׳•׳×). ׳×׳›׳ ׳™׳ ׳׳׳• ׳׳•׳₪׳¢׳׳™׳ ׳¢׳ ׳™׳“׳™ ׳’׳•׳¨׳׳™׳ ׳—׳™׳¦׳•׳ ׳™׳™׳, <b>׳•׳ ׳’׳™׳©׳•׳×׳ ׳”׳™׳ ׳” ׳‘׳׳—׳¨׳™׳•׳× ׳”׳׳₪׳¨׳¡׳׳™׳ ׳‘׳׳‘׳“</b>. ׳׳₪׳¢׳™׳ ׳”׳׳×׳¨ ׳׳™׳ ׳• ׳׳—׳¨׳׳™ ׳׳ ׳’׳™׳©׳•׳× ׳©׳ ׳׳×׳¨׳™׳ ׳—׳™׳¦׳•׳ ׳™׳™׳ ׳׳׳•.</p>
+                <p><b>׳”׳¡׳“׳¨׳™ ׳ ׳’׳™׳©׳•׳× ׳₪׳™׳–׳™׳™׳:</b><br>
+                ׳”׳׳×׳¨ ׳׳©׳׳© ׳›׳₪׳׳˜׳₪׳•׳¨׳׳” ׳“׳™׳’׳™׳˜׳׳™׳× ׳‘׳׳‘׳“ ׳•׳׳™׳ ׳׳׳₪׳¢׳™׳ ׳”׳׳×׳¨ ׳׳©׳¨׳“׳™׳ ׳׳• ׳¡׳ ׳™׳₪׳™׳ ׳”׳׳§׳‘׳׳™׳ ׳§׳”׳ ׳₪׳¨׳•׳ ׳˜׳׳™׳×. ׳׳₪׳™׳›׳, ׳׳ ׳§׳™׳™׳׳™׳ ׳”׳¡׳“׳¨׳™ ׳ ׳’׳™׳©׳•׳× ׳₪׳™׳–׳™׳™׳.</p>
+                <p><b>׳“׳™׳•׳•׳— ׳¢׳ ׳×׳§׳׳•׳× ׳•׳₪׳¨׳˜׳™ ׳¨׳›׳– ׳ ׳’׳™׳©׳•׳×:</b><br>
+                ׳׳ ׳• ׳׳׳©׳™׳›׳™׳ ׳‘׳׳׳׳¦׳™׳ ׳׳©׳₪׳¨ ׳׳× ׳ ׳’׳™׳©׳•׳× ׳”׳׳×׳¨ ׳›׳—׳׳§ ׳׳׳—׳•׳™׳‘׳•׳×׳ ׳• ׳׳׳₪׳©׳¨ ׳©׳™׳׳•׳© ׳‘׳• ׳¢׳‘׳•׳¨ ׳›׳׳ ׳”׳׳•׳›׳׳•׳¡׳™׳™׳”, ׳›׳•׳׳ ׳׳ ׳©׳™׳ ׳¢׳ ׳׳•׳’׳‘׳׳•׳™׳•׳×. ׳׳ ׳ ׳×׳§׳׳×׳ ׳‘׳‘׳¢׳™׳™׳× ׳ ׳’׳™׳©׳•׳× ׳›׳׳©׳”׳™ ׳‘׳׳×׳¨ ׳¢׳¦׳׳•, ׳ ׳©׳׳— ׳׳ ׳×׳₪׳ ׳• ׳׳׳™׳ ׳• ׳›׳“׳™ ׳©׳ ׳•׳›׳ ׳׳×׳§׳ ׳–׳׳× ׳‘׳”׳§׳“׳. <br>
+                <b>׳₪׳¨׳˜׳™ ׳¨׳›׳– ׳”׳ ׳’׳™׳©׳•׳×:</b> ׳™׳•׳ ׳×׳ ׳׳‘׳ ׳•׳‘ | ׳“׳•׳"׳: <a href="mailto:levanov.yonatan@gmail.com" style="color:#0ea5e9;">levanov.yonatan@gmail.com</a>.</p>
+                <p><small>׳×׳׳¨׳™׳ ׳¢׳“׳›׳•׳ ׳”׳¦׳”׳¨׳× ׳ ׳’׳™׳©׳•׳×: ׳׳•׳’׳•׳¡׳˜ 2026</small></p>
             </div>`;
     }
 
@@ -1565,7 +1565,7 @@ function closeLegalModal() {
     }
 }
 
-// חסימת מקשים (למניעת העתקה)
+// ׳—׳¡׳™׳׳× ׳׳§׳©׳™׳ (׳׳׳ ׳™׳¢׳× ׳”׳¢׳×׳§׳”)
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('keydown', function (e) {
     if (e.key === 'F12' || e.keyCode === 123) return e.preventDefault(), false;
@@ -1579,7 +1579,7 @@ function initSplashScreen() {
         const splash = document.getElementById('neto-splash');
         if (!splash) return;
 
-        // משאירים את מסך הפתיחה ל-1100ms כדי שייתן תחושה יפה ומעבר חלק ואלגנטי לממשק
+        // ׳׳©׳׳™׳¨׳™׳ ׳׳× ׳׳¡׳ ׳”׳₪׳×׳™׳—׳” ׳-1100ms ׳›׳“׳™ ׳©׳™׳™׳×׳ ׳×׳—׳•׳©׳” ׳™׳₪׳” ׳•׳׳¢׳‘׳¨ ׳—׳׳§ ׳•׳׳׳’׳ ׳˜׳™ ׳׳׳׳©׳§
         setTimeout(() => {
             splash.classList.add('splash-hiding');
             document.body.classList.remove('splash-active');
@@ -1590,7 +1590,7 @@ function initSplashScreen() {
     } catch (e) { }
 }
 
-// אתחול מראש של נגן ה-Vimeo לביצועים מהירים
+// ׳׳×׳—׳•׳ ׳׳¨׳׳© ׳©׳ ׳ ׳’׳ ׳”-Vimeo ׳׳‘׳™׳¦׳•׳¢׳™׳ ׳׳”׳™׳¨׳™׳
 document.addEventListener('DOMContentLoaded', () => {
     try {
         if (/Android/i.test(navigator.userAgent)) {
@@ -1623,7 +1623,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// פונקציית אנימציית גולש עבור האתר הנסיוני בלבד
+// ׳₪׳•׳ ׳§׳¦׳™׳™׳× ׳׳ ׳™׳׳¦׳™׳™׳× ׳’׳•׳׳© ׳¢׳‘׳•׳¨ ׳”׳׳×׳¨ ׳”׳ ׳¡׳™׳•׳ ׳™ ׳‘׳׳‘׳“
 let surferClickCount = 0;
 let surferClickTimer = null;
 
@@ -1638,7 +1638,7 @@ function triggerSurferAnimation() {
                 trackEvent('view_easter_egg_surfer');
                 const surfer = document.createElement('div');
                 surfer.className = 'surfer-passenger surf-right-to-left';
-                surfer.innerHTML = '🏄‍♂️';
+                surfer.innerHTML = 'נ„ג€ג™‚ן¸';
                 timer.appendChild(surfer);
 
                 surfer.addEventListener('animationend', () => {
@@ -1652,8 +1652,8 @@ function triggerSurferAnimation() {
                 const airplane = document.createElement('div');
                 airplane.className = 'airplane-container';
                 airplane.innerHTML = `
-                    <div class="airplane-banner">עוד קצת וטסים לחופש! ☀️</div>
-                    <div class="airplane-emoji">✈️</div>
+                    <div class="airplane-banner">׳¢׳•׳“ ׳§׳¦׳× ׳•׳˜׳¡׳™׳ ׳׳—׳•׳₪׳©! ג˜€ן¸</div>
+                    <div class="airplane-emoji">גˆן¸</div>
                 `;
                 document.body.appendChild(airplane);
 
@@ -1671,3 +1671,37 @@ function triggerSurferAnimation() {
 
 
 
+
+function updateSponsorTexts() {
+    const sponsorOptions = [
+        "מרגיש שאתה יכול יותר? 💪<br><b><span style='color: #166534;'>בוא לפרוץ את הגבולות שלך עם אימוני כוח מטורפים</span></b>",
+        "נמאס לשבת מול המסך כל היום?<br><b><span style='color: #166534;'>אימוני אקשן וכושר במרכז שירסקו לכם את השיעמום</span></b>",
+        "בוא לרסק את השיעמום!<br><b><span style='color: #166534;'>עם אימונים מטריפים, כוח וחברים חדשים באזור המרכז</span></b>"
+    ];
+
+    const now = new Date();
+    const start = new Date('2025-05-16');
+    let dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+    if (dayIndex < 0) dayIndex = 0;
+
+    const targetId = typeof userConfig !== 'undefined' ? userConfig.activeTargetId : 'summer';
+    const currentState = typeof getDailyTipState === 'function' ? getDailyTipState(targetId) : {};
+    const clickNum = currentState.clicks || 1;
+    
+    const finalIndex = (dayIndex * 3 + clickNum) % sponsorOptions.length;
+    const chosenOption = sponsorOptions[finalIndex];
+
+    const htmlContent = '<span aria-hidden="true">🏋️‍♂️</span> ' + chosenOption;
+
+    const tipTextElement = document.querySelector('#tip-sponsor-banner .sponsor-text');
+    if (tipTextElement) tipTextElement.innerHTML = htmlContent;
+
+    const gameSponsorBanner = document.getElementById('game-sponsor-banner');
+    if (gameSponsorBanner) {
+        gameSponsorBanner.style.background = 'linear-gradient(135deg, #f0fdf4, #dcfce7)';
+        gameSponsorBanner.style.borderColor = '#86efac';
+        gameSponsorBanner.style.color = '#000000';
+        const gameTextElement = gameSponsorBanner.querySelector('.sponsor-text');
+        if (gameTextElement) gameTextElement.innerHTML = htmlContent;
+    }
+}
