@@ -1679,16 +1679,11 @@ function updateSponsorTexts() {
     
     localStorage.setItem('sponsorRotationIndex', (rotIdx + 1).toString());
 
-    const htmlContent = `
-        <span style="flex: 1; text-align: right;">${chosen.text}</span>
-        <span aria-hidden="true" style="margin-right: 12px; font-size: 1.25em; white-space: nowrap;">${chosen.emojis}</span>
-    `;
+    const htmlContent = `${chosen.text} <span aria-hidden="true">${chosen.emojis}</span>`;
 
     const tipTextElement = document.querySelector('#tip-sponsor-banner .sponsor-text');
     if (tipTextElement) {
-        tipTextElement.style.display = 'flex';
-        tipTextElement.style.justifyContent = 'space-between';
-        tipTextElement.style.alignItems = 'center';
+        tipTextElement.style.display = 'block';
         tipTextElement.innerHTML = htmlContent;
     }
 
@@ -1699,9 +1694,7 @@ function updateSponsorTexts() {
         gameSponsorBanner.style.color = '#000000';
         const gameTextElement = gameSponsorBanner.querySelector('.sponsor-text');
         if (gameTextElement) {
-            gameTextElement.style.display = 'flex';
-            gameTextElement.style.justifyContent = 'space-between';
-            gameTextElement.style.alignItems = 'center';
+            gameTextElement.style.display = 'block';
             gameTextElement.innerHTML = htmlContent;
         }
     }
