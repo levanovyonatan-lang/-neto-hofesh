@@ -400,7 +400,7 @@
             if(overlay && video) {
                 overlay.addEventListener('click', function() {
                     video.play();
-                    if(window.trackEvent && video.currentTime < 1) window.trackEvent('play_avigail_video');
+                    if(window.trackEvent && video.currentTime < 1) window.trackEvent('play_fitness_video');
                 });
                 
                 video.addEventListener('play', function() {
@@ -422,7 +422,7 @@
 
                 // Track when video finishes
                 video.addEventListener('ended', function() {
-                    if(window.trackEvent) window.trackEvent('finish_watch_avigail_video');
+                    if(window.trackEvent) window.trackEvent('finish_watch_fitness_video');
                     overlay.style.display = 'flex';
                     if (playText) playText.innerText = "לחצו לצפייה חוזרת";
                 });

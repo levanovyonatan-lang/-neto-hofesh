@@ -672,8 +672,6 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                 sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
                 if (userConfig.schoolType === 'elem') {
                     trackEvent('view_tip_sponsor_elem');
-                } else {
-                    trackEvent('view_tip_sponsor_main');
                 }
             }
             setTimeout(() => {
