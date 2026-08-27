@@ -1162,6 +1162,7 @@ function showMainScreen() {
 
     const demoBanner = document.getElementById('demo-banner');
     const avigailBanner = document.getElementById('avigail-banner');
+    const fitnessBanner = document.getElementById('fitness-banner');
     const jobsBanner = document.getElementById('jobs-banner');
     const highSocial = document.getElementById('social-high-banner');
     const elemSocial = document.getElementById('social-elem-banner');
@@ -1235,8 +1236,8 @@ function showMainScreen() {
         }
     }
 
-    if (isDemo && avigailBanner) {
-        avigailBanner.style.display = 'flex';
+    if (isDemo && userConfig.schoolType === 'elem' && fitnessBanner) {
+        fitnessBanner.style.display = 'flex';
     }
 
     const summerHighObj = allTargets.find(t => t.id === 'summerHigh');
