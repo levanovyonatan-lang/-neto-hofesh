@@ -1205,6 +1205,7 @@ function showMainScreen() {
 
     if (userConfig.schoolType === 'elem' && fitnessBanner) {
         fitnessBanner.style.display = 'flex';
+        trackEvent('view_ad_fitness_sticky');
     }
 
     const summerHighObj = allTargets.find(t => t.id === 'summerHigh');
