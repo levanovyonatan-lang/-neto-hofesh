@@ -638,7 +638,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         if (!shouldShowTips) {
             sponsorBanner.style.display = 'none';
         } else {
-            sponsorBanner.style.display = 'block';
+            sponsorBanner.style.display = 'none'; // Hidden until tip is clicked
             sponsorBanner.style.background = 'linear-gradient(135deg, #f0fdf4, #dcfce7)';
             sponsorBanner.style.borderColor = '#86efac';
             sponsorBanner.style.color = '#000000';
@@ -688,7 +688,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
     } else {
         btnText.innerHTML = isVacation ? "לחצו למשימה היומית ⚡" : "לחצו לטיפ אופטימיות יומי ✨";
         btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
-        if (sponsorBanner) sponsorBanner.style.display = 'block';
+        if (sponsorBanner) sponsorBanner.style.display = 'none';
     }
 }
 
@@ -989,7 +989,7 @@ function resetApp() {
 
     const btn = document.getElementById('main-ai-btn'); document.getElementById('ai-btn-text').innerHTML = "לחצו לטיפ אופטימיות יומי ✨";
     btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
-    const sponsorBanner = document.getElementById('tip-sponsor-banner'); if (sponsorBanner) sponsorBanner.style.display = 'block';
+    const sponsorBanner = document.getElementById('tip-sponsor-banner'); if (sponsorBanner) sponsorBanner.style.display = 'none';
     const elemSocial = document.getElementById('social-elem-banner'); if (elemSocial) elemSocial.style.display = 'none';
     const highSocial = document.getElementById('social-high-banner'); if (highSocial) highSocial.style.display = 'none';
     const demoBanner = document.getElementById('demo-banner'); if (demoBanner) demoBanner.style.display = 'none';
