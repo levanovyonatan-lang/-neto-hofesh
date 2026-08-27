@@ -1671,7 +1671,7 @@ function triggerSurferAnimation() {
 function updateSponsorTexts() {
     const sponsorOptions = [
         { text: "<b><span style=\"color: #166534;\">בוא לפרוץ את הגבולות שלך עם אימוני כוח מטורפים.</span></b>", emojis: "🏋️‍♂️ 💪" },
-        { text: "<b><span style=\"color: #166534;\">בוא לרסק את השיעמום עם אימונים מטריפים, כוח וחברים חדשים באזור המרכז.</span></b>", emojis: "🏋️‍♂️" }
+        { text: "<b><span style=\"color: #166534;\">בוא לרסק את השיעמום עם אימונים מטריפים, כוח וחברים חדשים</span></b>", emojis: "🏋️‍♂️" }
     ];
 
     let rotIdx = parseInt(localStorage.getItem('sponsorRotationIndex') || '0', 10);
