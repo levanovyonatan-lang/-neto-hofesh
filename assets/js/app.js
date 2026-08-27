@@ -1031,6 +1031,7 @@ function resetApp() {
     const demoBanner = document.getElementById('demo-banner'); if (demoBanner) demoBanner.style.display = 'none';
     const avigailBanner = document.getElementById('avigail-banner'); if (avigailBanner) avigailBanner.style.display = 'none';
     const jobsBanner = document.getElementById('jobs-banner'); if (jobsBanner) jobsBanner.style.display = 'none';
+    const fitnessBanner = document.getElementById('fitness-banner'); if (fitnessBanner) fitnessBanner.style.display = 'none';
 }
 
 function updateSchoolSelection(radio) {
@@ -1210,6 +1211,7 @@ function showMainScreen() {
         if (demoBanner) demoBanner.style.display = 'none';
         if (avigailBanner) avigailBanner.style.display = 'none';
         if (jobsBanner) jobsBanner.style.display = 'none';
+        if (fitnessBanner) fitnessBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
 
@@ -1224,6 +1226,7 @@ function showMainScreen() {
         if (demoBanner) demoBanner.style.display = 'none';
         if (avigailBanner) avigailBanner.style.display = 'none';
         if (jobsBanner) jobsBanner.style.display = 'none';
+        if (fitnessBanner) fitnessBanner.style.display = 'none';
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
 
