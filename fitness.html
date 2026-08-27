@@ -350,13 +350,12 @@
 
     <!-- Main Video Hero -->
     <div class="video-container" style="position: relative;">
-        <video id="avigail-vid" playsinline controls>
+        <video id="avigail-vid" playsinline controls poster="assets/images/fitness-bg.jpg">
             <source src="assets/videos/fitness.html.mp4" type="video/mp4">
-            דפדפן זה אינו תומך בווידאו.
         </video>
-        
-        <!-- Play Overlay -->
-        <div id="play-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.65); z-index: 10; cursor: pointer; backdrop-filter: blur(2px);">
+
+        <!-- Custom Play Button Overlay -->
+        <div id="play-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); z-index: 10; cursor: pointer; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);">
             <div style="color: white; font-weight: 900; font-size: 1.6rem; display: flex; flex-direction: column; align-items: center; gap: 12px; animation: pulse 2.5s infinite; text-shadow: 0 4px 20px rgba(0,0,0,0.9); text-align: center;">
                 <span style="font-size: 3.5rem; filter: drop-shadow(0 0 15px rgba(255,255,255,0.4)); line-height: 1;">▶️</span>
                 <span id="play-text">לחצו לתחילת הסרטון</span>
