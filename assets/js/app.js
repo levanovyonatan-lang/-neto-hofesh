@@ -667,18 +667,16 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
 
-            if (sponsorBanner) {
+            if (sponsorBanner && userConfig.schoolType === 'elem') {
                 sponsorBanner.style.display = 'block'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
                 sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-                if (userConfig.schoolType === 'elem') {
-                    trackEvent('view_tip_sponsor_elem');
-                }
+                trackEvent('view_tip_sponsor_elem');
             }
             setTimeout(() => {
                 window.scrollBy({ top: 70, behavior: 'smooth' });
             }, 150);
         } else {
-            if (sponsorBanner) sponsorBanner.style.display = 'block';
+            if (sponsorBanner && userConfig.schoolType === 'elem') sponsorBanner.style.display = 'block';
         }
 
         if (currentState.clicks >= 2) { btn.disabled = true; btn.style.pointerEvents = 'none'; btn.setAttribute('aria-disabled', 'true'); }
