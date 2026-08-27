@@ -167,7 +167,9 @@
     function startGame() {
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
-        if (gameSponsorBanner && window.userConfig && window.userConfig.schoolType === 'elem') gameSponsorBanner.style.display = 'flex';
+        let isElem = false;
+        try { const config = JSON.parse(localStorage.getItem('netoConfig')); if (config && config.schoolType === 'elem') isElem = true; } catch(e) {}
+        if (gameSponsorBanner && isElem) gameSponsorBanner.style.display = 'flex';
 
         const appContainer = document.querySelector('.app-container');
         if (appContainer) appContainer.style.zIndex = '1001';
@@ -1168,7 +1170,9 @@
     window.showDinoGameOver = function(savedScore, savedStage, killerEmoji) {
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
-        if (gameSponsorBanner && window.userConfig && window.userConfig.schoolType === 'elem') gameSponsorBanner.style.display = 'flex';
+        let isElem = false;
+        try { const config = JSON.parse(localStorage.getItem('netoConfig')); if (config && config.schoolType === 'elem') isElem = true; } catch(e) {}
+        if (gameSponsorBanner && isElem) gameSponsorBanner.style.display = 'flex';
 
         const appContainer = document.querySelector('.app-container');
         if (appContainer) appContainer.style.zIndex = '1001';
