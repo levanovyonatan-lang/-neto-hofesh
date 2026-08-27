@@ -434,13 +434,8 @@ function attemptRegistration() {
 }
 
 function handleSponsorClick() {
-    if (userConfig.schoolType === 'elem') {
-        trackEvent('click_tip_community_elem');
-        window.open("https://chat.whatsapp.com/D6TsQfLFkA072Xv6Q6pKDc", "_blank");
-    } else {
-        trackEvent('click_tip_community_main');
-        window.open("https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF", "_blank");
-    }
+    trackEvent('click_tip_fitness_sponsor');
+    window.location.href = '/fitness.html';
 }
 
 function loadTipsDatabase() {
@@ -642,45 +637,13 @@ function renderTipBox(targetId, isNewlyClicked = false) {
     if (sponsorBanner) {
         if (!shouldShowTips) {
             sponsorBanner.style.display = 'none';
-        } else if (userConfig.schoolType === 'middle' || userConfig.schoolType === 'elem') {
-            sponsorBanner.style.display = 'none';
         } else {
-            sponsorBanner.style.display = 'none'; // Temporarily disabled
-            const textElement = sponsorBanner.querySelector('.sponsor-text');
-            if (textElement) {
-                if (userConfig.schoolType === 'elem') {
-                    /* Temporarily disabled
-                    if (isNewlyClicked) trackEvent('view_tip_sponsor_elem');
-
-                    sponsorBanner.style.background = 'linear-gradient(135deg, #f3e8ff, #e9d5ff)';
-                    sponsorBanner.style.borderColor = '#d8b4fe';
-                    sponsorBanner.style.color = '#000000';
-
-                    const elemSponsorOptions = [
-                        "לונה פארק, בריכה ועוד?<br><b><span style=\"color: #ff6600;\">תצטרפו לקייטנת אקשן עם אביגיל</span></b>",
-                        "פארק מים, קולנוע ועוד?<br><b><span style=\"color: #ff6600;\">תרשמו לקייטנת אקשן עם אביגיל!</span></b>",
-                        "הופעה פרטית, גרביטי פארק ועוד?<br><b><span style=\"color: #ff6600;\">תרשמו לקייטנת אקשן עם אביגיל!</span></b>"
-                    ];
-                    const now = new Date();
-                    const start = new Date('2026-05-16');
-                    let dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-                    if (dayIndex < 0) dayIndex = 0;
-
-                    const clickNum = currentState.clicks || 1;
-                    const finalIndex = (dayIndex * 3 + clickNum) % elemSponsorOptions.length;
-                    const chosenOption = elemSponsorOptions[finalIndex];
-
-                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> ${chosenOption}`;
-                    */
-                } else if (false && userConfig.schoolType === 'high') {
-                    if (isNewlyClicked) trackEvent('view_tip_jobs_sponsor');
-
-                    sponsorBanner.style.background = '';
-                    sponsorBanner.style.borderColor = '';
-                    sponsorBanner.style.color = '';
-
-                    textElement.innerHTML = `<span aria-hidden="true">🌟</span> <b style="font-size: 1.05em; color: #1e293b;">רוצים להרוויח הרבה כסף בחופש?</b><br><b style="font-size: 1.15em; text-decoration: underline;">לחצו כאן (16+)</b>`;
-                }
+            sponsorBanner.style.display = 'block';
+            sponsorBanner.style.background = 'linear-gradient(135deg, #f0fdf4, #dcfce7)';
+            sponsorBanner.style.borderColor = '#86efac';
+            sponsorBanner.style.color = '#000000';
+            if (isNewlyClicked) {
+                trackEvent('view_tip_sponsor_fitness');
             }
         }
     }
@@ -922,6 +885,7 @@ function updateNextVacationButtonText() {
 }
 
 window.onload = () => {
+    updateSponsorTexts();
     updateNextVacationButtonText();
     initPWA();
     setupManualCopyListener();
