@@ -267,19 +267,48 @@
             fill: currentColor;
         }
 
-        /* Secondary CTA (Registration) */
-        .btn-registration {
-            background: linear-gradient(135deg, #7F00FF, #3b0a70);
-            color: white;
-            border: none;
-            box-shadow: 0 6px 20px rgba(127, 0, 255, 0.35);
-            margin-top: 5px;
-            transition: all 0.1s ease;
+        /* Info Points Box */
+        .info-points {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: right;
+            font-size: 1rem;
+            line-height: 1.4;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            margin-bottom: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-
-        .btn-registration:hover {
-            box-shadow: 0 8px 25px rgba(127, 0, 255, 0.5);
-            transform: translateY(-2px);
+        
+        .info-points p {
+            margin: 0 0 10px 0;
+            font-size: 1.15rem;
+            font-weight: 800;
+            text-align: center;
+            color: #fbbf24;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .info-points ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .info-points li {
+            margin-bottom: 8px;
+        }
+        
+        .info-points li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-points strong {
+            color: #fbbf24;
+            font-weight: 700;
         }
 
         /* Close Button */
@@ -421,13 +450,16 @@
             </svg>
         </a>
 
-        <!-- Secondary Call-to-Action -->
-        <a href="https://roeikatav.co.il/" 
-           class="btn btn-registration" 
-           target="_blank"
-           onclick="if(window.trackEvent) window.trackEvent('click_registration_fitness');">
-            פרטים והרשמה
-        </a>
+        <!-- Info Points -->
+        <div class="info-points" dir="rtl">
+            <p>רוצה להיות הכי חזק בשכבה? 💪</p>
+            <ul>
+                <li><strong>איפה?</strong> פעיל ממש כאן באזור המרכז וגוש דן 📍</li>
+                <li><strong>מה עושים?</strong> אימוני כוח, אקשן וכושר שיעיפו אותך קדימה 🚀</li>
+                <li><strong>מי המאמן?</strong> יחס של אח גדול ממפקד לשעבר בצנחנים 🥷</li>
+                <li><strong>החבר'ה:</strong> קבוצה קטנה, צחוקים ואווירה פצצה</li>
+            </ul>
+        </div>
     </div>
 
 </body>
