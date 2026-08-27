@@ -1235,6 +1235,10 @@ function showMainScreen() {
         }
     }
 
+    if (isDemo && avigailBanner) {
+        avigailBanner.style.display = 'flex';
+    }
+
     const summerHighObj = allTargets.find(t => t.id === 'summerHigh');
     if (summerHighObj) { if (!userConfig.studyFriday) summerHighObj.date = new Date('2026-06-18T08:15:00'); else summerHighObj.date = new Date('2026-06-19T08:15:00'); }
 
