@@ -1670,19 +1670,27 @@ function triggerSurferAnimation() {
 
 function updateSponsorTexts() {
     const sponsorOptions = [
-        "💪 <b><span style=\"color: #166534;\">בוא לפרוץ את הגבולות שלך עם אימוני כוח מטורפים.</span></b>",
-        "<b><span style=\"color: #166534;\">בוא לרסק את השיעמום עם אימונים מטריפים, כוח וחברים חדשים באזור המרכז.</span></b>"
+        { text: "<b><span style=\"color: #166534;\">בוא לפרוץ את הגבולות שלך עם אימוני כוח מטורפים.</span></b>", emojis: "🏋️‍♂️ 💪" },
+        { text: "<b><span style=\"color: #166534;\">בוא לרסק את השיעמום עם אימונים מטריפים, כוח וחברים חדשים באזור המרכז.</span></b>", emojis: "🏋️‍♂️" }
     ];
 
     let rotIdx = parseInt(localStorage.getItem('sponsorRotationIndex') || '0', 10);
-    const chosenOption = sponsorOptions[rotIdx % sponsorOptions.length];
+    const chosen = sponsorOptions[rotIdx % sponsorOptions.length];
     
     localStorage.setItem('sponsorRotationIndex', (rotIdx + 1).toString());
 
-    const htmlContent = `<span aria-hidden="true">🏋️‍♂️</span> ${chosenOption}`;
+    const htmlContent = `
+        <span style="flex: 1; text-align: right;">${chosen.text}</span>
+        <span aria-hidden="true" style="margin-right: 12px; font-size: 1.25em; white-space: nowrap;">${chosen.emojis}</span>
+    `;
 
     const tipTextElement = document.querySelector('#tip-sponsor-banner .sponsor-text');
-    if (tipTextElement) tipTextElement.innerHTML = htmlContent;
+    if (tipTextElement) {
+        tipTextElement.style.display = 'flex';
+        tipTextElement.style.justifyContent = 'space-between';
+        tipTextElement.style.alignItems = 'center';
+        tipTextElement.innerHTML = htmlContent;
+    }
 
     const gameSponsorBanner = document.getElementById('game-sponsor-banner');
     if (gameSponsorBanner) {
@@ -1690,6 +1698,11 @@ function updateSponsorTexts() {
         gameSponsorBanner.style.borderColor = '#86efac';
         gameSponsorBanner.style.color = '#000000';
         const gameTextElement = gameSponsorBanner.querySelector('.sponsor-text');
-        if (gameTextElement) gameTextElement.innerHTML = htmlContent;
+        if (gameTextElement) {
+            gameTextElement.style.display = 'flex';
+            gameTextElement.style.justifyContent = 'space-between';
+            gameTextElement.style.alignItems = 'center';
+            gameTextElement.innerHTML = htmlContent;
+        }
     }
 }
