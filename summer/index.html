@@ -156,20 +156,11 @@
             z-index: 9999;
             display: flex;
             justify-content: center;
-            padding-bottom: env(safe-area-inset-bottom, 0px);
-            /* Handle iOS Safari scroll gap */
+            align-items: flex-start;
+            /* Handle iOS Safari scroll gap by bleeding white background downward */
+            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 200px);
+            margin-bottom: -200px;
             box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .sticky-banner-container::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: inherit;
-            z-index: -1;
         }
 
         #jobs-banner {
