@@ -1670,22 +1670,14 @@ function triggerSurferAnimation() {
 
 function updateSponsorTexts() {
     const sponsorOptions = [
-        "מרגיש שאתה יכול יותר? 💪<br><b><span style=\"color: #166534;\">בוא לפרוץ את הגבולות שלך עם אימוני כוח מטורפים</span></b>",
-        "נמאס לשבת מול המסך כל היום?<br><b><span style=\"color: #166534;\">אימוני אקשן וכושר במרכז שירסקו לכם את השיעמום</span></b>",
-        "בוא לרסק את השיעמום!<br><b><span style=\"color: #166534;\">עם אימונים מטריפים, כוח וחברים חדשים באזור המרכז</span></b>"
+        "💪 <b><span style=\"color: #166534;\">בוא לפרוץ את הגבולות שלך עם אימוני כוח מטורפים.</span></b>",
+        "<b><span style=\"color: #166534;\">בוא לרסק את השיעמום עם אימונים מטריפים, כוח וחברים חדשים באזור המרכז.</span></b>"
     ];
 
-    const now = new Date();
-    const start = new Date('2025-05-16');
-    let dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-    if (dayIndex < 0) dayIndex = 0;
-
-    const targetId = typeof userConfig !== 'undefined' ? userConfig.activeTargetId : 'summer';
-    const currentState = typeof getDailyTipState === 'function' ? getDailyTipState(targetId) : {};
-    const clickNum = currentState.clicks || 1;
+    let rotIdx = parseInt(localStorage.getItem('sponsorRotationIndex') || '0', 10);
+    const chosenOption = sponsorOptions[rotIdx % sponsorOptions.length];
     
-    const finalIndex = (dayIndex * 3 + clickNum) % sponsorOptions.length;
-    const chosenOption = sponsorOptions[finalIndex];
+    localStorage.setItem('sponsorRotationIndex', (rotIdx + 1).toString());
 
     const htmlContent = `<span aria-hidden="true">🏋️‍♂️</span> ${chosenOption}`;
 
