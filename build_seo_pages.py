@@ -240,8 +240,8 @@ def generate_seo_page(base_html, holiday):
     html = html.replace('href="assets/', 'href="../assets/')
     html = html.replace('src="assets/', 'src="../assets/')
     html = html.replace('src="tips.js"', 'src="../tips.js"')
-    html = html.replace('src="avigail-camp.html"', 'src="../avigail-camp.html"')
-    
+    html = html.replace('href="avigail-camp.html"', 'href="../avigail-camp.html"')
+    html = html.replace('href="fitness.html"', 'href="../fitness.html"')
     return html
 
 def build_all():
