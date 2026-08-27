@@ -435,7 +435,7 @@ function attemptRegistration() {
 
 function handleSponsorClick() {
     trackEvent('click_tip_fitness_sponsor');
-    window.location.href = '/fitness.html';
+    window.open('/fitness.html', '_blank');
 }
 
 function loadTipsDatabase() {
