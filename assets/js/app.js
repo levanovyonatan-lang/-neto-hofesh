@@ -1203,7 +1203,7 @@ function showMainScreen() {
         }
     }
 
-    if (isDemo && userConfig.schoolType === 'elem' && fitnessBanner) {
+    if (userConfig.schoolType === 'elem' && fitnessBanner) {
         fitnessBanner.style.display = 'flex';
     }
 
@@ -1361,12 +1361,7 @@ function selectTarget(id, shouldScroll = true) {
         timerBg.style.background = target.bg;
         timerBg.classList.remove('vacation-mode');
         
-        const isDemoSite = new URLSearchParams(window.location.search).get('show_demo') === 'true' || window.location.hostname.includes('github.io');
-        if (isDemoSite) {
-            timerBg.classList.add('premium-countdown');
-        } else {
-            timerBg.classList.remove('premium-countdown');
-        }
+        timerBg.classList.add('premium-countdown');
 
         document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
         if (netDaysPrefix) {
