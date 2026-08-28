@@ -169,7 +169,10 @@
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
         let isElem = false;
         try { const config = JSON.parse(localStorage.getItem('netoConfig')); if (config && config.schoolType === 'elem') isElem = true; } catch(e) {}
-        if (gameSponsorBanner && isElem) gameSponsorBanner.style.display = 'flex';
+        if (gameSponsorBanner && isElem) {
+            gameSponsorBanner.style.display = 'flex';
+            gameSponsorBanner.style.opacity = '1';
+        }
 
         const appContainer = document.querySelector('.app-container');
         if (appContainer) appContainer.style.zIndex = '1001';
@@ -1172,7 +1175,10 @@
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
         let isElem = false;
         try { const config = JSON.parse(localStorage.getItem('netoConfig')); if (config && config.schoolType === 'elem') isElem = true; } catch(e) {}
-        if (gameSponsorBanner && isElem) gameSponsorBanner.style.display = 'flex';
+        if (gameSponsorBanner && isElem) {
+            gameSponsorBanner.style.display = 'flex';
+            gameSponsorBanner.style.opacity = '1';
+        }
 
         const appContainer = document.querySelector('.app-container');
         if (appContainer) appContainer.style.zIndex = '1001';
