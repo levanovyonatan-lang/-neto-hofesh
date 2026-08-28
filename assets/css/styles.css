@@ -310,7 +310,8 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 .btn-a2hs-half { background: #0f172a; color: white; box-shadow: 0 6px 15px rgba(15, 23, 42, 0.2); }
 .btn-a2hs-half:hover { background: #1e293b; transform: translateY(-2px); }
 
-.reset-btn { background: none; border: none; color: var(--text-muted); text-decoration: underline; cursor: pointer; padding: 8px; font-size: calc(13px * var(--text-scale, 1)); margin-top: 10px; }
+.reset-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; color: var(--text-color); cursor: pointer; padding: 8px 16px; font-size: calc(14px * var(--text-scale, 1)); font-weight: 600; margin-top: 10px; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.reset-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.25); }
 
 .seo-footer { margin-top: 40px; padding: 30px 10px; border-top: 1px solid #f1f5f9; font-size: calc(14px * var(--text-scale, 1)); color: var(--text-muted); text-align: right; line-height: 1.7; }
 .seo-footer h2 { font-size: calc(18px * var(--text-scale, 1)); margin-bottom: 12px; color: var(--text-main); font-weight: 800; }
