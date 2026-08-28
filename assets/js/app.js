@@ -1625,7 +1625,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         intent = 'summer';
                     }
                     initApp(intent);
-                }, 50);
+                }, 1000);
             }
         }
     } catch(e) {}
