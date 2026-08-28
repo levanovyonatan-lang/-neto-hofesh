@@ -1620,11 +1620,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Set a flag so initApp knows not to override active holiday if not needed
                 setTimeout(() => {
-                    let intent = 'next';
-                    if (config.activeTargetId && config.activeTargetId.startsWith('summer')) {
-                        intent = 'summer';
-                    }
-                    initApp(intent);
+                    initApp('next');
                 }, 1000);
             }
         }
