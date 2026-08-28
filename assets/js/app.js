@@ -673,7 +673,9 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                 trackEvent('view_tip_sponsor_elem');
             }
             setTimeout(() => {
-                window.scrollBy({ top: 70, behavior: 'smooth' });
+                if (currentState.clicks === 1) {
+                    window.scrollBy({ top: 70, behavior: 'smooth' });
+                }
             }, 150);
         } else {
             if (sponsorBanner && userConfig.schoolType === 'elem') sponsorBanner.style.display = 'block';
