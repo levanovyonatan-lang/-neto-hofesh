@@ -668,9 +668,12 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
 
             if (sponsorBanner && userConfig.schoolType === 'elem') {
-                sponsorBanner.style.display = 'block'; sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
-                sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-                trackEvent('view_tip_sponsor_elem');
+                sponsorBanner.style.display = 'block'; 
+                if (currentState.clicks === 1) {
+                    sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
+                    sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+                    trackEvent('view_tip_sponsor_elem');
+                }
             }
             setTimeout(() => {
                 if (currentState.clicks === 1) {
