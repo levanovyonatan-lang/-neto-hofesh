@@ -677,7 +677,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             }
             setTimeout(() => {
                 if (currentState.clicks === 1) {
-                    window.scrollBy({ top: 70, behavior: 'smooth' });
+                    window.scrollBy({ top: 40, behavior: 'smooth' });
                 }
             }, 150);
         } else {
