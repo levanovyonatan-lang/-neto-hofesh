@@ -942,6 +942,13 @@ function initApp(countdownTarget = 'summer') {
     if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
+    
+    try {
+        localStorage.setItem('neto_userConfig', JSON.stringify({
+            schoolType: userConfig.schoolType,
+            studyFriday: userConfig.studyFriday
+        }));
+    } catch(e) {}
 
     userConfig.targetIntent = countdownTarget;
 
@@ -969,6 +976,7 @@ function initApp(countdownTarget = 'summer') {
 
 function resetApp() {
     window.scrollTo(0, 0); trackEvent('click_change_settings');
+    try { localStorage.removeItem('neto_userConfig'); } catch(e) {}
     const subPages = ['/hanukkah', '/taanit-esther', '/purim', '/pesach', '/asru-chag', '/atzmaut', '/lag-baomer', '/shavuot', '/summer-high', '/summer'];
     if (subPages.some(p => window.location.pathname.includes(p))) {
         if (window.location.hostname.includes('neto-hofesh.co.il') || (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.protocol !== 'file:')) {
@@ -1584,6 +1592,24 @@ function initSplashScreen() {
 
 // אתחול מראש של נגן ה-Vimeo לביצועים מהירים
 document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const stored = localStorage.getItem('neto_userConfig');
+        if (stored) {
+            const config = JSON.parse(stored);
+            if (config.schoolType) {
+                const radio = document.querySelector(`input[name="schoolType"][value="${config.schoolType}"]`);
+                if (radio) radio.checked = true;
+                const fridayToggle = document.getElementById('friday-toggle');
+                if (fridayToggle) fridayToggle.checked = !!config.studyFriday;
+                
+                // Set a flag so initApp knows not to override active holiday if not needed
+                setTimeout(() => {
+                    initApp(config.targetIntent || 'summer');
+                }, 50);
+            }
+        }
+    } catch(e) {}
+
     try {
         if (/Android/i.test(navigator.userAgent)) {
             document.body.classList.add('is-android');
