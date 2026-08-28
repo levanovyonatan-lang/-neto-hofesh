@@ -160,6 +160,11 @@
             justify-content: center;
             align-items: flex-start;
             box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+            transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
+            will-change: transform;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
 
         .sticky-banner-container::after {
