@@ -172,6 +172,9 @@
         if (gameSponsorBanner && isElem) {
             gameSponsorBanner.style.display = 'flex';
             gameSponsorBanner.style.opacity = '1';
+            gameSponsorBanner.style.position = 'relative';
+            gameSponsorBanner.style.zIndex = '1005';
+            gameSponsorBanner.style.visibility = 'visible';
         }
 
         const appContainer = document.querySelector('.app-container');
@@ -1178,6 +1181,9 @@
         if (gameSponsorBanner && isElem) {
             gameSponsorBanner.style.display = 'flex';
             gameSponsorBanner.style.opacity = '1';
+            gameSponsorBanner.style.position = 'relative';
+            gameSponsorBanner.style.zIndex = '1005';
+            gameSponsorBanner.style.visibility = 'visible';
         }
 
         const appContainer = document.querySelector('.app-container');
