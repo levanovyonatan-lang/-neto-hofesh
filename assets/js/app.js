@@ -1335,6 +1335,17 @@ function selectTarget(id, shouldScroll = true) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     userConfig.activeTargetId = id; confettiFired = false;
+    
+    try {
+        if (userConfig.schoolType) {
+            localStorage.setItem('neto_userConfig', JSON.stringify({
+                schoolType: userConfig.schoolType,
+                studyFriday: userConfig.studyFriday,
+                activeTargetId: userConfig.activeTargetId
+            }));
+        }
+    } catch(e) {}
+    
     const target = activeEventsList.find(e => e.id === id); if (!target) return;
     document.getElementById('main-timer-bg').style.background = target.bg;
     const timerBg = document.getElementById('main-timer-bg');
@@ -1604,7 +1615,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Set a flag so initApp knows not to override active holiday if not needed
                 setTimeout(() => {
-                    initApp(config.targetIntent || 'summer');
+                    initApp(config.activeTargetId || config.targetIntent || 'summer');
                 }, 50);
             }
         }
