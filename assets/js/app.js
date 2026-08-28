@@ -1340,8 +1340,7 @@ function selectTarget(id, shouldScroll = true) {
         if (userConfig.schoolType) {
             localStorage.setItem('neto_userConfig', JSON.stringify({
                 schoolType: userConfig.schoolType,
-                studyFriday: userConfig.studyFriday,
-                activeTargetId: userConfig.activeTargetId
+                studyFriday: userConfig.studyFriday
             }));
         }
     } catch(e) {}
@@ -1615,7 +1614,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Set a flag so initApp knows not to override active holiday if not needed
                 setTimeout(() => {
-                    initApp(config.activeTargetId || config.targetIntent || 'summer');
+                    initApp('next');
                 }, 50);
             }
         }
