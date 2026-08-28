@@ -168,7 +168,7 @@
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
         let isElem = false;
-        try { const config = JSON.parse(localStorage.getItem('netoConfig')); if (config && config.schoolType === 'elem') isElem = true; } catch(e) {}
+        try { if (typeof userConfig !== 'undefined' && userConfig.schoolType === 'elem') isElem = true; } catch(e) {}
         if (gameSponsorBanner && isElem) {
             gameSponsorBanner.style.display = 'flex';
             gameSponsorBanner.style.opacity = '1';
@@ -1177,7 +1177,7 @@
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
         let isElem = false;
-        try { const config = JSON.parse(localStorage.getItem('netoConfig')); if (config && config.schoolType === 'elem') isElem = true; } catch(e) {}
+        try { if (typeof userConfig !== 'undefined' && userConfig.schoolType === 'elem') isElem = true; } catch(e) {}
         if (gameSponsorBanner && isElem) {
             gameSponsorBanner.style.display = 'flex';
             gameSponsorBanner.style.opacity = '1';
