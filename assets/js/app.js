@@ -5,6 +5,7 @@ const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
 const tipsScriptSrc = `tips.js?v=${tipsDataVersion}`;
 const schoolTipKeys = { elem: 'elementary', middle: 'highschool', high: 'highschool' };
 let tipsDatabasePromise = null;
+let dailyTipsPromise = null;
 let userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' };
 let activeEventsList = [];
 let timerInterval = null;
@@ -481,6 +482,31 @@ function loadTipsDatabase() {
     return tipsDatabasePromise;
 }
 
+async function loadDailyTipsDatabase() {
+    if (window.dailyTips) return window.dailyTips;
+    if (dailyTipsPromise) return dailyTipsPromise;
+
+    // Use absolute URL from origin to avoid 404s on subpages
+    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=334';
+    
+    dailyTipsPromise = fetch(fetchUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to load daily-tips.json');
+            return response.json();
+        })
+        .then(data => {
+            window.dailyTips = data;
+            return data;
+        })
+        .catch(err => {
+            console.error('Error loading daily tips:', err);
+            dailyTipsPromise = null;
+            return null; // Return null on failure so it can fallback
+        });
+        
+    return dailyTipsPromise;
+}
+
 function flattenTips(source) {
     const tips = [];
     const collect = (value) => {
@@ -694,6 +720,40 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 }
 
 async function getSmartTip(targetId, schoolType, tipNumber) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDemo = urlParams.get('show_demo') === 'true';
+
+    // Check window.dailyTips for today
+    let d = new Date();
+    if (isDemo && urlParams.has('demo_date')) {
+        d = new Date('2024-' + urlParams.get('demo_date'));
+    }
+    const ilDate = new Date(d.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
+    const month = String(ilDate.getMonth() + 1).padStart(2, '0');
+    const day = String(ilDate.getDate()).padStart(2, '0');
+    const dateKey = `${month}-${day}`;
+
+    // Safely load daily tips, without blocking the rest of the flow on error
+    let dailyTipsData = null;
+    try {
+        dailyTipsData = await loadDailyTipsDatabase();
+    } catch(e) {
+        console.error('Safe fallback: Daily tips failed to load', e);
+    }
+
+    if (dailyTipsData && dailyTipsData[dateKey]) {
+        const dailyData = dailyTipsData[dateKey];
+        if (tipNumber === 1) {
+            if (dailyData.type === 'holiday') {
+                return (schoolType === 'high' || schoolType === 'middle') ? dailyData.missionHigh : dailyData.missionElem;
+            } else {
+                return (schoolType === 'high' || schoolType === 'middle') ? dailyData.tipHigh : dailyData.tipElem;
+            }
+        } else if (tipNumber === 2 && dailyData.type === 'holiday' && dailyData.tip) {
+            return dailyData.tip;
+        }
+    }
+
     if (tipNumber === 1) {
         const _d = new Date();
         const _il = new Date(_d.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
@@ -709,8 +769,6 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     const tipsDb = await loadTipsDatabase();
 
     // Check if we are in vacation mode AND demo parameter is true
-    const urlParams = new URLSearchParams(window.location.search);
-    const isDemo = urlParams.get('show_demo') === 'true';
     const target = typeof activeEventsList !== 'undefined' ? activeEventsList.find(e => e.id === targetId) : null;
 
     let poolKeyOverride = null;
