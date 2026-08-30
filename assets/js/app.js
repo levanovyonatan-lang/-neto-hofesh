@@ -5,6 +5,7 @@ const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
 const tipsScriptSrc = `tips.js?v=${tipsDataVersion}`;
 const schoolTipKeys = { elem: 'elementary', middle: 'highschool', high: 'highschool' };
 let tipsDatabasePromise = null;
+let dailyTipsPromise = null;
 let userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' };
 let activeEventsList = [];
 let timerInterval = null;
@@ -458,27 +459,52 @@ function loadTipsDatabase() {
         };
 
         if (existingScript) {
-            existingScript.addEventListener('load', finishLoading, { once: true });
-            existingScript.addEventListener('error', () => {
+            if (existingScript.dataset.loaded === 'true') {
+                finishLoading();
+            } else {
+                existingScript.addEventListener('load', finishLoading);
+                existingScript.addEventListener('error', () => {
+                    tipsDatabasePromise = null;
+                    reject(new Error('Failed to load existing tips.js script'));
+                });
+            }
+        } else {
+            const script = document.createElement('script');
+            script.src = tipsScriptSrc;
+            script.async = true;
+            script.dataset.tipsDatabase = 'true';
+            script.onload = finishLoading;
+            script.onerror = () => {
                 tipsDatabasePromise = null;
                 reject(new Error('Failed to load tips.js'));
-            }, { once: true });
-            return;
+            };
+            document.head.appendChild(script);
         }
-
-        const script = document.createElement('script');
-        script.src = tipsScriptSrc;
-        script.async = true;
-        script.dataset.tipsDatabase = 'true';
-        script.onload = finishLoading;
-        script.onerror = () => {
-            tipsDatabasePromise = null;
-            reject(new Error('Failed to load tips.js'));
-        };
-        document.head.appendChild(script);
     });
 
     return tipsDatabasePromise;
+}
+
+async function loadDailyTipsDatabase() {
+    if (window.dailyTips) return window.dailyTips;
+    if (dailyTipsPromise) return dailyTipsPromise;
+
+    dailyTipsPromise = fetch('assets/data/daily-tips.json?v=334')
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to load daily-tips.json');
+            return response.json();
+        })
+        .then(data => {
+            window.dailyTips = data;
+            return data;
+        })
+        .catch(err => {
+            console.error('Error loading daily tips:', err);
+            dailyTipsPromise = null;
+            return null; // Return null on failure so it can fallback
+        });
+        
+    return dailyTipsPromise;
 }
 
 function flattenTips(source) {
@@ -694,17 +720,34 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 }
 
 async function getSmartTip(targetId, schoolType, tipNumber) {
-    if (tipNumber === 1) {
-        const _d = new Date();
-        const _il = new Date(_d.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
-        const _str = `${_il.getFullYear()}-${String(_il.getMonth() + 1).padStart(2, '0')}-${String(_il.getDate()).padStart(2, '0')}`;
-        if (_str === '2026-06-27') {
-            return "המורה אמרה “נשאר לנו רק נושא קטן” ואז התחילה סופת שלגים של סיכומים, דפים ומבטי ייאוש. 📚😵💫";
-        }
-        if (_str === '2026-06-28') {
-            return "המזגן בכיתה עובד כאילו הוא קיבל משימה אישית להפוך את יוני לסופת שלגים. 🥶☀️";
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDemo = urlParams.get('show_demo') === 'true';
+
+    // 1. Check window.dailyTips for today
+    let d = new Date();
+    if (isDemo && urlParams.has('demo_date')) {
+        d = new Date('2024-' + urlParams.get('demo_date'));
+    }
+    const ilDate = new Date(d.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
+    const month = String(ilDate.getMonth() + 1).padStart(2, '0');
+    const day = String(ilDate.getDate()).padStart(2, '0');
+    const dateKey = `${month}-${day}`;
+
+    const dailyTipsData = await loadDailyTipsDatabase();
+
+    if (dailyTipsData && dailyTipsData[dateKey]) {
+        const dailyData = dailyTipsData[dateKey];
+        if (tipNumber === 1) {
+            if (dailyData.type === 'holiday') {
+                return (schoolType === 'high' || schoolType === 'middle') ? dailyData.missionHigh : dailyData.missionElem;
+            } else {
+                return (schoolType === 'high' || schoolType === 'middle') ? dailyData.tipHigh : dailyData.tipElem;
+            }
+        } else if (tipNumber === 2 && dailyData.type === 'holiday' && dailyData.tip) {
+            return dailyData.tip;
         }
     }
+
 
     const tipsDb = await loadTipsDatabase();
 
