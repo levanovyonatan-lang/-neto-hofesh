@@ -487,7 +487,7 @@ async function loadDailyTipsDatabase() {
     if (dailyTipsPromise) return dailyTipsPromise;
 
     // Use absolute URL from origin to avoid 404s on subpages
-    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=335';
+    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=336';
     
     dailyTipsPromise = fetch(fetchUrl)
         .then(response => {
@@ -747,10 +747,14 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
             if (dailyData.type === 'holiday') {
                 return (schoolType === 'high' || schoolType === 'middle') ? dailyData.missionHigh : dailyData.missionElem;
             } else {
-                return (schoolType === 'high' || schoolType === 'middle') ? dailyData.tipHigh : dailyData.tipElem;
+                return dailyData.tip1 || dailyData.tipHigh; // fallback just in case
             }
-        } else if (tipNumber === 2 && dailyData.type === 'holiday' && dailyData.tip) {
-            return dailyData.tip;
+        } else if (tipNumber === 2) {
+            if (dailyData.type === 'holiday' && dailyData.tip) {
+                return dailyData.tip;
+            } else if (dailyData.type === 'regular' && (dailyData.tip2 || dailyData.tipElem)) {
+                return dailyData.tip2 || dailyData.tipElem;
+            }
         }
     }
 
