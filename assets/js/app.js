@@ -694,17 +694,32 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 }
 
 async function getSmartTip(targetId, schoolType, tipNumber) {
-    if (tipNumber === 1) {
-        const _d = new Date();
-        const _il = new Date(_d.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
-        const _str = `${_il.getFullYear()}-${String(_il.getMonth() + 1).padStart(2, '0')}-${String(_il.getDate()).padStart(2, '0')}`;
-        if (_str === '2026-06-27') {
-            return "המורה אמרה “נשאר לנו רק נושא קטן” ואז התחילה סופת שלגים של סיכומים, דפים ומבטי ייאוש. 📚😵💫";
-        }
-        if (_str === '2026-06-28') {
-            return "המזגן בכיתה עובד כאילו הוא קיבל משימה אישית להפוך את יוני לסופת שלגים. 🥶☀️";
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDemo = urlParams.get('show_demo') === 'true';
+
+    // 1. Check window.dailyTips for today
+    let d = new Date();
+    if (isDemo && urlParams.has('demo_date')) {
+        d = new Date('2024-' + urlParams.get('demo_date'));
+    }
+    const ilDate = new Date(d.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
+    const month = String(ilDate.getMonth() + 1).padStart(2, '0');
+    const day = String(ilDate.getDate()).padStart(2, '0');
+    const dateKey = `${month}-${day}`;
+
+    if (window.dailyTips && window.dailyTips[dateKey]) {
+        const dailyData = window.dailyTips[dateKey];
+        if (tipNumber === 1) {
+            if (dailyData.type === 'holiday') {
+                return (schoolType === 'high' || schoolType === 'middle') ? dailyData.missionHigh : dailyData.missionElem;
+            } else {
+                return (schoolType === 'high' || schoolType === 'middle') ? dailyData.tipHigh : dailyData.tipElem;
+            }
+        } else if (tipNumber === 2 && dailyData.type === 'holiday' && dailyData.tip) {
+            return dailyData.tip;
         }
     }
+
 
     const tipsDb = await loadTipsDatabase();
 
