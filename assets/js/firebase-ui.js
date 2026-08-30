@@ -57,12 +57,12 @@ function injectFirebaseUI() {
         .fb-checkbox-wrap input { margin-top: 5px; width: 18px; height: 18px; }
         .fb-checkbox-wrap label { font-size: 13px; color: #475569; line-height: 1.4; }
         .fb-btn {
-            background: linear-gradient(135deg, #3b82f6, #2563eb); color: white;
-            border: none; border-radius: 50px; padding: 12px 0; width: 100%;
-            font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #0f172a;
+            border: 3px solid #fef08a; border-radius: 50px; padding: 10px 0; width: 100%;
+            font-size: 18px; font-weight: 900; cursor: pointer; transition: 0.2s;
+            box-shadow: 0 8px 20px rgba(234, 179, 8, 0.4);
         }
-        .fb-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4); }
+        .fb-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(234, 179, 8, 0.5); }
         .fb-btn.google {
             background: white; color: #475569; border: 2px solid #e2e8f0;
             display: flex; align-items: center; justify-content: center; gap: 10px;

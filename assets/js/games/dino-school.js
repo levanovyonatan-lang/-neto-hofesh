@@ -1087,7 +1087,7 @@
 
         if (isNewRecord && !window.currentUserProfile) {
             leaderboardBtn.textContent = 'התחבר בשביל להיכנס לטבלה';
-            leaderboardBtn.style.color = '#fbbf24'; // צבע זהב
+            leaderboardBtn.style.color = '#d97706'; // צבע זהב
             leaderboardBtn.style.fontWeight = 'bold';
         }
         btnContainer.appendChild(leaderboardBtn);
