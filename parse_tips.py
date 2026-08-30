@@ -52,11 +52,17 @@ for chunk in chunks[1:]:
         tip1_text = parts_2[0]
         tip2_text = parts_2[1] if len(parts_2) > 1 else ""
     else:
-        # No '1.' found, maybe just bullet points?
-        bullets = re.split(r'\*', day_text)
-        bullets = [b.strip() for b in bullets if len(b.strip()) > 10]
-        tip1_text = bullets[0] if len(bullets) > 0 else ""
-        tip2_text = bullets[1] if len(bullets) > 1 else ""
+        # No '1.' found. Maybe it's split by "3 . 4 ." which is a common PDF extraction artifact?
+        parts_34 = re.split(r'\s+3\s*\.\s*4\s*\.\s+', day_text, maxsplit=1)
+        if len(parts_34) > 1:
+            tip1_text = parts_34[0]
+            tip2_text = re.sub(r'\s+5\s*\.\s*$', '', parts_34[1])
+        else:
+            # Maybe just bullet points?
+            bullets = re.split(r'\*', day_text)
+            bullets = [b.strip() for b in bullets if len(b.strip()) > 10]
+            tip1_text = bullets[0] if len(bullets) > 0 else day_text
+            tip2_text = bullets[1] if len(bullets) > 1 else ""
 
     def parse_tip_block(block_text):
         res = {}
