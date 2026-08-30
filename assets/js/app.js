@@ -89,7 +89,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=318').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=319').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -266,18 +266,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=284&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses.png?v=284&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-white.png?v=284&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-transparent.png?v=284&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('manifest.json?v=285&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses.png?v=285&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-white.png?v=285&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-transparent.png?v=285&cb=' + cb, { cache: 'reload' }).catch(() => { });
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=284&cb=' + cb;
+            link.href = baseHref + '?v=285&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=284&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=285&cb=' + cb;
         }
     } catch (e) { }
 }
@@ -436,7 +436,7 @@ function attemptRegistration() {
 
 function handleSponsorClick() {
     trackEvent('click_tip_fitness_sponsor');
-    window.open('/fitness.html?v=3', '_blank');
+    window.open('/fitness.html?v=4', '_blank');
 }
 
 function loadTipsDatabase() {
@@ -487,7 +487,7 @@ async function loadDailyTipsDatabase() {
     if (dailyTipsPromise) return dailyTipsPromise;
 
     // Use absolute URL from origin to avoid 404s on subpages
-    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=336';
+    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=338';
     
     dailyTipsPromise = fetch(fetchUrl)
         .then(response => {
@@ -743,18 +743,16 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
 
     if (dailyTipsData && dailyTipsData[dateKey]) {
         const dailyData = dailyTipsData[dateKey];
+        const isHigh = schoolType === 'high' || schoolType === 'middle';
+        
         if (tipNumber === 1) {
-            if (dailyData.type === 'holiday') {
-                return (schoolType === 'high' || schoolType === 'middle') ? dailyData.missionHigh : dailyData.missionElem;
-            } else {
-                return dailyData.tip1 || dailyData.tipHigh; // fallback just in case
-            }
+            if (isHigh && dailyData.tip1High) return dailyData.tip1High;
+            if (!isHigh && dailyData.tip1Elem) return dailyData.tip1Elem;
+            return dailyData.tip1 || dailyData.missionHigh || dailyData.tipHigh || '';
         } else if (tipNumber === 2) {
-            if (dailyData.type === 'holiday' && dailyData.tip) {
-                return dailyData.tip;
-            } else if (dailyData.type === 'regular' && (dailyData.tip2 || dailyData.tipElem)) {
-                return dailyData.tip2 || dailyData.tipElem;
-            }
+            if (isHigh && dailyData.tip2High) return dailyData.tip2High;
+            if (!isHigh && dailyData.tip2Elem) return dailyData.tip2Elem;
+            return dailyData.tip2 || dailyData.tip || dailyData.tipElem || '';
         }
     }
 
@@ -1210,7 +1208,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=319';
+        script.src = 'assets/js/games/dino-school.js?v=320';
         document.body.appendChild(script);
     }
 
