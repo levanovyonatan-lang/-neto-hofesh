@@ -89,7 +89,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=10141').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=10142').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -266,18 +266,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=10141&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses.png?v=10141&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-white.png?v=10141&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-transparent.png?v=10141&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('manifest.json?v=10142&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses.png?v=10142&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-white.png?v=10142&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-transparent.png?v=10142&cb=' + cb, { cache: 'reload' }).catch(() => { });
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=10141&cb=' + cb;
+            link.href = baseHref + '?v=10142&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=10141&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=10142&cb=' + cb;
         }
     } catch (e) { }
 }
@@ -436,7 +436,7 @@ function attemptRegistration() {
 
 function handleSponsorClick() {
     trackEvent('click_tip_fitness_sponsor');
-    window.open('/fitness.html?v=10141', '_blank');
+    window.open('/fitness.html?v=10142', '_blank');
 }
 
 function loadTipsDatabase() {
@@ -487,7 +487,7 @@ async function loadDailyTipsDatabase() {
     if (dailyTipsPromise) return dailyTipsPromise;
 
     // Use absolute URL from origin to avoid 404s on subpages
-    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10141';
+    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10142';
     
     dailyTipsPromise = fetch(fetchUrl)
         .then(response => {
@@ -547,7 +547,7 @@ function resolveTipPool(tipsDb, targetId, schoolType) {
 }
 
 function getDailyTipStateKey(targetId, schoolType = userConfig.schoolType) {
-    return `${targetId}::${schoolType || 'default'}`;
+    return `dailyTip::${schoolType || 'default'}`;
 }
 
 function normalizeDailyTipState(state) {
@@ -623,17 +623,11 @@ function renderTipBox(targetId, isNewlyClicked = false) {
     const target = typeof activeEventsList !== 'undefined' ? activeEventsList.find(e => e.id === targetId) : null;
 
     let shouldShowTips = false;
-    if (target) {
-        if (target.isHappeningNow) {
+    if (target && activeEventsList && activeEventsList.length > 0) {
+        const firstId = activeEventsList[0].id;
+        const lastId = activeEventsList[activeEventsList.length - 1].id;
+        if (target.id === firstId || target.id === lastId) {
             shouldShowTips = true;
-        } else {
-            const nextUpcomingHoliday = activeEventsList.find(e => !e.isHappeningNow && !e.id.startsWith('summer'));
-            if (nextUpcomingHoliday && target.id === nextUpcomingHoliday.id) {
-                shouldShowTips = true;
-            }
-            if (target.isSummer) {
-                shouldShowTips = true;
-            }
         }
         if (shouldShowTips && !hasDailyTips(targetId)) {
             shouldShowTips = false;
@@ -1208,7 +1202,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=10141';
+        script.src = 'assets/js/games/dino-school.js?v=10142';
         document.body.appendChild(script);
     }
 
