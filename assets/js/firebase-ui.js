@@ -57,12 +57,19 @@ function injectFirebaseUI() {
         .fb-checkbox-wrap input { margin-top: 5px; width: 18px; height: 18px; }
         .fb-checkbox-wrap label { font-size: 13px; color: #475569; line-height: 1.4; }
         .fb-btn {
-            background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #0f172a;
-            border: 3px solid #fef08a; border-radius: 50px; padding: 10px 0; width: 100%;
-            font-size: 18px; font-weight: 900; cursor: pointer; transition: 0.2s;
-            box-shadow: 0 8px 20px rgba(234, 179, 8, 0.4);
+            background: linear-gradient(135deg, #3b82f6, #2563eb); color: white;
+            border: none; border-radius: 50px; padding: 12px 0; width: 100%;
+            font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
-        .fb-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(234, 179, 8, 0.5); }
+        .fb-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4); }
+        .fb-btn-gold {
+            background: linear-gradient(135deg, #facc15 0%, #eab308 100%) !important; color: #0f172a !important;
+            border: 3px solid #fef08a !important; padding: 10px 0 !important;
+            font-weight: 900 !important;
+            box-shadow: 0 8px 20px rgba(234, 179, 8, 0.4) !important;
+        }
+        .fb-btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(234, 179, 8, 0.5) !important; }
         .fb-btn.google {
             background: white; color: #475569; border: 2px solid #e2e8f0;
             display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -119,7 +126,7 @@ function injectFirebaseUI() {
                     <label for="reg-newsletter">אני מאשר/ת קבלת עדכונים והפתעות למייל מנטו חופש.</label>
                 </div>
                 
-                <button class="fb-btn" onclick="submitRegistration()">שמור כינוי וסיימנו</button>
+                <button class="fb-btn fb-btn-gold" onclick="submitRegistration()">שמור כינוי וסיימנו</button>
                 <div class="terms-text">בלחיצה על שמירה אני מאשר/ת את <a href="terms.html" target="_blank" style="color: #3b82f6;">תקנון האתר ומדיניות הפרטיות</a>.</div>
             </div>
         </div>
@@ -145,7 +152,7 @@ function injectFirebaseUI() {
             <div class="emoji-grid" id="local-emoji-grid" style="margin-bottom: 20px; width: 100%; max-width: 500px; justify-content: center;"></div>
             <input type="hidden" id="local-selected-emoji" value="👤">
             
-            <button class="fb-btn" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="padding: 12px 20px; font-size: 18px; margin-bottom: 15px; width: 100%; max-width: 300px;">
+            <button class="fb-btn fb-btn-gold" onclick="if(window.handleLocalLogin) window.handleLocalLogin()" style="font-size: 18px; margin-bottom: 15px; width: 100%; max-width: 300px;">
                 היכנס לטבלה 🚀
             </button>
             <button onclick="window.skippedRegistration=true; if(window.updateLeaderboardUI) window.updateLeaderboardUI();" style="background: none; border: none; color: #94a3b8; font-size: 15px; text-decoration: underline; cursor: pointer; padding: 5px; font-weight: bold;">
@@ -203,7 +210,7 @@ function injectFirebaseUI() {
                     <div class="emoji-grid" id="pa-emoji-grid" style="margin-bottom: 20px; width: 100%; max-width: 320px; margin-left: auto; margin-right: auto;"></div>
                     <input type="hidden" id="pa-selected-emoji" value="👤">
                     
-                    <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="fb-btn" style="padding: 12px 20px; font-size: 18px; width: 100%; max-width: 250px;">שמור שינויים</button>
+                    <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="fb-btn fb-btn-gold" style="font-size: 18px; width: 100%; max-width: 250px;">שמור שינויים</button>
                     
                     <button onclick="if(window.deleteUserAccount) window.deleteUserAccount()" style="margin-top: 15px; background: none; border: none; color: #ef4444; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: underline;">מחק משתמש לצמיתות</button>
                     
