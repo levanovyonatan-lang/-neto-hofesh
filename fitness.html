@@ -239,6 +239,16 @@
             color: white;
             box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
             border: none;
+            animation: gentle-shake 6s infinite ease-in-out;
+        }
+        
+        @keyframes gentle-shake {
+            0%, 85% { transform: rotate(0) scale(1); }
+            87% { transform: rotate(-3deg) scale(1.03); }
+            90% { transform: rotate(3deg) scale(1.03); }
+            93% { transform: rotate(-3deg) scale(1.03); }
+            96% { transform: rotate(3deg) scale(1.03); }
+            100% { transform: rotate(0) scale(1); }
         }
 
         /* Animated Shine on WhatsApp Button */
