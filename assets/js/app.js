@@ -488,7 +488,7 @@ async function loadDailyTipsDatabase() {
 
     // Use absolute URL from origin to avoid 404s on subpages
     const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10144';
-    
+
     dailyTipsPromise = fetch(fetchUrl)
         .then(response => {
             if (!response.ok) throw new Error('Failed to load daily-tips.json');
@@ -503,7 +503,7 @@ async function loadDailyTipsDatabase() {
             dailyTipsPromise = null;
             return null; // Return null on failure so it can fallback
         });
-        
+
     return dailyTipsPromise;
 }
 
@@ -688,7 +688,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
 
             if (sponsorBanner && userConfig.schoolType === 'elem') {
-                sponsorBanner.style.display = 'block'; 
+                sponsorBanner.style.display = 'block';
                 if (currentState.clicks === 1) {
                     sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
                     sponsorBanner.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
@@ -731,14 +731,14 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     let dailyTipsData = null;
     try {
         dailyTipsData = await loadDailyTipsDatabase();
-    } catch(e) {
+    } catch (e) {
         console.error('Safe fallback: Daily tips failed to load', e);
     }
 
     if (dailyTipsData && dailyTipsData[dateKey]) {
         const dailyData = dailyTipsData[dateKey];
         const isHigh = schoolType === 'high' || schoolType === 'middle';
-        
+
         if (tipNumber === 1) {
             if (isHigh && dailyData.tip1High) return dailyData.tip1High;
             if (!isHigh && dailyData.tip1Elem) return dailyData.tip1Elem;
@@ -1001,13 +1001,13 @@ function initApp(countdownTarget = 'summer') {
     if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
-    
+
     try {
         localStorage.setItem('neto_userConfig', JSON.stringify({
             schoolType: userConfig.schoolType,
             studyFriday: userConfig.studyFriday
         }));
-    } catch(e) {}
+    } catch (e) { }
 
     userConfig.targetIntent = countdownTarget;
 
@@ -1035,7 +1035,7 @@ function initApp(countdownTarget = 'summer') {
 
 function resetApp() {
     window.scrollTo(0, 0); trackEvent('click_change_settings');
-    try { localStorage.removeItem('neto_userConfig'); } catch(e) {}
+    try { localStorage.removeItem('neto_userConfig'); } catch (e) { }
     const subPages = ['/hanukkah', '/taanit-esther', '/purim', '/pesach', '/asru-chag', '/atzmaut', '/lag-baomer', '/shavuot', '/summer-high', '/summer'];
     if (subPages.some(p => window.location.pathname.includes(p))) {
         if (window.location.hostname.includes('neto-hofesh.co.il') || (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.protocol !== 'file:')) {
@@ -1394,7 +1394,7 @@ function selectTarget(id, shouldScroll = true) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     userConfig.activeTargetId = id; confettiFired = false;
-    
+
     try {
         if (userConfig.schoolType) {
             localStorage.setItem('neto_userConfig', JSON.stringify({
@@ -1403,8 +1403,8 @@ function selectTarget(id, shouldScroll = true) {
                 activeTargetId: userConfig.activeTargetId
             }));
         }
-    } catch(e) {}
-    
+    } catch (e) { }
+
     const target = activeEventsList.find(e => e.id === id); if (!target) return;
     document.getElementById('main-timer-bg').style.background = target.bg;
     const timerBg = document.getElementById('main-timer-bg');
@@ -1435,7 +1435,7 @@ function selectTarget(id, shouldScroll = true) {
     } else {
         timerBg.style.background = target.bg;
         timerBg.classList.remove('vacation-mode');
-        
+
         timerBg.classList.add('premium-countdown');
 
         document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
@@ -1546,7 +1546,7 @@ function shareWhatsApp(event) {
         }
     }
 
-    const text = `אמאל'ה, קלטתם כמה ימי לימוד נשארו עד החופש? 😱🏃‍♂️ כנסו דחוף לראות את הספירה לאחור >> ${shareUrl}`;
+    const text = `מצאתי את החוג הזה לכושר ונראה שזה ממש מתאים לי💪\nכל הפרטים פה: https://roeikatav.co.il`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 }
 
@@ -1671,7 +1671,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (radio) radio.checked = true;
                 const fridayToggle = document.getElementById('friday-toggle');
                 if (fridayToggle) fridayToggle.checked = !!config.studyFriday;
-                
+
                 // Set a flag so initApp knows not to override active holiday if not needed
                 setTimeout(() => {
                     let intent = 'next';
@@ -1682,7 +1682,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 1000);
             }
         }
-    } catch(e) {}
+    } catch (e) { }
 
     try {
         if (/Android/i.test(navigator.userAgent)) {
@@ -1768,7 +1768,7 @@ function updateSponsorTexts() {
 
     let rotIdx = parseInt(localStorage.getItem('sponsorRotationIndex') || '0', 10);
     const chosen = sponsorOptions[rotIdx % sponsorOptions.length];
-    
+
     localStorage.setItem('sponsorRotationIndex', (rotIdx + 1).toString());
 
     const htmlContent = `${chosen.text} <span aria-hidden="true">${chosen.emojis}</span>`;
