@@ -1546,7 +1546,7 @@ function shareWhatsApp(event) {
         }
     }
 
-    const text = `אמאל'ה, קלטתם כמה ימי לימוד נשארו עד החופש? 😱🏃‍♂️ כנסו דחוף לראות את הספירה לאחור >> ${shareUrl}`;
+    const text = `מצאתי את החוג הזה לכושר ונראה שזה ממש מתאים לי💪\nכל הפרטים פה: https://roeikatav.co.il`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 }
 
