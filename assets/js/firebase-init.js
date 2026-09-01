@@ -250,6 +250,12 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
     if (!uid || !window.currentUserProfile) return false;
 
     // Anti-Cheat Validation
+    score = Number(score);
+    if (!Number.isFinite(score) || score < 0 || score > 999999) {
+        console.warn("Anti-Cheat: Invalid score format (Infinity/NaN/Too High).");
+        return false;
+    }
+
     let isValid = false;
     if (score <= 3000 && !token) {
         // Legacy scores up to 3000 are allowed without token for smooth transition
