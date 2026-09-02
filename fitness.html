@@ -402,6 +402,13 @@
     </div>
 
     <script>
+        window.trackEvent = function(eventName, params = {}) {
+            console.log("Track Event:", eventName, params);
+            if (typeof gtag === 'function') {
+                gtag('event', eventName, { ...params, transport: 'beacon' });
+            }
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
             const video = document.getElementById('fitness-vid');
             const overlay = document.getElementById('play-overlay');
