@@ -236,7 +236,12 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
             await window.saveDinoHighScore(localDinoScore, token, timeElapsed);
         }
         
-        if(window.updateLeaderboardUI) window.updateLeaderboardUI();
+        window.leaderboardLastFetch = 0;
+        if(window.showLeaderboard) {
+            window.showLeaderboard(null, null, null, true);
+        } else if(window.updateLeaderboardUI) {
+            window.updateLeaderboardUI();
+        }
     } catch (error) {
         console.error("Error saving user profile:", error);
         alert("אירעה שגיאה בשמירת הנתונים. נסה שוב.");
@@ -315,6 +320,7 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
             const scoreDocRef = doc(db, "dino_scores", uid);
             await setDoc(scoreDocRef, scoreMergeData, { merge: true });
 
+            window.leaderboardLastFetch = 0; // Force refresh on next view
             return true;
         } catch (error) {
             console.error("Error saving high score:", error);

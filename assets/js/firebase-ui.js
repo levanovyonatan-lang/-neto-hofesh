@@ -875,14 +875,17 @@ window.saveNewNickname = async () => {
             setTimeout(() => {
                 editBtn.textContent = originalBtnText;
                 if (window.closePersonalArea) window.closePersonalArea();
-                if (window.showLeaderboard) window.showLeaderboard();
+                window.leaderboardLastFetch = 0;
+                if (window.showLeaderboard) window.showLeaderboard(null, null, null, true);
+                else if (window.updateLeaderboardUI) window.updateLeaderboardUI();
             }, 1000);
         } else {
-            if (window.closePersonalArea) window.closePersonalArea();
-            if (window.showLeaderboard) window.showLeaderboard();
-        }
+            document.getElementById('personal-area-modal').classList.remove('active');
         
-        if (window.updateLeaderboardUI) window.updateLeaderboardUI();
+            window.leaderboardLastFetch = 0;
+            if (window.showLeaderboard) window.showLeaderboard(null, null, null, true);
+            else if (window.updateLeaderboardUI) window.updateLeaderboardUI();
+        }
         
     } catch (error) {
         console.error("Error updating nickname:", error);
