@@ -286,10 +286,10 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
     let updated = false;
     let userMergeData = {};
     let scoreMergeData = {
-        nickname: window.currentUserProfile.nickname,
-        emoji: window.currentUserProfile.emoji || '👤',
         updatedAt: new Date().toISOString()
     };
+    if (window.currentUserProfile.nickname) scoreMergeData.nickname = window.currentUserProfile.nickname;
+    if (window.currentUserProfile.emoji) scoreMergeData.emoji = window.currentUserProfile.emoji;
 
     if (score > serverAllTime) {
         userMergeData.dinoHighScore = score;
