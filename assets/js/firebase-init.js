@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, deleteUser, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, setPersistence, browserLocalPersistence, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+// Removed getAnalytics
 
 // TODO: החלף את הערכים האלו בנתוני הפרויקט שלך ב-Firebase
 const firebaseConfig = {
@@ -25,7 +25,7 @@ setPersistence(auth, browserLocalPersistence).catch((error) => {
 
 auth.languageCode = 'iw'; // Set language to Hebrew (iw is Google's internal code for Hebrew)
 const db = getFirestore(app);
-const analytics = getAnalytics(app);
+// Analytics removed to avoid overriding existing gtag
 const provider = new GoogleAuthProvider();
 
 // Expose Firebase functions globally for the app
