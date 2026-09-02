@@ -279,20 +279,41 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
         return false;
     }
 
-    if (score >= (window.currentUserProfile.dinoHighScore || 0)) {
+    const currentMonth = new Date().toISOString().substring(0, 7);
+    const serverAllTime = window.currentUserProfile.dinoHighScore || 0;
+    const serverMonthly = (window.currentUserProfile.monthlyScores && window.currentUserProfile.monthlyScores[currentMonth]) ? window.currentUserProfile.monthlyScores[currentMonth] : 0;
+
+    let updated = false;
+    let userMergeData = {};
+    let scoreMergeData = {
+        nickname: window.currentUserProfile.nickname,
+        emoji: window.currentUserProfile.emoji || '👤',
+        updatedAt: new Date().toISOString()
+    };
+
+    if (score > serverAllTime) {
+        userMergeData.dinoHighScore = score;
+        scoreMergeData.score = score;
+        window.currentUserProfile.dinoHighScore = score;
+        updated = true;
+    }
+
+    if (score > serverMonthly) {
+        if (!window.currentUserProfile.monthlyScores) window.currentUserProfile.monthlyScores = {};
+        window.currentUserProfile.monthlyScores[currentMonth] = score;
+        userMergeData.monthlyScores = { [currentMonth]: score };
+        scoreMergeData.monthlyScores = { [currentMonth]: score };
+        updated = true;
+    }
+
+    if (updated) {
         try {
             const userDocRef = doc(db, "users", uid);
-            await setDoc(userDocRef, { dinoHighScore: score }, { merge: true });
-            window.currentUserProfile.dinoHighScore = score;
+            await setDoc(userDocRef, userMergeData, { merge: true });
 
             // עדכון באוסף נפרד שמיועד רק לטבלת השיאים (לשליפה מהירה)
             const scoreDocRef = doc(db, "dino_scores", uid);
-            await setDoc(scoreDocRef, {
-                nickname: window.currentUserProfile.nickname,
-                emoji: window.currentUserProfile.emoji || '👤',
-                score: score,
-                updatedAt: new Date().toISOString()
-            });
+            await setDoc(scoreDocRef, scoreMergeData, { merge: true });
 
             return true;
         } catch (error) {
@@ -304,15 +325,28 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
 };
 
 // פונקציה לשליפת טבלת השיאים
-window.getTopDinoScores = async () => {
+window.getTopDinoScores = async (type = 'monthly') => {
     try {
         const scoresRef = collection(db, "dino_scores");
-        const q = query(scoresRef, orderBy("score", "desc"), limit(100));
+        let q;
+        const currentMonth = new Date().toISOString().substring(0, 7);
+        
+        if (type === 'monthly') {
+            q = query(scoresRef, orderBy(`monthlyScores.${currentMonth}`, "desc"), limit(100));
+        } else {
+            q = query(scoresRef, orderBy("score", "desc"), limit(100));
+        }
+        
         const querySnapshot = await getDocs(q);
         
         let leaderboard = [];
         querySnapshot.forEach((doc) => {
-            leaderboard.push({ ...doc.data(), uid: doc.id });
+            const data = doc.data();
+            let displayScore = data.score || 0;
+            if (type === 'monthly') {
+                displayScore = (data.monthlyScores && data.monthlyScores[currentMonth]) ? data.monthlyScores[currentMonth] : 0;
+            }
+            leaderboard.push({ ...data, uid: doc.id, displayScore: displayScore });
         });
         return leaderboard;
     } catch (error) {

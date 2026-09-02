@@ -169,6 +169,10 @@ function injectFirebaseUI() {
         <div class="fb-modal-overlay" id="lb-modal">
             <div class="fb-modal">
                 <div class="fb-title">🏆 טבלת השיאים 🏆</div>
+                <div class="lb-tabs" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; margin-top: -10px;">
+                    <button id="tab-monthly" onclick="if(window.switchLeaderboardTab) window.switchLeaderboardTab('monthly')" style="padding: 6px 14px; border-radius: 20px; border: none; background: #3b82f6; color: white; cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s;">שיא חודשי</button>
+                    <button id="tab-all-time" onclick="if(window.switchLeaderboardTab) window.switchLeaderboardTab('all-time')" style="padding: 6px 14px; border-radius: 20px; border: none; background: #f1f5f9; color: #64748b; cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s;">כל הזמנים</button>
+                </div>
                 <div style="position: relative;">
                     <ul class="leaderboard-list" id="lb-list">
                         <div style="text-align: center; padding: 20px; color: #94a3b8;">טוען נתונים...</div>
@@ -370,27 +374,59 @@ window.submitRegistration = async function() {
         }
 }
 
-window.showLeaderboard = async function(score, stage, killer) {
+window.currentLbTab = window.currentLbTab || 'monthly';
+
+window.switchLeaderboardTab = function(tabName) {
+    window.currentLbTab = tabName;
+    
+    // Update button styles
+    const btnMonthly = document.getElementById('tab-monthly');
+    const btnAllTime = document.getElementById('tab-all-time');
+    
+    if (btnMonthly && btnAllTime) {
+        if (tabName === 'monthly') {
+            btnMonthly.style.background = '#3b82f6';
+            btnMonthly.style.color = 'white';
+            btnAllTime.style.background = '#f1f5f9';
+            btnAllTime.style.color = '#64748b';
+        } else {
+            btnAllTime.style.background = '#3b82f6';
+            btnAllTime.style.color = 'white';
+            btnMonthly.style.background = '#f1f5f9';
+            btnMonthly.style.color = '#64748b';
+        }
+    }
+    
+    const listEl = document.getElementById('lb-list');
+    if(listEl) listEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #94a3b8;">טוען נתונים...</div>';
+    
+    // Re-render
+    window.showLeaderboard(null, null, null, true);
+}
+
+window.showLeaderboard = async function(score, stage, killer, isTabSwitch = false) {
     if (window.pendingFirebaseUser && !window.currentUserProfile) {
         window.showRegistrationCompletionModal(window.pendingFirebaseUser);
         return;
     }
     
-    // סנכרון השיא המקומי לשרת במידה והוא גבוה יותר ממה ששמור בשרת
-    if (window.trackEvent) window.trackEvent('click_leaderboard');
-    if (window.currentUserProfile && window.saveDinoHighScore) {
-        const localScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
-        const serverScore = window.currentUserProfile.dinoHighScore || 0;
-        const maxScore = Math.max(localScore, serverScore);
-        
-        const token = localStorage.getItem('dinoHighScoreToken');
-        const timeElapsed = localStorage.getItem('dinoTimeElapsed');
-        
-        if (maxScore > 0 && !localStorage.getItem('forceSync_v1_modal')) {
-            await window.saveDinoHighScore(maxScore, token, timeElapsed);
-            localStorage.setItem('forceSync_v1_modal', 'true');
-        } else if (localScore > serverScore) {
-            await window.saveDinoHighScore(localScore, token, timeElapsed);
+    // סנכרון השיא המקומי לשרת במידה והוא גבוה יותר ממה ששמור בשרת (רק אם זה פתיחה רגילה, לא החלפת טאבים)
+    if (!isTabSwitch) {
+        if (window.trackEvent) window.trackEvent('click_leaderboard');
+        if (window.currentUserProfile && window.saveDinoHighScore) {
+            const localScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
+            const serverScore = window.currentUserProfile.dinoHighScore || 0;
+            const maxScore = Math.max(localScore, serverScore);
+            
+            const token = localStorage.getItem('dinoHighScoreToken');
+            const timeElapsed = localStorage.getItem('dinoTimeElapsed');
+            
+            if (maxScore > 0 && !localStorage.getItem('forceSync_v1_modal')) {
+                await window.saveDinoHighScore(maxScore, token, timeElapsed);
+                localStorage.setItem('forceSync_v1_modal', 'true');
+            } else if (localScore > serverScore) {
+                await window.saveDinoHighScore(localScore, token, timeElapsed);
+            }
         }
     }
     
@@ -399,7 +435,7 @@ window.showLeaderboard = async function(score, stage, killer) {
     
 
     if(window.getTopDinoScores) {
-        const scores = await window.getTopDinoScores();
+        const scores = await window.getTopDinoScores(window.currentLbTab);
         const listEl = document.getElementById('lb-list');
         listEl.innerHTML = '';
         
@@ -422,7 +458,7 @@ window.showLeaderboard = async function(score, stage, killer) {
             const isCurrentUser = currentUid && s.uid === currentUid;
             if (isCurrentUser) {
                 userRank = index + 1;
-                userScore = s.score;
+                userScore = s.displayScore || s.score;
             }
             
             const blurClass = '';
@@ -434,7 +470,7 @@ window.showLeaderboard = async function(score, stage, killer) {
                     <span class="lb-rank">${rankStr}</span>
                     <span class="lb-emoji">${s.emoji || '👤'}</span>
                     <span class="lb-name">${s.nickname || "אנונימי"}</span>
-                    <span class="lb-score">${s.score}</span>
+                    <span class="lb-score">${s.displayScore || s.score}</span>
                 </li>
             `;
         });
@@ -503,7 +539,19 @@ window.updateLeaderboardUI = function() {
         if(authSec) authSec.style.display = 'none';
         if(userSec) {
             userSec.style.display = 'block';
-            greeting.textContent = "היי " + window.currentUserProfile.nickname + "! השיא שלך: " + (window.currentUserProfile.dinoHighScore || 0);
+            
+            const currentMonth = new Date().toISOString().substring(0, 7);
+            const monthlyScore = (window.currentUserProfile.monthlyScores && window.currentUserProfile.monthlyScores[currentMonth]) ? window.currentUserProfile.monthlyScores[currentMonth] : 0;
+            const allTimeScore = window.currentUserProfile.dinoHighScore || 0;
+            const displayScore = window.currentLbTab === 'all-time' ? allTimeScore : monthlyScore;
+            
+            let greetingStr = "היי " + window.currentUserProfile.nickname + "!";
+            if (window.currentLbTab === 'all-time') {
+                greetingStr += " שיא כל הזמנים שלך: " + displayScore;
+            } else {
+                greetingStr += " השיא החודשי שלך: " + displayScore;
+            }
+            greeting.textContent = greetingStr;
         }
         if(guestSec) guestSec.style.display = 'none';
         
