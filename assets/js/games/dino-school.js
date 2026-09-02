@@ -319,9 +319,20 @@
         
         const highScore = localStorage.getItem('dinoHighScore') || 0;
         
+        let currentMonthStr = new Date().toISOString().substring(0, 7);
+        let monthlyScore = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonthStr)) || 0;
+        if (window.currentUserProfile && window.currentUserProfile.monthlyScores && window.currentUserProfile.monthlyScores[currentMonthStr]) {
+            let profileMonthly = window.currentUserProfile.monthlyScores[currentMonthStr];
+            if (profileMonthly > monthlyScore) {
+                monthlyScore = profileMonthly;
+                localStorage.setItem('dinoMonthlyScore_' + currentMonthStr, monthlyScore);
+            }
+        }
+        
         scoreDisplay.innerHTML = `
             <div id="dino-score-val" style="font-size: 22px; line-height: 1;">0</div>
-            <div style="font-size: 11px; color: #4b5563; font-weight: 500; margin-top: 2px; line-height: 1;">שיא: <span id="dino-high-score-val">${highScore}</span></div>
+            <div style="font-size: 11px; color: #4b5563; font-weight: 500; margin-top: 2px; line-height: 1;">שיא כללי: <span id="dino-high-score-val">${highScore}</span></div>
+            <div style="font-size: 11px; color: #3b82f6; font-weight: bold; margin-top: 2px; line-height: 1;">שיא חודשי: <span id="dino-monthly-score-val">${monthlyScore}</span></div>
         `;
         scoreDisplay.style.position = 'absolute';
         scoreDisplay.style.top = '10px';
@@ -952,25 +963,38 @@
             score = 0;
         }
 
-        if (score > currentHighScore && !isCheater) {
-            currentHighScore = Math.floor(score); // Ensure integer
-            localStorage.setItem('dinoHighScore', currentHighScore);
-            
-            // Create Anti-Cheat Token
-            const tokenStr = currentHighScore + "_NETOHOFESH_" + timeElapsed;
+        if (!isCheater) {
+            const currentMonth = new Date().toISOString().substring(0, 7);
+            const intScore = Math.floor(score);
+            const tokenStr = intScore + "_NETOHOFESH_" + timeElapsed;
             const token = btoa(tokenStr);
-            localStorage.setItem('dinoHighScoreToken', token);
-            localStorage.setItem('dinoTimeElapsed', timeElapsed.toString());
             
-            isNewRecord = true;
-            const hsEl = document.getElementById('dino-high-score-val');
-            if (hsEl) hsEl.textContent = currentHighScore;
-            
-            // אוטומטית שומר לשרת אם המשתמש מחובר ויש שיא חדש
+            // אוטומטית שומר לשרת אם המשתמש מחובר ויש שיא חדש (חודשי או כללי)
             if (window.currentUserProfile && window.saveDinoHighScore) {
-                if (currentHighScore > (window.currentUserProfile.dinoHighScore || 0)) {
-                    window.saveDinoHighScore(currentHighScore, token, timeElapsed);
+                const serverAllTime = window.currentUserProfile.dinoHighScore || 0;
+                const serverMonthly = (window.currentUserProfile.monthlyScores && window.currentUserProfile.monthlyScores[currentMonth]) ? window.currentUserProfile.monthlyScores[currentMonth] : 0;
+                
+                if (intScore > serverAllTime || intScore > serverMonthly) {
+                    window.saveDinoHighScore(intScore, token, timeElapsed);
                 }
+            }
+            
+            let localMonthly = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonth)) || 0;
+            if (intScore > localMonthly) {
+                localStorage.setItem('dinoMonthlyScore_' + currentMonth, intScore);
+                const msEl = document.getElementById('dino-monthly-score-val');
+                if (msEl) msEl.textContent = intScore;
+            }
+
+            if (intScore > currentHighScore) {
+                currentHighScore = intScore;
+                localStorage.setItem('dinoHighScore', currentHighScore);
+                localStorage.setItem('dinoHighScoreToken', token);
+                localStorage.setItem('dinoTimeElapsed', timeElapsed.toString());
+                
+                isNewRecord = true;
+                const hsEl = document.getElementById('dino-high-score-val');
+                if (hsEl) hsEl.textContent = currentHighScore;
             }
         }
 
