@@ -98,9 +98,6 @@ function initPWA() {
         }).catch(() => { });
 
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-            // בPWA ממסך הבית - לעולם לא לעשות reload כדי למנוע הבהוב כפול
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-            if (isStandalone) return;
 
             if (hadController && !isRefreshing) {
                 const lastReload = sessionStorage.getItem('pwa_last_reload');
