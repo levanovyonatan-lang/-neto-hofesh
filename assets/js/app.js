@@ -432,7 +432,7 @@ function attemptRegistration() {
 }
 
 function handleSponsorClick() {
-    trackEvent('click_tip_fitness_sponsor');
+    trackEvent('click_tip_roei_katav_sponsor');
     window.open('https://roei-katav.framer.website/', '_blank');
 }
 
@@ -1265,7 +1265,7 @@ function showMainScreen() {
 
     if (userConfig.schoolType === 'elem' && fitnessBanner) {
         fitnessBanner.style.display = 'flex';
-        trackEvent('view_ad_fitness_sticky');
+        trackEvent('view_ad_roei_katav_sticky');
     }
 
     const summerHighObj = allTargets.find(t => t.id === 'summerHigh');
