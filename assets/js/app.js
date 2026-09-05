@@ -433,7 +433,7 @@ function attemptRegistration() {
 
 function handleSponsorClick() {
     trackEvent('click_tip_fitness_sponsor');
-    window.open('/fitness.html?v=10144', '_blank');
+    window.open('https://roei-katav.framer.website/', '_blank');
 }
 
 function loadTipsDatabase() {
