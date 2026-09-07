@@ -1095,7 +1095,13 @@ window.triggerPremiumUnboxing = function() {
 // Auto-apply theme on load if premium
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-        if (window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme) {
+        if (localStorage.getItem('demo_premium') === '1') {
+            window.applyTheme('gold');
+            if (window.triggerPremiumUnboxing && !sessionStorage.getItem('demo_unboxed')) {
+                window.triggerPremiumUnboxing();
+                sessionStorage.setItem('demo_unboxed', '1');
+            }
+        } else if (window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme) {
             window.applyTheme(window.currentUserProfile.theme);
         }
     }, 1500); // give time for auth to load
