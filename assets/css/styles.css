@@ -1285,6 +1285,15 @@ body.theme-gold input:checked + .toggle-slider {
     box-shadow: 0 0 12px rgba(250, 204, 21, 0.4);
 }
 
+/* Footer and legal links in white for premium theme */
+body.theme-gold footer p,
+body.theme-gold footer a,
+body.theme-gold footer strong,
+body.theme-gold .contact-area,
+body.theme-gold .contact-area a {
+    color: #ffffff !important;
+}
+
 body.theme-gold h1, body.theme-gold .countdown-item span { 
     background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c) !important;
     -webkit-background-clip: text !important;
