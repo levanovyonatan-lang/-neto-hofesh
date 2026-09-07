@@ -1115,7 +1115,7 @@ window.triggerPremiumUnboxing = function() {
 // Auto-apply theme on load if premium
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-        if (localStorage.getItem('demo_premium') === '1') {
+        if (window.location.search.includes('demo_premium=1') || sessionStorage.getItem('demo_premium') === '1') {
             window.applyTheme('gold');
             if (window.triggerPremiumUnboxing && !sessionStorage.getItem('demo_unboxed')) {
                 window.triggerPremiumUnboxing();
