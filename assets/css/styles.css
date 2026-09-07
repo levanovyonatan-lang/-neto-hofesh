@@ -256,19 +256,7 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 .ai-btn.has-tip { background: #ffffff; border-color: var(--primary); box-shadow: 0 5px 15px rgba(234, 179, 8, 0.1); }
 .ai-btn:disabled { cursor: default; }
 
-.daily-tip-text {
-    display: inline-block;
-    color: #0369a1; /* High contrast dark blue */
-    background: #f0f9ff;
-    font-weight: 800;
-    font-size: calc(16px * var(--text-scale, 1));
-    padding: 8px 12px;
-    border-radius: 8px;
-    margin: 8px 0;
-    border: 1px solid #bae6fd;
-    line-height: 1.4;
-    box-shadow: 0 2px 8px rgba(3, 105, 161, 0.08);
-}
+
 
 .ai-sponsor {
     background: linear-gradient(135deg, #ffffff, #fff7ed); border: 2px solid #ffedd5;

@@ -676,7 +676,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         let extraHTML = currentState.clicks === 1 ? `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--primary-hover); margin-top: 8px; display: block;">${secondTipText}</span>` : `<span style="font-size: calc(13px * var(--text-scale, 1)); color: var(--text-muted); margin-top: 8px; display: block;">טיפ חדש יופיע מחר ✨</span>`;
 
         const titleIcon = isVacation && currentState.clicks === 1 ? "⚡" : "✨";
-        btnText.innerHTML = `<b style="color: var(--text-main); font-size: calc(16px * var(--text-scale, 1));">${title} ${titleIcon}</b><br><span class="daily-tip-text">${latestTip}</span>${extraHTML}`;
+        btnText.innerHTML = `<b style="color: var(--text-main); font-size: calc(16px * var(--text-scale, 1));">${title} ${titleIcon}</b><br><span class="daily-tip-text" style="color: var(--text-main); font-weight: 600;">${latestTip}</span>${extraHTML}`;
         btn.classList.add('has-tip', 'expanded');
 
         if (isNewlyClicked) {
