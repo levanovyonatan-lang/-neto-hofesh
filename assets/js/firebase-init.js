@@ -14,6 +14,12 @@ const firebaseConfig = {
   measurementId: "G-99S4VQZ1SL"
 };
 
+// Clear sticky demo_premium from users who visited the demo link previously
+if (!window.location.search.includes('demo_premium=1')) {
+    localStorage.removeItem('demo_premium');
+    sessionStorage.removeItem('demo_premium');
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -136,8 +142,8 @@ onAuthStateChanged(auth, async (user) => {
                     }
                     localStorage.setItem('forceSync_v1', 'true');
                 }
-                if (window.location.search.includes('demo_premium=1')) localStorage.setItem('demo_premium', '1');
-                if (localStorage.getItem('demo_premium') === '1' && window.currentUserProfile) {
+                if (window.location.search.includes('demo_premium=1')) sessionStorage.setItem('demo_premium', '1');
+                if (sessionStorage.getItem('demo_premium') === '1' && window.currentUserProfile) {
                     window.currentUserProfile.isPremium = true;
                     if(!window.currentUserProfile.customBio) window.currentUserProfile.customBio = "מצב דמו פרימיום 👑";
                 }
@@ -158,7 +164,7 @@ onAuthStateChanged(auth, async (user) => {
         // מזהה מקומי למשתמש ללא חשבון גוגל
         if (window.location.search.includes('demo_premium=1')) {
             localStorage.removeItem('local_uid'); // Treat as new user every time
-            localStorage.setItem('demo_premium', '1');
+            sessionStorage.setItem('demo_premium', '1');
         }
         let localUid = localStorage.getItem('local_uid');
         if (!localUid) {
@@ -195,8 +201,8 @@ onAuthStateChanged(auth, async (user) => {
             console.error("Error fetching local profile:", error);
             window.currentUserProfile = null;
         }
-        if (window.location.search.includes('demo_premium=1')) localStorage.setItem('demo_premium', '1');
-        if (localStorage.getItem('demo_premium') === '1' && window.currentUserProfile) {
+        if (window.location.search.includes('demo_premium=1')) sessionStorage.setItem('demo_premium', '1');
+        if (sessionStorage.getItem('demo_premium') === '1' && window.currentUserProfile) {
             window.currentUserProfile.isPremium = true;
             if(!window.currentUserProfile.customBio) window.currentUserProfile.customBio = "מצב דמו פרימיום 👑";
         }
@@ -241,7 +247,7 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
             customBio: ""
         };
 
-        if (localStorage.getItem('demo_premium') === '1') {
+        if (sessionStorage.getItem('demo_premium') === '1') {
             profileData.isPremium = true;
             profileData.customBio = "מצב דמו פרימיום 👑";
             profileData.theme = "gold";
@@ -252,7 +258,7 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
         window.currentUserProfile = profileData;
         console.log("Registration completed successfully!");
         
-        if (localStorage.getItem('demo_premium') === '1') {
+        if (sessionStorage.getItem('demo_premium') === '1') {
             if (window.triggerPremiumUnboxing) {
                 setTimeout(() => window.triggerPremiumUnboxing(), 500);
             }
