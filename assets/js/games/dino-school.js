@@ -331,8 +331,8 @@
         
         scoreDisplay.innerHTML = `
             <div id="dino-score-val" style="font-size: 22px; line-height: 1;">0</div>
-            <div style="font-size: 11px; color: #4b5563; font-weight: 500; margin-top: 2px; line-height: 1;">שיא כללי: <span id="dino-high-score-val">${highScore}</span></div>
-            <div style="font-size: 11px; color: #3b82f6; font-weight: bold; margin-top: 2px; line-height: 1;">שיא חודשי: <span id="dino-monthly-score-val">${monthlyScore}</span></div>
+            <div class="dino-score-text" style="font-size: 11px; color: #4b5563; font-weight: 500; margin-top: 2px; line-height: 1;">שיא כללי: <span id="dino-high-score-val">${highScore}</span></div>
+            <div class="dino-score-text" style="font-size: 11px; color: #3b82f6; font-weight: bold; margin-top: 2px; line-height: 1;">שיא חודשי: <span id="dino-monthly-score-val">${monthlyScore}</span></div>
         `;
         scoreDisplay.style.position = 'absolute';
         scoreDisplay.style.top = '10px';
