@@ -1180,14 +1180,16 @@ window.triggerPremiumUnboxing = function() {
 // Auto-apply theme on load if premium
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-        if (window.location.search.includes('demo_premium=1') || sessionStorage.getItem('demo_premium') === '1') {
+        if (window.location.search.includes('demo_premium=1')) {
             window.applyTheme('gold');
+            document.body.classList.add('premium-active');
             if (window.triggerPremiumUnboxing && !sessionStorage.getItem('demo_unboxed')) {
                 window.triggerPremiumUnboxing();
                 sessionStorage.setItem('demo_unboxed', '1');
             }
         } else if (window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme) {
             window.applyTheme(window.currentUserProfile.theme);
+            document.body.classList.add('premium-active');
         }
     }, 1500); // give time for auth to load
 });
