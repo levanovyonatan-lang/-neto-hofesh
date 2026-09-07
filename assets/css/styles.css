@@ -1159,6 +1159,13 @@ body.theme-gold {
     color: #fef08a !important;
     --text-muted: #fde047 !important; /* Forces all muted text to be bright yellow */
 }
+
+/* Splash Screen Fix for Gold Theme */
+body.theme-gold #neto-splash {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+}
+body.theme-gold #neto-splash p { color: #fde047 !important; }
+
 body.theme-gold .main-timer-card, body.theme-gold .holiday-card, body.theme-gold .setup-step { 
     background: rgba(255, 255, 255, 0.05) !important; 
     backdrop-filter: blur(20px) !important; 
@@ -1177,7 +1184,7 @@ body.theme-gold .ai-btn {
     box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 0 20px rgba(234, 179, 8, 0.1) !important;
 }
 body.theme-gold .time-lbl { color: rgba(254, 240, 138, 0.8) !important; }
-body.theme-gold .time-val, body.theme-gold .total-days-label, body.theme-gold #vacation-days-count, body.theme-gold .vacation-length-box { color: #fef08a !important; }
+body.theme-gold .time-val, body.theme-gold .total-days-label, body.theme-gold #vacation-days-count, body.theme-gold .vacation-length-box, body.theme-gold .vacation-length-box b { color: #fef08a !important; }
 body.theme-gold .ai-btn.expanded #ai-tip-content { color: #fef08a !important; }
 
 /* Setup Options Fix */
