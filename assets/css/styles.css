@@ -1137,39 +1137,43 @@ body.splash-active .sun-background {
 }
 
 /* Themes */
-/* 1. Cyberpunk Neon */
-body.theme-cyberpunk {
-    background: #0d0e15 url('data:image/svg+xml;utf8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="none"/><path d="M 40 0 L 0 0 0 40" fill="none" stroke="%23ff005533" stroke-width="1"/></svg>') repeat !important;
-    color: #0ff !important;
-    font-family: 'Courier New', Courier, monospace !important;
-}
-body.theme-cyberpunk .container { background: rgba(13, 14, 21, 0.8) !important; border: 2px solid #f0f !important; box-shadow: 0 0 20px #f0f !important; }
-body.theme-cyberpunk h1, body.theme-cyberpunk .countdown-item span { color: #0ff !important; text-shadow: 0 0 10px #0ff, 0 0 20px #0ff !important; }
-body.theme-cyberpunk .fb-btn { background: #f0f !important; border-radius: 0 !important; border: 2px solid #0ff !important; box-shadow: 4px 4px 0 #0ff !important; color: #fff !important; }
-body.theme-cyberpunk .lb-name { text-shadow: 0 0 5px #f0f, 0 0 10px #f0f; color: #fff; }
+/* 1. Cyberpunk */
+body.theme-cyberpunk { background: #0d0e15 !important; color: #0ff !important; font-family: 'Courier New', monospace !important; }
+body.theme-cyberpunk .main-timer-card, body.theme-cyberpunk .holiday-card { background: rgba(13, 14, 21, 0.8) !important; border: 2px solid #f0f !important; box-shadow: 0 0 20px #f0f !important; }
+body.theme-cyberpunk h1, body.theme-cyberpunk .countdown-item span { color: #f0f !important; text-shadow: 0 0 10px #f0f !important; }
+body.theme-cyberpunk .fb-btn { background: transparent !important; border: 2px solid #0ff !important; color: #0ff !important; box-shadow: 0 0 10px #0ff !important; }
+body.theme-cyberpunk .fb-btn:hover { background: #0ff !important; color: #000 !important; }
 
 /* 2. Retro 8-Bit */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 body.theme-retro {
-    background: #2b2b40 !important;
-    color: #fff !important;
-    font-family: 'Courier New', Courier, monospace !important;
+    background: #2b2b45 !important; color: #fff !important; font-family: 'Press Start 2P', cursive !important;
 }
-body.theme-retro .container { background: #3b3b58 !important; border: 4px solid #fff !important; box-shadow: 8px 8px 0 #000 !important; border-radius: 0 !important; }
-body.theme-retro h1, body.theme-retro .countdown-item span { color: #facc15 !important; text-shadow: 4px 4px 0 #000 !important; }
-body.theme-retro .fb-btn { background: #ef4444 !important; border: 4px solid #fff !important; border-radius: 0 !important; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.3) !important; }
+body.theme-retro .main-timer-card, body.theme-retro .holiday-card { background: #3b3b58 !important; border: 4px solid #fff !important; box-shadow: 8px 8px 0 #000 !important; border-radius: 0 !important; }
+body.theme-retro h1, body.theme-retro .countdown-item span { color: #ffeb3b !important; text-shadow: 4px 4px 0 #000 !important; }
+body.theme-retro .fb-btn { background: #f44336 !important; border: 4px solid #fff !important; box-shadow: 4px 4px 0 #000 !important; border-radius: 0 !important; }
 
 /* 3. Gold & Glass */
 body.theme-gold {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
     color: #fef08a !important;
 }
-body.theme-gold .container { 
+body.theme-gold .main-timer-card, body.theme-gold .holiday-card { 
     background: rgba(255, 255, 255, 0.05) !important; 
     backdrop-filter: blur(20px) !important; 
     -webkit-backdrop-filter: blur(20px) !important;
     border: 1px solid rgba(250, 204, 21, 0.3) !important; 
     box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(250, 204, 21, 0.2) !important; 
 }
+body.theme-gold .main-timer-card.premium-countdown .net-days-container,
+body.theme-gold .main-timer-card.premium-countdown .absolute-timer,
+body.theme-gold .main-timer-card.vacation-mode .net-days-container,
+body.theme-gold .main-timer-card.vacation-mode .absolute-timer,
+body.theme-gold .ai-btn {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(250, 204, 21, 0.2) !important;
+}
+body.theme-gold .time-lbl { color: rgba(254, 240, 138, 0.7) !important; }
 body.theme-gold h1, body.theme-gold .countdown-item span { 
     background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c) !important;
     -webkit-background-clip: text !important;

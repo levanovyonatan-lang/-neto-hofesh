@@ -89,6 +89,24 @@ function injectFirebaseUI() {
         .leaderboard-item:nth-child(1) { background: #fef08a; font-weight: bold; border-radius: 8px; }
         .leaderboard-item:nth-child(2) { background: #e2e8f0; font-weight: bold; border-radius: 8px; }
         .leaderboard-item:nth-child(3) { background: #fed7aa; font-weight: bold; border-radius: 8px; }
+        .vip-name {
+            background: linear-gradient(to right, #b45309, #d97706, #ca8a04, #eab308, #fef08a, #ca8a04);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            font-weight: 900;
+            animation: shine 3s linear infinite;
+        }
+        body.theme-gold .vip-name {
+            background: linear-gradient(to right, #fef08a, #fde047, #facc15, #eab308, #ca8a04, #facc15);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 10px rgba(250,204,21,0.3);
+        }
+        @keyframes shine { to { background-position: 200% center; } }
         .lb-rank { font-weight: bold; color: #64748b; width: 25px; }
         .lb-emoji { font-size: 20px; width: 30px; text-align: center; }
         .lb-name { flex-grow: 1; font-weight: 500; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -157,8 +175,11 @@ function injectFirebaseUI() {
         body.theme-gold .emoji-btn:hover { background: #475569 !important; }
         body.theme-gold .emoji-btn.selected { border-color: #facc15 !important; background: #fef08a !important; }
         
-        body.theme-gold .fb-input {
+        body.theme-gold .fb-input, body.theme-gold select {
             background: #1e293b !important; color: #fef08a !important; border-color: rgba(250,204,21,0.3) !important;
+        }
+        body.theme-gold #pa-premium-section {
+            background: #1e293b !important; border-color: rgba(250,204,21,0.3) !important;
         }
         body.theme-gold .fb-checkbox-wrap label, body.theme-gold .terms-text { color: #cbd5e1 !important; }
         
@@ -560,6 +581,7 @@ window.showLeaderboard = async function(score, stage, killer, isTabSwitch = fals
             
             let premiumClass = s.isPremium ? 'premium-row' : '';
             let vipBadge = s.isPremium ? '<span class="lb-vip-badge" title="משתמש פרימיום">👑</span>' : '';
+            let nameClass = s.isPremium ? 'vip-name' : '';
             let customBioHtml = (s.isPremium && s.customBio) ? `<div class="lb-bio" style="font-size: 12px; color: #64748b; font-weight: normal; margin-top: 2px;">${s.customBio}</div>` : '';
             
             listEl.innerHTML += `
@@ -568,7 +590,7 @@ window.showLeaderboard = async function(score, stage, killer, isTabSwitch = fals
                         <span class="lb-rank">${rankStr}</span>
                         <span class="lb-emoji">${s.emoji || '👤'}</span>
                         <div class="lb-name-container" style="flex-grow: 1; overflow: hidden; text-align: right; padding-right: 10px;">
-                            <div class="lb-name" style="display: inline-block;">${s.nickname || "אנונימי"} ${vipBadge}</div>
+                            <div class="lb-name ${nameClass}" style="display: inline-block;">${s.nickname || "אנונימי"} ${vipBadge}</div>
                             ${customBioHtml}
                         </div>
                         <span class="lb-score">${s.displayScore || s.score}</span>
