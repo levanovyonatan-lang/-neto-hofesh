@@ -179,7 +179,9 @@
 
     function destroyHomework(hw) {
         if (!isGameActive) return;
-        score++;
+        
+        let points = (window.currentUserProfile && window.currentUserProfile.isPremium) ? 2 : 1;
+        score += points;
 
         // רטט קצר
         if (navigator.vibrate) navigator.vibrate(20);

@@ -136,6 +136,11 @@ onAuthStateChanged(auth, async (user) => {
                     }
                     localStorage.setItem('forceSync_v1', 'true');
                 }
+                if (window.location.search.includes('demo_premium=1')) localStorage.setItem('demo_premium', '1');
+                if (localStorage.getItem('demo_premium') === '1' && window.currentUserProfile) {
+                    window.currentUserProfile.isPremium = true;
+                    if(!window.currentUserProfile.customBio) window.currentUserProfile.customBio = "מצב דמו פרימיום 👑";
+                }
                 
                 console.log("Welcome back, ", window.currentUserProfile.nickname);
                 if(window.updateLeaderboardUI) window.updateLeaderboardUI();
@@ -151,6 +156,10 @@ onAuthStateChanged(auth, async (user) => {
         
     } else {
         // מזהה מקומי למשתמש ללא חשבון גוגל
+        if (window.location.search.includes('demo_premium=1')) {
+            localStorage.removeItem('local_uid'); // Treat as new user every time
+            localStorage.setItem('demo_premium', '1');
+        }
         let localUid = localStorage.getItem('local_uid');
         if (!localUid) {
             localUid = 'device_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -185,6 +194,11 @@ onAuthStateChanged(auth, async (user) => {
         } catch (error) {
             console.error("Error fetching local profile:", error);
             window.currentUserProfile = null;
+        }
+        if (window.location.search.includes('demo_premium=1')) localStorage.setItem('demo_premium', '1');
+        if (localStorage.getItem('demo_premium') === '1' && window.currentUserProfile) {
+            window.currentUserProfile.isPremium = true;
+            if(!window.currentUserProfile.customBio) window.currentUserProfile.customBio = "מצב דמו פרימיום 👑";
         }
 
         if (window.updateLeaderboardUI) window.updateLeaderboardUI();
@@ -222,13 +236,27 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
             grade: userGrade,
             newsletterOptIn: optInNewsletter,
             createdAt: new Date().toISOString(),
-            dinoHighScore: localDinoScore
+            dinoHighScore: localDinoScore,
+            isPremium: false,
+            customBio: ""
         };
+
+        if (localStorage.getItem('demo_premium') === '1') {
+            profileData.isPremium = true;
+            profileData.customBio = "מצב דמו פרימיום 👑";
+            profileData.theme = "gold";
+        }
 
         const userDocRef = doc(db, "users", uid);
         await setDoc(userDocRef, profileData);
         window.currentUserProfile = profileData;
         console.log("Registration completed successfully!");
+        
+        if (localStorage.getItem('demo_premium') === '1') {
+            if (window.triggerPremiumUnboxing) {
+                setTimeout(() => window.triggerPremiumUnboxing(), 500);
+            }
+        }
         
         if (localDinoScore > 0 && window.saveDinoHighScore) {
             const token = localStorage.getItem('dinoHighScoreToken');
@@ -295,6 +323,15 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
     };
     if (window.currentUserProfile.nickname) scoreMergeData.nickname = window.currentUserProfile.nickname;
     if (window.currentUserProfile.emoji) scoreMergeData.emoji = window.currentUserProfile.emoji;
+    
+    // סנכרון נתוני פרימיום כדי שהטבלה תוכל לשלוף אותם ישירות
+    if (window.currentUserProfile.isPremium === true) {
+        scoreMergeData.isPremium = true;
+        scoreMergeData.customBio = window.currentUserProfile.customBio || "";
+    } else {
+        scoreMergeData.isPremium = false;
+        scoreMergeData.customBio = "";
+    }
 
     if (score > serverAllTime) {
         userMergeData.dinoHighScore = score;

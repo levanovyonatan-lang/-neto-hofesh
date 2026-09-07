@@ -1788,3 +1788,81 @@ function updateSponsorTexts() {
         }
     }
 }
+
+let privateTimersInterval = null;
+
+window.renderPrivateTimers = function() {
+    const container = document.getElementById('private-timers-container');
+    if (!container) return;
+    
+    if (!window.currentUserProfile || !window.currentUserProfile.isPremium || !window.currentUserProfile.privateTimers || window.currentUserProfile.privateTimers.length === 0) {
+        container.style.display = 'none';
+        if (privateTimersInterval) clearInterval(privateTimersInterval);
+        return;
+    }
+    
+    container.style.display = 'flex';
+    
+    function updateTimers() {
+        let html = '<div style="font-size: 16px; font-weight: 800; color: #b45309; text-align: center; width: 100%;">הספירות האישיות שלך ⏱️</div>';
+        
+        window.currentUserProfile.privateTimers.forEach((timer, index) => {
+            const targetDate = new Date(timer.date);
+            const now = new Date();
+            const diff = targetDate - now;
+            
+            let timeStr = "";
+            if (diff <= 0) {
+                timeStr = "הגיע הזמן!";
+            } else {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const mins = Math.floor((diff / 1000 / 60) % 60);
+                const secs = Math.floor((diff / 1000) % 60);
+                timeStr = `${days} ימים, ${hours} שעות, ${mins} דקות ו-${secs} שניות`;
+            }
+            
+            html += `
+                <div style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px); border: 1px solid #facc15; padding: 10px; border-radius: 12px; width: 100%; max-width: 320px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative;">
+                    <button onclick="window.deletePrivateTimer(${index})" style="position: absolute; left: 10px; top: 10px; background: none; border: none; color: #ef4444; font-size: 16px; cursor: pointer; padding: 0;">×</button>
+                    <div style="font-weight: bold; color: #334155; font-size: 15px; margin-bottom: 5px; padding-right: 15px;">${timer.title}</div>
+                    <div style="color: #ea580c; font-weight: 800; font-size: 16px; text-align: center; direction: rtl;">${timeStr}</div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    updateTimers();
+    if (privateTimersInterval) clearInterval(privateTimersInterval);
+    privateTimersInterval = setInterval(updateTimers, 1000);
+};
+
+window.deletePrivateTimer = async function(index) {
+    if (confirm("בטוח שברצונך למחוק טיימר זה?")) {
+        window.currentUserProfile.privateTimers.splice(index, 1);
+        
+        const localUid = localStorage.getItem('local_uid');
+        const uidToUpdate = (window.firebaseAuth && window.firebaseAuth.currentUser) ? window.firebaseAuth.currentUser.uid : localUid;
+        if (uidToUpdate) {
+            try {
+                const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
+                const userDocRef = doc(window.firebaseDb, "users", uidToUpdate);
+                await setDoc(userDocRef, { privateTimers: window.currentUserProfile.privateTimers }, { merge: true });
+            } catch(e) {
+                console.error("Failed to delete private timer", e);
+            }
+        }
+        
+        window.renderPrivateTimers();
+    }
+};
+
+// Hook into existing app init to render timers if already loaded
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        if (window.renderPrivateTimers) window.renderPrivateTimers();
+    }, 2000);
+});
+

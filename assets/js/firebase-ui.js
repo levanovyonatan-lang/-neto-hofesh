@@ -105,6 +105,24 @@ function injectFirebaseUI() {
             background: linear-gradient(to top, rgba(255,255,255,1) 60%, rgba(255,255,255,0.8) 80%, rgba(255,255,255,0));
             padding: 40px 20px 20px 20px; z-index: 10;
         }
+        
+        /* Premium UI Styles */
+        .premium-row {
+            background: linear-gradient(90deg, rgba(254,252,232,1) 0%, rgba(253,224,71,0.15) 50%, rgba(254,252,232,1) 100%);
+            border-left: 3px solid #facc15;
+            border-right: 3px solid #facc15;
+        }
+        .lb-vip-badge {
+            font-size: 14px;
+            margin-right: 4px;
+            animation: pulse-glow 2s infinite;
+            display: inline-block;
+        }
+        @keyframes pulse-glow {
+            0% { filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.4)); }
+            50% { filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.9)); }
+            100% { filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.4)); }
+        }
     `;
     document.head.appendChild(style);
 
@@ -213,6 +231,38 @@ function injectFirebaseUI() {
                     <div style="margin-top: 10px; font-size: 14px; font-weight: bold; color: #64748b; margin-bottom: 5px;">בחר אימוג'י חדש:</div>
                     <div class="emoji-grid" id="pa-emoji-grid" style="margin-bottom: 20px; width: 100%; max-width: 320px; margin-left: auto; margin-right: auto;"></div>
                     <input type="hidden" id="pa-selected-emoji" value="👤">
+                    
+                    <div id="pa-premium-section" style="margin-bottom: 20px; border: 1px solid #facc15; border-radius: 8px; padding: 15px; background: #fefce8; display: none;">
+                        <div style="font-size: 16px; color: #d97706; margin-bottom: 10px; font-weight: bold;">👑 הגדרות VIP</div>
+                        
+                        <div style="font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #b45309;">שורת סטטוס בטבלה:</div>
+                        <input type="text" id="pa-custom-bio-input" class="fb-input" maxlength="25" placeholder="לשל: מתגייס עוד חודש!" style="margin-bottom: 15px; width: 100%; max-width: 250px; text-align: center; font-size: 14px;">
+                        
+                        <div style="font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #b45309;">ערכת נושא לאתר:</div>
+                        <select id="pa-theme-select" style="width: 100%; max-width: 250px; padding: 8px; border-radius: 8px; border: 1px solid #facc15; font-weight: bold; background: #fff; margin-bottom: 15px;">
+                            <option value="default">רגיל (קלאסי)</option>
+                            <option value="cyberpunk">Cyberpunk Neon</option>
+                            <option value="retro">Retro 8-Bit</option>
+                            <option value="gold">Gold & Glass</option>
+                        </select>
+                        <div style="font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #b45309;">טיימרים אישיים (הספירות שלך):</div>
+                        <button onclick="if(window.openAddTimerModal) window.openAddTimerModal()" style="background: #eab308; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 5px; width: 100%; max-width: 250px;">+ הוסף טיימר אישי חדש</button>
+                    </div>
+                    <div id="pa-upgrade-cta" style="margin-bottom: 20px; background: #f1f5f9; padding: 15px; border-radius: 8px; font-size: 13px; color: #475569;">
+                        <div style="font-weight: 800; color: #3b82f6; font-size: 15px; margin-bottom: 5px;">👑 שדרג ל-Premium!</div>
+                        <div>קבל ערכות נושא מטורפות, מסגרות אש לפרופיל, טיימרים פרטיים ו-Double XP במשחקים!</div>
+                        <div style="margin-top: 10px; margin-bottom: 15px;">
+                            <a href="#" onclick="alert('חיבור לסליקה יתווסף בהמשך');" style="display: inline-block; background: #2563eb; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; font-weight: bold;">לרכישת קוד VIP</a>
+                        </div>
+                        <div style="border-top: 1px solid #cbd5e1; padding-top: 10px;">
+                            <div style="font-weight: bold; margin-bottom: 5px;">כבר יש לך קוד?</div>
+                            <div style="display: flex; gap: 5px; justify-content: center;">
+                                <input type="text" id="vip-token-input" placeholder="הזן קוד כאן" style="padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; width: 140px; text-align: center; font-weight: bold;">
+                                <button onclick="if(window.activateVipToken) window.activateVipToken()" style="background: #10b981; color: white; border: none; border-radius: 8px; padding: 8px 15px; cursor: pointer; font-weight: bold;">הפעל</button>
+                            </div>
+                            <div id="vip-token-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none; font-weight: bold;"></div>
+                        </div>
+                    </div>
                     
                     <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="fb-btn fb-btn-gold" style="font-size: 18px; width: 100%; max-width: 250px;">שמור שינויים</button>
                     
@@ -465,12 +515,21 @@ window.showLeaderboard = async function(score, stage, killer, isTabSwitch = fals
             const liStyle = isCurrentUser ? 'border: 2px solid #facc15; background: rgba(250, 204, 21, 0.1);' : '';
             const liId = isCurrentUser ? 'id="current-user-lb-row"' : '';
             
+            let premiumClass = s.isPremium ? 'premium-row' : '';
+            let vipBadge = s.isPremium ? '<span class="lb-vip-badge" title="משתמש פרימיום">👑</span>' : '';
+            let customBioHtml = (s.isPremium && s.customBio) ? `<div class="lb-bio" style="font-size: 12px; color: #64748b; font-weight: normal; margin-top: 2px;">${s.customBio}</div>` : '';
+            
             listEl.innerHTML += `
-                <li class="leaderboard-item ${blurClass}" ${liId} style="${liStyle}">
-                    <span class="lb-rank">${rankStr}</span>
-                    <span class="lb-emoji">${s.emoji || '👤'}</span>
-                    <span class="lb-name">${s.nickname || "אנונימי"}</span>
-                    <span class="lb-score">${s.displayScore || s.score}</span>
+                <li class="leaderboard-item ${blurClass} ${premiumClass}" ${liId} style="${liStyle}">
+                    <div style="display: flex; align-items: center; width: 100%;">
+                        <span class="lb-rank">${rankStr}</span>
+                        <span class="lb-emoji">${s.emoji || '👤'}</span>
+                        <div class="lb-name-container" style="flex-grow: 1; overflow: hidden; text-align: right; padding-right: 10px;">
+                            <div class="lb-name" style="display: inline-block;">${s.nickname || "אנונימי"} ${vipBadge}</div>
+                            ${customBioHtml}
+                        </div>
+                        <span class="lb-score">${s.displayScore || s.score}</span>
+                    </div>
                 </li>
             `;
         });
@@ -745,6 +804,19 @@ window.openPersonalArea = () => {
         const currentEmoji = window.currentUserProfile.emoji || '👤';
         if (emojiInput) emojiInput.value = currentEmoji;
         
+        const premiumSection = document.getElementById('pa-premium-section');
+        const upgradeCta = document.getElementById('pa-upgrade-cta');
+        const bioInput = document.getElementById('pa-custom-bio-input');
+        
+        if (window.currentUserProfile.isPremium) {
+            if (premiumSection) premiumSection.style.display = 'block';
+            if (upgradeCta) upgradeCta.style.display = 'none';
+            if (bioInput) bioInput.value = window.currentUserProfile.customBio || '';
+        } else {
+            if (premiumSection) premiumSection.style.display = 'none';
+            if (upgradeCta) upgradeCta.style.display = 'block';
+        }
+        
         // Render the emoji grid directly
         const grid = document.getElementById('pa-emoji-grid');
         if (grid) {
@@ -818,6 +890,14 @@ window.saveNewNickname = async () => {
     const newEmoji = document.getElementById('pa-selected-emoji').value || '👤';
     const errorMsg = document.getElementById('pa-error-msg');
     
+    let newBio = undefined;
+    if (window.currentUserProfile && window.currentUserProfile.isPremium) {
+        const bioInput = document.getElementById('pa-custom-bio-input');
+        if (bioInput) {
+            newBio = bioInput.value.trim();
+        }
+    }
+    
     if (newName.length < 2) {
         errorMsg.textContent = "הכינוי קצר מדי.";
         errorMsg.style.display = 'block';
@@ -853,21 +933,29 @@ window.saveNewNickname = async () => {
         
         const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
         
+        let updateData = { nickname: newName, emoji: newEmoji };
+        if (newBio !== undefined) {
+            updateData.customBio = newBio;
+        }
+
         const userDocRef = doc(window.firebaseDb, "users", uidToUpdate);
-        await setDoc(userDocRef, { nickname: newName, emoji: newEmoji }, { merge: true });
+        await setDoc(userDocRef, updateData, { merge: true });
         
         const scoreDocRef = doc(window.firebaseDb, "dino_scores", uidToUpdate);
-        await setDoc(scoreDocRef, { nickname: newName, emoji: newEmoji }, { merge: true });
+        await setDoc(scoreDocRef, updateData, { merge: true });
         
         if (window.currentUserProfile) {
             window.currentUserProfile.nickname = newName;
             window.currentUserProfile.emoji = newEmoji;
+            if (newBio !== undefined) window.currentUserProfile.customBio = newBio;
         }
+        if (window.updateLeaderboardUI) window.updateLeaderboardUI();
+        window.leaderboardLastFetch = 0; // Force refresh
         
-        // Hide error message on success
-        errorMsg.style.display = 'none';
+        errorMsg.textContent = "השינויים נשמרו בהצלחה! 🎉";
+        errorMsg.style.color = "#10b981";
+        errorMsg.style.display = 'block';
         
-        // Show temporary success message and close modal
         const editBtn = document.querySelector('#personal-area-modal button.fb-btn');
         if (editBtn) {
             const originalBtnText = editBtn.textContent;
@@ -875,21 +963,19 @@ window.saveNewNickname = async () => {
             setTimeout(() => {
                 editBtn.textContent = originalBtnText;
                 if (window.closePersonalArea) window.closePersonalArea();
-                window.leaderboardLastFetch = 0;
                 if (window.showLeaderboard) window.showLeaderboard(null, null, null, true);
-                else if (window.updateLeaderboardUI) window.updateLeaderboardUI();
             }, 1000);
         } else {
-            document.getElementById('personal-area-modal').classList.remove('active');
-        
-            window.leaderboardLastFetch = 0;
-            if (window.showLeaderboard) window.showLeaderboard(null, null, null, true);
-            else if (window.updateLeaderboardUI) window.updateLeaderboardUI();
+            setTimeout(() => {
+                if (window.closePersonalArea) window.closePersonalArea();
+                if (window.showLeaderboard) window.showLeaderboard(null, null, null, true);
+            }, 1500);
         }
-        
+
     } catch (error) {
-        console.error("Error updating nickname:", error);
-        errorMsg.textContent = "שגיאה בשמירת הכינוי.";
+        console.error("Error updating profile:", error);
+        errorMsg.textContent = "שגיאה בשמירת הנתונים. נסה שוב.";
+        errorMsg.style.color = "#ef4444";
         errorMsg.style.display = 'block';
     }
 };
@@ -930,5 +1016,152 @@ window.deleteUserAccount = async () => {
     } catch (error) {
         console.error("Error deleting user:", error);
         alert("אירעה שגיאה בעת מחיקת המשתמש.");
+    }
+};
+
+window.applyTheme = function(theme) {
+    document.body.classList.remove('theme-cyberpunk', 'theme-retro', 'theme-gold');
+    if (theme && theme !== 'default') {
+        document.body.classList.add('theme-' + theme);
+    }
+};
+
+window.triggerPremiumUnboxing = function() {
+    // Inject overlay if not present
+    let overlay = document.getElementById('unboxing-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'unboxing-overlay';
+        overlay.innerHTML = `
+            <div style="font-size: 80px; filter: drop-shadow(0 0 20px #facc15);">💎</div>
+            <h1 style="color: #facc15; text-shadow: 0 0 20px #facc15; margin-top: 20px; font-size: 36px; text-align: center;">ברוך הבא למועדון ה-VIP!</h1>
+            <p style="color: #fff; font-size: 18px; margin-top: 10px;">כל הפיצ'רים נפתחו עבורך.</p>
+        `;
+        document.body.appendChild(overlay);
+    }
+    
+    // Play shatter animation on the main container
+    const mainContainer = document.querySelector('.container');
+    if (mainContainer) {
+        mainContainer.classList.add('shatter-glass');
+        setTimeout(() => mainContainer.classList.remove('shatter-glass'), 1500);
+    }
+    
+    // Show overlay
+    overlay.classList.add('active');
+    
+    // Load confetti if missing and fire
+    if (typeof confetti !== 'function') {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js';
+        script.onload = () => fireConfetti();
+        document.head.appendChild(script);
+    } else {
+        fireConfetti();
+    }
+    
+    function fireConfetti() {
+        var duration = 3000;
+        var end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#facc15', '#fbbf24', '#f59e0b']
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#facc15', '#fbbf24', '#f59e0b']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            } else {
+                // Hide overlay after animation
+                setTimeout(() => {
+                    overlay.classList.remove('active');
+                }, 1000);
+            }
+        }());
+    }
+};
+
+// Auto-apply theme on load if premium
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        if (window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme) {
+            window.applyTheme(window.currentUserProfile.theme);
+        }
+    }, 1500); // give time for auth to load
+});
+
+// --- Private Timers ---
+window.openAddTimerModal = function() {
+    let overlay = document.getElementById('add-timer-modal');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'add-timer-modal';
+        overlay.className = 'fb-modal-overlay';
+        overlay.innerHTML = `
+            <div class="fb-modal" style="max-width: 350px;">
+                <button class="fb-modal-close" onclick="document.getElementById('add-timer-modal').classList.remove('active');">×</button>
+                <div class="fb-title" style="margin-top:0;">⏱️ הוספת ספירה לאחור</div>
+                <div class="fb-subtitle" style="margin-bottom:15px;">למה אתם מחכים?</div>
+                <input type="text" id="pt-title" class="fb-input" placeholder="לדוגמה: טיסה ליוון, טסט שני..." maxlength="30" style="text-align: center;">
+                <div style="font-size: 14px; font-weight: bold; margin-bottom: 5px; color: #475569;">תאריך יעד:</div>
+                <input type="date" id="pt-date" class="fb-input" style="text-align: center;">
+                <button onclick="window.savePrivateTimer()" class="fb-btn" style="background: #eab308; color: white;">הוסף ספירה</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    }
+    document.getElementById('add-timer-modal').classList.add('active');
+};
+
+window.savePrivateTimer = async function() {
+    const title = document.getElementById('pt-title').value.trim();
+    const dateStr = document.getElementById('pt-date').value;
+    
+    if (!title || !dateStr) {
+        alert("אנא מלאו את כל השדות.");
+        return;
+    }
+    
+    const targetDate = new Date(dateStr);
+    if (targetDate.getTime() < Date.now()) {
+        alert("התאריך שבחרתם עבר כבר.");
+        return;
+    }
+    
+    if (window.currentUserProfile) {
+        if (!window.currentUserProfile.privateTimers) {
+            window.currentUserProfile.privateTimers = [];
+        }
+        window.currentUserProfile.privateTimers.push({ title: title, date: dateStr, id: Date.now().toString() });
+        
+        // Save to firestore
+        const localUid = localStorage.getItem('local_uid');
+        const uidToUpdate = (window.firebaseAuth && window.firebaseAuth.currentUser) ? window.firebaseAuth.currentUser.uid : localUid;
+        if (uidToUpdate) {
+            try {
+                const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
+                const userDocRef = doc(window.firebaseDb, "users", uidToUpdate);
+                await setDoc(userDocRef, { privateTimers: window.currentUserProfile.privateTimers }, { merge: true });
+            } catch(e) {
+                console.error("Failed to save private timer to DB", e);
+            }
+        }
+        
+        document.getElementById('add-timer-modal').classList.remove('active');
+        alert("הטיימר נוסף בהצלחה!");
+        
+        // Trigger app.js to re-render timers
+        if (typeof window.renderPrivateTimers === 'function') window.renderPrivateTimers();
     }
 };
