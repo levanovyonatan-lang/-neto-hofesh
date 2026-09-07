@@ -684,7 +684,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             btn.style.animation = 'tipUpdateAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
             setTimeout(() => { btn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease'; }, 600);
 
-            if (sponsorBanner && userConfig.schoolType === 'elem') {
+            if (sponsorBanner && userConfig.schoolType === 'elem' && (!window.currentUserProfile || !window.currentUserProfile.isPremium)) {
                 sponsorBanner.style.display = 'block';
                 if (currentState.clicks === 1) {
                     sponsorBanner.style.animation = 'none'; void sponsorBanner.offsetWidth;
@@ -698,7 +698,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
                 }
             }, 150);
         } else {
-            if (sponsorBanner && userConfig.schoolType === 'elem') sponsorBanner.style.display = 'block';
+            if (sponsorBanner && userConfig.schoolType === 'elem' && (!window.currentUserProfile || !window.currentUserProfile.isPremium)) sponsorBanner.style.display = 'block';
         }
 
         if (currentState.clicks >= 2) { btn.disabled = true; btn.style.pointerEvents = 'none'; btn.setAttribute('aria-disabled', 'true'); }
@@ -1758,6 +1758,14 @@ function triggerSurferAnimation() {
 // Demo Site specific logic removed as requested by user.
 
 function updateSponsorTexts() {
+    if (window.currentUserProfile && window.currentUserProfile.isPremium) {
+        const t = document.getElementById('tip-sponsor-banner');
+        if(t) t.style.display = 'none';
+        const g = document.getElementById('game-sponsor-banner');
+        if(g) g.style.display = 'none';
+        return;
+    }
+
     const sponsorOptions = [
         { text: "<b><span style=\"color: #166534;\">בוא לפרוץ את הגבולות שלך עם אימוני כוח מטורפים.</span></b>", emojis: "🏋️‍♂️ 💪" },
         { text: "<b><span style=\"color: #166534;\">בוא לרסק את השיעמום עם אימונים מטריפים, כוח וחברים חדשים</span></b>", emojis: "🏋️‍♂️" }
