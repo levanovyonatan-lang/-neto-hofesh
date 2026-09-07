@@ -123,6 +123,49 @@ function injectFirebaseUI() {
             50% { filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.9)); }
             100% { filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.4)); }
         }
+        
+        /* Gold Theme Fixes for Modals */
+        body.theme-gold .fb-modal {
+            background: #0f172a !important; border: 1px solid #facc15; box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 15px rgba(250,204,21,0.15);
+        }
+        body.theme-gold .fb-title { color: #fef08a !important; }
+        body.theme-gold .fb-subtitle { color: #cbd5e1 !important; }
+        body.theme-gold .lb-name, body.theme-gold .lb-score, body.theme-gold .lb-rank { color: #fef08a !important; }
+        body.theme-gold .leaderboard-item { border-bottom: 1px solid rgba(250,204,21,0.2); }
+        
+        body.theme-gold .leaderboard-item:nth-child(1) .lb-name,
+        body.theme-gold .leaderboard-item:nth-child(1) .lb-score,
+        body.theme-gold .leaderboard-item:nth-child(1) .lb-rank,
+        body.theme-gold .leaderboard-item:nth-child(2) .lb-name,
+        body.theme-gold .leaderboard-item:nth-child(2) .lb-score,
+        body.theme-gold .leaderboard-item:nth-child(2) .lb-rank,
+        body.theme-gold .leaderboard-item:nth-child(3) .lb-name,
+        body.theme-gold .leaderboard-item:nth-child(3) .lb-score,
+        body.theme-gold .leaderboard-item:nth-child(3) .lb-rank {
+            color: #0f172a !important;
+        }
+        
+        body.theme-gold .lb-overlay-auth {
+            background: linear-gradient(to top, rgba(15,23,42,1) 60%, rgba(15,23,42,0.8) 80%, rgba(15,23,42,0)) !important;
+        }
+        body.theme-gold .emoji-grid {
+            background: #1e293b !important; border-color: rgba(250,204,21,0.3) !important;
+        }
+        body.theme-gold .emoji-btn {
+            background: #334155 !important;
+        }
+        body.theme-gold .emoji-btn:hover { background: #475569 !important; }
+        body.theme-gold .emoji-btn.selected { border-color: #facc15 !important; background: #fef08a !important; }
+        
+        body.theme-gold .fb-input {
+            background: #1e293b !important; color: #fef08a !important; border-color: rgba(250,204,21,0.3) !important;
+        }
+        body.theme-gold .fb-checkbox-wrap label, body.theme-gold .terms-text { color: #cbd5e1 !important; }
+        
+        body.theme-gold .premium-row {
+            background: linear-gradient(90deg, rgba(30,41,59,1) 0%, rgba(250,204,21,0.15) 50%, rgba(30,41,59,1) 100%) !important;
+        }
+        body.theme-gold .fb-modal-close { color: #fef08a !important; }
     `;
     document.head.appendChild(style);
 
