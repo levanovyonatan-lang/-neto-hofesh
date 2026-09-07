@@ -1272,6 +1272,13 @@ body.theme-gold .toggle-slider {
     background: rgba(255, 255, 255, 0.1) !important;
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
+body.theme-gold .toggle-container {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+body.theme-gold .toggle-content h3 {
+    color: #ffffff !important;
+}
 body.theme-gold input:checked + .toggle-slider {
     background: linear-gradient(135deg, #facc15, #ca8a04) !important;
     border: none;
