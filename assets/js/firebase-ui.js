@@ -1032,12 +1032,48 @@ window.triggerPremiumUnboxing = function() {
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'unboxing-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        `;
         overlay.innerHTML = `
-            <div style="font-size: 80px; filter: drop-shadow(0 0 20px #facc15);">💎</div>
-            <h1 style="color: #facc15; text-shadow: 0 0 20px #facc15; margin-top: 20px; font-size: 36px; text-align: center;">ברוך הבא למועדון ה-VIP!</h1>
-            <p style="color: #fff; font-size: 18px; margin-top: 10px;">כל הפיצ'רים נפתחו עבורך.</p>
+            <div style="font-size: 90px; filter: drop-shadow(0 0 25px #facc15); margin-bottom: 20px;">💎</div>
+            <h1 style="color: #facc15; text-shadow: 0 0 20px #ca8a04; margin: 0; font-size: 42px; text-align: center; font-weight: 900; line-height: 1.2; padding: 0 20px;">ברוך הבא למועדון ה-VIP!</h1>
+            <p style="color: #e2e8f0; font-size: 20px; margin-top: 15px; text-align: center; font-weight: 500; padding: 0 20px;">כל הפיצ'רים נפתחו עבורך.</p>
+            <button id="unboxing-start-btn" style="
+                margin-top: 40px;
+                padding: 16px 45px;
+                font-size: 24px;
+                font-weight: 800;
+                background: linear-gradient(135deg, #facc15, #eab308);
+                color: #451a03;
+                border: none;
+                border-radius: 50px;
+                cursor: pointer;
+                box-shadow: 0 10px 25px rgba(234, 179, 8, 0.4);
+                transition: transform 0.2s, box-shadow 0.2s;
+            ">התחל עכשיו 🚀</button>
         `;
         document.body.appendChild(overlay);
+
+        const btn = document.getElementById('unboxing-start-btn');
+        btn.onmouseover = () => { btn.style.transform = 'scale(1.05)'; btn.style.boxShadow = '0 15px 35px rgba(234, 179, 8, 0.6)'; };
+        btn.onmouseout = () => { btn.style.transform = 'scale(1)'; btn.style.boxShadow = '0 10px 25px rgba(234, 179, 8, 0.4)'; };
+        
+        btn.onclick = () => {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 500);
+        };
     }
     
     // Play shatter animation on the main container
@@ -1048,7 +1084,8 @@ window.triggerPremiumUnboxing = function() {
     }
     
     // Show overlay
-    overlay.classList.add('active');
+    overlay.style.display = 'flex';
+    setTimeout(() => { overlay.style.opacity = '1'; }, 50);
     
     // Load confetti if missing and fire
     if (typeof confetti !== 'function') {
@@ -1065,28 +1102,11 @@ window.triggerPremiumUnboxing = function() {
         var end = Date.now() + duration;
 
         (function frame() {
-            confetti({
-                particleCount: 5,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: ['#facc15', '#fbbf24', '#f59e0b']
-            });
-            confetti({
-                particleCount: 5,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: ['#facc15', '#fbbf24', '#f59e0b']
-            });
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#facc15', '#fbbf24', '#f59e0b'], zIndex: 100001 });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#facc15', '#fbbf24', '#f59e0b'], zIndex: 100001 });
 
             if (Date.now() < end) {
                 requestAnimationFrame(frame);
-            } else {
-                // Hide overlay after animation
-                setTimeout(() => {
-                    overlay.classList.remove('active');
-                }, 1000);
             }
         }());
     }
