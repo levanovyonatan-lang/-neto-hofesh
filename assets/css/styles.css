@@ -1234,8 +1234,21 @@ body.theme-gold h1, body.theme-gold .countdown-item span {
 }
 body.theme-gold .fb-btn { 
     background: linear-gradient(135deg, #bf953f, #fcf6ba) !important; 
-    color: #000 !important; 
-    box-shadow: 0 4px 15px rgba(250,204,21,0.4) !important; border: none;
+    color: #000 !important;
+    box-shadow: 0 4px 15px rgba(250,204,21,0.4) !important;
+    border: none;
 }
 
-
+/* Fix visibility of dark text elements on the dark premium background */
+body.theme-gold .app-container h2,
+body.theme-gold .app-container h3,
+body.theme-gold .app-container h4,
+body.theme-gold .app-container p,
+body.theme-gold .app-container .seo-faq-content p,
+body.theme-gold .app-container .demo-buttons-title,
+body.theme-gold #dino-ui-overlay div,
+body.theme-gold #dino-ui-overlay span,
+body.theme-gold .dino-stat-label,
+body.theme-gold .dino-stat-value {
+    color: #fef08a !important;
+}
