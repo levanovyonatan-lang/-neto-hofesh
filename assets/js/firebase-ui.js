@@ -568,10 +568,12 @@ window.showLeaderboard = async function(score, stage, killer, isTabSwitch = fals
         let userRank = null;
         let userScore = null;
         
-        // Filter out demo users from display
+        // Filter out demo and anonymous premium users from display
         const filteredScores = scores.filter(s => {
-            const name = s.nickname || "";
-            return !name.toLowerCase().includes('demo') && !name.includes('דמו');
+            const name = (s.nickname || "").trim();
+            if (name.toLowerCase().includes('demo') || name.includes('דמו')) return false;
+            if (s.isPremium && (name === "" || name === "אנונימי")) return false;
+            return true;
         });
         
         filteredScores.forEach((s, index) => {
