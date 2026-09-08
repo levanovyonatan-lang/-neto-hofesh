@@ -296,39 +296,7 @@ function injectFirebaseUI() {
                     <div class="emoji-grid" id="pa-emoji-grid" style="margin-bottom: 20px; width: 100%; max-width: 320px; margin-left: auto; margin-right: auto;"></div>
                     <input type="hidden" id="pa-selected-emoji" value="👤">
                     
-                    <div id="pa-premium-section" style="margin-bottom: 20px; border: 1px solid #facc15; border-radius: 8px; padding: 15px; background: #fefce8; display: none;">
-                        <div style="font-size: 16px; color: #d97706; margin-bottom: 10px; font-weight: bold;">👑 הגדרות VIP</div>
-                        
-                        <div style="font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #b45309;">שורת סטטוס בטבלה:</div>
-                        <input type="text" id="pa-custom-bio-input" class="fb-input" maxlength="25" placeholder="לשל: מתגייס עוד חודש!" style="margin-bottom: 15px; width: 100%; max-width: 250px; text-align: center; font-size: 14px;">
-                        
-                        <div style="font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #b45309;">ערכת נושא לאתר:</div>
-                        <select id="pa-theme-select" style="width: 100%; max-width: 250px; padding: 8px; border-radius: 8px; border: 1px solid #facc15; font-weight: bold; background: #fff; margin-bottom: 15px;">
-                            <option value="default">רגיל (קלאסי)</option>
-                            <option value="cyberpunk">Cyberpunk Neon</option>
-                            <option value="retro">Retro 8-Bit</option>
-                            <option value="gold">Gold & Glass</option>
-                        </select>
-                        <div style="font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #b45309;">טיימרים אישיים (הספירות שלך):</div>
-                        <button onclick="if(window.openAddTimerModal) window.openAddTimerModal()" style="background: #eab308; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 5px; width: 100%; max-width: 250px;">+ הוסף טיימר אישי חדש</button>
-                    </div>
-                    <div id="pa-upgrade-cta" style="margin-bottom: 20px; background: #f1f5f9; padding: 15px; border-radius: 8px; font-size: 13px; color: #475569;">
-                        <div style="font-weight: 800; color: #3b82f6; font-size: 15px; margin-bottom: 5px;">👑 שדרג ל-Premium!</div>
-                        <div>קבל ערכות נושא מטורפות, מסגרות אש לפרופיל, טיימרים פרטיים ו-Double XP במשחקים!</div>
-                        <div style="margin-top: 10px; margin-bottom: 15px;">
-                            <a href="#" onclick="alert('חיבור לסליקה יתווסף בהמשך');" style="display: inline-block; background: #2563eb; color: #fff; padding: 8px 15px; border-radius: 20px; text-decoration: none; font-weight: bold;">לרכישת קוד VIP</a>
-                        </div>
-                        <div style="border-top: 1px solid #cbd5e1; padding-top: 10px;">
-                            <div style="font-weight: bold; margin-bottom: 5px;">כבר יש לך קוד?</div>
-                            <div style="display: flex; gap: 5px; justify-content: center;">
-                                <input type="text" id="vip-token-input" placeholder="הזן קוד כאן" style="padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; width: 140px; text-align: center; font-weight: bold;">
-                                <button onclick="if(window.activateVipToken) window.activateVipToken()" style="background: #10b981; color: white; border: none; border-radius: 8px; padding: 8px 15px; cursor: pointer; font-weight: bold;">הפעל</button>
-                            </div>
-                            <div id="vip-token-error" style="color: #ef4444; font-size: 12px; margin-top: 5px; display: none; font-weight: bold;"></div>
-                        </div>
-                    </div>
-                    
-                    <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="fb-btn fb-btn-gold" style="font-size: 18px; width: 100%; max-width: 250px;">שמור שינויים</button>
+                    <button onclick="if(window.saveNewNickname) window.saveNewNickname()" class="fb-btn fb-btn-gold" style="margin-top: 15px; font-size: 18px; width: 100%; max-width: 250px;">שמור שינויים</button>
                     
                     <button onclick="if(window.deleteUserAccount) window.deleteUserAccount()" style="margin-top: 15px; background: none; border: none; color: #ef4444; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: underline;">מחק משתמש לצמיתות</button>
                     
@@ -882,19 +850,6 @@ window.openPersonalArea = () => {
         const currentEmoji = window.currentUserProfile.emoji || '👤';
         if (emojiInput) emojiInput.value = currentEmoji;
         
-        const premiumSection = document.getElementById('pa-premium-section');
-        const upgradeCta = document.getElementById('pa-upgrade-cta');
-        const bioInput = document.getElementById('pa-custom-bio-input');
-        
-        if (window.currentUserProfile.isPremium) {
-            if (premiumSection) premiumSection.style.display = 'block';
-            if (upgradeCta) upgradeCta.style.display = 'none';
-            if (bioInput) bioInput.value = window.currentUserProfile.customBio || '';
-        } else {
-            if (premiumSection) premiumSection.style.display = 'none';
-            if (upgradeCta) upgradeCta.style.display = 'block';
-        }
-        
         // Render the emoji grid directly
         const grid = document.getElementById('pa-emoji-grid');
         if (grid) {
@@ -968,14 +923,6 @@ window.saveNewNickname = async () => {
     const newEmoji = document.getElementById('pa-selected-emoji').value || '👤';
     const errorMsg = document.getElementById('pa-error-msg');
     
-    let newBio = undefined;
-    if (window.currentUserProfile && window.currentUserProfile.isPremium) {
-        const bioInput = document.getElementById('pa-custom-bio-input');
-        if (bioInput) {
-            newBio = bioInput.value.trim();
-        }
-    }
-    
     if (newName.length < 2) {
         errorMsg.textContent = "הכינוי קצר מדי.";
         errorMsg.style.display = 'block';
@@ -1012,9 +959,6 @@ window.saveNewNickname = async () => {
         const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
         
         let updateData = { nickname: newName, emoji: newEmoji };
-        if (newBio !== undefined) {
-            updateData.customBio = newBio;
-        }
 
         const userDocRef = doc(window.firebaseDb, "users", uidToUpdate);
         await setDoc(userDocRef, updateData, { merge: true });
@@ -1025,7 +969,6 @@ window.saveNewNickname = async () => {
         if (window.currentUserProfile) {
             window.currentUserProfile.nickname = newName;
             window.currentUserProfile.emoji = newEmoji;
-            if (newBio !== undefined) window.currentUserProfile.customBio = newBio;
         }
         if (window.updateLeaderboardUI) window.updateLeaderboardUI();
         window.leaderboardLastFetch = 0; // Force refresh
