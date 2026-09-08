@@ -1539,28 +1539,28 @@ body.premium-active #dino-score-val + div { color: #3b82f6 !important; }
     width: 100%; max-width: 500px; margin: 0 auto; color: #1e293b; animation: splash-fade-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .vip-screen-title {
-    font-size: 2.8rem; background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; margin: 0; filter: drop-shadow(0 4px 15px rgba(37,99,235,0.2));
+    font-size: 2.8rem; background: linear-gradient(135deg, #facc15 0%, #d97706 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; margin: 0; filter: drop-shadow(0 4px 15px rgba(217,119,6,0.3));
 }
 .vip-screen-subtitle {
-    color: #475569; font-size: 1.2rem; margin-top: 10px; font-weight: 600;
+    color: #64748b; font-size: 1.2rem; margin-top: 10px; font-weight: 600;
 }
 .vip-screen-box {
-    background: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.5); padding: 25px; border-radius: 24px; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,1);
+    background: #ffffff; border: 1px solid #e2e8f0; padding: 25px; border-radius: 24px; margin-bottom: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);
 }
 .vip-screen-box-title {
-    color: #334155; font-size: 1.3rem; margin-bottom: 20px; font-weight: 800; text-align: center;
+    color: #1e293b; font-size: 1.3rem; margin-bottom: 20px; font-weight: 800; text-align: center;
 }
 .vip-btn-gold {
-    border: 2px solid #cbd5e1; background: #f8fafc; color: #64748b; transition: 0.3s; padding: 20px; box-shadow: none;
+    border: 2px solid #e2e8f0; background: #f8fafc; color: #64748b; transition: 0.3s; padding: 20px; box-shadow: none; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
 }
 .vip-btn-gold .option-title, .vip-btn-regular .option-title { font-weight: 800; font-size: 1.2rem; }
 .vip-btn-gold .option-emoji, .vip-btn-regular .option-emoji { font-size: 1.8rem; margin-top: 8px; }
 
 .vip-btn-regular {
-    border: 2px solid #3b82f6; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1e3a8a; transition: 0.3s; padding: 20px; box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+    border: 2px solid #f59e0b; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #b45309; transition: 0.3s; padding: 20px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
 }
 .vip-save-btn {
-    width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #ffffff; font-weight: 900; border: none; padding: 20px; font-size: 1.3rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(37, 99, 235, 0.3); cursor: pointer; transition: 0.3s;
+    width: 100%; background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #ffffff; font-weight: 900; border: none; padding: 20px; font-size: 1.3rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(217, 119, 6, 0.4); cursor: pointer; transition: 0.3s;
 }
 
 /* Gold Theme VIP Screen Styles (Dark / Premium Mode) */
