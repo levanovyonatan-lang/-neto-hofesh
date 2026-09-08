@@ -1536,7 +1536,7 @@ body.premium-active #dino-score-val + div { color: #3b82f6 !important; }
 
 /* Base VIP Screen Styles (Regular / Light Mode) */
 .vip-screen-content {
-    width: 100%; max-width: 500px; margin: 0 auto; color: #1e293b; animation: splash-fade-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: 100%; max-width: 420px; margin: 0 auto; color: #1e293b; animation: splash-fade-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .vip-screen-title {
     font-size: 2.8rem; background: linear-gradient(135deg, #facc15 0%, #d97706 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; margin: 0; filter: drop-shadow(0 4px 15px rgba(217,119,6,0.3));
@@ -1551,13 +1551,13 @@ body.premium-active #dino-score-val + div { color: #3b82f6 !important; }
     color: #1e293b; font-size: 1.3rem; margin-bottom: 20px; font-weight: 800; text-align: center;
 }
 .vip-btn-gold {
-    border: 2px solid #e2e8f0; background: #f8fafc; color: #64748b; transition: 0.3s; padding: 20px; box-shadow: none; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
+    border: 2px solid #e2e8f0; background: #f8fafc; color: #64748b; transition: 0.3s; padding: 15px; box-shadow: none; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; height: 100%;
 }
 .vip-btn-gold .option-title, .vip-btn-regular .option-title { font-weight: 800; font-size: 1.2rem; }
 .vip-btn-gold .option-emoji, .vip-btn-regular .option-emoji { font-size: 1.8rem; margin-top: 8px; }
 
 .vip-btn-regular {
-    border: 2px solid #f59e0b; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #b45309; transition: 0.3s; padding: 20px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
+    border: 2px solid #f59e0b; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #b45309; transition: 0.3s; padding: 15px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; height: 100%;
 }
 .vip-save-btn {
     width: 100%; background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #ffffff; font-weight: 900; border: none; padding: 20px; font-size: 1.3rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(217, 119, 6, 0.4); cursor: pointer; transition: 0.3s;
@@ -1566,9 +1566,6 @@ body.premium-active #dino-score-val + div { color: #3b82f6 !important; }
 /* Gold Theme VIP Screen Styles (Dark / Premium Mode) */
 body.theme-gold .vip-screen-content {
     color: #f8fafc;
-}
-body.theme-gold .vip-screen-title {
-    background: linear-gradient(135deg, #fef08a 0%, #d97706 100%); filter: drop-shadow(0 4px 15px rgba(217,119,6,0.4));
 }
 body.theme-gold .vip-screen-subtitle {
     color: #94a3b8;

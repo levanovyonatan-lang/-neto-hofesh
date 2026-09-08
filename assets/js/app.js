@@ -15,6 +15,8 @@ let deferredPrompt = null;
 let vimeoPlayerInstance = null;
 let isAnimatingNetDays = false;
 let netDaysAnimationId = null;
+let isAnimatingAbs = false;
+let absAnimationId = null;
 let safariInstallModalOpened = false;
 const shouldOpenInstallVideo = (() => {
     try {
@@ -1137,6 +1139,40 @@ function animateNetDays(finalValue) {
     netDaysAnimationId = window.requestAnimationFrame(step);
 }
 
+function animateAbsoluteTimer(diff) {
+    if (absAnimationId) { cancelAnimationFrame(absAnimationId); absAnimationId = null; }
+    if (diff <= 0) { isAnimatingAbs = false; return; }
+    isAnimatingAbs = true;
+    
+    const finalDays = Math.floor(diff / 86400000);
+    const finalHours = Math.floor((diff % 86400000) / 3600000);
+    const finalMins = Math.floor((diff % 3600000) / 60000);
+    const finalSecs = Math.floor((diff % 60000) / 1000);
+    
+    const startTime = performance.now();
+    const duration = 1500;
+    
+    function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        let progress = elapsed / duration;
+        if (progress > 1) progress = 1;
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        
+        setDomText('abs-days', Math.floor(finalDays * easeOut));
+        setDomText('abs-hours', String(Math.floor(finalHours * easeOut)).padStart(2, '0'));
+        setDomText('abs-mins', String(Math.floor(finalMins * easeOut)).padStart(2, '0'));
+        setDomText('abs-secs', String(Math.floor(finalSecs * easeOut)).padStart(2, '0'));
+        
+        if (progress < 1) {
+            absAnimationId = window.requestAnimationFrame(step);
+        } else {
+            isAnimatingAbs = false;
+            absAnimationId = null;
+        }
+    }
+    absAnimationId = window.requestAnimationFrame(step);
+}
+
 function getActiveHolidayFromUrlOrWindow() {
     if (window.NETO_ACTIVE_HOLIDAY) return window.NETO_ACTIVE_HOLIDAY;
     try {
@@ -1483,6 +1519,11 @@ function selectTarget(id, shouldScroll = true) {
         targetDaysForAnim = calculateNetDays(target.date, target.noFriday, target.id);
     }
     animateNetDays(targetDaysForAnim);
+    
+    let diff = target.date.getTime() - Date.now();
+    if (target.isHappeningNow) { diff = target.endDate.getTime() - Date.now(); }
+    animateAbsoluteTimer(diff);
+    
     updateDashboard();
 }
 
@@ -1505,10 +1546,12 @@ function updateDashboard() {
         setDomText('main-net-days', "הגיע!");
         if (!event.isHappeningNow && !confettiFired) { confettiFired = true; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
     } else {
-        setDomText('abs-days', Math.floor(diff / 86400000));
-        setDomText('abs-hours', String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0'));
-        setDomText('abs-mins', String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0'));
-        setDomText('abs-secs', String(Math.floor((diff % 60000) / 1000)).padStart(2, '0'));
+        if (!isAnimatingAbs) {
+            setDomText('abs-days', Math.floor(diff / 86400000));
+            setDomText('abs-hours', String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0'));
+            setDomText('abs-mins', String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0'));
+            setDomText('abs-secs', String(Math.floor((diff % 60000) / 1000)).padStart(2, '0'));
+        }
         if (!isAnimatingNetDays) {
             if (event.isHappeningNow) {
                 setDomText('main-net-days', Math.ceil(diff / 86400000));
