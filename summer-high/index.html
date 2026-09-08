@@ -662,25 +662,25 @@
 
     <!-- VIP Settings Screen (acts as a completely new page) -->
     <main class="app-container" id="vip-screen" style="display: none; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 40px 20px;">
-        <div style="width: 100%; max-width: 500px; margin: 0 auto; color: #f8fafc; animation: splash-fade-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+        <div class="vip-screen-content">
             
             <div style="text-align: center; margin-bottom: 40px; margin-top: 10px;">
-                <h2 style="font-size: 2.8rem; background: linear-gradient(135deg, #fef08a 0%, #d97706 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; margin: 0; filter: drop-shadow(0 4px 15px rgba(217,119,6,0.4));">אזור ה-VIP</h2>
-                <p style="color: #94a3b8; font-size: 1.2rem; margin-top: 10px; font-weight: 500;">הגדרות אישיות למשתמשי פרימיום</p>
+                <h2 class="vip-screen-title">אזור ה-VIP</h2>
+                <p class="vip-screen-subtitle">הגדרות אישיות למשתמשי פרימיום</p>
             </div>
             
-            <div class="setup-step" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 25px; border-radius: 24px; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1);">
-                <h3 style="color: #e2e8f0; font-size: 1.3rem; margin-bottom: 20px; font-weight: 800; text-align: center;">✨ סגנון עיצוב למערכת</h3>
+            <div class="setup-step vip-screen-box">
+                <h3 class="vip-screen-box-title">✨ סגנון עיצוב למערכת</h3>
                 <div class="school-grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <label class="option-card" aria-label="רקע יוקרתי" style="border: 2px solid #facc15; background: linear-gradient(135deg, rgba(69,26,3,0.8) 0%, rgba(2,6,23,0.9) 100%); color: #fef08a; box-shadow: 0 0 25px rgba(250, 204, 21, 0.2); transition: 0.3s; padding: 20px;">
-                        <input type="radio" name="vipTheme" value="gold" onchange="selectTheme('gold'); closeVipScreen();">
-                        <span class="option-title" style="font-weight: 900; font-size: 1.2rem;">יוקרתי</span>
-                        <span class="option-emoji" aria-hidden="true" style="font-size: 1.8rem; margin-top: 8px;">💎</span>
+                    <label class="option-card vip-btn-gold" aria-label="רקע יוקרתי">
+                        <input type="radio" name="vipTheme" value="gold" onchange="selectTheme('gold');">
+                        <span class="option-title">יוקרתי</span>
+                        <span class="option-emoji" aria-hidden="true">💎</span>
                     </label>
-                    <label class="option-card" aria-label="ממשק רגיל" style="border: 2px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #cbd5e1; transition: 0.3s; padding: 20px;">
-                        <input type="radio" name="vipTheme" value="default" onchange="selectTheme('default'); closeVipScreen();">
-                        <span class="option-title" style="font-weight: 600; font-size: 1.2rem;">רגיל</span>
-                        <span class="option-emoji" aria-hidden="true" style="font-size: 1.8rem; margin-top: 8px;">☀️</span>
+                    <label class="option-card vip-btn-regular" aria-label="ממשק רגיל">
+                        <input type="radio" name="vipTheme" value="default" onchange="selectTheme('default');">
+                        <span class="option-title">רגיל</span>
+                        <span class="option-emoji" aria-hidden="true">☀️</span>
                     </label>
                 </div>
             </div>
@@ -688,7 +688,7 @@
             <!-- Future premium settings will go here -->
 
             <div style="display: flex; justify-content: center; gap: 10px; margin-top: 40px;">
-                <button class="reset-btn" onclick="closeVipScreen();" style="width: 100%; background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #020617; font-weight: 900; border: none; padding: 20px; font-size: 1.3rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(217, 119, 6, 0.5); cursor: pointer; transition: 0.3s;">שמירה וחזרה למסך 👑</button>
+                <button class="reset-btn vip-save-btn" onclick="closeVipScreen();">שמירה וחזרה למסך 👑</button>
             </div>
         </div>
     </main>
@@ -697,12 +697,10 @@
         function openVipScreen() {
             document.getElementById('main-screen').style.display = 'none';
             document.getElementById('vip-screen').style.display = 'flex';
-            document.body.classList.add('vip-page-active');
         }
         function closeVipScreen() {
             document.getElementById('vip-screen').style.display = 'none';
             document.getElementById('main-screen').style.display = 'flex';
-            document.body.classList.remove('vip-page-active');
         }
     </script>
 

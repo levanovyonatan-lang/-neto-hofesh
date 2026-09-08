@@ -1334,15 +1334,257 @@ body.theme-gold .app-container .demo-buttons-title {
 body.premium-active #dino-score-val { color: white !important; }
 body.premium-active #dino-score-val + div { color: #3b82f6 !important; }
 
+    0% { box-shadow: 0 0 5px #ff4500, inset 0 0 5px #ff4500; border-color: #ff4500; }
+    50% { box-shadow: 0 0 15px #ff8c00, inset 0 0 15px #ff8c00; border-color: #ff8c00; }
+    100% { box-shadow: 0 0 20px #ffd700, inset 0 0 20px #ffd700; border-color: #ffd700; }
+}
+.premium-avatar-electric {
+    border: 3px solid #00f3ff !important;
+    box-shadow: 0 0 10px #00f3ff, inset 0 0 10px #00f3ff !important;
+    border-radius: 50% !important;
+    animation: electric-zap 0.5s infinite;
+}
+@keyframes electric-zap {
+    0% { box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff; }
+    50% { box-shadow: 0 0 15px #0ff, 0 0 25px #0ff; transform: scale(1.02); }
+    100% { box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff; transform: scale(1); }
+}
+
+/* Themes */
+/* 1. Cyberpunk */
+body.theme-cyberpunk { background: #0d0e15 !important; color: #0ff !important; font-family: 'Courier New', monospace !important; }
+body.theme-cyberpunk .main-timer-card, body.theme-cyberpunk .holiday-card { background: rgba(13, 14, 21, 0.8) !important; border: 2px solid #f0f !important; box-shadow: 0 0 20px #f0f !important; }
+body.theme-cyberpunk h1, body.theme-cyberpunk .countdown-item span { color: #f0f !important; text-shadow: 0 0 10px #f0f !important; }
+body.theme-cyberpunk .fb-btn { background: transparent !important; border: 2px solid #0ff !important; color: #0ff !important; box-shadow: 0 0 10px #0ff !important; }
+body.theme-cyberpunk .fb-btn:hover { background: #0ff !important; color: #000 !important; }
+
+/* 2. Retro 8-Bit */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+body.theme-retro {
+    background: #2b2b45 !important; color: #fff !important; font-family: 'Press Start 2P', cursive !important;
+}
+body.theme-retro .main-timer-card, body.theme-retro .holiday-card { background: #3b3b58 !important; border: 4px solid #fff !important; box-shadow: 8px 8px 0 #000 !important; border-radius: 0 !important; }
+body.theme-retro h1, body.theme-retro .countdown-item span { color: #ffeb3b !important; text-shadow: 4px 4px 0 #000 !important; }
+body.theme-retro .fb-btn { background: #f44336 !important; border: 4px solid #fff !important; box-shadow: 4px 4px 0 #000 !important; border-radius: 0 !important; }
+
+/* 3. Gold & Glass */
+body.theme-gold {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    color: #fef08a !important;
+    --text-muted: #fde047 !important; /* Forces all muted text to be bright yellow */
+}
+
+/* Splash Screen Fix for Gold Theme */
+body.theme-gold #neto-splash {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+}
+body.theme-gold #neto-splash p { color: #fde047 !important; }
+
+body.theme-gold .main-timer-card, body.theme-gold .holiday-card, body.theme-gold .setup-step { 
+    background: rgba(255, 255, 255, 0.05) !important; 
+    backdrop-filter: blur(20px) !important; 
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(250, 204, 21, 0.3) !important; 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(250, 204, 21, 0.2) !important; 
+    color: #fef08a !important;
+}
+body.theme-gold .main-timer-card.premium-countdown .net-days-container,
+body.theme-gold .main-timer-card.premium-countdown .absolute-timer,
+body.theme-gold .main-timer-card.vacation-mode .net-days-container,
+body.theme-gold .main-timer-card.vacation-mode .absolute-timer,
+body.theme-gold .ai-btn {
+    background: #000000 !important;
+    border: 1px solid rgba(250, 204, 21, 0.5) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 20px rgba(234, 179, 8, 0.15) !important;
+}
+body.theme-gold .ai-btn b { color: #fef08a !important; }
+body.theme-gold .ai-btn span { color: #ffffff !important; }
+
+body.theme-gold .time-lbl { color: rgba(254, 240, 138, 0.8) !important; }
+body.theme-gold .time-val, body.theme-gold .total-days-label, body.theme-gold #vacation-days-count, body.theme-gold .vacation-length-box, body.theme-gold .vacation-length-box b { color: #fef08a !important; }
+body.theme-gold .daily-tip-text { 
+    color: #ffffff !important; 
+    background: transparent !important; 
+    border: none !important;
+    box-shadow: none !important;
+    padding: 5px 0 !important;
+}
+
+/* Hide Ads for Premium Users */
+body.premium-active .ai-sponsor,
+body.premium-active .sticky-banner-container,
+body.premium-active #demo-banner,
+body.premium-active #fitness-banner,
+body.premium-active #jobs-banner {
+    display: none !important;
+}
+
+/* Setup Options Fix */
+body.theme-gold .setup-step {
+    background: rgba(15, 23, 42, 0.6) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+    border-radius: 24px !important;
+}
+body.theme-gold .setup-step h3,
+body.theme-gold .setup-step .toggle-title {
+    color: #ffffff !important;
+}
+
+body.theme-gold .toggle-container {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-gold .setup-header h1 {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    line-height: 1.1 !important;
+}
+
+body.theme-gold .setup-header h1 span {
+    display: block !important;
+    font-size: 1.4em !important;
+    margin-bottom: 5px !important;
+}
+
+body.theme-gold .option-card {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #e2e8f0 !important;
+    border-radius: 16px !important;
+    box-shadow: none !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.theme-gold .option-card:hover {
+    background: rgba(250, 204, 21, 0.1) !important;
+    border-color: rgba(250, 204, 21, 0.4) !important;
+    color: #fef08a !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25) !important;
+}
+
+body.theme-gold .option-card.selected {
+    background: #facc15 !important;
+    border-color: #facc15 !important;
+    color: #020617 !important;
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.5) !important;
+}
+
+/* Premium toggle switch */
+body.theme-gold .toggle-slider {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+body.theme-gold .toggle-container {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+body.theme-gold .toggle-content h3 {
+    color: #ffffff !important;
+}
+body.theme-gold input:checked + .toggle-slider {
+    background: linear-gradient(135deg, #facc15, #ca8a04) !important;
+    border: none;
+    box-shadow: 0 0 12px rgba(250, 204, 21, 0.4);
+}
+
+/* Footer and legal links in white for premium theme */
+body.theme-gold footer p,
+body.theme-gold footer a,
+body.theme-gold footer strong,
+body.theme-gold .contact-area,
+body.theme-gold .contact-area a {
+    color: #ffffff !important;
+}
+
+body.theme-gold h1, body.theme-gold .countdown-item span { 
+    background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    text-shadow: none !important;
+}
+body.theme-gold .fb-btn { 
+    background: linear-gradient(135deg, #bf953f, #fcf6ba) !important; 
+    color: #000 !important;
+    box-shadow: 0 4px 15px rgba(250,204,21,0.4) !important;
+    border: none;
+}
+
+/* Fix visibility of dark text elements on the dark premium background */
+body.theme-gold .app-container h2,
+body.theme-gold .app-container h3,
+body.theme-gold .app-container h4,
+body.theme-gold .app-container p,
+body.theme-gold .app-container .seo-faq-content p,
+body.theme-gold .app-container .demo-buttons-title {
+    color: #fef08a !important;
+}
+/* Premium Dino Game Colors */
+body.premium-active #dino-score-val { color: white !important; }
+body.premium-active #dino-score-val + div { color: #3b82f6 !important; }
+
 /* FAQ Answer Text Color Fix */
 .seo-faq-answer { color: #000 !important; }
 
 
 
-body.vip-page-active {
-    background: #020617;
-    background-image: radial-gradient(circle at top right, rgba(217, 119, 6, 0.25), transparent 50%), radial-gradient(circle at bottom left, rgba(217, 119, 6, 0.15), transparent 50%);
+/* Base VIP Screen Styles (Regular / Light Mode) */
+.vip-screen-content {
+    width: 100%; max-width: 500px; margin: 0 auto; color: #1e293b; animation: splash-fade-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-body.vip-page-active .sun-background {
-    display: none !important;
+.vip-screen-title {
+    font-size: 2.8rem; background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; margin: 0; filter: drop-shadow(0 4px 15px rgba(37,99,235,0.2));
+}
+.vip-screen-subtitle {
+    color: #475569; font-size: 1.2rem; margin-top: 10px; font-weight: 600;
+}
+.vip-screen-box {
+    background: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.5); padding: 25px; border-radius: 24px; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,1);
+}
+.vip-screen-box-title {
+    color: #334155; font-size: 1.3rem; margin-bottom: 20px; font-weight: 800; text-align: center;
+}
+.vip-btn-gold {
+    border: 2px solid #cbd5e1; background: #f8fafc; color: #64748b; transition: 0.3s; padding: 20px; box-shadow: none;
+}
+.vip-btn-gold .option-title, .vip-btn-regular .option-title { font-weight: 800; font-size: 1.2rem; }
+.vip-btn-gold .option-emoji, .vip-btn-regular .option-emoji { font-size: 1.8rem; margin-top: 8px; }
+
+.vip-btn-regular {
+    border: 2px solid #3b82f6; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1e3a8a; transition: 0.3s; padding: 20px; box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+}
+.vip-save-btn {
+    width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #ffffff; font-weight: 900; border: none; padding: 20px; font-size: 1.3rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(37, 99, 235, 0.3); cursor: pointer; transition: 0.3s;
+}
+
+/* Gold Theme VIP Screen Styles (Dark / Premium Mode) */
+body.theme-gold .vip-screen-content {
+    color: #f8fafc;
+}
+body.theme-gold .vip-screen-title {
+    background: linear-gradient(135deg, #fef08a 0%, #d97706 100%); filter: drop-shadow(0 4px 15px rgba(217,119,6,0.4));
+}
+body.theme-gold .vip-screen-subtitle {
+    color: #94a3b8;
+}
+body.theme-gold .vip-screen-box {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1);
+}
+body.theme-gold .vip-screen-box-title {
+    color: #e2e8f0;
+}
+body.theme-gold .vip-btn-gold {
+    border: 2px solid #facc15; background: linear-gradient(135deg, rgba(69,26,3,0.8) 0%, rgba(2,6,23,0.9) 100%); color: #fef08a; box-shadow: 0 0 25px rgba(250, 204, 21, 0.2);
+}
+body.theme-gold .vip-btn-regular {
+    border: 2px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #cbd5e1; box-shadow: none;
+}
+body.theme-gold .vip-save-btn {
+    background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #020617; box-shadow: 0 15px 35px rgba(217, 119, 6, 0.5);
 }
