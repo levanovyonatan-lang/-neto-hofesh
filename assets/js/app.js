@@ -1141,18 +1141,45 @@ function animateNetDays(finalValue) {
 
 function animateAbsoluteTimer(diff) {
     if (absAnimationId) { cancelAnimationFrame(absAnimationId); absAnimationId = null; }
-    isAnimatingAbs = false;
-    if (diff <= 0) return;
+    if (diff <= 0) { isAnimatingAbs = false; return; }
+    isAnimatingAbs = true;
     
     const finalDays = Math.floor(diff / 86400000);
     const finalHours = Math.floor((diff % 86400000) / 3600000);
     const finalMins = Math.floor((diff % 3600000) / 60000);
     const finalSecs = Math.floor((diff % 60000) / 1000);
     
-    setDomText('abs-days', finalDays);
-    setDomText('abs-hours', String(finalHours).padStart(2, '0'));
-    setDomText('abs-mins', String(finalMins).padStart(2, '0'));
-    setDomText('abs-secs', String(finalSecs).padStart(2, '0'));
+    if (document.body.classList.contains('theme-gold')) {
+        setDomText('abs-days', finalDays);
+        setDomText('abs-hours', String(finalHours).padStart(2, '0'));
+        setDomText('abs-mins', String(finalMins).padStart(2, '0'));
+        setDomText('abs-secs', String(finalSecs).padStart(2, '0'));
+        isAnimatingAbs = false;
+        return;
+    }
+    
+    const startTime = performance.now();
+    const duration = 1500;
+    
+    function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        let progress = elapsed / duration;
+        if (progress > 1) progress = 1;
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        
+        setDomText('abs-days', Math.floor(finalDays * easeOut));
+        setDomText('abs-hours', String(Math.floor(finalHours * easeOut)).padStart(2, '0'));
+        setDomText('abs-mins', String(Math.floor(finalMins * easeOut)).padStart(2, '0'));
+        setDomText('abs-secs', String(Math.floor(finalSecs * easeOut)).padStart(2, '0'));
+        
+        if (progress < 1) {
+            absAnimationId = window.requestAnimationFrame(step);
+        } else {
+            isAnimatingAbs = false;
+            absAnimationId = null;
+        }
+    }
+    absAnimationId = window.requestAnimationFrame(step);
 }
 
 function getActiveHolidayFromUrlOrWindow() {
