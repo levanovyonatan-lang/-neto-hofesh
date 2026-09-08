@@ -1181,17 +1181,21 @@ body.theme-gold .main-timer-card.premium-countdown .absolute-timer,
 body.theme-gold .main-timer-card.vacation-mode .net-days-container,
 body.theme-gold .main-timer-card.vacation-mode .absolute-timer,
 body.theme-gold .ai-btn {
-    background: linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(202, 138, 4, 0.05) 100%) !important;
-    border: 1px solid rgba(250, 204, 21, 0.4) !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 0 20px rgba(234, 179, 8, 0.1) !important;
+    background: #000000 !important;
+    border: 1px solid rgba(250, 204, 21, 0.5) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 20px rgba(234, 179, 8, 0.15) !important;
 }
+body.theme-gold .ai-btn b { color: #fef08a !important; }
+body.theme-gold .ai-btn span { color: #ffffff !important; }
+
 body.theme-gold .time-lbl { color: rgba(254, 240, 138, 0.8) !important; }
 body.theme-gold .time-val, body.theme-gold .total-days-label, body.theme-gold #vacation-days-count, body.theme-gold .vacation-length-box, body.theme-gold .vacation-length-box b { color: #fef08a !important; }
 body.theme-gold .daily-tip-text { 
     color: #ffffff !important; 
-    background: #000000 !important; 
-    border: 1px solid rgba(250, 204, 21, 0.4) !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 20px rgba(234, 179, 8, 0.1) !important;
+    background: transparent !important; 
+    border: none !important;
+    box-shadow: none !important;
+    padding: 5px 0 !important;
 }
 
 /* Hide Ads for Premium Users */
