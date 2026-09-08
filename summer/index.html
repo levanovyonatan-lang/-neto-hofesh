@@ -351,20 +351,36 @@
 
             <!-- Premium Settings Modal -->
             <div id="premium-settings-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 100000; justify-content: center; align-items: center; padding: 20px;">
-                <div style="background: #ffffff; padding: 25px; border-radius: 20px; text-align: center; max-width: 90%; width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; animation: splash-fade-up 0.3s ease-out;">
-                    <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 1.3rem; color: #d97706; font-weight: 800;">✨ הגדרות VIP ✨</h3>
+                <div class="card setup-card" style="margin: 0; max-height: 90vh; overflow-y: auto; animation: splash-fade-up 0.3s ease-out; position: relative;">
                     
-                    <div style="margin-bottom: 25px; text-align: right;">
-                        <label style="font-weight: bold; display: block; margin-bottom: 10px; color: #334155;">בחירת רקע למערכת:</label>
-                        <div style="display: flex; gap: 10px; justify-content: center;">
-                            <button class="theme-btn" onclick="selectTheme('gold'); document.getElementById('premium-settings-modal').style.display='none';" style="flex: 1; padding: 12px; border-radius: 12px; border: 2px solid #facc15; background: #020617; color: #fef08a; font-weight: bold; cursor: pointer; font-size: 16px; transition: transform 0.2s;">רקע יוקרתי 💎</button>
-                            <button class="theme-btn" onclick="selectTheme('default'); document.getElementById('premium-settings-modal').style.display='none';" style="flex: 1; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; background: #ffffff; color: #334155; font-weight: bold; cursor: pointer; font-size: 16px; transition: transform 0.2s;">ממשק רגיל ☀️</button>
+                    <button onclick="document.getElementById('premium-settings-modal').style.display='none';" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #94a3b8; font-size: 28px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
+                    
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <h2 style="font-size: 1.8rem; color: #d97706; font-weight: 900; margin: 0; text-shadow: 0 2px 4px rgba(217,119,6,0.1);">👑 הגדרות VIP 👑</h2>
+                        <p style="color: var(--text-muted); font-size: 1rem; margin-top: 5px;">אזור אישי למשתמשי פרימיום</p>
+                    </div>
+                    
+                    <div class="setup-step">
+                        <h3>בחירת רקע למערכת</h3>
+                        <div class="school-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <label class="option-card" aria-label="רקע יוקרתי" style="border: 2px solid #facc15; background: #020617;">
+                                <input type="radio" name="vipTheme" value="gold" onchange="selectTheme('gold'); document.getElementById('premium-settings-modal').style.display='none';">
+                                <span class="option-title" style="color: #fef08a;">יוקרתי</span>
+                                <span class="option-emoji" aria-hidden="true">💎</span>
+                            </label>
+                            <label class="option-card" aria-label="ממשק רגיל" style="background: #ffffff; border: 2px solid #cbd5e1;">
+                                <input type="radio" name="vipTheme" value="default" onchange="selectTheme('default'); document.getElementById('premium-settings-modal').style.display='none';">
+                                <span class="option-title" style="color: #334155;">רגיל</span>
+                                <span class="option-emoji" aria-hidden="true">☀️</span>
+                            </label>
                         </div>
                     </div>
                     
                     <!-- Future premium settings will go here -->
 
-                    <button onclick="document.getElementById('premium-settings-modal').style.display='none';" class="btn-action" style="width: 100%; background: #f1f5f9; color: #475569;">סגור</button>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 25px;">
+                        <button class="reset-btn" onclick="document.getElementById('premium-settings-modal').style.display='none';" style="width: 100%;">סיום ושמירה 👑</button>
+                    </div>
                 </div>
             </div>
 
