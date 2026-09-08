@@ -1096,6 +1096,22 @@ window.applyTheme = function(theme) {
     }
 };
 
+window.selectTheme = function(theme) {
+    if (window.applyTheme) window.applyTheme(theme);
+    
+    // Save to user profile if logged in
+    if (window.currentUserProfile && window.currentUserProfile.isPremium) {
+        window.currentUserProfile.theme = theme;
+        if (window.db && window.auth && window.auth.currentUser) {
+            window.db.collection('users').doc(window.auth.currentUser.uid).update({
+                theme: theme
+            }).catch(e => console.error("Error saving theme", e));
+        }
+    } else if (window.location.search.includes('demo_premium=1') || sessionStorage.getItem('demo_premium') === '1') {
+        localStorage.setItem('demo_theme', theme);
+    }
+};
+
 window.triggerPremiumUnboxing = function() {
     // Inject overlay if not present
     let overlay = document.getElementById('unboxing-overlay');
@@ -1186,7 +1202,8 @@ window.triggerPremiumUnboxing = function() {
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         if (window.location.search.includes('demo_premium=1')) {
-            window.applyTheme('gold');
+            const demoTheme = localStorage.getItem('demo_theme') || 'gold';
+            window.applyTheme(demoTheme);
             document.body.classList.add('premium-active');
             if (window.triggerPremiumUnboxing && !sessionStorage.getItem('demo_unboxed')) {
                 window.triggerPremiumUnboxing();

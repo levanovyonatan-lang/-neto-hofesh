@@ -1047,6 +1047,11 @@ function resetApp() {
     userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' }; confettiFired = false;
     document.getElementById('main-screen').style.display = 'none'; document.getElementById('setup-screen').style.display = 'flex';
 
+    const premiumSelector = document.getElementById('premium-theme-selector');
+    if (premiumSelector) {
+        premiumSelector.style.display = document.body.classList.contains('premium-active') ? 'block' : 'none';
+    }
+
     const btn = document.getElementById('main-ai-btn'); document.getElementById('ai-btn-text').innerHTML = "לחצו לטיפ אופטימיות יומי ✨";
     btn.classList.remove('has-tip'); btn.disabled = false; btn.style.pointerEvents = 'auto';
     const sponsorBanner = document.getElementById('tip-sponsor-banner'); if (sponsorBanner) sponsorBanner.style.display = 'none';

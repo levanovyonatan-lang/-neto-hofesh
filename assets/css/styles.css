@@ -1274,11 +1274,11 @@ body.theme-gold .option-card:hover {
 }
 
 body.theme-gold .option-card.selected {
-    background: linear-gradient(135deg, rgba(250, 204, 21, 0.15) 0%, rgba(250, 204, 21, 0.05) 100%) !important;
+    background: #facc15 !important;
     border-color: #facc15 !important;
-    color: #facc15 !important;
+    color: #020617 !important;
     transform: translateY(-5px);
-    box-shadow: 0 0 15px rgba(250, 204, 21, 0.2), inset 0 0 10px rgba(250, 204, 21, 0.1) !important;
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.5) !important;
 }
 
 /* Premium toggle switch */
