@@ -568,7 +568,13 @@ window.showLeaderboard = async function(score, stage, killer, isTabSwitch = fals
         let userRank = null;
         let userScore = null;
         
-        scores.forEach((s, index) => {
+        // Filter out demo users from display
+        const filteredScores = scores.filter(s => {
+            const name = s.nickname || "";
+            return !name.toLowerCase().includes('demo') && !name.includes('דמו');
+        });
+        
+        filteredScores.forEach((s, index) => {
             let rankStr = (index + 1) + ".";
             if(index === 0) rankStr = "🥇";
             if(index === 1) rankStr = "🥈";
