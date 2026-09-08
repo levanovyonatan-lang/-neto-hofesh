@@ -1330,3 +1330,10 @@ body.theme-gold .app-container .seo-faq-content p,
 body.theme-gold .app-container .demo-buttons-title {
     color: #fef08a !important;
 }
+/* Premium Dino Game Colors */
+body.premium-active #dino-score-val { color: white !important; }
+body.premium-active #dino-score-val + div { color: #3b82f6 !important; }
+
+/* FAQ Answer Text Color Fix */
+.seo-faq-answer { color: #000 !important; }
+
