@@ -810,7 +810,7 @@
     </div>
 
     <!-- Premium Settings Modal -->
-    <div id="premium-settings-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 100000; justify-content: center; align-items: center; padding: 20px;">
+    <div id="premium-settings-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.95); z-index: 100000; justify-content: center; align-items: center; padding: 20px;">
         <div class="card setup-card" style="margin: 0; max-height: 90vh; overflow-y: auto; animation: splash-fade-up 0.3s ease-out; position: relative;">
             
             <button onclick="document.getElementById('premium-settings-modal').style.display='none';" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #94a3b8; font-size: 28px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
@@ -823,14 +823,14 @@
             <div class="setup-step">
                 <h3>בחירת רקע למערכת</h3>
                 <div class="school-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <label class="option-card" aria-label="רקע יוקרתי" style="border: 2px solid #facc15; background: #020617;">
+                    <label class="option-card" aria-label="רקע יוקרתי" style="border: 2px solid #facc15; background: #020617; color: #fef08a;">
                         <input type="radio" name="vipTheme" value="gold" onchange="selectTheme('gold'); document.getElementById('premium-settings-modal').style.display='none';">
-                        <span class="option-title" style="color: #fef08a;">יוקרתי</span>
+                        <span class="option-title">יוקרתי</span>
                         <span class="option-emoji" aria-hidden="true">💎</span>
                     </label>
-                    <label class="option-card" aria-label="ממשק רגיל" style="background: #ffffff; border: 2px solid #cbd5e1;">
+                    <label class="option-card" aria-label="ממשק רגיל" style="border: 2px solid #cbd5e1;">
                         <input type="radio" name="vipTheme" value="default" onchange="selectTheme('default'); document.getElementById('premium-settings-modal').style.display='none';">
-                        <span class="option-title" style="color: #334155;">רגיל</span>
+                        <span class="option-title">רגיל</span>
                         <span class="option-emoji" aria-hidden="true">☀️</span>
                     </label>
                 </div>
