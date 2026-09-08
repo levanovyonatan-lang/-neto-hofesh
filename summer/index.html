@@ -500,6 +500,30 @@
             <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation"
                 aria-label="בחירת חגים"></div>
             
+            <button class="btn-action" onclick="openCustomCountdownModal()" style="background: rgba(255, 255, 255, 0.15); color: var(--text-color, #1e293b); border: 2px dashed #94a3b8; padding: 12px; margin-top: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; border-radius: 16px; cursor: pointer; transition: all 0.2s ease;">
+                <span style="background: white; color: #475569; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">+</span>
+                הוספת ספירה אישית
+            </button>
+            
+            <div id="custom-countdown-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px); flex-direction: column;" onclick="this.style.display='none'">
+        <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 35px 25px; border-radius: 20px; text-align: center; max-width: 90%; width: 350px; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); border: 2px solid #cbd5e1;" onclick="event.stopPropagation()">
+            <button onclick="document.getElementById('custom-countdown-modal').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
+            <h3 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 1.5rem; font-weight: 900;">הוספת ספירה אישית ✨</h3>
+            
+            <div style="text-align: right; margin-bottom: 15px;">
+                <label for="custom-name" style="display: block; margin-bottom: 5px; font-weight: bold; color: #334155;">שם הספירה (למשל "טסים לחו״ל"):</label>
+                <input type="text" id="custom-name" placeholder="הכנס שם כאן..." style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e1; font-family: inherit; font-size: 1rem;">
+            </div>
+            
+            <div style="text-align: right; margin-bottom: 25px;">
+                <label for="custom-date" style="display: block; margin-bottom: 5px; font-weight: bold; color: #334155;">תאריך היעד:</label>
+                <input type="date" id="custom-date" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e1; font-family: inherit; font-size: 1rem;">
+            </div>
+            
+            <button onclick="saveCustomCountdown()" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; padding: 12px 24px; font-size: 1.1rem; font-weight: 900; border-radius: 12px; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);">שמירה והוספה 🚀</button>
+        </div>
+    </div>
+            
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; margin-top: 15px;">
                 <button class="reset-btn" onclick="resetApp()" style="width: 100%; max-width: 300px;">שינוי הגדרות</button>
                 

@@ -1361,6 +1361,29 @@ function showMainScreen() {
         if (userConfig.schoolType === 'high') return e.type === 'high';
         return false;
     });
+    
+    // Add custom countdowns
+    try {
+        const savedCustoms = localStorage.getItem('neto_customCountdowns');
+        if (savedCustoms) {
+            const customCountdowns = JSON.parse(savedCustoms);
+            customCountdowns.forEach(c => {
+                const cDate = new Date(c.date);
+                if (cDate.getTime() > now) {
+                    activeEventsList.push({
+                        id: c.id,
+                        name: c.name,
+                        date: cDate,
+                        icon: c.icon || '🗓️',
+                        bg: '#f1f5f9',
+                        lengthText: 'ספירה אישית',
+                        isCustom: true
+                    });
+                }
+            });
+        }
+    } catch (e) {}
+
     activeEventsList.sort((a, b) => a.date - b.date);
 
     const activeHolidayFromUrl = window.NETO_ACTIVE_HOLIDAY || getActiveHolidayFromUrlOrWindow();
@@ -1421,8 +1444,86 @@ function renderHolidays() {
 
         card.innerHTML = `<div><b>${ev.name} <span aria-hidden="true">${ev.icon}</span></b><br><small>${subText}</small></div>`;
         card.setAttribute('aria-label', `ספירה לחג ${ev.name}`);
+        
+        // Add delete button if it's a custom countdown
+        if (ev.isCustom) {
+            const delBtn = document.createElement('span');
+            delBtn.innerHTML = '🗑️';
+            delBtn.style.cssText = 'position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 16px; cursor: pointer; padding: 5px;';
+            delBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (confirm('למחוק את הספירה האישית הזו?')) {
+                    deleteCustomCountdown(ev.id);
+                }
+            };
+            card.style.position = 'relative';
+            card.appendChild(delBtn);
+        }
+        
         container.appendChild(card);
     });
+}
+
+function openCustomCountdownModal() {
+    document.getElementById('custom-name').value = '';
+    document.getElementById('custom-date').value = '';
+    document.getElementById('custom-countdown-modal').style.display = 'flex';
+}
+
+function saveCustomCountdown() {
+    const name = document.getElementById('custom-name').value.trim();
+    const dateStr = document.getElementById('custom-date').value;
+    
+    if (!name || !dateStr) {
+        alert('יש להזין שם ותאריך לספירה האישית.');
+        return;
+    }
+    
+    const targetDate = new Date(dateStr);
+    targetDate.setHours(8, 15, 0, 0); // Default to morning time
+    
+    if (targetDate.getTime() <= Date.now()) {
+        alert('יש לבחור תאריך עתידי.');
+        return;
+    }
+    
+    let customCountdowns = [];
+    try {
+        const saved = localStorage.getItem('neto_customCountdowns');
+        if (saved) customCountdowns = JSON.parse(saved);
+    } catch (e) {}
+    
+    const newCustom = {
+        id: 'custom_' + Date.now(),
+        name: name,
+        date: targetDate.toISOString(),
+        icon: '🗓️'
+    };
+    
+    customCountdowns.push(newCustom);
+    localStorage.setItem('neto_customCountdowns', JSON.stringify(customCountdowns));
+    
+    document.getElementById('custom-countdown-modal').style.display = 'none';
+    
+    // Refresh the UI to show the new countdown
+    userConfig.targetIntent = newCustom.id;
+    showMainScreen();
+}
+
+function deleteCustomCountdown(id) {
+    try {
+        const saved = localStorage.getItem('neto_customCountdowns');
+        if (saved) {
+            let customCountdowns = JSON.parse(saved);
+            customCountdowns = customCountdowns.filter(c => c.id !== id);
+            localStorage.setItem('neto_customCountdowns', JSON.stringify(customCountdowns));
+            
+            if (userConfig.activeTargetId === id) {
+                userConfig.targetIntent = 'next';
+            }
+            showMainScreen();
+        }
+    } catch (e) {}
 }
 
 function selectTarget(id, shouldScroll = true) {
