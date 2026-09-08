@@ -416,12 +416,12 @@
             <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation"
                 aria-label="בחירת חגים"></div>
             
-            <button id="custom-countdown-btn" class="btn-action" onclick="openCustomCountdownModal()" style="display: none; background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%); color: #451a03; border: none; padding: 16px; margin-top: 20px; font-weight: 900; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; border-radius: 16px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); font-size: 1.1rem; text-shadow: 0 1px 1px rgba(255,255,255,0.4); animation: pulsePremium 2s infinite;">
+            <button id="custom-countdown-btn" class="btn-action" onclick="openCustomCountdownModal()" style="display: none; background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%); color: #451a03; border: none; padding: 16px; margin-top: 20px; font-weight: 900; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; border-radius: 16px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); font-size: 1.1rem; text-shadow: 0 1px 1px rgba(255,255,255,0.4); animation: pulsePremium 2s infinite; direction: rtl;">
                 <span style="background: rgba(255,255,255,0.4); color: #451a03; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">+</span>
-                הוספת ספירה אישית 👑
+                <span>הוספת ספירה אישית</span>
             </button>
             
-            <div id="custom-countdown-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px); flex-direction: column;" onclick="this.style.display='none'">
+            <div id="custom-countdown-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px); flex-direction: column;" onclick="this.style.display='none'">
         <div style="background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); padding: 35px 25px; border-radius: 20px; text-align: center; max-width: 90%; width: 350px; position: relative; box-shadow: 0 10px 40px rgba(245, 158, 11, 0.2); border: 2px solid #f59e0b;" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('custom-countdown-modal').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: #94a3b8; font-size: 24px; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1;">&times;</button>
             <h3 style="color: #fef08a; margin-top: 0; margin-bottom: 20px; font-size: 1.5rem; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">הוספת ספירה אישית 👑</h3>
@@ -445,8 +445,8 @@
                 
                 <!-- Premium Theme Selector (VIP) -->
                 <div id="premium-theme-selector" style="display: none; width: 100%; max-width: 300px;">
-                    <button class="btn-action" onclick="openVipScreen();" style="background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #020617; font-weight: 900; border: none; padding: 12px 24px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4); width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-                        <span>👑</span> הגדרות VIP
+                    <button class="btn-action" onclick="openVipScreen();" style="background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #020617; font-weight: 900; border: none; padding: 12px 24px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4); width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; direction: rtl;">
+                        <span>👑</span> <span>הגדרות VIP</span>
                     </button>
                 </div>
             </div>
