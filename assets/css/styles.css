@@ -1585,3 +1585,5 @@ body.theme-gold .vip-btn-regular {
 body.theme-gold .vip-save-btn {
     background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #020617; box-shadow: 0 15px 35px rgba(217, 119, 6, 0.5);
 }
+
+body.premium-active #custom-countdown-btn { display: flex !important; }

@@ -1365,7 +1365,7 @@ function showMainScreen() {
     // Add custom countdowns
     try {
         const savedCustoms = localStorage.getItem('neto_customCountdowns');
-        if (savedCustoms) {
+        if (savedCustoms && document.body.classList.contains('premium-active')) {
             const customCountdowns = JSON.parse(savedCustoms);
             customCountdowns.forEach(c => {
                 const cDate = new Date(c.date);
