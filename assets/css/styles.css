@@ -1229,8 +1229,13 @@ body.theme-gold .setup-step {
     background: rgba(15, 23, 42, 0.6) !important;
     backdrop-filter: blur(16px) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
     border-radius: 24px !important;
+}
+body.theme-gold .setup-step h3,
+body.theme-gold .setup-step .toggle-title {
+    color: #ffffff !important;
 }
 
 body.theme-gold .toggle-container {
@@ -1303,12 +1308,6 @@ body.theme-gold .contact-area a {
     color: #ffffff !important;
 }
 
-/* Dino game text in premium */
-body.theme-gold #dino-score-val,
-body.theme-gold .dino-score-text {
-    color: #ffffff !important;
-}
-
 body.theme-gold h1, body.theme-gold .countdown-item span { 
     background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c) !important;
     -webkit-background-clip: text !important;
@@ -1328,10 +1327,6 @@ body.theme-gold .app-container h3,
 body.theme-gold .app-container h4,
 body.theme-gold .app-container p,
 body.theme-gold .app-container .seo-faq-content p,
-body.theme-gold .app-container .demo-buttons-title,
-body.theme-gold #dino-ui-overlay div,
-body.theme-gold #dino-ui-overlay span,
-body.theme-gold .dino-stat-label,
-body.theme-gold .dino-stat-value {
+body.theme-gold .app-container .demo-buttons-title {
     color: #fef08a !important;
 }
