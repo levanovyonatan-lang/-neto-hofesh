@@ -988,22 +988,22 @@
         </div>
     </div>
     
-    <div id="custom-countdown-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0f172a; z-index: 10000; align-items: center; justify-content: center; flex-direction: column;" onclick="this.style.display='none'">
-        <div style="box-sizing: border-box; background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); padding: 40px 25px; text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative;" onclick="event.stopPropagation()">
+    <div id="custom-countdown-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px); flex-direction: column;" onclick="this.style.display='none'">
+        <div style="box-sizing: border-box; background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); padding: 35px 25px; border-radius: 20px; text-align: center; max-width: 90%; width: 350px; position: relative; box-shadow: 0 10px 40px rgba(245, 158, 11, 0.2); border: 2px solid #f59e0b;" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('custom-countdown-modal').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: #94a3b8; font-size: 24px; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1;">&times;</button>
             <h3 style="color: #fef08a; margin-top: 0; margin-bottom: 20px; font-size: 1.5rem; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">הוספת ספירה אישית 👑</h3>
             
-            <div style="text-align: right; margin-bottom: 15px; width: 100%; max-width: 400px;">
+            <div style="text-align: right; margin-bottom: 15px;">
                 <label for="custom-name" style="display: block; margin-bottom: 5px; font-weight: bold; color: #e2e8f0;">שם הספירה (למשל "טסים לחו״ל"):</label>
                 <input type="text" id="custom-name" placeholder="הכנס שם כאן..." style="box-sizing: border-box; display: block; width: 100%; height: 48px; padding: 0 12px; border-radius: 12px; border: 1px solid #475569; background: rgba(255,255,255,0.05); color: white; font-family: inherit; font-size: 1rem; transition: all 0.2s; -webkit-appearance: none; appearance: none; margin: 0;">
             </div>
             
-            <div style="text-align: right; margin-bottom: 25px; width: 100%; max-width: 400px;">
+            <div style="text-align: right; margin-bottom: 25px;">
                 <label for="custom-date" style="display: block; margin-bottom: 5px; font-weight: bold; color: #e2e8f0;">תאריך היעד:</label>
                 <input type="date" id="custom-date" style="box-sizing: border-box; display: block; width: 100%; height: 48px; padding: 0 12px; border-radius: 12px; border: 1px solid #475569; background: rgba(255,255,255,0.05); color: white; font-family: inherit; font-size: 1rem; transition: all 0.2s; -webkit-appearance: none; appearance: none; margin: 0;">
             </div>
             
-            <button onclick="saveCustomCountdown()" style="box-sizing: border-box; display: block; width: 100%; max-width: 400px; height: 48px; background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%); color: #451a03; border: none; font-size: 1.1rem; font-weight: 900; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); text-shadow: 0 1px 1px rgba(255,255,255,0.4); transition: transform 0.2s; margin: 0;">שמירה והוספה 🚀</button>
+            <button onclick="saveCustomCountdown()" style="box-sizing: border-box; display: block; width: 100%; height: 48px; background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%); color: #451a03; border: none; font-size: 1.1rem; font-weight: 900; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); text-shadow: 0 1px 1px rgba(255,255,255,0.4); transition: transform 0.2s; margin: 0;">שמירה והוספה 🚀</button>
         </div>
     </div>
 </body>
