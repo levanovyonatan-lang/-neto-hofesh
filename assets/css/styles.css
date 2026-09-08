@@ -1337,3 +1337,12 @@ body.premium-active #dino-score-val + div { color: #3b82f6 !important; }
 /* FAQ Answer Text Color Fix */
 .seo-faq-answer { color: #000 !important; }
 
+
+
+body.vip-page-active {
+    background: #020617;
+    background-image: radial-gradient(circle at top right, rgba(217, 119, 6, 0.25), transparent 50%), radial-gradient(circle at bottom left, rgba(217, 119, 6, 0.15), transparent 50%);
+}
+body.vip-page-active .sun-background {
+    display: none !important;
+}

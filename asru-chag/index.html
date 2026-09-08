@@ -489,7 +489,7 @@
                 
                 <!-- Premium Theme Selector (VIP) -->
                 <div id="premium-theme-selector" style="display: none; width: 100%; max-width: 300px;">
-                    <button class="btn-action" onclick="document.getElementById('premium-settings-modal').style.display='flex';" style="background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #020617; font-weight: 900; border: none; padding: 12px 24px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4); width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                    <button class="btn-action" onclick="openVipScreen();" style="background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #020617; font-weight: 900; border: none; padding: 12px 24px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4); width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
                         <span>👑</span> הגדרות VIP
                     </button>
                 </div>
@@ -643,6 +643,54 @@
             </footer>
         </div>
     </main>
+
+    <!-- VIP Settings Screen (acts as a completely new page) -->
+    <main class="app-container" id="vip-screen" style="display: none;">
+        <div class="card setup-card" style="margin: 20px auto; max-height: none; overflow: visible; animation: splash-fade-up 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+            
+            <button onclick="closeVipScreen();" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #94a3b8; font-size: 28px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
+            
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="font-size: 1.8rem; color: #d97706; font-weight: 900; margin: 0; text-shadow: 0 2px 4px rgba(217,119,6,0.1);">👑 הגדרות VIP 👑</h2>
+                <p style="color: var(--text-muted); font-size: 1rem; margin-top: 5px;">אזור אישי למשתמשי פרימיום</p>
+            </div>
+            
+            <div class="setup-step">
+                <h3>בחירת רקע למערכת</h3>
+                <div class="school-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <label class="option-card" aria-label="רקע יוקרתי" style="border: 2px solid #facc15; background: #020617; color: #fef08a;">
+                        <input type="radio" name="vipTheme" value="gold" onchange="selectTheme('gold'); closeVipScreen();">
+                        <span class="option-title">יוקרתי</span>
+                        <span class="option-emoji" aria-hidden="true">💎</span>
+                    </label>
+                    <label class="option-card" aria-label="ממשק רגיל" style="border: 2px solid #cbd5e1;">
+                        <input type="radio" name="vipTheme" value="default" onchange="selectTheme('default'); closeVipScreen();">
+                        <span class="option-title">רגיל</span>
+                        <span class="option-emoji" aria-hidden="true">☀️</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Future premium settings will go here -->
+
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 25px;">
+                <button class="reset-btn" onclick="closeVipScreen();" style="width: 100%;">סיום ושמירה 👑</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function openVipScreen() {
+            document.getElementById('main-screen').style.display = 'none';
+            document.getElementById('vip-screen').style.display = 'flex';
+            document.body.classList.add('vip-page-active');
+        }
+        function closeVipScreen() {
+            document.getElementById('vip-screen').style.display = 'none';
+            document.getElementById('main-screen').style.display = 'flex';
+            document.body.classList.remove('vip-page-active');
+        }
+    </script>
 
 
 
@@ -877,44 +925,6 @@
         </a>
     </div>
 
-    <!-- Premium Settings Modal / Page -->
-    <div id="premium-settings-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 100000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
-        
-        <!-- Oversized background layer to prevent iOS Safari bottom gaps and rubber-band issues -->
-        <div style="position: absolute; top: -30vh; bottom: -30vh; left: -30vw; right: -30vw; background: #020617; background-image: radial-gradient(circle at top right, rgba(217, 119, 6, 0.25), transparent 50%), radial-gradient(circle at bottom left, rgba(217, 119, 6, 0.15), transparent 50%); z-index: -1;"></div>
-        
-        <div class="card setup-card" style="margin: 0; max-height: 90vh; overflow-y: auto; animation: splash-fade-up 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
-            
-            <button onclick="document.getElementById('premium-settings-modal').style.display='none';" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #94a3b8; font-size: 28px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
-            
-            <div style="text-align: center; margin-bottom: 25px;">
-                <h2 style="font-size: 1.8rem; color: #d97706; font-weight: 900; margin: 0; text-shadow: 0 2px 4px rgba(217,119,6,0.1);">👑 הגדרות VIP 👑</h2>
-                <p style="color: var(--text-muted); font-size: 1rem; margin-top: 5px;">אזור אישי למשתמשי פרימיום</p>
-            </div>
-            
-            <div class="setup-step">
-                <h3>בחירת רקע למערכת</h3>
-                <div class="school-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <label class="option-card" aria-label="רקע יוקרתי" style="border: 2px solid #facc15; background: #020617; color: #fef08a;">
-                        <input type="radio" name="vipTheme" value="gold" onchange="selectTheme('gold'); document.getElementById('premium-settings-modal').style.display='none';">
-                        <span class="option-title">יוקרתי</span>
-                        <span class="option-emoji" aria-hidden="true">💎</span>
-                    </label>
-                    <label class="option-card" aria-label="ממשק רגיל" style="border: 2px solid #cbd5e1;">
-                        <input type="radio" name="vipTheme" value="default" onchange="selectTheme('default'); document.getElementById('premium-settings-modal').style.display='none';">
-                        <span class="option-title">רגיל</span>
-                        <span class="option-emoji" aria-hidden="true">☀️</span>
-                    </label>
-                </div>
-            </div>
-            
-            <!-- Future premium settings will go here -->
-
-            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 25px;">
-                <button class="reset-btn" onclick="document.getElementById('premium-settings-modal').style.display='none';" style="width: 100%;">סיום ושמירה 👑</button>
-            </div>
-        </div>
-    </div>
 
     <script src="tips.js?v=tips-file-v2" defer></script>
     <script src="../assets/js/app.js?v=4232" defer></script>
