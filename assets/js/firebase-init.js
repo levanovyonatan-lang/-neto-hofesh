@@ -140,12 +140,15 @@ onAuthStateChanged(auth, async (user) => {
                     }
                     localStorage.setItem('forceSync_v1', 'true');
                 }
-                if (window.location.search.includes('demo_premium=1') && window.currentUserProfile) {
+                if (window.location.search.includes('demo_premium=1')) {
+                    if (!window.currentUserProfile) window.currentUserProfile = {};
                     window.currentUserProfile.isPremium = true;
                     if(!window.currentUserProfile.customBio) window.currentUserProfile.customBio = "מצב דמו פרימיום 👑";
                 }
                 if (window.currentUserProfile && window.currentUserProfile.isPremium) {
                     document.body.classList.add('premium-active');
+                    const premiumSelector = document.getElementById('premium-theme-selector');
+                    if (premiumSelector) premiumSelector.style.display = 'block';
                 }
                 
                 console.log("Welcome back, ", window.currentUserProfile.nickname);
@@ -200,12 +203,15 @@ onAuthStateChanged(auth, async (user) => {
             console.error("Error fetching local profile:", error);
             window.currentUserProfile = null;
         }
-        if (window.location.search.includes('demo_premium=1') && window.currentUserProfile) {
+        if (window.location.search.includes('demo_premium=1')) {
+            if (!window.currentUserProfile) window.currentUserProfile = {};
             window.currentUserProfile.isPremium = true;
             if(!window.currentUserProfile.customBio) window.currentUserProfile.customBio = "מצב דמו פרימיום 👑";
         }
         if (window.currentUserProfile && window.currentUserProfile.isPremium) {
             document.body.classList.add('premium-active');
+            const premiumSelector = document.getElementById('premium-theme-selector');
+            if (premiumSelector) premiumSelector.style.display = 'block';
         }
 
         if (window.updateLeaderboardUI) window.updateLeaderboardUI();

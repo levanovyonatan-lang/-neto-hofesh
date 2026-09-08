@@ -1205,6 +1205,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const demoTheme = localStorage.getItem('demo_theme') || 'gold';
             window.applyTheme(demoTheme);
             document.body.classList.add('premium-active');
+            const premiumSelector = document.getElementById('premium-theme-selector');
+            if (premiumSelector) premiumSelector.style.display = 'block';
+            
             if (window.triggerPremiumUnboxing && !sessionStorage.getItem('demo_unboxed')) {
                 window.triggerPremiumUnboxing();
                 sessionStorage.setItem('demo_unboxed', '1');
@@ -1212,6 +1215,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme) {
             window.applyTheme(window.currentUserProfile.theme);
             document.body.classList.add('premium-active');
+            const premiumSelector = document.getElementById('premium-theme-selector');
+            if (premiumSelector) premiumSelector.style.display = 'block';
         }
     }, 1500); // give time for auth to load
 });
