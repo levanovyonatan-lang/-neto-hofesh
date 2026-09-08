@@ -209,7 +209,7 @@
 
             score = 0;
             currentStageIndex = 0;
-            gameContainer.style.background = '';
+            gameContainer.style.removeProperty('background');
             gameContainer.style.animation = 'none';
             document.getElementById('dino-score-val').textContent = '0';
             isGameOver = false;
@@ -575,7 +575,7 @@
             currentStageIndex = nextStageIndex;
             const newStage = STAGES[currentStageIndex];
             
-            gameContainer.style.background = newStage.bg;
+            gameContainer.style.setProperty('background', newStage.bg, 'important');
             gameContainer.style.transition = 'background 2s ease, height 0.4s ease';
             
             if (currentStageIndex === 9) { // Stage 10: Principal
@@ -1154,7 +1154,7 @@
 
         gameContainer.style.transition = '';
         gameContainer.style.height = '200px'; // Lock before restore
-        gameContainer.style.background = '';
+        gameContainer.style.removeProperty('background');
         
         const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
         hiddenEls.forEach(el => {
@@ -1317,7 +1317,7 @@
         }
 
         const stageObj = STAGES[currentStageIndex] || STAGES[0];
-        gameContainer.style.background = stageObj.bg;
+        gameContainer.style.setProperty('background', stageObj.bg, 'important');
         dino.innerHTML = `<span class="dino-inner">${stageObj.dinoEmoji || '🦖'}</span>`;
         dino.style.filter = stageObj.dinoFilter || 'none';
         dino.style.opacity = stageObj.dinoOpacity || '1';
