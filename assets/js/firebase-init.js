@@ -405,7 +405,7 @@ window.getTopDinoScores = async (type = 'monthly') => {
         return leaderboard;
     } catch (error) {
         console.error("Error fetching leaderboard:", error);
-        return [];
+        return [{ isError: true, message: error.message }];
     }
 };
 

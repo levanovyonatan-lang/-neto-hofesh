@@ -553,6 +553,11 @@ window.showLeaderboard = async function(score, stage, killer, isTabSwitch = fals
         const listEl = document.getElementById('lb-list');
         listEl.innerHTML = '';
         
+        if(scores.length > 0 && scores[0].isError) {
+            listEl.innerHTML = `<div style="text-align: center; padding: 20px; color: #ef4444; direction: ltr;">${scores[0].message}</div>`;
+            return;
+        }
+
         if(scores.length === 0) {
             listEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #94a3b8;">אין עדיין שיאים בטבלה. תהיה הראשון!</div>';
             return;
