@@ -1637,27 +1637,4 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
     backdrop-filter: blur(4px);
 }
 
-/* VIP Premium mode for custom countdown btn */
-body.theme-gold #custom-countdown-btn,
-body.premium-active #custom-countdown-btn {
-    background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%); 
-    color: #451a03; 
-    border: none;
-    padding: 16px;
-    margin-top: 20px;
-    font-size: 1.1rem;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); 
-    text-shadow: 0 1px 1px rgba(255,255,255,0.4); 
-    animation: pulsePremium 2s infinite;
-}
-
-body.theme-gold #custom-countdown-btn span:first-child,
-body.premium-active #custom-countdown-btn span:first-child {
-    background: rgba(255,255,255,0.4); 
-    color: #451a03; 
-    width: 28px;
-    height: 28px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
 @keyframes pulsePremium { 0% { transform: scale(1); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); } 50% { transform: scale(1.02); box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6); } 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); } }
