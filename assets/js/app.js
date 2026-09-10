@@ -1449,6 +1449,16 @@ function renderHolidays() {
 function openCustomCountdownModal() {
     document.getElementById('custom-name').value = '';
     document.getElementById('custom-date').value = '';
+    
+    const timeInput = document.getElementById('custom-time');
+    if(timeInput) timeInput.value = '';
+    
+    const emojiWrap = document.getElementById('custom-emoji-grid-wrap');
+    if(emojiWrap) emojiWrap.style.display = 'none';
+    
+    if(window.renderEmojiGrid) {
+        window.renderEmojiGrid('custom-emoji-grid', 'custom-emoji');
+    }
     document.getElementById('custom-countdown-modal').style.display = 'flex';
 }
 
@@ -1456,16 +1466,27 @@ function saveCustomCountdown() {
     const name = document.getElementById('custom-name').value.trim();
     const dateStr = document.getElementById('custom-date').value;
     
+    const timeInput = document.getElementById('custom-time');
+    const timeStr = timeInput ? timeInput.value : '';
+    
+    const emojiInput = document.getElementById('custom-emoji');
+    const emojiStr = emojiInput ? emojiInput.value : '📅';
+    
     if (!name || !dateStr) {
         alert('יש להזין שם ותאריך לספירה האישית.');
         return;
     }
     
     const targetDate = new Date(dateStr);
-    targetDate.setHours(8, 15, 0, 0); // Default to morning time
+    if (timeStr) {
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        targetDate.setHours(hours, minutes, 0, 0);
+    } else {
+        targetDate.setHours(8, 15, 0, 0); // Default to morning time
+    }
     
     if (targetDate.getTime() <= Date.now()) {
-        alert('יש לבחור תאריך עתידי.');
+        alert('יש לבחור תאריך/שעה בעתיד.');
         return;
     }
     
@@ -1479,7 +1500,7 @@ function saveCustomCountdown() {
         id: 'custom_' + Date.now(),
         name: name,
         date: targetDate.toISOString(),
-        icon: '🗓️'
+        icon: emojiStr
     };
     
     customCountdowns.push(newCustom);
