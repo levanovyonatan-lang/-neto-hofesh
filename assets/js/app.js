@@ -1636,10 +1636,24 @@ function updateDashboard() {
             setDomText('abs-secs', String(Math.floor((diff % 60000) / 1000)).padStart(2, '0'));
         }
         if (!isAnimatingNetDays) {
-            if (event.isHappeningNow) {
+            if (event.isCustom) {
+                setDomText('main-net-days', Math.floor(diff / 86400000));
+                setDomText('net-days-prefix', "זמן שנותר:");
+                setDomText('net-days-suffix', "ימים!");
+                const el = document.getElementById('excluding-label');
+                if (el) el.style.display = 'none';
+            } else if (event.isHappeningNow) {
                 setDomText('main-net-days', Math.ceil(diff / 86400000));
+                setDomText('net-days-prefix', "נשארו רק:");
+                setDomText('net-days-suffix', "ימי חופש נטו!");
+                const el = document.getElementById('excluding-label');
+                if (el) el.style.display = 'block';
             } else {
                 setDomText('main-net-days', calculateNetDays(event.date, event.noFriday, event.id));
+                setDomText('net-days-prefix', "נשארו רק:");
+                setDomText('net-days-suffix', "ימי לימוד נטו!");
+                const el = document.getElementById('excluding-label');
+                if (el) el.style.display = 'block';
             }
         }
     }
