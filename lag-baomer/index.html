@@ -1009,16 +1009,11 @@
             </div>
 
             <div style="text-align: right; margin-bottom: 25px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #e2e8f0;">אימוג'י לאירוע:</label>
-                <div id="emoji-picker-container" style="display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; direction: ltr;">
-                    <button class="emoji-btn selected" data-emoji="📅" onclick="selectEmoji(this)" style="background: rgba(255,255,255,0.1); border: 2px solid #fef08a; border-radius: 12px; font-size: 24px; padding: 5px; cursor: pointer;">📅</button>
-                    <button class="emoji-btn" data-emoji="🎉" onclick="selectEmoji(this)" style="background: rgba(255,255,255,0.05); border: 2px solid transparent; border-radius: 12px; font-size: 24px; padding: 5px; cursor: pointer;">🎉</button>
-                    <button class="emoji-btn" data-emoji="🎂" onclick="selectEmoji(this)" style="background: rgba(255,255,255,0.05); border: 2px solid transparent; border-radius: 12px; font-size: 24px; padding: 5px; cursor: pointer;">🎂</button>
-                    <button class="emoji-btn" data-emoji="✈️" onclick="selectEmoji(this)" style="background: rgba(255,255,255,0.05); border: 2px solid transparent; border-radius: 12px; font-size: 24px; padding: 5px; cursor: pointer;">✈️</button>
-                    <button class="emoji-btn" data-emoji="🎓" onclick="selectEmoji(this)" style="background: rgba(255,255,255,0.05); border: 2px solid transparent; border-radius: 12px; font-size: 24px; padding: 5px; cursor: pointer;">🎓</button>
-                    <button class="emoji-btn" data-emoji="❤️" onclick="selectEmoji(this)" style="background: rgba(255,255,255,0.05); border: 2px solid transparent; border-radius: 12px; font-size: 24px; padding: 5px; cursor: pointer;">❤️</button>
-                    <button class="emoji-btn" data-emoji="💍" onclick="selectEmoji(this)" style="background: rgba(255,255,255,0.05); border: 2px solid transparent; border-radius: 12px; font-size: 24px; padding: 5px; cursor: pointer;">💍</button>
-                    <button class="emoji-btn" data-emoji="🏆" onclick="selectEmoji(this)" style="background: rgba(255,255,255,0.05); border: 2px solid transparent; border-radius: 12px; font-size: 24px; padding: 5px; cursor: pointer;">🏆</button>
+                <button type="button" onclick="const g = document.getElementById('custom-emoji-grid-wrap'); g.style.display = g.style.display === 'none' ? 'block' : 'none';" style="background: rgba(255,255,255,0.1); border: 1px solid #475569; color: #e2e8f0; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: bold; margin-bottom: 10px; transition: all 0.2s;">
+                    + הוספת אימוג'י (לא חובה) 😊
+                </button>
+                <div id="custom-emoji-grid-wrap" style="display: none; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px; margin-bottom: 10px;">
+                    <div class="emoji-grid" id="custom-emoji-grid" style="max-height: 150px; overflow-y: auto; direction: ltr;"></div>
                 </div>
                 <input type="hidden" id="custom-emoji" value="📅">
             </div>
