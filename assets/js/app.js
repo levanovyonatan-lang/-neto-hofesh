@@ -1,4 +1,4 @@
-﻿const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
+const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
 const tipsDataVersion = 'tips-file-v2';
 const dailyTipsStorageKey = `holiday_calc_daily_tips_${tipsDataVersion}`;
 const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
@@ -1347,7 +1347,7 @@ function showMainScreen() {
     // Add custom countdowns
     try {
         const savedCustoms = localStorage.getItem('neto_customCountdowns');
-        if (savedCustoms && document.body.classList.contains('premium-active')) {
+        if (savedCustoms) {
             const customCountdowns = JSON.parse(savedCustoms);
             customCountdowns.forEach(c => {
                 const cDate = new Date(c.date);
