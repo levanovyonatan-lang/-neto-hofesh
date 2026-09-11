@@ -486,7 +486,7 @@ async function loadDailyTipsDatabase() {
     if (dailyTipsPromise) return dailyTipsPromise;
 
     // Use absolute URL from origin to avoid 404s on subpages
-    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10146';
+    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10147';
 
     dailyTipsPromise = fetch(fetchUrl)
         .then(response => {
