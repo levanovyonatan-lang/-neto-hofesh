@@ -56,7 +56,9 @@
             ctx.direction = /[\u0590-\u05ff]/.test(text) ? 'rtl' : 'ltr'; ctx.fillText(text, x, y);
         }
         function repeat(period, speed, paint) {
-            const offset = distance * speed % period;
+            // Give wall text time to be read while keeping the pavement at running speed.
+            const readingPace = speed < 1 ? 0.22 : 1;
+            const offset = distance * speed * readingPace % period;
             for (let x = offset - period; x < width + period; x += period) paint(x);
         }
         function windowPane(x, y, w = 85, h = 96) {
