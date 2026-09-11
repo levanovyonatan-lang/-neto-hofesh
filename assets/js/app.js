@@ -486,7 +486,7 @@ async function loadDailyTipsDatabase() {
     if (dailyTipsPromise) return dailyTipsPromise;
 
     // Use absolute URL from origin to avoid 404s on subpages
-    const urlParams = new URLSearchParams(window.location.search); const isDemo = urlParams.get('show_demo') === 'true' || window.location.hostname.includes('github.io'); const fileName = isDemo ? 'daily-tips-demo.json' : 'daily-tips.json'; const fetchUrl = window.location.origin + '/assets/data/' + fileName + '?v=10151';
+    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10152';
 
     dailyTipsPromise = fetch(fetchUrl)
         .then(response => {
