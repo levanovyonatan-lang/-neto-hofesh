@@ -95,6 +95,14 @@
     const GAME_SPEED_START = 5.0;
     const TARGET_MS_PER_FRAME = 1000 / 60; // 16.67ms — game is designed for 60fps
     const urlParams = new URLSearchParams(window.location.search);
+    const demoArtEnabled = urlParams.get('show_demo') === 'true';
+    const demoArtReady = demoArtEnabled ? new Promise(resolve => {
+        const script = document.createElement('script');
+        script.src = new URL('dino-school-art.js?v=1', document.currentScript.src).href;
+        script.onload = script.onerror = resolve;
+        document.head.appendChild(script);
+    }) : null;
+    let scenery = null;
     const isGodMode = false; // Disabled so you can actually lose and see jokes!
     
     let isGameActive = false;
@@ -126,6 +134,7 @@
 
     function announceStage(stageIndex) {
         const stage = STAGES[stageIndex];
+        if (scenery) scenery.setStage(stageIndex);
         
         const isCollecting = stage.bonusChance > 0;
         if (isCollecting && stage.objective) {
@@ -143,6 +152,7 @@
         
         const stageTxt = document.createElement('div');
         stageTxt.className = 'dino-element';
+        if (scenery) stageTxt.classList.add('dino-art-announcement');
         stageTxt.textContent = stage.title;
         stageTxt.style.position = 'absolute';
         stageTxt.style.top = '40px';
@@ -164,7 +174,8 @@
         }, 4500);
     }
 
-    function startGame() {
+    async function startGame() {
+        if (demoArtReady) await demoArtReady;
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
         let isElem = false;
@@ -408,6 +419,18 @@
         isJumping = false;
 
         // Controls
+        if (demoArtEnabled && window.DinoSchoolArt) {
+            scenery = window.DinoSchoolArt.create(gameContainer);
+            scoreDisplay.classList.add('dino-art-score');
+            closeBtn.classList.add('dino-art-close');
+            closeBtn.setAttribute('role', 'button');
+            closeBtn.setAttribute('aria-label', 'סגירת המשחק');
+            closeBtn.tabIndex = 0;
+            closeBtn.onkeydown = e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); cleanupGame(); }
+            };
+            groundLine.style.visibility = 'hidden';
+        }
         window.addEventListener('keydown', handleInput);
         window.addEventListener('touchstart', handleInput, {passive: false});
         gameContainer.addEventListener('mousedown', handleInput);
@@ -502,6 +525,7 @@
         }
 
         el.textContent = emoji;
+        if (scenery && isCloud) el.style.visibility = 'hidden';
         el.style.position = 'absolute';
         el.style.bottom = bottom;
         el.style.right = '100%';
@@ -529,6 +553,7 @@
         const deltaMs = Math.min(timestamp - lastFrameTime, 50); // cap at 50ms to avoid huge jumps
         lastFrameTime = timestamp;
         const timeScale = deltaMs / TARGET_MS_PER_FRAME; // 1.0 at 60fps, ~0.5 at 120fps
+        if (scenery) scenery.update(gameSpeed, timeScale);
 
         frameCount++;
 
@@ -1129,6 +1154,7 @@
         if (gameSponsorBanner) gameSponsorBanner.style.display = 'none';
         if (objectiveTimeoutId) clearTimeout(objectiveTimeoutId);
         
+        if (scenery) { scenery.destroy(); scenery = null; }
         // Remove dynamic game elements
         const els = gameContainer.querySelectorAll('.dino-element');
         els.forEach(el => el.remove());
