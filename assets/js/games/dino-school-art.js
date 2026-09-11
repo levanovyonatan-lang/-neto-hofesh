@@ -57,7 +57,7 @@
         }
         function repeat(period, speed, paint) {
             // Give wall text time to be read while keeping the pavement at running speed.
-            const readingPace = speed < 1 ? 0.22 : 1;
+            const readingPace = speed < 1 ? 0.55 : 1;
             const offset = distance * speed * readingPace % period;
             for (let x = offset - period; x < width + period; x += period) paint(x);
         }
