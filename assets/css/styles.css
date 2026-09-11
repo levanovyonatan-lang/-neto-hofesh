@@ -247,6 +247,14 @@ input:checked + .smiley-handle::after { content: "☹️"; }
     -webkit-text-fill-color: transparent;
     display: inline-block;
 }
+
+body.demo-preview #main-net-days {
+    background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 6px rgba(37, 99, 235, 0.28));
+}
+
 .absolute-timer {
     display: flex; justify-content: center; gap: 12px; background: rgba(0,0,0,0.04); padding: 16px; border-radius: 22px; margin-top: 18px;
     position: relative; user-select: none; -webkit-user-select: none;
