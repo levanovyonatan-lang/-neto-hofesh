@@ -946,7 +946,6 @@ window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
 
     if (urlParams.get('show_demo') === 'true') {
-        document.body.classList.add('demo-preview');
         document.title = "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש";
         const ogTitle = document.querySelector('meta[property="og:title"]');
         if (ogTitle) ogTitle.setAttribute("content", "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש");
