@@ -221,6 +221,56 @@
                 }
             });
         }
+        function morningStreet() {
+            rect(0, 0, width, 300, '#cce5ed'); circle(width * .78, 92, 23, '#fff0bf');
+            // Distant apartments, street furniture, and pavement scroll at different speeds.
+            repeat(620, .14, x => {
+                for (let b = 0; b < 3; b++) {
+                    const a = x + b * 195, top = 94 + b % 2 * 23;
+                    rect(a + 6, top, 167, 140, ['#ddd8c8', '#d4dcda', '#e4d5c4'][b]);
+                    rect(a, top - 4, 179, 5, '#aeb7b1');
+                    rect(a + 13, top - 14, 19, 10, '#efeee3');
+                    poly([[a + 44, top - 4], [a + 62, top - 18], [a + 79, top - 18], [a + 61, top - 4]], '#738e97');
+                    for (let row = 0; row < 3; row++) for (let col = 0; col < 4; col++) {
+                        const wx = a + 16 + col * 38, wy = top + 13 + row * 34;
+                        rect(wx, wy, 24, 25, '#f1f0e5'); rect(wx + 3, wy + 3, 18, 19, '#86a9b1');
+                        rect(wx + 2, wy + 2, 20, row % 2 ? 9 : 4, '#bbc5c0');
+                        rect(wx + 27, wy + 12, 8, 8, '#f0eee2');
+                    }
+                    rect(a + 67, 204, 38, 30, '#739493');
+                }
+            });
+            rect(0, 227, width, 35, '#a4adae');
+            repeat(125, .25, x => rect(x + 12, 242, 49, 3, '#eeeee0'));
+            repeat(740, .38, x => {
+                // Neighborhood bus shelter with a timetable and a familiar morning complaint.
+                rect(x + 15, 153, 136, 7, '#687f80');
+                rect(x + 22, 160, 4, 97, '#6c8585'); rect(x + 140, 160, 4, 97, '#6c8585');
+                rect(x + 27, 164, 111, 65, '#e5f0e04d');
+                rect(x + 30, 169, 70, 40, '#f7f5e5');
+                label('האוטובוס מגיע', x + 65, 185, '#4b6265', 10);
+                label('כשמפסיקים לחכות', x + 65, 200, '#7e7363', 9);
+                bench(x + 35, 229, '#9baba3');
+                rect(x + 160, 138, 3, 119, '#6c8585'); rect(x + 148, 125, 27, 31, '#dfbb54');
+                rect(x + 153, 131, 17, 13, '#486d86'); rect(x + 155, 133, 13, 5, '#e8f1e9');
+                circle(x + 156, 145, 2, '#3f5762'); circle(x + 167, 145, 2, '#3f5762');
+                rect(x + 148, 161, 27, 21, '#f6f3e5'); label('18', x + 161, 176, '#3f6478', 13);
+                // A small corner shop under a striped awning.
+                rect(x + 273, 162, 127, 96, '#d9ceba'); rect(x + 281, 184, 49, 74, '#6f9698');
+                rect(x + 337, 184, 55, 50, '#8bacac'); rect(x + 340, 187, 49, 44, '#bed6ce');
+                rect(x + 267, 150, 139, 24, '#f3ead3'); label('המכולת של אבי', x + 337, 166, '#4e7467', 14);
+                for (let i = 0; i < 10; i++) rect(x + 267 + i * 14, 175, 14, 10, i % 2 ? '#e4ead5' : '#729689');
+                rect(x + 343, 196, 42, 26, '#f4eedc'); label('שוקו ולחמנייה', x + 364, 207, '#7b7160', 7); label('לפני הצלצול', x + 364, 218, '#7b7160', 7);
+                // Crosswalk is behind the running sidewalk, not an extra collision surface.
+                for (let i = 0; i < 5; i++) poly([[x + 465 + i * 16, 228], [x + 474 + i * 16, 228], [x + 464 + i * 16, 257], [x + 452 + i * 16, 257]], '#edf0e4');
+                rect(x + 560, 164, 3, 93, '#708786'); rect(x + 548, 140, 29, 27, '#487f9d');
+                poly([[x + 562, 144], [x + 552, 161], [x + 572, 161]], '#edf2e8');
+                circle(x + 562, 150, 2, '#52676c'); line([[x + 562, 153], [x + 559, 157], [x + 556, 160]], '#52676c', 1.5);
+                line([[x + 562, 153], [x + 565, 159]], '#52676c', 1.5);
+                rect(x + 665, 192, 7, 64, '#918e71'); circle(x + 668, 163, 32, '#83aa88'); circle(x + 647, 178, 23, '#739c7d');
+                rect(x + 616, 229, 23, 26, '#6a9586'); rect(x + 613, 226, 29, 5, '#527c70');
+            });
+        }
         function outdoors() {
             const trip = stage === 5;
             rect(0, 0, width, 300, palettes[stage][3]); circle(width * .72, 70, 25, '#fff0ba');
@@ -259,7 +309,8 @@
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
             // Keep the floor at the game's original 30px collision baseline.
             ctx.save(); ctx.scale(1, (height - 30) / 270);
-            if (stage === 5 || stage === 11) outdoors(); else interior();
+            if (stage === 0) morningStreet();
+            else if (stage === 5 || stage === 11) outdoors(); else interior();
             rect(0, 260, width, 10, palettes[stage][2]);
             if (stage === 10) { rect(0, 42, width, 218, '#14263855'); }
             if (stage === 9) { rect(0, 42, width, 218, `rgba(199,65,64,${.035 + (Math.sin(clock * .002) + 1) * .025})`); }
@@ -269,6 +320,10 @@
             }
             ctx.restore();
             rect(0, height - 30, width, 30, palettes[stage][2]); rect(0, height - 30, width, 3, '#355b5960');
+            if (stage === 0) {
+                rect(0, height - 30, width, 30, '#d0cec2');
+                repeat(48, 1, x => rect(x, height - 30, 24, 4, '#b76460'));
+            }
             repeat(stage === 4 ? 70 : 95, 1, x => { line([[x, height - 27], [x + 20, height]], '#45696725', 1); });
             line([[0, height - 12], [width, height - 12]], '#ffffff50', 1);
             if (![3, 4, 5, 11].includes(stage)) {
