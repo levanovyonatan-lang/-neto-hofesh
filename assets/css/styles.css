@@ -247,7 +247,6 @@ input:checked + .smiley-handle::after { content: "☹️"; }
     -webkit-text-fill-color: transparent;
     display: inline-block;
 }
-
 .absolute-timer {
     display: flex; justify-content: center; gap: 12px; background: rgba(0,0,0,0.04); padding: 16px; border-radius: 22px; margin-top: 18px;
     position: relative; user-select: none; -webkit-user-select: none;
@@ -346,58 +345,6 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 .ios-modal-content { background: #ffffff; width: 100%; max-width: 380px; padding: 32px 24px; border-radius: 32px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.8); margin: auto; }
 .ios-modal-close { background: #f1f5f9; color: var(--text-main); border: none; padding: 14px 30px; font-weight: 800; border-radius: 16px; font-size: calc(16px * var(--text-scale, 1)); cursor: pointer; width: 100%; transition: background 0.2s; }
 .ios-modal-close:hover { background: #e2e8f0; }
-
-/* --- מודל אירוע אישי --- */
-#custom-countdown-modal {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-    background: rgba(15, 23, 42, 0.75); display: none; justify-content: center; align-items: center; 
-    z-index: 1100; padding: 20px; animation: fadeIn 0.3s ease-out; backdrop-filter: blur(8px);
-}
-.custom-modal-content {
-    background: #ffffff; width: 100%; max-width: 400px; padding: 25px; border-radius: 28px; 
-    text-align: right; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); border: 2px solid #f8fafc;
-    direction: rtl; position: relative;
-}
-.custom-modal-title { font-size: 22px; font-weight: 900; color: #0f172a; margin-bottom: 20px; text-align: center; }
-.custom-input-group { margin-bottom: 16px; }
-.custom-input-group label { display: block; font-weight: 700; color: #475569; margin-bottom: 6px; font-size: 15px; }
-.custom-input-group input { 
-    width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 14px; 
-    font-size: 16px; font-family: 'Rubik', sans-serif; transition: border-color 0.2s; 
-    background: #f8fafc; color: #1e293b;
-}
-.custom-input-group input:focus { border-color: #eab308; outline: none; background: #ffffff; }
-
-.custom-emoji-select-btn {
-    width: 100%; padding: 12px; background: #f1f5f9; border: 2px dashed #cbd5e1; border-radius: 14px;
-    font-size: 24px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center;
-}
-.custom-emoji-select-btn:hover { background: #e2e8f0; border-color: #94a3b8; }
-.custom-emoji-select-btn span { font-size: 15px; font-weight: 700; color: #475569; margin-right: 10px; }
-
-.custom-modal-actions { display: flex; gap: 12px; margin-top: 25px; }
-.btn-custom-save { 
-    flex: 2; background: #0f172a; color: #ffffff; border: none; padding: 14px; 
-    border-radius: 16px; font-weight: 800; font-size: 16px; cursor: pointer; transition: transform 0.2s; 
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
-}
-.btn-custom-save:hover { transform: translateY(-2px); background: #1e293b; }
-.btn-custom-cancel { 
-    flex: 1; background: #f1f5f9; color: #64748b; border: none; padding: 14px; 
-    border-radius: 16px; font-weight: 700; font-size: 16px; cursor: pointer; transition: background 0.2s; 
-}
-.btn-custom-cancel:hover { background: #e2e8f0; color: #334155; }
-
-/* --- כפתור הוספת אירוע אישי --- */
-.btn-custom-add {
-    background: #0f172a; color: white; border: none; padding: 12px 20px; 
-    border-radius: 20px; font-weight: 800; font-size: 16px; cursor: pointer;
-    display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 6px 15px rgba(15, 23, 42, 0.15); margin-top: 10px; direction: rtl;
-}
-.btn-custom-add:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25); background: #1e293b; }
-.btn-custom-add .plus-icon { background: rgba(255,255,255,0.2); border-radius: 50%; width: 24px; height: 24px; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: 900; }
 
 /* --- עיצוב רשתות חברתיות --- */
 .social-banner-container { background: transparent; padding: 10px; margin-top: 10px; text-align: center; }
