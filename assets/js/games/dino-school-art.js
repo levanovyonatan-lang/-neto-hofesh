@@ -25,7 +25,7 @@
         .dino-art-score .dino-score-text { font-size:9px !important; line-height:1.1 !important; }
         .dino-art-active .dino-art-close { top:9px !important; left:10px !important; color:#607b75 !important; width:28px; height:28px; line-height:28px; font-size:17px !important; }
         .dino-art-active .dino-objective { top:12px !important; left:44px !important; transform:none !important; font-size:11px !important; max-width:calc(100% - 162px); line-height:1.3; color:#487565 !important; }
-        .dino-art-active .dino-art-announcement { top:59px !important; width:calc(100% - 24px); max-width:350px; box-sizing:border-box; padding:5px 8px; font-size:13px !important; line-height:1.4; border-radius:4px; background:#f7faf2ed; color:#3c5a54 !important; text-shadow:none !important; animation:none !important; pointer-events:none; }
+        .dino-art-active .dino-art-announcement { top:15px !important; width:auto !important; box-sizing:border-box; padding:6px 18px !important; font-size:16px !important; font-weight:bold; border-radius:20px !important; border:2px solid #a8bda9; background:rgba(247,250,242,0.95) !important; color:#3c5a54 !important; text-shadow:none !important; box-shadow:0 4px 10px rgba(0,0,0,0.05) !important; animation:none !important; pointer-events:none; z-index:40; }
         .dino-art-active #dino-game-over { width:calc(100% - 54px) !important; max-width:320px !important; max-height:184px !important; overflow-y:auto; padding:9px 12px !important; border:1px solid #8caaa0 !important; border-radius:8px !important; background:#263f3df5 !important; gap:4px !important; }
         .dino-art-active #dino-game-over > div:first-child { font-size:13px !important; line-height:1.3 !important; }
         .dino-art-active #dino-game-over > div:last-child { margin-top:4px !important; gap:4px !important; }
@@ -35,9 +35,9 @@
     document.head.appendChild(css);
     let nextScene = Date.now() % 60;
     const wallJokes = [
-        ['האוטובוס? בדרך.', 'עוד חמש דקות...', 'שוקו לפני בוחן', 'רק לא לאחר שוב', 'השיפוץ מסיים י״ב', 'הצלצול לא מחכה', 'התיק ער. אני לא.', 'רצתי. מגיע פטור?', 'הפקק מאחר איתי', 'המיטה קראה לי'],
-        ['זה לבוחן?', 'גם השם שווה נקודות', 'לא למדנו את זה!', 'שאלה קלה. למורה.', 'מותר חבר טלפוני?', 'הטיוטה יותר חכמה', 'השם: 100. השאר: 0', 'יש מועד ג׳?', 'החומר? בקבוצה.', 'מי מחק את התשובה?'],
-        ['תרשום לי? לא.', 'טוסט בלי תור?', 'טרופית של תקווה', 'הבורקס האחרון', 'התור עד המזכירות', 'אין עודף. יש זעתר.', 'הטוסט עוד לומד', 'הקטשופ לא בחינם?', 'מי לקח לי ביס?', 'צלצול? עוד ביס.'],
+        ['האוטובוס? בדרך.', 'עוד חמש דקות...', 'שוקו לפני בוחן', 'רק לא לאחר שוב', 'השיפוץ מסיים י״ב', 'הצלצול לא מחכה', 'התיק ער. אני לא.', 'רצתי. מגיע פטור?', 'הפקק מאחר איתי', 'המיטה קראה לי', 'הכלב אכל לי את השעון מעורר', 'שכחתי את המוח בבית 🧠', 'למה בוקר עכשיו? 😴', 'אני פה פיזית בלבד'],
+        ['זה לבוחן?', 'גם השם שווה נקודות', 'לא למדנו את זה!', 'שאלה קלה. למורה.', 'מותר חבר טלפוני?', 'הטיוטה יותר חכמה', 'השם: 100. השאר: 0', 'יש מועד ג׳?', 'החומר? בקבוצה.', 'מי מחק את התשובה?', 'המורה, אפשר שירותים?', 'מה התשובה ב-4?', 'המחשבון שבת 🧮', 'שכחתי למחוק 🤦‍♂️'],
+        ['תרשום לי? לא.', 'טוסט בלי תור?', 'טרופית של תקווה', 'הבורקס האחרון', 'התור עד המזכירות', 'אין עודף. יש זעתר.', 'הטוסט עוד לומד', 'הקטשופ לא בחינם?', 'מי לקח לי ביס?', 'צלצול? עוד ביס.', 'תביא ביס! 🍕', 'נגמר הברד 😭'],
         ['לא שיעור שחייה', 'מי סגר את הברז?', 'רצפה עם בונוס', 'הברז לקח חופש', 'שחייה בלי הרשמה', 'נא להביא סנפירים', 'גם התיק שותה', 'המסדרון נהר', 'מי הזמין בריכה?', 'המגב ביקש תגבור'],
         ['עוד סיבוב קטן', 'הליכה זה גם ספורט', 'קרוקס לא נחשב', 'מי החביא את הכדור?', 'רצתי לקיוסק. נחשב?', 'הספסל בהרכב', 'חימום? כבר חם.', 'הכדור על הגג שוב', 'מי סופר סיבובים?', 'השרוך ביקש הפסקה'],
         ['עוד חמש דקות...', 'אין כאן קליטה', 'מי הביא רמקול?', 'זה לא קיצור דרך', 'האוטובוס איפה?', 'הסנדוויץ׳ כבר נגמר', 'מי אורז כרית לטיול?', 'עלייה אחרונה. בטח.', 'גם הווייז התעייף', 'המדריך לא מזיע?!'],
@@ -263,9 +263,17 @@
                 if (variant > 1) for (let n = 0; n < 5; n++) triangle(x + 68 + n * 24, 68, 12, 9, n % 2 ? '#c6baa9' : '#b1c8b7');
             }
         }
+        function drawJokeSign(x, y, joke, stageIdx, isOutside) {
+            const signWidth = 140;
+            rect(x, y, signWidth, 24, stageIdx === 10 ? '#425d5a' : '#edf2e5');
+            rect(x, y + 23, signWidth, 2, '#a8bda9');
+            if (isOutside) {
+                rect(x + signWidth / 2 - 3, y + 25, 6, 40, '#a8bda9');
+            }
+            caption(joke, x + signWidth / 2, y + 16, signWidth - 12);
+        }
         function scene(sceneStage, p) {
             rect(0, 0, width, 170, p[0]);
-            if (sceneStage === 0) return;
             if (![0, 5, 11].includes(sceneStage)) rect(0, 136, width, 34, p[1] + '55');
             const scroll = distance * .14, offset = scroll % 450;
             // Tile identity remains stable while it crosses the viewport.
@@ -274,8 +282,17 @@
                 const index = runSeed + sceneStage * 3 + Math.floor(scroll / 450) - tile;
                 const variant = (index % count + count) % count;
                 const detail = (Math.floor(index / count) % 3 + 3) % 3;
-                if ([0, 5, 11].includes(sceneStage)) outside(x, variant, detail, sceneStage);
-                else classroom(x, variant, detail, sceneStage);
+                
+                const jokeIndex = Math.abs(index) % wallJokes[sceneStage].length;
+                const joke = wallJokes[sceneStage][jokeIndex];
+
+                if ([0, 5, 11].includes(sceneStage)) {
+                    outside(x, variant, detail, sceneStage);
+                    if (variant === 1 || variant === 3) drawJokeSign(x + 220, 75, joke, sceneStage, true);
+                } else {
+                    classroom(x, variant, detail, sceneStage);
+                    if (variant === 0 || variant === 2) drawJokeSign(x + 180, 50, joke, sceneStage, false);
+                }
             }
             rect(0, 152, width, 18, p[0] + 'b0');
         }
@@ -295,10 +312,6 @@
             if (!ctx || !width || !height) return;
             const dpr = Math.min(devicePixelRatio || 1, 2), p = colors.map(hex);
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
-            if (stage === 0) {
-                rect(0, 0, width, height, hex(palettes[0][0]));
-                return;
-            }
             // Scale the artwork only. The player's 30px ground baseline is unchanged.
             ctx.save(); ctx.scale(1, (height - 30) / 170);
             scene(stage, p);
@@ -308,12 +321,6 @@
                 scene(previousStage, fromColors.map(hex)); ctx.restore();
                 passage(boundary);
             }
-            // Exactly one readable sign per stage/run, independent of scrolling tiles.
-            const signWidth = Math.min(174, width - 28), signX = (width - signWidth) / 2;
-            rect(signX, 57, signWidth, 24, stage === 10 ? '#425d5a' : '#edf2e5');
-            rect(signX, 80, signWidth, 2, '#a8bda9');
-            const joke = wallJokes[stage][(runSeed + stage * 3) % wallJokes[stage].length];
-            caption(joke, width / 2, 73, signWidth - 12);
             ctx.restore();
             rect(0, height - 30, width, 30, p[2]);
             rect(0, height - 30, width, 1, '#91a89d');
