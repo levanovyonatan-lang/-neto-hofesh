@@ -7,6 +7,9 @@
     // Only run if the demo flag is on
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('show_demo') !== 'true' && urlParams.get('demo_premium') !== '1') return;
+    const celebrationStyle = document.createElement('style');
+    celebrationStyle.textContent = '.main-timer-card.theme-celebration::before { background:rgba(10,22,26,.12);backdrop-filter:none;-webkit-backdrop-filter:none; }';
+    document.head.appendChild(celebrationStyle);
 
     let canvas = null;
     let ctx = null;
@@ -104,18 +107,6 @@
                     y: Math.random() * (height * 0.6),
                     speed: (Math.random() * 0.2 + 0.1),
                     scale: Math.random() * 0.5 + 0.5
-                });
-            }
-        } else if (theme === 'celebration') {
-            // Bokeh Orbs
-            for (let i = 0; i < 30; i++) {
-                particles.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 30 + 10,
-                    speedY: -(Math.random() * 0.5 + 0.2),
-                    hue: Math.random() > 0.5 ? 320 : 40, // Pink or Gold
-                    opacity: Math.random() * 0.3 + 0.1
                 });
             }
         } else if (theme === 'exam') {
@@ -270,58 +261,46 @@
     }
     
     function drawCelebration() {
-        // Deep elegant burgundy/purple background
         const grad = ctx.createLinearGradient(0, 0, width, height);
-        grad.addColorStop(0, '#1e1b4b'); // Deep indigo
-        grad.addColorStop(1, '#4c1d95'); // Deep purple
+        grad.addColorStop(0, '#183b3b');
+        grad.addColorStop(1, '#242933');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
-
-        // Light beams rotating slowly
-        ctx.save();
-        ctx.translate(width / 2, height / 2);
-        ctx.rotate(time * 0.002);
-        for (let i = 0; i < 6; i++) {
-            ctx.rotate((Math.PI * 2) / 6);
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(-width, height * 2);
-            ctx.lineTo(width, height * 2);
-            
-            let beamGrad = ctx.createLinearGradient(0, 0, 0, height * 2);
-            beamGrad.addColorStop(0, 'rgba(255, 215, 0, 0.1)');
-            beamGrad.addColorStop(1, 'rgba(255, 215, 0, 0)');
-            ctx.fillStyle = beamGrad;
-            ctx.fill();
-        }
-        ctx.restore();
-
-        // Elegant floating golden bokeh
-        particles.forEach(p => {
-            p.y -= (Math.abs(p.speedY) * 0.5 + 0.2); // Float up slowly
-            p.x += Math.sin(time * 0.02 + p.hue) * 0.5; // Sway
-            
-            if (p.y < -p.radius * 2) {
-                p.y = height + p.radius * 2;
-                p.x = Math.random() * width;
+        const palette = ['#edb972', '#e8a3b1', '#87d4cd'];
+        // Small celebrations stay at the edges, away from the countdown.
+        for (let burst = 0; burst < 3; burst++) {
+            const phase = ((time + burst * 130) % 420) / 420;
+            const radius = Math.min(width * .18, 78) * (.25 + phase * .75);
+            const alpha = Math.pow(Math.sin(phase * Math.PI), 2) * .65;
+            const cx = width * (burst === 1 ? .93 : .07);
+            const cy = height * [.2, .48, .83][burst];
+            ctx.strokeStyle = palette[burst]; ctx.lineWidth = 1.5;
+            ctx.globalAlpha = alpha;
+            for (let ray = 0; ray < 12; ray++) {
+                const angle = ray * Math.PI / 6 + burst;
+                ctx.beginPath();
+                ctx.moveTo(cx + Math.cos(angle) * radius * .67, cy + Math.sin(angle) * radius * .67);
+                ctx.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+                ctx.stroke();
             }
-            
-            const alpha = 0.3 + Math.sin(time * 0.05 + p.x) * 0.3; // Twinkle
-            
-            // Gold and pinkish-gold
-            const hue = Math.floor(p.hue) % 2 === 0 ? 45 : 35; 
-            
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius * 1.5, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${hue}, 90%, 60%, ${Math.max(0.1, alpha)})`;
-            ctx.fill();
-            
-            // Core glow
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius * 0.5, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${hue}, 100%, 80%, ${Math.max(0.1, alpha + 0.2)})`;
-            ctx.fill();
-        });
+        }
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = '#a9c0b26b';ctx.lineWidth = 1;
+        ctx.beginPath();ctx.moveTo(-10, 8);ctx.quadraticCurveTo(width * .5, 39, width + 10, 8);ctx.stroke();
+        for(let i=0;i<9;i++) {
+            const x = width * (i + .5) / 9;
+            const y = 8 + 15 * Math.sin((i + .5) / 9 * Math.PI);
+            ctx.fillStyle = palette[i % palette.length];ctx.globalAlpha = .6;
+            ctx.beginPath();ctx.moveTo(x-5,y);ctx.lineTo(x+5,y);ctx.lineTo(x,y+10);ctx.closePath();ctx.fill();
+        }
+        for(let i=0;i<18;i++) {
+            const side = i % 2;
+            const x = width * (side ? .9 + (i % 3) * .024 : .04 + (i % 3) * .024) + Math.sin(time * .008 + i) * 4;
+            const y = (i * 53 + time * (.13 + i % 3 * .04)) % (height + 30) - 15;
+            ctx.save();ctx.translate(x,y);ctx.rotate(i + time * .006);
+            ctx.globalAlpha = .48;ctx.fillStyle = palette[i % 3];ctx.fillRect(-1.5,-4,3,8);ctx.restore();
+        }
+        ctx.globalAlpha = 1;
     }
     
     function drawExam() {
