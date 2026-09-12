@@ -30,6 +30,7 @@
         // Create canvas
         canvas = document.createElement('canvas');
         canvas.style.position = 'absolute';
+        canvas.style.display = 'none';
         canvas.style.top = '0';
         canvas.style.left = '0';
         canvas.style.width = '100%';
@@ -80,6 +81,8 @@
     }
     
     function initScene(theme) {
+        // An opaque canvas must not cover ordinary holiday countdowns.
+        canvas.style.display = theme ? 'block' : 'none';
         particles = [];
         time = 0;
         
