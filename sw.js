@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v4348';
-const CACHE_NAME = 'neto-cache-v4348';
+const CACHE_VERSION = 'v4349';
+const CACHE_NAME = 'neto-cache-v4349';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -9,6 +9,7 @@ self.addEventListener('install', e => {
         './',
         'index.html',
         'assets/css/styles.css',
+        'assets/js/premium-cinematic-themes.js',
         'assets/js/app.js',
         'tips.js',
         'assets/js/games/dino-school.js',
