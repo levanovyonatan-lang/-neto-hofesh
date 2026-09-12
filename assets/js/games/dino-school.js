@@ -98,7 +98,7 @@
     const demoArtEnabled = urlParams.get('show_demo') === 'true';
     const demoArtReady = demoArtEnabled ? new Promise(resolve => {
         const script = document.createElement('script');
-        script.src = new URL('dino-school-art.js?v=9', document.currentScript.src).href;
+        script.src = new URL('dino-school-art.js?v=10', document.currentScript.src).href;
         script.onload = script.onerror = resolve;
         document.head.appendChild(script);
     }) : null;
@@ -504,9 +504,14 @@
         let isCloud = (type === 'cloud');
 
         if (type === 'obstacle') {
-            emoji = stage.obsSet[Math.floor(Math.random() * stage.obsSet.length)];
+            const pool = demoArtEnabled ? stage.obsSet.map(item => {
+                if (currentStageIndex === 10 && item === '🚌') return '🔦';
+                if (currentStageIndex === 11 && item === '✈️') return '📓';
+                return item;
+            }) : stage.obsSet;
+            emoji = pool[Math.floor(Math.random() * pool.length)];
         } else if (type === 'flying') {
-            const pool = stage.flySet || FLYING;
+            const pool = demoArtEnabled && currentStageIndex === 1 ? ['📝', '📚'] : (stage.flySet || FLYING);
             emoji = pool[Math.floor(Math.random() * pool.length)];
             bottom = '70px'; // Head height, requires no jump
             speedMult = 1.2; 

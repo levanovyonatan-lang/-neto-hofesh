@@ -4,17 +4,17 @@
     if (new URLSearchParams(location.search).get('show_demo') !== 'true') return;
     const themes = [
         ['#e5eef0', '#bdced0', '#d2d9d6'],
-        ['#edf0e7', '#bbc9b7', '#d6dace'],
-        ['#f1e9e4', '#d1b6aa', '#ddd1c5'],
-        ['#e2edef', '#adc9cc', '#bfd7d8'],
-        ['#e9eee4', '#b7c8ae', '#d4c9ad'],
-        ['#eeeadc', '#c8bea2', '#d6c9aa'],
-        ['#e7eeeb', '#b0c6bd', '#cbd8cd'],
-        ['#eee9ee', '#c3b8c8', '#d6cfd9'],
-        ['#e4edf2', '#b4cbd8', '#cfdee6'],
-        ['#eee7e5', '#cdb9b5', '#d7cdca'],
+        ['#fbe2e5', '#dfb7be', '#e8cdd0'],
+        ['#fff0d4', '#dcc498', '#ead9b9'],
+        ['#d8f1f5', '#a4cdd6', '#bddfe5'],
+        ['#e2f3d9', '#b2cda6', '#ccdfc1'],
+        ['#f9eccd', '#d5c298', '#e7d6b0'],
+        ['#eae2f6', '#c6b6dc', '#dbcee9'],
+        ['#fce5ed', '#deb7c8', '#ecd0db'],
+        ['#deedfc', '#b1cbe5', '#c9ddf0'],
+        ['#f7dfd9', '#d7b3ac', '#e7cac3'],
         ['#566a76', '#768c92', '#8b9da0'],
-        ['#e3eee8', '#b2cbb8', '#d0ddc5']
+        ['#def5e9', '#a9d4bf', '#c4e6d3']
     ];
     const css = document.createElement('style');
     css.textContent = `
@@ -50,6 +50,20 @@
     ];
 
     function create(container) {
+        const startingColor = getComputedStyle(container).backgroundColor;
+        const rgb = value => {
+            const channels = value.match(/[\d.]+/g);
+            if (value.startsWith('rgb') && channels && Number(channels[3] ?? 1) > 0)
+                return channels.slice(0, 3).map(Number);
+            if (/^#[\da-f]{6}$/i.test(value)) return [1, 3, 5].map(i => parseInt(value.slice(i, i + 2), 16));
+            return [229, 238, 240];
+        };
+        const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+        const hex = color => '#' + color.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+        const base = rgb(startingColor);
+        const palettes = themes.map(p => p.map(rgb));
+        palettes[0] = [base, mix(base, [106, 137, 132], .28), mix(base, [106, 137, 132], .16)];
+        let colors = palettes[0].map(c => c.slice()), fromColors = colors, colorProgress = 1;
         const canvas = document.createElement('canvas');
         canvas.className = 'dino-element dino-art-canvas';
         canvas.setAttribute('aria-hidden', 'true');
@@ -205,7 +219,7 @@
         }
         function draw() {
             if (!ctx || !width || !height) return;
-            const dpr = Math.min(devicePixelRatio || 1, 2), p = themes[stage];
+            const dpr = Math.min(devicePixelRatio || 1, 2), p = colors.map(hex);
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
             // Scale the artwork only. The player's 30px ground baseline is unchanged.
             ctx.save(); ctx.scale(1, (height - 30) / 170);
@@ -226,7 +240,8 @@
             rect(0, height - 30, width, 1, '#91a89d');
             for (let x = distance % 125 - 125; x < width; x += 125)
                 line(x, height - 12, x + 15, height - 12, '#91a39840', 1);
-            rect(0, 0, width, 53, '#f5f7ef'); rect(0, 52, width, 1, '#d6dfd3');
+            rect(0, 0, width, 53, hex(mix(colors[0], [255, 255, 255], .22).map(v => Math.max(225, v))));
+            rect(0, 52, width, 1, p[1]);
         }
         const observer = new ResizeObserver(() => {
             width = container.clientWidth; height = container.clientHeight;
@@ -236,11 +251,22 @@
         observer.observe(container);
         return {
             setStage(index) {
-                stage = Math.max(0, Math.min(11, index));
+                const nextStage = Math.max(0, Math.min(11, index));
+                if (nextStage !== stage) {
+                    fromColors = colors.map(c => c.slice());
+                    colorProgress = 0;
+                }
+                stage = nextStage;
                 if (stage === 0) { runSeed = ++nextScene; distance = 0; }
                 canvas.dataset.stage = String(stage + 1); draw();
             },
-            update(speed, timeScale) { distance += speed * timeScale; draw(); },
+            update(speed, timeScale) {
+                distance += speed * timeScale;
+                colorProgress = Math.min(1, colorProgress + timeScale / 108);
+                const eased = colorProgress * colorProgress * (3 - 2 * colorProgress);
+                colors = fromColors.map((c, i) => mix(c, palettes[stage][i], eased));
+                draw();
+            },
             destroy() { observer.disconnect(); canvas.remove(); container.classList.remove('dino-art-active'); }
         };
     }
