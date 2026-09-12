@@ -1577,20 +1577,22 @@ function selectTarget(id, shouldScroll = true) {
     const totalDaysLabel = document.getElementById('total-days-label');
 
     if (target.isHappeningNow) {
-        timerBg.style.background = '#fefce8';
-        timerBg.classList.add('vacation-mode');
-        timerBg.classList.remove('premium-countdown');
-        document.getElementById('main-target-title').textContent = `${target.name} כבר כאן! ${target.icon}`;
+        if (!target.theme || target.theme === 'default') {
+            timerBg.style.background = target.bg;
+        }
+        timerBg.classList.remove('vacation-mode');
+        timerBg.classList.add('premium-countdown');
+        document.getElementById('main-target-title').textContent = `עד סוף ${target.name} ${target.icon}`;
         if (netDaysPrefix) {
             netDaysPrefix.style.display = 'block';
             netDaysPrefix.textContent = 'נשארו:';
         }
-        if (netDaysSuffix) netDaysSuffix.textContent = 'ימים עד חזרה ללימודים';
+        if (netDaysSuffix) netDaysSuffix.textContent = 'ימים לסיום החג';
         if (excludingLabel) excludingLabel.style.display = 'none';
         if (vacationBox) vacationBox.style.display = 'none';
-        if (absoluteTimer) absoluteTimer.style.display = 'none';
+        if (absoluteTimer) absoluteTimer.style.display = 'flex';
         if (totalDaysLabel) totalDaysLabel.style.display = 'none';
-        if (vacationMessage) vacationMessage.style.display = 'block';
+        if (vacationMessage) vacationMessage.style.display = 'none';
     } else {
         if (!target.theme || target.theme === 'default') {
             timerBg.style.background = target.bg;
