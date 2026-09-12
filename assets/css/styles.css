@@ -1649,52 +1649,90 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
 .emoji-btn.selected { background: rgba(255,255,255,0.15) !important; border-color: #fef08a !important; transform: scale(1.1); box-shadow: 0 4px 10px rgba(254, 240, 138, 0.2); }
 
 /* Premium Countdown Themes */
+
+/* 1. Vacation: Sunset gradient with subtle flight path arcs */
 .theme-vacation {
-    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
-    background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 25%), 
-                      radial-gradient(circle at 80% 70%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 30%), 
-                      linear-gradient(135deg, #e0f2fe 0%, #7dd3fc 100%) !important;
+    background: linear-gradient(135deg, #0284c7 0%, #38bdf8 40%, #fef08a 100%) !important;
+    background-image: 
+        radial-gradient(150% 100% at 50% 100%, transparent 45%, rgba(255,255,255,0.3) 46%, rgba(255,255,255,0.3) 48%, transparent 49%),
+        radial-gradient(120% 80% at 20% 120%, transparent 45%, rgba(255,255,255,0.2) 46%, rgba(255,255,255,0.2) 47%, transparent 48%),
+        linear-gradient(135deg, #0284c7 0%, #38bdf8 40%, #fef08a 100%) !important;
+    color: white !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 10px 25px rgba(2, 132, 199, 0.25) !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
+.theme-vacation * { color: white !important; }
 
+/* 2. Celebration: Deep purple with minimal gold/rose-gold starbursts */
 .theme-celebration {
-    background: linear-gradient(135deg, #fae8ff 0%, #f3e8ff 100%);
-    background-image: radial-gradient(circle at 15% 15%, #f472b6 2px, transparent 3px),
-                      radial-gradient(circle at 85% 20%, #c084fc 3px, transparent 4px),
-                      radial-gradient(circle at 20% 80%, #fbbf24 2px, transparent 3px),
-                      radial-gradient(circle at 80% 85%, #f472b6 3px, transparent 4px),
-                      radial-gradient(circle at 50% 50%, #c084fc 2px, transparent 3px),
-                      linear-gradient(135deg, #fdf4ff 0%, #f3e8ff 100%) !important;
-    background-size: 100px 100px, 120px 120px, 90px 90px, 110px 110px, 80px 80px, 100% 100%;
+    background: linear-gradient(135deg, #2e1065 0%, #4c1d95 100%) !important;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(250, 204, 21, 0.8) 1px, transparent 3px),
+        radial-gradient(circle at 80% 20%, rgba(250, 204, 21, 0.6) 2px, transparent 4px),
+        radial-gradient(circle at 40% 70%, rgba(250, 204, 21, 0.9) 1.5px, transparent 3.5px),
+        radial-gradient(circle at 75% 80%, rgba(250, 204, 21, 0.7) 1px, transparent 3px),
+        radial-gradient(circle at 90% 50%, rgba(250, 204, 21, 0.5) 2px, transparent 4px),
+        linear-gradient(135deg, #2e1065 0%, #4c1d95 100%) !important;
+    color: white !important;
+    border-color: #4c1d95 !important;
+    box-shadow: 0 10px 25px rgba(76, 29, 149, 0.3) !important;
 }
+.theme-celebration * { color: white !important; }
 
+/* 3. Exam: Clean blueprint/graph paper on soft teal */
 .theme-exam {
-    background: #f8fafc;
-    background-image: linear-gradient(rgba(14, 165, 233, 0.1) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(14, 165, 233, 0.1) 1px, transparent 1px),
-                      linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    background: linear-gradient(135deg, #0f766e 0%, #115e59 100%) !important;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(135deg, #0f766e 0%, #115e59 100%) !important;
     background-size: 20px 20px, 20px 20px, 100% 100%;
     background-position: -1px -1px, -1px -1px, 0 0;
+    color: white !important;
+    border-color: #115e59 !important;
+    box-shadow: 0 10px 25px rgba(17, 94, 89, 0.25) !important;
 }
+.theme-exam * { color: white !important; }
 
+/* 4. Military: Olive green with subtle modern topographic lines */
 .theme-military {
-    background: linear-gradient(135deg, #fefce8 0%, #ecfccb 100%);
-    background-image: radial-gradient(circle at 30% 30%, rgba(101, 163, 13, 0.08) 0%, transparent 40%),
-                      radial-gradient(circle at 70% 60%, rgba(77, 124, 15, 0.08) 0%, transparent 50%),
-                      radial-gradient(circle at 10% 80%, rgba(101, 163, 13, 0.06) 0%, transparent 40%),
-                      linear-gradient(135deg, #f7fee7 0%, #ecfccb 100%) !important;
+    background: linear-gradient(135deg, #3f6212 0%, #14532d 100%) !important;
+    background-image: 
+        repeating-radial-gradient(circle at 20% 30%, transparent, transparent 15px, rgba(255, 255, 255, 0.04) 16px, transparent 17px),
+        repeating-radial-gradient(circle at 80% 70%, transparent, transparent 20px, rgba(255, 255, 255, 0.04) 21px, transparent 22px),
+        linear-gradient(135deg, #3f6212 0%, #14532d 100%) !important;
+    color: #ecfccb !important;
+    border-color: #14532d !important;
+    box-shadow: 0 10px 25px rgba(20, 83, 45, 0.3) !important;
 }
+.theme-military * { color: #ecfccb !important; }
 
+/* 5. License: Deep asphalt road with bright dashed yellow line and white edge lines */
 .theme-license {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    background-image: repeating-linear-gradient(
-                        0deg,
-                        transparent,
-                        transparent 20px,
-                        rgba(234, 179, 8, 0.15) 20px,
-                        rgba(234, 179, 8, 0.15) 40px
-                      ),
-                      linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
-    background-size: 8px 100%, 100% 100%;
-    background-position: center center, 0 0;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    background-image: 
+        /* Dashed yellow line */
+        repeating-linear-gradient(0deg, transparent, transparent 20px, #facc15 20px, #facc15 40px),
+        /* Left white edge line */
+        linear-gradient(90deg, transparent calc(10% - 1px), rgba(255,255,255,0.7) calc(10%), rgba(255,255,255,0.7) calc(10% + 2px), transparent calc(10% + 3px)),
+        /* Right white edge line */
+        linear-gradient(90deg, transparent calc(90% - 3px), rgba(255,255,255,0.7) calc(90% - 2px), rgba(255,255,255,0.7) calc(90%), transparent calc(90% + 1px)),
+        linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    background-size: 6px 100%, 100% 100%, 100% 100%, 100% 100%;
+    background-position: center center, 0 0, 0 0, 0 0;
     background-repeat: no-repeat;
+    color: white !important;
+    border-color: #0f172a !important;
+    box-shadow: inset 0 0 25px rgba(0,0,0,0.6), 0 10px 25px rgba(15, 23, 42, 0.4) !important;
+}
+.theme-license * { color: white !important; }
+
+/* Ensure holiday cards take the border styles and keep text readable */
+.holiday-card.theme-vacation, .holiday-card.theme-celebration, .holiday-card.theme-exam, .holiday-card.theme-military, .holiday-card.theme-license {
+    border-style: solid;
+    border-width: 2px;
+}
+.holiday-card.theme-vacation small, .holiday-card.theme-celebration small, .holiday-card.theme-exam small, .holiday-card.theme-military small, .holiday-card.theme-license small {
+    color: rgba(255,255,255,0.8) !important;
 }
