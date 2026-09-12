@@ -8,7 +8,23 @@
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('show_demo') !== 'true' && urlParams.get('demo_premium') !== '1') return;
     const celebrationStyle = document.createElement('style');
-    celebrationStyle.textContent = '.main-timer-card.theme-celebration::before { background:rgba(10,22,26,.12);backdrop-filter:none;-webkit-backdrop-filter:none; }';
+    celebrationStyle.textContent = `
+        .main-timer-card.theme-celebration::before {background:rgba(10,22,26,.08);backdrop-filter:none;-webkit-backdrop-filter:none;}
+        #main-timer-bg[data-personal-countdown] {padding:24px 26px !important;}
+        #main-timer-bg[data-personal-countdown] #main-target-title {font-size:22px;margin:12px 0 8px !important;overflow-wrap:anywhere;}
+        #personal-event-date {display:block;font-size:13px;color:inherit;opacity:.85;line-height:1.6;margin-bottom:18px;}
+        #main-timer-bg[data-personal-countdown] .net-days-container {background:transparent !important;border:0 !important;box-shadow:none !important;backdrop-filter:none !important;padding:14px 0 !important;}
+        #main-timer-bg[data-personal-countdown] #main-net-days {font-size:76px;line-height:1.1;font-variant-numeric:tabular-nums;}
+        #main-timer-bg[data-personal-countdown] #net-days-suffix {font-size:15px;}
+        #main-timer-bg[data-personal-countdown] #absolute-timer-container {margin:20px auto 8px;max-width:300px;display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;background:transparent !important;border:0 !important;box-shadow:none !important;}
+        #main-timer-bg[data-personal-countdown] .time-box:has(#abs-days),
+        #main-timer-bg[data-personal-countdown] :is(.ai-tools,.tip-box,#excluding-label,#vacation-length-box,#total-days-label) {display:none !important;}
+        #main-timer-bg[data-personal-countdown] .time-box {min-width:0;}
+        #main-timer-bg[data-personal-countdown] .time-val {font-size:26px;font-variant-numeric:tabular-nums;}
+        #main-timer-bg[data-personal-countdown].theme-celebration #personal-event-date {color:#f4ddd0;}
+        #main-timer-bg[data-personal-countdown].theme-celebration :is(#main-net-days,.time-val) {color:#fff0d4 !important;-webkit-text-fill-color:#fff0d4 !important;background:none !important;filter:none !important;text-shadow:none !important;}
+        #main-timer-bg[data-personal-countdown].theme-celebration :is(#main-target-title,#net-days-prefix,#net-days-suffix,.time-lbl) {text-shadow:none !important;}
+    `;
     document.head.appendChild(celebrationStyle);
 
     let canvas = null;
@@ -262,16 +278,18 @@
     
     function drawCelebration() {
         const grad = ctx.createLinearGradient(0, 0, width, height);
-        grad.addColorStop(0, '#183b3b');
-        grad.addColorStop(1, '#242933');
+        grad.addColorStop(0, '#452c3c');
+        grad.addColorStop(1, '#1c3438');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
         const palette = ['#edb972', '#e8a3b1', '#87d4cd'];
+        ctx.strokeStyle = '#e6bd8160';ctx.lineWidth = 1;
+        ctx.beginPath();ctx.roundRect(11,11,width-22,height-22,18);ctx.stroke();
         // Small celebrations stay at the edges, away from the countdown.
         for (let burst = 0; burst < 3; burst++) {
             const phase = ((time + burst * 130) % 420) / 420;
             const radius = Math.min(width * .18, 78) * (.25 + phase * .75);
-            const alpha = Math.pow(Math.sin(phase * Math.PI), 2) * .65;
+            const alpha = Math.pow(Math.sin(phase * Math.PI), 2) * .38;
             const cx = width * (burst === 1 ? .93 : .07);
             const cy = height * [.2, .48, .83][burst];
             ctx.strokeStyle = palette[burst]; ctx.lineWidth = 1.5;

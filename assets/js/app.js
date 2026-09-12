@@ -1426,7 +1426,8 @@ function renderHolidays() {
         if (ev.description) subText = ev.description;
 
         card.innerHTML = `<div><b>${ev.name} <span aria-hidden="true">${ev.icon}</span></b><br><small>${subText}</small></div>`;
-        card.setAttribute('aria-label', `ספירה לחג ${ev.name}`);
+        card.setAttribute('aria-label', `${isPersonalCountdownDemo(ev) ? 'ספירה אישית' : 'ספירה לחג'} ${ev.name}`);
+        if (isPersonalCountdownDemo(ev)) card.querySelector('small').textContent = formatPersonalDate(ev.date);
         
         // Add delete button if it's a custom countdown
         if (ev.isCustom) {
@@ -1632,9 +1633,30 @@ function selectTarget(id, shouldScroll = true) {
         if (vacationMessage) vacationMessage.style.display = 'none';
     }
 
+    const personalDemo = isPersonalCountdownDemo(target);
+    timerBg.toggleAttribute('data-personal-countdown', personalDemo);
+    let personalDate = document.getElementById('personal-event-date');
+    if (personalDemo) {
+        if (!personalDate) {
+            personalDate = document.createElement('time');
+            personalDate.id = 'personal-event-date';
+            document.getElementById('main-target-title').after(personalDate);
+        }
+        personalDate.dateTime = target.date.toISOString();
+        personalDate.textContent = formatPersonalDate(target.date);
+        document.getElementById('main-target-title').textContent = `${target.name} ${target.icon}`;
+        if (netDaysPrefix) netDaysPrefix.textContent = 'עוד';
+        if (netDaysSuffix) netDaysSuffix.textContent = 'ימים לאירוע';
+        if (excludingLabel) excludingLabel.style.display = 'none';
+        if (vacationBox) vacationBox.style.display = 'none';
+        if (totalDaysLabel) totalDaysLabel.style.display = 'none';
+    } else if (personalDate) personalDate.remove();
+
     loadDailyState(); renderTipBox(id); updateActiveHolidayCard(id);
     let targetDaysForAnim = 0;
-    if (target.isHappeningNow) {
+    if (personalDemo) {
+        targetDaysForAnim = Math.max(0, Math.floor((target.date.getTime() - Date.now()) / 86400000));
+    } else if (target.isHappeningNow) {
         const diff = target.endDate.getTime() - Date.now();
         targetDaysForAnim = Math.ceil(diff / 86400000);
     } else {
@@ -1647,6 +1669,15 @@ function selectTarget(id, shouldScroll = true) {
     animateAbsoluteTimer(diff);
     
     updateDashboard();
+}
+
+function isPersonalCountdownDemo(target) {
+    const params = new URLSearchParams(location.search);
+    return target.isCustom && (params.get('demo_premium') === '1' || params.get('show_demo') === 'true');
+}
+
+function formatPersonalDate(date) {
+    return new Intl.DateTimeFormat('he-IL', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'}).format(date);
 }
 
 function setDomText(id, val) {
@@ -1666,6 +1697,11 @@ function updateDashboard() {
 
     if (diff <= 0) {
         setDomText('main-net-days', "הגיע!");
+        if (isPersonalCountdownDemo(event)) {
+            setDomText('net-days-prefix', '');
+            setDomText('net-days-suffix', 'הגיע הזמן!');
+            ['abs-days', 'abs-hours', 'abs-mins', 'abs-secs'].forEach(id => setDomText(id, '00'));
+        }
         if (!event.isHappeningNow && !confettiFired) { confettiFired = true; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
     } else {
         if (!isAnimatingAbs) {
@@ -1677,8 +1713,8 @@ function updateDashboard() {
         if (!isAnimatingNetDays) {
             if (event.isCustom) {
                 setDomText('main-net-days', Math.floor(diff / 86400000));
-                setDomText('net-days-prefix', "זמן שנותר:");
-                setDomText('net-days-suffix', "ימים!");
+                setDomText('net-days-prefix', isPersonalCountdownDemo(event) ? 'עוד' : 'זמן שנותר:');
+                setDomText('net-days-suffix', isPersonalCountdownDemo(event) ? 'ימים לאירוע' : 'ימים!');
                 const el = document.getElementById('excluding-label');
                 if (el) el.style.display = 'none';
             } else if (event.isHappeningNow) {
