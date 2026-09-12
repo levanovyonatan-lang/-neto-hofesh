@@ -1695,19 +1695,33 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
     z-index: 1;
 }
 
-/* Force bright text and shadow on premium cards */
-.main-timer-card.theme-vacation,
-.main-timer-card.theme-celebration,
-.main-timer-card.theme-exam,
-.main-timer-card.theme-military,
-.main-timer-card.theme-license,
-.main-timer-card.theme-vacation *,
-.main-timer-card.theme-celebration *,
-.main-timer-card.theme-exam *,
-.main-timer-card.theme-military *,
-.main-timer-card.theme-license * {
+/* Force bright text and shadow on premium cards (excluding time-boxes) */
+.main-timer-card.theme-vacation #main-target-title,
+.main-timer-card.theme-celebration #main-target-title,
+.main-timer-card.theme-exam #main-target-title,
+.main-timer-card.theme-military #main-target-title,
+.main-timer-card.theme-license #main-target-title,
+.main-timer-card.theme-vacation .net-days-container,
+.main-timer-card.theme-celebration .net-days-container,
+.main-timer-card.theme-exam .net-days-container,
+.main-timer-card.theme-military .net-days-container,
+.main-timer-card.theme-license .net-days-container,
+.main-timer-card.theme-vacation .net-days-container *,
+.main-timer-card.theme-celebration .net-days-container *,
+.main-timer-card.theme-exam .net-days-container *,
+.main-timer-card.theme-military .net-days-container *,
+.main-timer-card.theme-license .net-days-container * {
     color: #f8fafc !important;
     text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+}
+
+/* Fix main net days gradient over dark themes */
+.main-timer-card.theme-vacation #main-net-days,
+.main-timer-card.theme-celebration #main-net-days,
+.main-timer-card.theme-exam #main-net-days,
+.main-timer-card.theme-military #main-net-days,
+.main-timer-card.theme-license #main-net-days {
+    -webkit-text-fill-color: #fef08a; /* Soft gold */
 }
 
 /* Glassmorphism for net-days inside premium cards */
