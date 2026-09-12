@@ -1628,7 +1628,9 @@ function selectTarget(id, shouldScroll = true) {
                 vacationBox.style.display = 'none';
             }
         }
-        if (absoluteTimer) absoluteTimer.style.display = 'flex';
+        if (absoluteTimer) {
+            absoluteTimer.style.display = target.isCustom ? 'flex' : 'none';
+        }
         if (totalDaysLabel) totalDaysLabel.style.display = 'block';
         if (vacationMessage) vacationMessage.style.display = 'none';
     }
