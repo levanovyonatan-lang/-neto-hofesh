@@ -145,6 +145,33 @@
                     life: 0
                 });
             }
+        } else if (theme === 'celebration') {
+            const colors = ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#8b5cf6'];
+            // Confetti
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    type: 'confetti',
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 6 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speedY: Math.random() * 1.5 + 0.8,
+                    speedX: (Math.random() - 0.5) * 1.5,
+                    angle: Math.random() * Math.PI * 2,
+                    spin: (Math.random() - 0.5) * 0.25
+                });
+            }
+            // Glowing Orbs (Bokeh)
+            for (let i = 0; i < 12; i++) {
+                particles.push({
+                    type: 'orb',
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 25 + 10,
+                    speedY: -(Math.random() * 0.6 + 0.2),
+                    alpha: Math.random() * 0.3 + 0.1
+                });
+            }
         }
     }
     
@@ -278,48 +305,92 @@
     }
     
     function drawCelebration() {
-        const grad = ctx.createLinearGradient(0, 0, width, height);
-        grad.addColorStop(0, '#452c3c');
-        grad.addColorStop(1, '#1c3438');
+        // Deep party gradient background
+        const grad = ctx.createLinearGradient(0, 0, 0, height);
+        grad.addColorStop(0, '#0f172a'); // Very dark blue
+        grad.addColorStop(0.5, '#3b0764'); // Deep rich purple
+        grad.addColorStop(1, '#831843'); // Dark pink/magenta at bottom
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
-        const palette = ['#edb972', '#e8a3b1', '#87d4cd'];
-        ctx.strokeStyle = '#e6bd8160';ctx.lineWidth = 1;
-        ctx.beginPath();ctx.roundRect(11,11,width-22,height-22,18);ctx.stroke();
-        // Small celebrations stay at the edges, away from the countdown.
-        for (let burst = 0; burst < 3; burst++) {
-            const phase = ((time + burst * 130) % 420) / 420;
-            const radius = Math.min(width * .18, 78) * (.25 + phase * .75);
-            const alpha = Math.pow(Math.sin(phase * Math.PI), 2) * .38;
-            const cx = width * (burst === 1 ? .93 : .07);
-            const cy = height * [.2, .48, .83][burst];
-            ctx.strokeStyle = palette[burst]; ctx.lineWidth = 1.5;
-            ctx.globalAlpha = alpha;
-            for (let ray = 0; ray < 12; ray++) {
-                const angle = ray * Math.PI / 6 + burst;
+
+        // Subtle stage light glow from bottom
+        const glow = ctx.createRadialGradient(width/2, height, 0, width/2, height, width);
+        glow.addColorStop(0, 'rgba(244, 63, 94, 0.3)'); // Vibrant rose glow
+        glow.addColorStop(1, 'transparent');
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, width, height);
+        
+        // Draw Particles (Orbs and Confetti)
+        particles.forEach(p => {
+            if (p.type === 'orb') {
+                p.y += p.speedY;
+                if (p.y + p.size < 0) {
+                    p.y = height + p.size;
+                    p.x = Math.random() * width;
+                }
+                
+                // Pulsing alpha for bokeh
+                const currentAlpha = p.alpha + Math.sin(time * 0.02 + p.x) * 0.15;
                 ctx.beginPath();
-                ctx.moveTo(cx + Math.cos(angle) * radius * .67, cy + Math.sin(angle) * radius * .67);
-                ctx.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, currentAlpha)})`;
+                ctx.fill();
+            } else if (p.type === 'confetti') {
+                p.y += p.speedY;
+                p.x += Math.sin(time * 0.01 + p.size) * 0.5 + p.speedX; // sway sideways
+                p.angle += p.spin;
+                
+                if (p.y > height + 20) {
+                    p.y = -20;
+                    p.x = Math.random() * width;
+                }
+                
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.angle);
+                // Pseudo 3D flip effect
+                ctx.scale(Math.sin(time * 0.06 + p.size), 1);
+                
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size/2, -p.size, p.size, p.size * 2);
+                ctx.restore();
+            }
+        });
+
+        // Periodic fireworks bursts in background
+        const burstPeriod = 180;
+        const burstTime = time % burstPeriod;
+        if (burstTime < 70) {
+            // Fixed position for the burst per cycle
+            const cycle = Math.floor(time / burstPeriod);
+            const bx = ((cycle * 137) % (width * 0.8)) + width * 0.1;
+            const by = ((cycle * 251) % (height * 0.5)) + height * 0.1;
+            
+            const progress = burstTime / 70; // 0 to 1
+            const radius = progress * 90;
+            const alpha = 1 - progress; // Fade out
+            
+            ctx.save();
+            ctx.translate(bx, by);
+            ctx.globalAlpha = alpha;
+            
+            for(let i=0; i<12; i++) {
+                const angle = (i / 12) * Math.PI * 2 + (progress * 0.5);
+                const rayLen = radius * 0.8;
+                
+                ctx.beginPath();
+                ctx.moveTo(Math.cos(angle) * (radius * 0.2), Math.sin(angle) * (radius * 0.2));
+                ctx.lineTo(Math.cos(angle) * rayLen, Math.sin(angle) * rayLen);
+                
+                const hue = (cycle * 73 + i * 15) % 360;
+                ctx.strokeStyle = `hsl(${hue}, 100%, 70%)`;
+                ctx.lineWidth = 3 * (1 - progress);
+                ctx.lineCap = 'round';
                 ctx.stroke();
             }
+            
+            ctx.restore();
         }
-        ctx.globalAlpha = 1;
-        ctx.strokeStyle = '#a9c0b26b';ctx.lineWidth = 1;
-        ctx.beginPath();ctx.moveTo(-10, 8);ctx.quadraticCurveTo(width * .5, 39, width + 10, 8);ctx.stroke();
-        for(let i=0;i<9;i++) {
-            const x = width * (i + .5) / 9;
-            const y = 8 + 15 * Math.sin((i + .5) / 9 * Math.PI);
-            ctx.fillStyle = palette[i % palette.length];ctx.globalAlpha = .6;
-            ctx.beginPath();ctx.moveTo(x-5,y);ctx.lineTo(x+5,y);ctx.lineTo(x,y+10);ctx.closePath();ctx.fill();
-        }
-        for(let i=0;i<18;i++) {
-            const side = i % 2;
-            const x = width * (side ? .9 + (i % 3) * .024 : .04 + (i % 3) * .024) + Math.sin(time * .008 + i) * 4;
-            const y = (i * 53 + time * (.13 + i % 3 * .04)) % (height + 30) - 15;
-            ctx.save();ctx.translate(x,y);ctx.rotate(i + time * .006);
-            ctx.globalAlpha = .48;ctx.fillStyle = palette[i % 3];ctx.fillRect(-1.5,-4,3,8);ctx.restore();
-        }
-        ctx.globalAlpha = 1;
     }
     
     function drawExam() {
