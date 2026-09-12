@@ -1698,3 +1698,54 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
     background-position: center center, 0 0;
     background-repeat: no-repeat;
 }
+
+/* --- Independent Beautiful Card Themes --- */
+.holiday-card.card-theme-vacation {
+    background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 50%, #fde047 100%) !important;
+    border: 1px solid #7dd3fc !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3) !important;
+}
+.holiday-card.card-theme-vacation small { color: rgba(255,255,255,0.9) !important; }
+
+.holiday-card.card-theme-celebration {
+    background: radial-gradient(circle at top right, rgba(250, 204, 21, 0.5) 0%, transparent 50%), linear-gradient(135deg, #9333ea 0%, #d946ef 100%) !important;
+    border: 1px solid #e879f9 !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3) !important;
+}
+.holiday-card.card-theme-celebration small { color: rgba(255,255,255,0.9) !important; }
+
+.holiday-card.card-theme-exam {
+    background: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(135deg, #0f766e 0%, #14b8a6 100%) !important;
+    background-size: 8px 8px, 8px 8px, 100% 100% !important;
+    border: 1px solid #5eead4 !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 4px 15px rgba(15, 118, 110, 0.3) !important;
+}
+.holiday-card.card-theme-exam small { color: rgba(255,255,255,0.9) !important; }
+
+.holiday-card.card-theme-military {
+    background: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(0,0,0,0.1) 4px, rgba(0,0,0,0.1) 8px), linear-gradient(135deg, #4d7c0f 0%, #65a30d 100%) !important;
+    border: 1px solid #a3e635 !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
+    box-shadow: 0 4px 15px rgba(77, 124, 15, 0.3) !important;
+}
+.holiday-card.card-theme-military small { color: rgba(255,255,255,0.85) !important; }
+
+.holiday-card.card-theme-license {
+    background: repeating-linear-gradient(180deg, #facc15, #facc15 10px, transparent 10px, transparent 20px), linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    background-size: 4px 100%, 100% 100% !important;
+    background-position: right 12px top 0, 0 0 !important;
+    background-repeat: no-repeat !important;
+    border: 1px solid #475569 !important;
+    color: white !important;
+    text-shadow: 0 1px 2px black !important;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.4) !important;
+    padding-right: 25px !important;
+}
+.holiday-card.card-theme-license small { color: rgba(255,255,255,0.85) !important; }
