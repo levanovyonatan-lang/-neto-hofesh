@@ -1419,11 +1419,7 @@ function renderHolidays() {
     const container = document.getElementById('holidays-container'); container.innerHTML = '';
     activeEventsList.forEach(ev => {
         const card = document.createElement('button');
-        let cardClass = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
-        if (ev.isCustom && ev.theme && ev.theme !== 'default') {
-            cardClass += ` theme-${ev.theme}`;
-        }
-        card.className = cardClass;
+        card.className = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
         card.onclick = () => selectTarget(ev.id);
 
         let subText = `ב-${ev.date.toLocaleDateString('he-IL')}`;
