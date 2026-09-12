@@ -1,4 +1,4 @@
-﻿const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
+const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
 const tipsDataVersion = 'tips-file-v2';
 const dailyTipsStorageKey = `holiday_calc_daily_tips_${tipsDataVersion}`;
 const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
@@ -1358,6 +1358,7 @@ function showMainScreen() {
                         date: cDate,
                         icon: c.icon || '🗓️',
                         bg: '#f1f5f9',
+                        theme: c.theme || 'default',
                         lengthText: 'ספירה אישית',
                         isCustom: true
                     });
@@ -1472,6 +1473,9 @@ function saveCustomCountdown() {
     const emojiInput = document.getElementById('custom-emoji');
     const emojiStr = emojiInput ? emojiInput.value : '📅';
     
+    const themeInput = document.getElementById('custom-theme');
+    const themeStr = themeInput ? themeInput.value : 'default';
+    
     if (!name || !dateStr) {
         alert('יש להזין שם ותאריך לספירה האישית.');
         return;
@@ -1500,7 +1504,8 @@ function saveCustomCountdown() {
         id: 'custom_' + Date.now(),
         name: name,
         date: targetDate.toISOString(),
-        icon: emojiStr
+        icon: emojiStr,
+        theme: themeStr
     };
     
     customCountdowns.push(newCustom);
@@ -1548,8 +1553,16 @@ function selectTarget(id, shouldScroll = true) {
     } catch (e) { }
 
     const target = activeEventsList.find(e => e.id === id); if (!target) return;
-    document.getElementById('main-timer-bg').style.background = target.bg;
     const timerBg = document.getElementById('main-timer-bg');
+    
+    // Manage themes
+    timerBg.classList.remove('theme-vacation', 'theme-celebration', 'theme-exam', 'theme-military', 'theme-license');
+    if (target.theme && target.theme !== 'default') {
+        timerBg.classList.add('theme-' + target.theme);
+        timerBg.style.background = '';
+    } else {
+        timerBg.style.background = target.bg;
+    }
 
     const netDaysPrefix = document.getElementById('net-days-prefix');
     const netDaysSuffix = document.getElementById('net-days-suffix');
@@ -1575,7 +1588,9 @@ function selectTarget(id, shouldScroll = true) {
         if (totalDaysLabel) totalDaysLabel.style.display = 'none';
         if (vacationMessage) vacationMessage.style.display = 'block';
     } else {
-        timerBg.style.background = target.bg;
+        if (!target.theme || target.theme === 'default') {
+            timerBg.style.background = target.bg;
+        }
         timerBg.classList.remove('vacation-mode');
 
         timerBg.classList.add('premium-countdown');

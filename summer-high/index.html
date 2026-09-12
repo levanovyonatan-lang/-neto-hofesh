@@ -1036,6 +1036,31 @@
                 </div>
                 <input type="hidden" id="custom-emoji" value="📅">
             </div>
+
+            <div style="text-align: right; margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #fef08a;">בחירת עיצוב מיוחד (פרימיום 👑):</label>
+                <div class="theme-selector-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <button type="button" class="theme-btn active" data-theme="default" onclick="selectCustomTheme(this)" style="background: rgba(255,255,255,0.1); border: 2px solid #f59e0b; color: white; padding: 10px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold; transition: all 0.2s;">רגיל</button>
+                    <button type="button" class="theme-btn" data-theme="vacation" onclick="selectCustomTheme(this)" style="background: linear-gradient(135deg, #38bdf8, #0284c7); border: 2px solid transparent; color: white; padding: 10px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold; transition: all 0.2s;">חופשה ✈️</button>
+                    <button type="button" class="theme-btn" data-theme="celebration" onclick="selectCustomTheme(this)" style="background: linear-gradient(135deg, #d946ef, #9333ea); border: 2px solid transparent; color: white; padding: 10px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold; transition: all 0.2s;">חגיגה 🎉</button>
+                    <button type="button" class="theme-btn" data-theme="exam" onclick="selectCustomTheme(this)" style="background: linear-gradient(135deg, #0d9488, #0f766e); border: 2px solid transparent; color: white; padding: 10px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold; transition: all 0.2s;">מבחן 🎓</button>
+                    <button type="button" class="theme-btn" data-theme="military" onclick="selectCustomTheme(this)" style="background: linear-gradient(135deg, #65a30d, #4d7c0f); border: 2px solid transparent; color: white; padding: 10px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold; transition: all 0.2s;">צבא 🪖</button>
+                    <button type="button" class="theme-btn" data-theme="license" onclick="selectCustomTheme(this)" style="background: linear-gradient(135deg, #475569, #334155); border: 2px solid transparent; color: white; padding: 10px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold; transition: all 0.2s; position: relative;">רישיון 🚗</button>
+                </div>
+                <input type="hidden" id="custom-theme" value="default">
+            </div>
+            
+            <script>
+                function selectCustomTheme(btn) {
+                    document.querySelectorAll('.theme-btn').forEach(b => {
+                        b.classList.remove('active');
+                        b.style.borderColor = 'transparent';
+                    });
+                    btn.classList.add('active');
+                    btn.style.borderColor = '#fef08a';
+                    document.getElementById('custom-theme').value = btn.getAttribute('data-theme');
+                }
+            </script>
             
             <button onclick="saveCustomCountdown()" style="box-sizing: border-box; display: block; width: 100%; height: 48px; background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%); color: #451a03; border: none; font-size: 1.1rem; font-weight: 900; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); text-shadow: 0 1px 1px rgba(255,255,255,0.4); transition: transform 0.2s; margin: 0;">שמירה והוספה 🚀</button>
         </div>
