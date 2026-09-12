@@ -98,7 +98,7 @@
     const demoArtEnabled = urlParams.get('show_demo') === 'true';
     const demoArtReady = demoArtEnabled ? new Promise(resolve => {
         const script = document.createElement('script');
-        script.src = new URL('dino-school-art.js?v=12', document.currentScript.src).href;
+        script.src = new URL('dino-school-art.js?v=13', document.currentScript.src).href;
         script.onload = script.onerror = resolve;
         document.head.appendChild(script);
     }) : null;
@@ -134,7 +134,13 @@
 
     function announceStage(stageIndex) {
         const stage = STAGES[stageIndex];
-        if (scenery) scenery.setStage(stageIndex);
+        if (scenery) {
+            scenery.setStage(stageIndex);
+            groundLine.style.visibility = stageIndex === 0 ? 'visible' : 'hidden';
+            obstaclesList.filter(item => item.type === 'cloud').forEach(item => {
+                item.el.style.visibility = stageIndex === 0 ? 'visible' : 'hidden';
+            });
+        }
         
         const isCollecting = stage.bonusChance > 0;
         if (isCollecting && stage.objective) {
@@ -530,7 +536,7 @@
         }
 
         el.textContent = emoji;
-        if (scenery && isCloud) el.style.visibility = 'hidden';
+        if (scenery && isCloud) el.style.visibility = currentStageIndex === 0 ? 'visible' : 'hidden';
         el.style.position = 'absolute';
         el.style.bottom = bottom;
         el.style.right = '100%';

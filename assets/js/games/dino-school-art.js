@@ -265,6 +265,7 @@
         }
         function scene(sceneStage, p) {
             rect(0, 0, width, 170, p[0]);
+            if (sceneStage === 0) return;
             if (![0, 5, 11].includes(sceneStage)) rect(0, 136, width, 34, p[1] + '55');
             const scroll = distance * .14, offset = scroll % 450;
             // Tile identity remains stable while it crosses the viewport.
@@ -294,6 +295,10 @@
             if (!ctx || !width || !height) return;
             const dpr = Math.min(devicePixelRatio || 1, 2), p = colors.map(hex);
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
+            if (stage === 0) {
+                rect(0, 0, width, height, hex(palettes[0][0]));
+                return;
+            }
             // Scale the artwork only. The player's 30px ground baseline is unchanged.
             ctx.save(); ctx.scale(1, (height - 30) / 170);
             scene(stage, p);
