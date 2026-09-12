@@ -213,65 +213,110 @@
     }
     
     function drawVacation() {
+        // Deep vibrant gradient sky
         const grad = ctx.createLinearGradient(0, 0, 0, height);
-        grad.addColorStop(0, '#38bdf8'); // Sky blue
-        grad.addColorStop(0.6, '#818cf8');
-        grad.addColorStop(1, '#f472b6'); // Pinkish sunset
+        grad.addColorStop(0, '#0f172a'); // Very dark blue at top
+        grad.addColorStop(0.5, '#312e81'); // Purple-blue
+        grad.addColorStop(1, '#be185d'); // Pink-red sunset at horizon
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
         
-        // Sun
+        // Huge glowing sun
+        const sunY = height * 0.4;
         ctx.fillStyle = '#fef08a';
         ctx.beginPath();
-        ctx.arc(width * 0.8, height * 0.7, 60, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 40;
-        ctx.shadowColor = '#fef08a';
+        ctx.arc(width * 0.5, sunY, 120, 0, Math.PI * 2);
+        ctx.shadowBlur = 80;
+        ctx.shadowColor = '#facc15';
         ctx.fill();
         ctx.shadowBlur = 0; // Reset
         
-        // Clouds
-        ctx.fillStyle = 'rgba(255,255,255,0.7)';
-        particles.forEach(p => {
-            p.x += p.speed;
-            if (p.x > width + 100) p.x = -100;
-            
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.scale(p.scale, p.scale);
-            
-            // Draw simple puffy cloud
-            ctx.beginPath();
-            ctx.arc(0, 0, 30, 0, Math.PI * 2);
-            ctx.arc(25, -15, 35, 0, Math.PI * 2);
-            ctx.arc(55, 0, 25, 0, Math.PI * 2);
-            ctx.arc(30, 10, 25, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.restore();
+        // Stars/particles slowly drifting
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
+        particles.forEach((p, i) => {
+            if (i < 30) { // use subset of particles for stars
+                p.x += p.speed * 0.5;
+                if (p.x > width + 10) p.x = -10;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y * 0.5, p.scale * 1.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
         });
+
+        // 3 Overlapping sine waves for ocean
+        for (let i = 0; i < 3; i++) {
+            ctx.beginPath();
+            ctx.moveTo(0, height);
+            
+            let amplitude = 20 + i * 15;
+            let frequency = 0.002 + i * 0.001;
+            let phase = time * (0.01 + i * 0.005);
+            let yOffset = height - 40 - (i * 20);
+            
+            for (let x = 0; x <= width; x += 20) {
+                let y = yOffset + Math.sin(x * frequency + phase) * amplitude;
+                ctx.lineTo(x, y);
+            }
+            ctx.lineTo(width, height);
+            
+            // Neon ocean colors
+            let colors = ['rgba(14, 165, 233, 0.4)', 'rgba(56, 189, 248, 0.5)', 'rgba(2, 132, 199, 0.6)'];
+            ctx.fillStyle = colors[i];
+            ctx.fill();
+        }
     }
     
     function drawCelebration() {
+        // Deep elegant burgundy/purple background
         const grad = ctx.createLinearGradient(0, 0, width, height);
-        grad.addColorStop(0, '#2e1065'); // Deep purple
-        grad.addColorStop(1, '#831843'); // Deep pink
+        grad.addColorStop(0, '#1e1b4b'); // Deep indigo
+        grad.addColorStop(1, '#4c1d95'); // Deep purple
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
-        
+
+        // Light beams rotating slowly
+        ctx.save();
+        ctx.translate(width / 2, height / 2);
+        ctx.rotate(time * 0.002);
+        for (let i = 0; i < 6; i++) {
+            ctx.rotate((Math.PI * 2) / 6);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-width, height * 2);
+            ctx.lineTo(width, height * 2);
+            
+            let beamGrad = ctx.createLinearGradient(0, 0, 0, height * 2);
+            beamGrad.addColorStop(0, 'rgba(255, 215, 0, 0.1)');
+            beamGrad.addColorStop(1, 'rgba(255, 215, 0, 0)');
+            ctx.fillStyle = beamGrad;
+            ctx.fill();
+        }
+        ctx.restore();
+
+        // Elegant floating golden bokeh
         particles.forEach(p => {
-            p.y += p.speedY;
-            if (p.y < -p.radius) {
-                p.y = height + p.radius;
+            p.y -= (Math.abs(p.speedY) * 0.5 + 0.2); // Float up slowly
+            p.x += Math.sin(time * 0.02 + p.hue) * 0.5; // Sway
+            
+            if (p.y < -p.radius * 2) {
+                p.y = height + p.radius * 2;
                 p.x = Math.random() * width;
             }
             
-            // Pulsing effect
-            const alpha = p.opacity + (Math.sin(time * 0.05 + p.x) * 0.1);
+            const alpha = 0.3 + Math.sin(time * 0.05 + p.x) * 0.3; // Twinkle
             
-            ctx.fillStyle = `hsla(${p.hue}, 80%, 60%, ${Math.max(0, alpha)})`;
+            // Gold and pinkish-gold
+            const hue = Math.floor(p.hue) % 2 === 0 ? 45 : 35; 
+            
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.arc(p.x, p.y, p.radius * 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${hue}, 90%, 60%, ${Math.max(0.1, alpha)})`;
+            ctx.fill();
+            
+            // Core glow
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius * 0.5, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${hue}, 100%, 80%, ${Math.max(0.1, alpha + 0.2)})`;
             ctx.fill();
         });
     }
