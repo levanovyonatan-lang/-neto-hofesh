@@ -1653,99 +1653,145 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
    (Main Container #main-timer-bg)
    ========================================= */
 
-/* 1. Vacation - Moving Sunset Clouds */
+/* =========================================
+   PREMIUM CUSTOM COUNTDOWN THEMES
+   ========================================= */
+
+/* Base style for all themes to ensure readability */
+.main-timer-card[class*="theme-"] {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1) !important;
+}
+
+/* Frosted glass overlay to guarantee text contrast against animated backgrounds */
+.main-timer-card[class*="theme-"]::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Bring all content above the frosted overlay */
+.main-timer-card[class*="theme-"] > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* 1. Vacation Theme - Sunset Glow */
 .theme-vacation {
-    background: linear-gradient(180deg, #38bdf8 0%, #fde047 100%) !important;
-    background-image: 
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.6) 0%, transparent 60%),
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
-        linear-gradient(180deg, #38bdf8 0%, #fde047 100%) !important;
-    background-size: 250px 250px, 350px 350px, 100% 100% !important;
-    background-position: -50px 20%, 110% 70%, 0 0 !important;
-    background-repeat: no-repeat !important;
-    animation: driftClouds 30s ease-in-out infinite alternate !important;
-    color: #0c4a6e !important;
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8, #facc15, #f59e0b) !important;
+    background-size: 300% 300% !important;
+    animation: flowGradient 15s ease infinite !important;
 }
-.theme-vacation * { color: #0c4a6e !important; text-shadow: 0 1px 3px rgba(255,255,255,0.7) !important; }
-
-@keyframes driftClouds {
-    0% { background-position: 0% 10%, 100% 80%, 0 0; }
-    100% { background-position: 100% 20%, 0% 60%, 0 0; }
+.theme-vacation::before {
+    background: rgba(2, 6, 23, 0.55);
 }
 
-/* 2. Celebration - Floating Confetti/Orbs */
+/* 2. Celebration Theme - Neon Party */
 .theme-celebration {
-    background: linear-gradient(135deg, #4c1d95 0%, #7e22ce 100%) !important;
-    background-image: 
-        radial-gradient(circle, rgba(250, 204, 21, 0.8) 3px, transparent 4px),
-        radial-gradient(circle, rgba(244, 114, 182, 0.8) 2px, transparent 3px),
-        linear-gradient(135deg, #4c1d95 0%, #7e22ce 100%) !important;
-    background-size: 90px 90px, 130px 130px, 100% 100% !important;
-    background-position: 0 0, 0 0, 0 0 !important;
-    animation: floatUp 15s linear infinite !important;
-    color: white !important;
+    background: linear-gradient(135deg, #9333ea, #d946ef, #4f46e5) !important;
+    background-size: 300% 300% !important;
+    animation: flowGradient 10s ease infinite !important;
 }
-.theme-celebration * { color: white !important; text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important; }
-
-@keyframes floatUp {
-    100% { background-position: 0 -90px, 0 -130px, 0 0; }
+.theme-celebration::after {
+    content: '✨ 🎉 🎊 ✨';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 200%; height: 200%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+    animation: spinSlow 40s linear infinite;
 }
 
-/* 3. Exam - Panning Blueprint Grid */
+/* 3. Exam Theme - Tech Blueprint */
 .theme-exam {
-    background: #f8fafc !important;
+    background: #0f172a !important;
     background-image: 
-        linear-gradient(rgba(15, 118, 110, 0.12) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(15, 118, 110, 0.12) 1px, transparent 1px),
-        linear-gradient(135deg, #ccfbf1 0%, #f0fdfa 100%) !important;
-    background-size: 30px 30px, 30px 30px, 100% 100% !important;
-    background-position: 0 0, 0 0, 0 0 !important;
-    animation: panGrid 20s linear infinite !important;
-    color: #0f766e !important;
+        linear-gradient(rgba(45, 212, 191, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(45, 212, 191, 0.15) 1px, transparent 1px) !important;
+    background-size: 40px 40px !important;
+    animation: panBlueprint 20s linear infinite !important;
+    border-color: rgba(45, 212, 191, 0.3) !important;
 }
-.theme-exam * { color: #0f766e !important; text-shadow: 0 1px 2px rgba(255,255,255,0.8) !important; }
-
-@keyframes panGrid {
-    100% { background-position: 30px 30px, 30px 30px, 0 0; }
+.theme-exam::before {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.9) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
-/* 4. Military - Tactical Diagonal Pan */
+/* 4. Military Theme - Tactical Radar */
 .theme-military {
-    background: linear-gradient(135deg, #3f6212 0%, #14532d 100%) !important;
-    background-image: 
-        repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(0,0,0,0.15) 15px, rgba(0,0,0,0.15) 30px),
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 60%),
-        linear-gradient(135deg, #3f6212 0%, #14532d 100%) !important;
-    background-size: 200% 200%, 100% 100%, 100% 100% !important;
-    background-position: 0 0, 0 0, 0 0 !important;
-    animation: panCamo 15s linear infinite !important;
-    color: #ecfccb !important;
+    background: radial-gradient(circle at center, #14532d 0%, #052e16 100%) !important;
+    overflow: hidden;
 }
-.theme-military * { color: #ecfccb !important; text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important; }
-
-@keyframes panCamo {
-    100% { background-position: -42.4px -42.4px, 0 0, 0 0; }
+.theme-military::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 300px; height: 300px;
+    margin-top: -150px; margin-left: -150px;
+    border-radius: 50%;
+    border: 2px solid rgba(132, 204, 22, 0.2);
+    box-shadow: inset 0 0 40px rgba(132, 204, 22, 0.1);
+    z-index: 0;
+    pointer-events: none;
+    background: conic-gradient(from 0deg, transparent 70%, rgba(132, 204, 22, 0.4) 100%);
+    animation: spinRadar 4s linear infinite;
+}
+.theme-military::before {
+    background: rgba(5, 46, 22, 0.6);
 }
 
-/* 5. License - The Moving Road */
+/* 5. License Theme - Midnight Drive (The Road) */
 .theme-license {
     background: #0f172a !important;
     background-image: 
-        /* The moving dashed yellow line (centered) */
-        repeating-linear-gradient(180deg, #facc15 0, #facc15 30px, transparent 30px, transparent 60px),
-        /* Dark asphalt base */
-        linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
-    /* Size the dashed line appropriately */
-    background-size: 8px 200%, 100% 100% !important;
+        repeating-linear-gradient(180deg, #facc15 0, #facc15 40px, transparent 40px, transparent 80px),
+        linear-gradient(90deg, #1e293b 0%, #0f172a 20%, #0f172a 80%, #1e293b 100%) !important;
+    background-size: 10px 200%, 100% 100% !important;
     background-position: center 0, 0 0 !important;
-    animation: driveRoad 1.2s linear infinite !important;
-    color: white !important;
+    animation: driveRoad 1s linear infinite !important;
+    border-bottom: 4px solid #facc15 !important;
 }
-.theme-license * { color: white !important; text-shadow: 0 2px 6px rgba(0,0,0,0.8) !important; }
+.theme-license::before {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.4) 100%);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
 
-@keyframes driveRoad {
-    100% { background-position: center 60px, 0 0; }
+/* Premium Animations */
+@keyframes flowGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
+@keyframes spinSlow {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes panBlueprint {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
+}
+@keyframes spinRadar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes driveRoad {
+    from { background-position: center -80px, 0 0; }
+    to { background-position: center 0, 0 0; }
+}
+
+
 
 /* =========================================
    PREMIUM MODAL DESIGNS (Add Personal Event)
