@@ -98,7 +98,7 @@
     const demoArtEnabled = urlParams.get('show_demo') === 'true';
     const demoArtReady = demoArtEnabled ? new Promise(resolve => {
         const script = document.createElement('script');
-        script.src = new URL('dino-school-art.js?v=10', document.currentScript.src).href;
+        script.src = new URL('dino-school-art.js?v=11', document.currentScript.src).href;
         script.onload = script.onerror = resolve;
         document.head.appendChild(script);
     }) : null;
