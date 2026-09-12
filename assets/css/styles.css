@@ -1990,19 +1990,19 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
 
 .theme-selector-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
 }
 
 .theme-btn {
     position: relative;
-    padding: 15px 10px;
-    border-radius: 12px;
+    padding: 10px 5px;
+    border-radius: 10px;
     border: 2px solid rgba(255, 255, 255, 0.1);
     color: white;
     font-family: inherit;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
@@ -2016,7 +2016,7 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
 }
 
 .theme-btn .icon {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
     transition: transform 0.3s ease;
 }
