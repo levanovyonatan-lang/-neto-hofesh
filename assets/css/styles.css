@@ -1648,68 +1648,101 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
 .emoji-btn:hover { transform: scale(1.1); }
 .emoji-btn.selected { background: rgba(255,255,255,0.15) !important; border-color: #fef08a !important; transform: scale(1.1); box-shadow: 0 4px 10px rgba(254, 240, 138, 0.2); }
 
-/* Premium Countdown Themes (Main Container) */
+/* =========================================
+   PREMIUM DYNAMIC COUNTDOWN THEMES
+   (Main Container #main-timer-bg)
+   ========================================= */
 
+/* 1. Vacation - Moving Sunset Clouds */
 .theme-vacation {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #fffbeb 100%) !important;
+    background: linear-gradient(180deg, #38bdf8 0%, #fde047 100%) !important;
     background-image: 
-        radial-gradient(circle at 90% 10%, rgba(253, 224, 71, 0.4) 0%, transparent 40%),
-        radial-gradient(circle at 10% 90%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
-        linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #fffbeb 100%) !important;
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.6) 0%, transparent 60%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+        linear-gradient(180deg, #38bdf8 0%, #fde047 100%) !important;
+    background-size: 250px 250px, 350px 350px, 100% 100% !important;
+    background-position: -50px 20%, 110% 70%, 0 0 !important;
+    background-repeat: no-repeat !important;
+    animation: driftClouds 30s ease-in-out infinite alternate !important;
     color: #0c4a6e !important;
 }
-.theme-vacation * { color: #0c4a6e !important; }
+.theme-vacation * { color: #0c4a6e !important; text-shadow: 0 1px 3px rgba(255,255,255,0.7) !important; }
 
-.theme-celebration {
-    background: linear-gradient(135deg, #fdf4ff 0%, #f3e8ff 100%) !important;
-    background-image: 
-        radial-gradient(circle at 15% 20%, rgba(217, 70, 239, 0.15) 0%, transparent 30%),
-        radial-gradient(circle at 85% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 30%),
-        radial-gradient(circle at 50% 50%, rgba(250, 204, 21, 0.1) 0%, transparent 40%),
-        linear-gradient(135deg, #fdf4ff 0%, #f3e8ff 100%) !important;
-    color: #4c1d95 !important;
+@keyframes driftClouds {
+    0% { background-position: 0% 10%, 100% 80%, 0 0; }
+    100% { background-position: 100% 20%, 0% 60%, 0 0; }
 }
-.theme-celebration * { color: #4c1d95 !important; }
 
+/* 2. Celebration - Floating Confetti/Orbs */
+.theme-celebration {
+    background: linear-gradient(135deg, #4c1d95 0%, #7e22ce 100%) !important;
+    background-image: 
+        radial-gradient(circle, rgba(250, 204, 21, 0.8) 3px, transparent 4px),
+        radial-gradient(circle, rgba(244, 114, 182, 0.8) 2px, transparent 3px),
+        linear-gradient(135deg, #4c1d95 0%, #7e22ce 100%) !important;
+    background-size: 90px 90px, 130px 130px, 100% 100% !important;
+    background-position: 0 0, 0 0, 0 0 !important;
+    animation: floatUp 15s linear infinite !important;
+    color: white !important;
+}
+.theme-celebration * { color: white !important; text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important; }
+
+@keyframes floatUp {
+    100% { background-position: 0 -90px, 0 -130px, 0 0; }
+}
+
+/* 3. Exam - Panning Blueprint Grid */
 .theme-exam {
     background: #f8fafc !important;
     background-image: 
-        radial-gradient(circle at 0% 0%, rgba(15, 118, 110, 0.1) 0%, transparent 40%),
-        linear-gradient(rgba(15, 118, 110, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(15, 118, 110, 0.05) 1px, transparent 1px),
-        linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
-    background-size: 100% 100%, 24px 24px, 24px 24px, 100% 100% !important;
-    background-position: 0 0, -1px -1px, -1px -1px, 0 0 !important;
-    color: #115e59 !important;
+        linear-gradient(rgba(15, 118, 110, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 118, 110, 0.12) 1px, transparent 1px),
+        linear-gradient(135deg, #ccfbf1 0%, #f0fdfa 100%) !important;
+    background-size: 30px 30px, 30px 30px, 100% 100% !important;
+    background-position: 0 0, 0 0, 0 0 !important;
+    animation: panGrid 20s linear infinite !important;
+    color: #0f766e !important;
 }
-.theme-exam * { color: #115e59 !important; }
+.theme-exam * { color: #0f766e !important; text-shadow: 0 1px 2px rgba(255,255,255,0.8) !important; }
 
+@keyframes panGrid {
+    100% { background-position: 30px 30px, 30px 30px, 0 0; }
+}
+
+/* 4. Military - Tactical Diagonal Pan */
 .theme-military {
-    background: linear-gradient(135deg, #f7fee7 0%, #ecfccb 100%) !important;
+    background: linear-gradient(135deg, #3f6212 0%, #14532d 100%) !important;
     background-image: 
-        radial-gradient(circle at 20% 80%, rgba(77, 124, 15, 0.06) 0%, transparent 40%),
-        radial-gradient(circle at 80% 20%, rgba(63, 98, 18, 0.06) 0%, transparent 40%),
-        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(77, 124, 15, 0.02) 10px, rgba(77, 124, 15, 0.02) 20px),
-        linear-gradient(135deg, #f7fee7 0%, #ecfccb 100%) !important;
-    color: #14532d !important;
+        repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(0,0,0,0.15) 15px, rgba(0,0,0,0.15) 30px),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 60%),
+        linear-gradient(135deg, #3f6212 0%, #14532d 100%) !important;
+    background-size: 200% 200%, 100% 100%, 100% 100% !important;
+    background-position: 0 0, 0 0, 0 0 !important;
+    animation: panCamo 15s linear infinite !important;
+    color: #ecfccb !important;
 }
-.theme-military * { color: #14532d !important; }
+.theme-military * { color: #ecfccb !important; text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important; }
 
-.theme-license {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
-    background-image: 
-        /* Soft subtle glowing streetlights in the background */
-        radial-gradient(circle at 20% 30%, rgba(250, 204, 21, 0.15) 0%, transparent 30%),
-        radial-gradient(circle at 80% 60%, rgba(226, 232, 240, 0.1) 0%, transparent 40%),
-        /* The horizontal dashed yellow line across the bottom area */
-        repeating-linear-gradient(90deg, #facc15 0, #facc15 40px, transparent 40px, transparent 80px),
-        linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
-    background-size: 100% 100%, 100% 100%, 100% 6px, 100% 100% !important;
-    background-position: 0 0, 0 0, 0 90%, 0 0 !important;
-    background-repeat: no-repeat !important;
-    color: #f8fafc !important;
+@keyframes panCamo {
+    100% { background-position: -42.4px -42.4px, 0 0, 0 0; }
 }
-.theme-license * { 
-    color: #f8fafc !important; 
-    text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important;
+
+/* 5. License - The Moving Road */
+.theme-license {
+    background: #0f172a !important;
+    background-image: 
+        /* The moving dashed yellow line (centered) */
+        repeating-linear-gradient(180deg, #facc15 0, #facc15 30px, transparent 30px, transparent 60px),
+        /* Dark asphalt base */
+        linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+    /* Size the dashed line appropriately */
+    background-size: 8px 200%, 100% 100% !important;
+    background-position: center 0, 0 0 !important;
+    animation: driveRoad 1.2s linear infinite !important;
+    color: white !important;
+}
+.theme-license * { color: white !important; text-shadow: 0 2px 6px rgba(0,0,0,0.8) !important; }
+
+@keyframes driveRoad {
+    100% { background-position: center 60px, 0 0; }
 }
