@@ -19,12 +19,18 @@
         #personal-countdown-label {display:block;font-size:13px;font-weight:500;line-height:1.5;margin-bottom:12px;}
         #main-timer-bg[data-personal-countdown] :is(#main-target-title,#personal-event-date,#personal-countdown-label,.time-val,.time-lbl) {color:var(--personal-ink) !important;-webkit-text-fill-color:var(--personal-ink) !important;background:none !important;filter:none !important;text-shadow:none !important;letter-spacing:0 !important;}
         #main-timer-bg[data-personal-countdown] :is(.net-days-container,.ai-tools,.tip-box,#excluding-label,#vacation-length-box,#total-days-label) {display:none !important;}
-        #main-timer-bg[data-personal-countdown] #absolute-timer-container {width:100%;margin:0 auto 12px !important;padding:16px 0 !important;max-width:370px;box-sizing:border-box;display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;background:transparent !important;border:0 !important;border-top:1px solid #9caeac55 !important;box-shadow:none !important;}
-        #main-timer-bg[data-personal-countdown] #absolute-timer-container {border-radius:0 !important;}
+        #main-timer-bg[data-personal-countdown] #absolute-timer-container {width:100%;margin:0 auto 12px !important;padding:16px 0 !important;max-width:370px;box-sizing:border-box;display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 4px;background:transparent !important;border:0 !important;border-top:1px solid rgba(255,255,255,0.15) !important;box-shadow:none !important;border-radius:0 !important;}
         #main-timer-bg[data-personal-countdown] .time-box {display:flex !important;flex-direction:column;gap:7px;min-width:0;box-sizing:border-box;padding:0 2px;background:transparent !important;border:0 !important;box-shadow:none !important;}
-        #main-timer-bg[data-personal-countdown] .time-val {font-size:30px !important;line-height:1.2;font-weight:700;font-variant-numeric:tabular-nums;min-height:36px;}
-        #main-timer-bg[data-personal-countdown] .time-lbl {font-size:12px !important;font-weight:400;line-height:1.4;}
-        @media(max-width:380px) {#main-timer-bg[data-personal-countdown] .time-val {font-size:24px !important;}#main-timer-bg[data-personal-countdown] #main-target-title{font-size:22px !important;}}
+        #main-timer-bg[data-personal-countdown] .time-box:nth-child(1) {grid-column: 1 / -1; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1) !important;}
+        #main-timer-bg[data-personal-countdown] .time-box:nth-child(1) .time-val {font-size:72px !important;line-height:1;font-weight:900;min-height:72px; text-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;}
+        #main-timer-bg[data-personal-countdown] .time-box:nth-child(1) .time-lbl {font-size:18px !important;font-weight:700;}
+        #main-timer-bg[data-personal-countdown] .time-box:not(:nth-child(1)) .time-val {font-size:28px !important;line-height:1.2;font-weight:700;font-variant-numeric:tabular-nums;min-height:34px;}
+        #main-timer-bg[data-personal-countdown] .time-box:not(:nth-child(1)) .time-lbl {font-size:12px !important;font-weight:400;line-height:1.4;}
+        @media(max-width:380px) {
+            #main-timer-bg[data-personal-countdown] .time-box:nth-child(1) .time-val {font-size:56px !important; min-height:56px;}
+            #main-timer-bg[data-personal-countdown] .time-box:not(:nth-child(1)) .time-val {font-size:24px !important;}
+            #main-timer-bg[data-personal-countdown] #main-target-title{font-size:22px !important;}
+        }
     `;
     document.head.appendChild(celebrationStyle);
 
