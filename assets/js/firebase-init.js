@@ -294,7 +294,7 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
 };
 
 // פונקציה לשמירת שיא בדינוזאור
-window.saveDinoHighScore = async (score, token, timeElapsed, explicitMonthlyScore = null) => {
+window.saveDinoHighScore = async (score, token, timeElapsed) => {
     const user = auth.currentUser;
     const uid = user ? user.uid : window.currentUid;
     if (!uid || !window.currentUserProfile) return false;
@@ -357,13 +357,11 @@ window.saveDinoHighScore = async (score, token, timeElapsed, explicitMonthlyScor
         updated = true;
     }
 
-    const monthlyToSave = explicitMonthlyScore !== null ? explicitMonthlyScore : score;
-
-    if (monthlyToSave > serverMonthly) {
+    if (score > serverMonthly) {
         if (!window.currentUserProfile.monthlyScores) window.currentUserProfile.monthlyScores = {};
-        window.currentUserProfile.monthlyScores[currentMonth] = monthlyToSave;
-        userMergeData.monthlyScores = { [currentMonth]: monthlyToSave };
-        scoreMergeData.monthlyScores = { [currentMonth]: monthlyToSave };
+        window.currentUserProfile.monthlyScores[currentMonth] = score;
+        userMergeData.monthlyScores = { [currentMonth]: score };
+        scoreMergeData.monthlyScores = { [currentMonth]: score };
         updated = true;
     }
 
