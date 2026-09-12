@@ -1561,6 +1561,9 @@ function selectTarget(id, shouldScroll = true) {
         timerBg.classList.add('theme-' + target.theme);
         timerBg.style.background = '';
     } else {
+        if (target.isCustom && target.bg === 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)') {
+             // Keep the light custom background for standard custom events unless we want dark mode
+        }
         timerBg.style.background = target.bg;
     }
 
