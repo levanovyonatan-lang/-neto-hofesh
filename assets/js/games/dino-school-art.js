@@ -69,7 +69,7 @@
         canvas.setAttribute('aria-hidden', 'true');
         container.prepend(canvas); container.classList.add('dino-art-active');
         const ctx = canvas.getContext('2d');
-        let stage = 0, distance = 0, width = 0, height = 0, runSeed = nextScene;
+        let stage = 0, previousStage = 0, distance = 0, width = 0, height = 0, runSeed = nextScene;
         const rect = (x, y, w, h, color) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); };
         function line(x, y, x2, y2, color, weight = 2) {
             ctx.strokeStyle = color; ctx.lineWidth = weight; ctx.beginPath();
@@ -99,14 +99,12 @@
             line(x + 7, y + 5, x + 7, y + 20, '#9aafa3');
             line(x + 59, y + 5, x + 59, y + 20, '#9aafa3');
         }
-        function door(x, label) {
+        function door(x) {
             rect(x, 83, 42, 78, '#a4b9ad'); rect(x + 3, 86, 36, 75, '#c2cebb');
             rect(x + 8, 94, 12, 24, '#e3e9d9'); rect(x + 31, 132, 6, 2, '#8caa9a');
-            caption(label, x + 21, 77);
         }
-        function board(x, title) {
+        function board(x) {
             rect(x, 81, 96, 50, '#adbfb2'); rect(x + 3, 84, 90, 43, '#f0f3e7');
-            caption(title, x + 48, 104, 86);
             line(x + 19, 115, x + 71, 115, '#c9d6c8', 1);
             rect(x - 2, 130, 100, 3, '#a8bba9');
         }
@@ -119,7 +117,7 @@
             rect(x, 131, 45, 3, '#b3c2ad');
             for (let i = 0; i < 4; i++) rect(x + 6 + i * 8, 118, 5, 13 + i % 2 * 2, ['#a9c0c3', '#c9bca7', '#bcb2c7', '#b6c7a4'][(i + variant) % 4]);
         }
-        function classroom(x, variant, joke, detail) {
+        function classroom(x, variant, detail, stage) {
             const p = themes[stage];
             if (detail === 1) {
                 circle(x + 372, 91, 10, '#aebfb5'); circle(x + 372, 91, 8, '#eef2e5');
@@ -131,14 +129,14 @@
             }
             const shift = variant % 2 ? 40 : 0;
             if ([1, 8].includes(stage)) {
-                board(x + 28 + shift, joke);
+                board(x + 28 + shift);
                 if (variant < 2) windowPane(x + 180 + shift, 82); else shelf(x + 184, variant);
                 bench(x + 49 + shift, 144, true);
                 if (stage === 8) {
                     rect(x + 263, 72, 54, 15, '#f0f3e9'); rect(x + 269, 82, 42, 2, '#a2bec4');
-                } else if (variant % 2) plant(x + 300); else door(x + 286, 'ג׳2');
+                } else if (variant % 2) plant(x + 300); else door(x + 286);
             } else if (stage === 2) {
-                rect(x + 28, 90, 105, 47, '#bbcbbb'); caption(joke, x + 80, 104);
+                rect(x + 28, 90, 105, 47, '#bbcbbb');
                 for (let n = 0; n < 3; n++) rect(x + 54 + n * 18, 119, 10, 16, '#dbd2b0');
                 rect(x + 22, 137, 118, 5, '#eee3cc'); rect(x + 28, 142, 106, 22, '#c7b8a5');
                 if (variant % 2) shelf(x + 206, variant); else windowPane(x + 206, 82);
@@ -150,13 +148,12 @@
                 line(x + 194, 117, x + 201, 132, '#e4e6d8', 1);
                 line(x + 216, 117, x + 209, 132, '#e4e6d8', 1);
                 bench(x + 280, 144);
-                caption(joke, x + 298, 97);
                 if (variant % 2) {
                     for (let n = 0; n < 5; n++) line(x + 30, 84 + n * 11, x + 74, 84 + n * 11, '#c5b99d', 3);
                 }
                 if (variant > 1) circle(x + 309, 138, 7, '#c7b999');
             } else if (stage === 6) {
-                board(x + 28 + shift, joke);
+                board(x + 28 + shift);
                 rect(x + 187, 129, 99, 5, '#aac0b2');
                 for (let n = 0; n < 3; n++) {
                     const a = x + 198 + n * 28; rect(a + 4, 106, 6, 10, '#bbd0c5');
@@ -166,8 +163,7 @@
                 if (variant > 1) plant(x + 324);
             } else {
                 if (variant % 2) shelf(x + 28, variant); else windowPane(x + 28, 84);
-                door(x + 184 + shift, stage === 9 ? 'המנהל' : stage === 10 ? 'יציאה' : 'ג׳2');
-                caption(joke, x + 104, 73);
+                door(x + 184 + shift);
                 if (stage === 3) {
                     rect(x + 291, 127, 26, 26, '#a9c4bf'); rect(x + 288, 125, 32, 4, '#8faeb1');
                     line(x + 310, 118, x + 310, 125, '#8faeb1');
@@ -176,7 +172,50 @@
                 if (variant > 1) plant(x + 114);
             }
         }
-        function outside(x, variant, joke, detail) {
+        function hill(x, y, w, h, color) {
+            ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(x, 164);
+            ctx.bezierCurveTo(x + w * .12, y + h, x + w * .18, y, x + w * .48, y);
+            ctx.bezierCurveTo(x + w * .76, y, x + w * .8, y + h, x + w, 164);
+            ctx.closePath(); ctx.fill();
+        }
+        function tree(x, y, size = 1) {
+            rect(x - 2, y, 4, 30 * size, '#a8b39a');
+            circle(x, y - 5 * size, 15 * size, '#b2c5a0');
+            circle(x - 10 * size, y, 10 * size, '#b2c5a0');
+        }
+        function trip(x, variant) {
+            const green = [0, 1, 4, 6].includes(variant);
+            hill(x - 25, 95 + variant % 3 * 7, 270, 58, green ? '#cedbb7' : '#d8ceb8');
+            hill(x + 175, 115, 280, 44, green ? '#bdcda9' : '#c9c0ab');
+            // A winding trail, not triangular mountains, connects the small landscape scenes.
+            ctx.strokeStyle = variant === 1 ? '#b4d3d7' : '#e6ddc4'; ctx.lineWidth = variant === 1 ? 9 : 6;
+            ctx.beginPath(); ctx.moveTo(x + 210, 119); ctx.bezierCurveTo(x + 125, 138, x + 280, 142, x + 196, 164); ctx.stroke();
+            if ([0, 1, 4, 6].includes(variant)) {
+                tree(x + 65, 125, .8); tree(x + 320, 122, 1);
+                if (variant === 4) tree(x + 105, 131, .65);
+            }
+            if ([2, 3, 7].includes(variant)) {
+                for (let n = 0; n < 4; n++) {
+                    ctx.fillStyle = n % 2 ? '#bfb9a8' : '#d5cebd'; ctx.beginPath();
+                    ctx.ellipse(x + 50 + n * 24, 151 - n % 2 * 6, 17, 8, -.2, 0, Math.PI * 2); ctx.fill();
+                }
+            }
+            if (variant === 3) {
+                for (let n = 0; n < 3; n++) line(x + 274, 135 + n * 8, x + 351 - n * 9, 135 + n * 8, '#b6b29b', 3);
+            } else if (variant === 5) {
+                rect(x + 54, 118, 86, 33, '#d9c79d'); rect(x + 60, 123, 72, 13, '#b1c7c7');
+                for (let n = 0; n < 4; n++) rect(x + 73 + n * 17, 123, 2, 13, '#d9c79d');
+                circle(x + 72, 152, 6, '#8e9d98'); circle(x + 123, 152, 6, '#8e9d98');
+                tree(x + 330, 125, .9);
+            } else if (variant === 6) {
+                bench(x + 112, 140); line(x + 101, 149, x + 188, 149, '#b5b59d', 3);
+            } else if (variant === 7) {
+                line(x + 270, 136, x + 350, 136, '#aab7a1', 2);
+                for (let n = 0; n < 4; n++) line(x + 275 + n * 24, 132, x + 275 + n * 24, 159, '#aab7a1', 2);
+            }
+            rect(x + 368, 139, 8, 21, '#d5d5c3'); rect(x + 369, 144, 6, 3, '#8eaa9b');
+        }
+        function outside(x, variant, detail, stage) {
             if (stage === 0) {
                 for (let b = 0; b < 2; b++) {
                     const a = x + 17 + b * 154, y = 78 + (b + variant) % 3 * 8;
@@ -214,20 +253,41 @@
                     for (let n = 0; n < 4; n++) rect(x + 286 + n * 20, 138, 9, 7, '#bcb497');
                     triangle(x + 142, 141, 15, 22, '#c6b8a1');
                 }
-                rect(x + 171, 93, 112, 18, '#f0f3e8'); caption(joke, x + 227, 106, 104);
             } else if (stage === 5) {
-                triangle(x - 20, 91 + variant * 4, 217, 72, '#d0c7b3'); triangle(x + 157, 110, 208, 53, '#dad0b8');
-                rect(x + 279, 128, 3, 36, '#aaab8e'); rect(x + 263, 124, 40, 13, '#e4ddbf');
-                if (variant % 2) { triangle(x + 50, 125, 47, 36, '#b9c6af'); triangle(x + 63, 136, 21, 25, '#93ada1'); }
-                if (variant > 1) plant(x + 178);
-                caption(joke, x + 276, 116);
+                trip(x, variant);
             } else {
                 rect(x + 49, 81, 166, 82, '#ccd9c3'); rect(x + 44, 78, 176, 4, '#abc2af');
                 for (let n = 0; n < 4; n++) windowPane(x + 61 + n * 38, 91, 24, 29);
                 rect(x + 117, 130, 29, 33, '#aec7bc');
-                caption(joke, x + 294, 103);
                 if (variant % 2) plant(x + 289); else bench(x + 270, 144);
                 if (variant > 1) for (let n = 0; n < 5; n++) triangle(x + 68 + n * 24, 68, 12, 9, n % 2 ? '#c6baa9' : '#b1c8b7');
+            }
+        }
+        function scene(sceneStage, p) {
+            rect(0, 0, width, 170, p[0]);
+            if (![0, 5, 11].includes(sceneStage)) rect(0, 136, width, 34, p[1] + '55');
+            const scroll = distance * .14, offset = scroll % 450;
+            // Tile identity remains stable while it crosses the viewport.
+            for (let x = offset - 450, tile = 0; x < width; x += 450, tile++) {
+                const count = sceneStage === 0 ? 6 : sceneStage === 5 ? 8 : 4;
+                const index = runSeed + sceneStage * 3 + Math.floor(scroll / 450) - tile;
+                const variant = (index % count + count) % count;
+                const detail = (Math.floor(index / count) % 3 + 3) % 3;
+                if ([0, 5, 11].includes(sceneStage)) outside(x, variant, detail, sceneStage);
+                else classroom(x, variant, detail, sceneStage);
+            }
+            rect(0, 152, width, 18, p[0] + 'b0');
+        }
+        function passage(x) {
+            if ([1, 5, 6, 11].includes(stage)) {
+                // School gates mark entering/leaving the grounds, including the trip return.
+                rect(x - 8, 77, 16, 93, '#b1c2b6'); rect(x - 13, 75, 26, 6, '#d5dfce');
+                for (let n = 1; n <= 5; n++) line(x + n * 9, 107, x + n * 9, 166, '#9eb6a9', 2);
+                line(x + 8, 117, x + 46, 117, '#9eb6a9', 3);
+            } else {
+                rect(x - 11, 81, 22, 89, '#aabfb5'); rect(x - 5, 87, 10, 83, '#dce5d5');
+                rect(x - 31, 81, 62, 6, '#aabfb5');
+                rect(x + 11, 91, 24, 77, '#bdcdbb'); rect(x + 27, 132, 5, 2, '#829e90');
             }
         }
         function draw() {
@@ -236,21 +296,19 @@
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
             // Scale the artwork only. The player's 30px ground baseline is unchanged.
             ctx.save(); ctx.scale(1, (height - 30) / 170);
-            rect(0, 0, width, 170, p[0]);
-            if (![0, 5, 11].includes(stage)) rect(0, 136, width, 34, p[1] + '55');
-            const scroll = distance * .14, offset = scroll % 450;
-            // World-indexed variants stay continuous across tile wraps and use no gameplay RNG.
-            for (let x = offset - 450, tile = 0; x < width; x += 450, tile++) {
-                const count = stage === 0 ? 6 : 4;
-                const index = runSeed + stage * 3 + Math.floor(scroll / 450) - tile;
-                const variant = (index % count + count) % count;
-                const jokeIndex = (index % wallJokes[stage].length + wallJokes[stage].length) % wallJokes[stage].length;
-                const detail = (Math.floor(index / count) % 3 + 3) % 3;
-                const joke = wallJokes[stage][jokeIndex];
-                if ([0, 5, 11].includes(stage)) outside(x, variant, joke, detail); else classroom(x, variant, joke, detail);
+            scene(stage, p);
+            if (colorProgress < 1) {
+                const boundary = -55 + (width + 110) * colorProgress;
+                ctx.save(); ctx.beginPath(); ctx.rect(Math.max(0, boundary), 0, width, 170); ctx.clip();
+                scene(previousStage, fromColors.map(hex)); ctx.restore();
+                passage(boundary);
             }
-            // Quiet foreground lane keeps small obstacles easy to distinguish.
-            rect(0, 152, width, 18, p[0] + 'b0');
+            // Exactly one readable sign per stage/run, independent of scrolling tiles.
+            const signWidth = Math.min(174, width - 28), signX = (width - signWidth) / 2;
+            rect(signX, 57, signWidth, 24, stage === 10 ? '#425d5a' : '#edf2e5');
+            rect(signX, 80, signWidth, 2, '#a8bda9');
+            const joke = wallJokes[stage][(runSeed + stage * 3) % wallJokes[stage].length];
+            caption(joke, width / 2, 73, signWidth - 12);
             ctx.restore();
             rect(0, height - 30, width, 30, p[2]);
             rect(0, height - 30, width, 1, '#91a89d');
@@ -269,6 +327,7 @@
             setStage(index) {
                 const nextStage = Math.max(0, Math.min(11, index));
                 if (nextStage !== stage) {
+                    previousStage = stage;
                     fromColors = colors.map(c => c.slice());
                     colorProgress = 0;
                 }
