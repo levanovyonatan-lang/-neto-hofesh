@@ -1636,6 +1636,8 @@ function selectTarget(id, shouldScroll = true) {
     const personalDemo = isPersonalCountdownDemo(target);
     timerBg.toggleAttribute('data-personal-countdown', personalDemo);
     let personalDate = document.getElementById('personal-event-date');
+    let personalLabel = document.getElementById('personal-countdown-label');
+    if (absoluteTimer) absoluteTimer.setAttribute('aria-hidden', personalDemo ? 'false' : 'true');
     if (personalDemo) {
         if (!personalDate) {
             personalDate = document.createElement('time');
@@ -1644,13 +1646,22 @@ function selectTarget(id, shouldScroll = true) {
         }
         personalDate.dateTime = target.date.toISOString();
         personalDate.textContent = formatPersonalDate(target.date);
+        if (!personalLabel) {
+            personalLabel = document.createElement('div');
+            personalLabel.id = 'personal-countdown-label';
+            absoluteTimer.before(personalLabel);
+        }
+        personalLabel.textContent = 'הזמן שנותר לאירוע';
         document.getElementById('main-target-title').textContent = `${target.name} ${target.icon}`;
         if (netDaysPrefix) netDaysPrefix.textContent = 'עוד';
         if (netDaysSuffix) netDaysSuffix.textContent = 'ימים לאירוע';
         if (excludingLabel) excludingLabel.style.display = 'none';
         if (vacationBox) vacationBox.style.display = 'none';
         if (totalDaysLabel) totalDaysLabel.style.display = 'none';
-    } else if (personalDate) personalDate.remove();
+    } else {
+        if (personalDate) personalDate.remove();
+        if (personalLabel) personalLabel.remove();
+    }
 
     loadDailyState(); renderTipBox(id); updateActiveHolidayCard(id);
     let targetDaysForAnim = 0;
@@ -1698,6 +1709,7 @@ function updateDashboard() {
     if (diff <= 0) {
         setDomText('main-net-days', "הגיע!");
         if (isPersonalCountdownDemo(event)) {
+            setDomText('personal-countdown-label', 'האירוע הגיע!');
             setDomText('net-days-prefix', '');
             setDomText('net-days-suffix', 'הגיע הזמן!');
             ['abs-days', 'abs-hours', 'abs-mins', 'abs-secs'].forEach(id => setDomText(id, '00'));
