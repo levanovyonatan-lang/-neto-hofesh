@@ -33,6 +33,21 @@
         .dino-art-active #dino-game-over button:first-child { background:#537e70 !important; }
     `;
     document.head.appendChild(css);
+    let nextScene = Date.now() % 60;
+    const wallJokes = [
+        ['האוטובוס? בדרך.', 'עוד חמש דקות...', 'שוקו לפני בוחן', 'רק לא לאחר שוב', 'השיפוץ מסיים י״ב', 'הצלצול לא מחכה'],
+        ['זה לבוחן?', 'גם השם שווה נקודות', 'לא למדנו את זה!', 'שאלה קלה. למורה.'],
+        ['תרשום לי? לא.', 'טוסט בלי תור?', 'טרופית של תקווה', 'הבורקס האחרון'],
+        ['לא שיעור שחייה', 'מי סגר את הברז?', 'רצפה עם בונוס', 'הברז לקח חופש'],
+        ['עוד סיבוב קטן', 'הליכה זה גם ספורט', 'קרוקס לא נחשב', 'מי החביא את הכדור?'],
+        ['עוד חמש דקות...', 'אין כאן קליטה', 'מי הביא רמקול?', 'זה לא קיצור דרך'],
+        ['זה לא פטל!', 'לא לטעום. שוב.', 'מי ערבב את זה?', 'הניסוי הצליח. בערך.'],
+        ['שיעור חופשי. כמעט.', 'המורה רק מאחרת', 'הפסקה לא רשמית', 'ששש... המנהל'],
+        ['מי נגע בשלט?', 'להביא מעיל לבוחן', '16 זה לא ציון', 'הקוטב, כיתה ג׳2'],
+        ['אני רק עובר פה', 'זימון לשיחה קצרה', 'ההורים כבר יודעים?', 'המנהל רואה הכול'],
+        ['מי נשאר תורן?', 'האחרון מכבה אור', 'גם השומר הלך', 'לא יום הורים עכשיו'],
+        ['לחופש! בלי חוברת?', 'נתראה בספטמבר', 'השיעורים? במזוודה', 'סוף סוף צלצול טוב']
+    ];
 
     function create(container) {
         const canvas = document.createElement('canvas');
@@ -40,7 +55,7 @@
         canvas.setAttribute('aria-hidden', 'true');
         container.prepend(canvas); container.classList.add('dino-art-active');
         const ctx = canvas.getContext('2d');
-        let stage = 0, distance = 0, width = 0, height = 0;
+        let stage = 0, distance = 0, width = 0, height = 0, runSeed = nextScene;
         const rect = (x, y, w, h, color) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); };
         function line(x, y, x2, y2, color, weight = 2) {
             ctx.strokeStyle = color; ctx.lineWidth = weight; ctx.beginPath();
@@ -55,7 +70,7 @@
         }
         function caption(text, x, y) {
             ctx.font = '600 10px Arial'; ctx.textAlign = 'center'; ctx.direction = 'rtl';
-            ctx.fillStyle = stage === 10 ? '#e1e7d5' : '#647d73'; ctx.fillText(text, x, y);
+            ctx.fillStyle = stage === 10 ? '#e1e7d5' : '#647d73'; ctx.fillText(text, x, y, 112);
         }
         function windowPane(x, y, w = 48, h = 47) {
             rect(x, y, w, h, '#f2f3e9'); rect(x + 3, y + 3, w - 6, h - 6, stage === 10 ? '#657e8b' : '#bed4d5');
@@ -81,19 +96,32 @@
             line(x + 19, 115, x + 71, 115, '#c9d6c8', 1);
             rect(x - 2, 130, 100, 3, '#a8bba9');
         }
-        function classroom(x) {
+        function plant(x) {
+            rect(x + 7, 143, 15, 18, '#c0b798'); line(x + 14, 142, x + 14, 121, '#a4b9a0');
+            circle(x + 8, 130, 8, '#b0c5a6'); circle(x + 20, 121, 10, '#bad0ae');
+        }
+        function shelf(x, variant) {
+            rect(x, 109, 45, 49, '#b3c2ad'); rect(x + 3, 112, 39, 43, '#dce4cc');
+            rect(x, 131, 45, 3, '#b3c2ad');
+            for (let i = 0; i < 4; i++) rect(x + 6 + i * 8, 118, 5, 13 + i % 2 * 2, ['#a9c0c3', '#c9bca7', '#bcb2c7', '#b6c7a4'][(i + variant) % 4]);
+        }
+        function classroom(x, variant) {
             const p = themes[stage];
+            const joke = wallJokes[stage][variant];
+            const shift = variant % 2 ? 40 : 0;
             if ([1, 8].includes(stage)) {
-                board(x + 28, stage === 1 ? 'זה לבוחן?' : 'מי נגע בשלט?');
-                windowPane(x + 180, 82); bench(x + 49, 144, true);
+                board(x + 28 + shift, joke);
+                if (variant < 2) windowPane(x + 180 + shift, 82); else shelf(x + 184, variant);
+                bench(x + 49 + shift, 144, true);
                 if (stage === 8) {
                     rect(x + 263, 72, 54, 15, '#f0f3e9'); rect(x + 269, 82, 42, 2, '#a2bec4');
-                } else door(x + 286, 'ג׳2');
+                } else if (variant % 2) plant(x + 300); else door(x + 286, 'ג׳2');
             } else if (stage === 2) {
-                rect(x + 28, 90, 105, 47, '#bbcbbb'); caption('המזנון של אבי', x + 80, 104);
+                rect(x + 28, 90, 105, 47, '#bbcbbb'); caption(joke, x + 80, 104);
                 for (let n = 0; n < 3; n++) rect(x + 54 + n * 18, 119, 10, 16, '#dbd2b0');
                 rect(x + 22, 137, 118, 5, '#eee3cc'); rect(x + 28, 142, 106, 22, '#c7b8a5');
-                windowPane(x + 206, 82); bench(x + 278, 145);
+                if (variant % 2) shelf(x + 206, variant); else windowPane(x + 206, 82);
+                bench(x + 278, 145, variant > 1);
             } else if (stage === 4) {
                 windowPane(x + 25, 74, 63, 46);
                 rect(x + 178, 85, 53, 33, '#eef1e4');
@@ -101,42 +129,78 @@
                 line(x + 194, 117, x + 201, 132, '#e4e6d8', 1);
                 line(x + 216, 117, x + 209, 132, '#e4e6d8', 1);
                 bench(x + 280, 144);
+                caption(joke, x + 298, 97);
+                if (variant % 2) {
+                    for (let n = 0; n < 5; n++) line(x + 30, 84 + n * 11, x + 74, 84 + n * 11, '#c5b99d', 3);
+                }
+                if (variant > 1) circle(x + 309, 138, 7, '#c7b999');
             } else if (stage === 6) {
-                board(x + 28, 'לא לשתות!');
+                board(x + 28 + shift, joke);
                 rect(x + 187, 129, 99, 5, '#aac0b2');
                 for (let n = 0; n < 3; n++) {
                     const a = x + 198 + n * 28; rect(a + 4, 106, 6, 10, '#bbd0c5');
-                    triangle(a, 113, 15, 15, ['#b2c7ad', '#c9b7c8', '#acc6cf'][n]);
+                    if (variant % 2) rect(a, 113, 15, 15, ['#b2c7ad', '#c9b7c8', '#acc6cf'][n]);
+                    else triangle(a, 113, 15, 15, ['#b2c7ad', '#c9b7c8', '#acc6cf'][n]);
                 }
+                if (variant > 1) plant(x + 324);
             } else {
-                windowPane(x + 28, 84); door(x + 184, stage === 9 ? 'המנהל' : stage === 10 ? 'יציאה' : 'ג׳2');
+                if (variant % 2) shelf(x + 28, variant); else windowPane(x + 28, 84);
+                door(x + 184 + shift, stage === 9 ? 'המנהל' : stage === 10 ? 'יציאה' : 'ג׳2');
+                caption(joke, x + 104, 73);
                 if (stage === 3) {
                     rect(x + 291, 127, 26, 26, '#a9c4bf'); rect(x + 288, 125, 32, 4, '#8faeb1');
                     line(x + 310, 118, x + 310, 125, '#8faeb1');
                 } else bench(x + 281, 144);
                 if (stage === 7) { rect(x + 281, 132, 66, 12, p[1]); }
+                if (variant > 1) plant(x + 114);
             }
         }
-        function outside(x) {
+        function outside(x, variant) {
             if (stage === 0) {
                 for (let b = 0; b < 2; b++) {
-                    const a = x + 17 + b * 154, y = 83 + b * 12;
+                    const a = x + 17 + b * 154, y = 78 + (b + variant) % 3 * 8;
                     rect(a, y, 113, 75, '#cbd7d0'); rect(a - 3, y - 3, 119, 4, '#b7c8bd');
                     rect(a + 12, y - 10, 16, 7, '#e9ece0');
                     for (let row = 0; row < 2; row++) for (let col = 0; col < 3; col++)
                         rect(a + 13 + col * 32, y + 13 + row * 27, 16, 17, '#a9c3c6');
                 }
-                line(x + 140, 115, x + 140, 163, '#90aaa0');
-                rect(x + 131, 104, 20, 20, '#d4c797'); rect(x + 135, 109, 12, 9, '#91adb3');
-                bench(x + 310, 144);
+                if (variant === 0) {
+                    line(x + 140, 115, x + 140, 163, '#90aaa0');
+                    rect(x + 131, 104, 20, 20, '#d4c797'); rect(x + 135, 109, 12, 9, '#91adb3');
+                    bench(x + 310, 144);
+                } else if (variant === 1) {
+                    for (let n = 0; n < 4; n++) rect(x + 292 + n * 18, 147, 10, 14, '#e7ece1');
+                    line(x + 144, 102, x + 144, 163, '#9aaea7'); rect(x + 138, 100, 13, 28, '#b3c4b7');
+                    circle(x + 144, 107, 3, '#c7b49f'); circle(x + 144, 121, 3, '#a2bfa5');
+                } else if (variant === 2 || variant === 5) {
+                    rect(x + 22, 117, 104, 44, '#d0c7b3');
+                    for (let n = 0; n < 8; n++) rect(x + 20 + n * 14, 110, 14, 8, n % 2 ? '#dfe6d3' : '#a9c0b4');
+                    rect(x + 32, 129, 28, 32, '#a5bdba'); rect(x + 70, 128, 44, 22, '#e8e7ce');
+                    plant(x + 318);
+                } else if (variant === 3) {
+                    for (let n = 0; n < 8; n++) line(x + 133 + n * 12, 117, x + 133 + n * 12, 162, '#b0c4b7');
+                    line(x + 131, 124, x + 219, 124, '#a3bca9', 3);
+                    rect(x + 300, 126, 5, 35, '#acb89c'); circle(x + 302, 111, 19, '#b7cca8');
+                } else {
+                    line(x + 292, 141, x + 292, 164, '#b6ad98', 3); line(x + 353, 141, x + 353, 164, '#b6ad98', 3);
+                    rect(x + 284, 137, 77, 9, '#d6c6a9');
+                    for (let n = 0; n < 4; n++) rect(x + 286 + n * 20, 138, 9, 7, '#bcb497');
+                    triangle(x + 142, 141, 15, 22, '#c6b8a1');
+                }
+                rect(x + 171, 93, 112, 18, '#f0f3e8'); caption(wallJokes[0][variant], x + 227, 106);
             } else if (stage === 5) {
-                triangle(x - 20, 91, 217, 72, '#d0c7b3'); triangle(x + 157, 110, 208, 53, '#dad0b8');
+                triangle(x - 20, 91 + variant * 4, 217, 72, '#d0c7b3'); triangle(x + 157, 110, 208, 53, '#dad0b8');
                 rect(x + 279, 128, 3, 36, '#aaab8e'); rect(x + 263, 124, 40, 13, '#e4ddbf');
+                if (variant % 2) { triangle(x + 50, 125, 47, 36, '#b9c6af'); triangle(x + 63, 136, 21, 25, '#93ada1'); }
+                if (variant > 1) plant(x + 178);
+                caption(wallJokes[stage][variant], x + 276, 116);
             } else {
                 rect(x + 49, 81, 166, 82, '#ccd9c3'); rect(x + 44, 78, 176, 4, '#abc2af');
                 for (let n = 0; n < 4; n++) windowPane(x + 61 + n * 38, 91, 24, 29);
                 rect(x + 117, 130, 29, 33, '#aec7bc');
-                caption('לחופש!', x + 280, 108); bench(x + 270, 144);
+                caption(wallJokes[stage][variant], x + 294, 103);
+                if (variant % 2) plant(x + 289); else bench(x + 270, 144);
+                if (variant > 1) for (let n = 0; n < 5; n++) triangle(x + 68 + n * 24, 68, 12, 9, n % 2 ? '#c6baa9' : '#b1c8b7');
             }
         }
         function draw() {
@@ -147,9 +211,13 @@
             ctx.save(); ctx.scale(1, (height - 30) / 170);
             rect(0, 0, width, 170, p[0]);
             if (![0, 5, 11].includes(stage)) rect(0, 136, width, 34, p[1] + '55');
-            const offset = distance * .14 % 450;
-            for (let x = offset - 450; x < width; x += 450) {
-                if ([0, 5, 11].includes(stage)) outside(x); else classroom(x);
+            const scroll = distance * .14, offset = scroll % 450;
+            // World-indexed variants stay continuous across tile wraps and use no gameplay RNG.
+            for (let x = offset - 450, tile = 0; x < width; x += 450, tile++) {
+                const count = stage === 0 ? 6 : 4;
+                const index = runSeed + stage * 3 + Math.floor(scroll / 450) - tile;
+                const variant = (index % count + count) % count;
+                if ([0, 5, 11].includes(stage)) outside(x, variant); else classroom(x, variant);
             }
             // Quiet foreground lane keeps small obstacles easy to distinguish.
             rect(0, 152, width, 18, p[0] + 'b0');
@@ -167,7 +235,11 @@
         });
         observer.observe(container);
         return {
-            setStage(index) { stage = Math.max(0, Math.min(11, index)); canvas.dataset.stage = String(stage + 1); draw(); },
+            setStage(index) {
+                stage = Math.max(0, Math.min(11, index));
+                if (stage === 0) { runSeed = ++nextScene; distance = 0; }
+                canvas.dataset.stage = String(stage + 1); draw();
+            },
             update(speed, timeScale) { distance += speed * timeScale; draw(); },
             destroy() { observer.disconnect(); canvas.remove(); container.classList.remove('dino-art-active'); }
         };
