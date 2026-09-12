@@ -452,7 +452,9 @@ window.submitRegistration = async function() {
         // Update any current high score they just achieved
         const currentHS = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         if(currentHS > 0 && window.saveDinoHighScore) {
-            window.saveDinoHighScore(currentHS);
+            const currentMonth = new Date().toISOString().substring(0, 7);
+            const localMonthlyScore = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonth)) || 0;
+            window.saveDinoHighScore(currentHS, null, null, localMonthlyScore);
         }
 }
 
@@ -504,10 +506,14 @@ window.showLeaderboard = async function(score, stage, killer, isTabSwitch = fals
             const timeElapsed = localStorage.getItem('dinoTimeElapsed');
             
             if (maxScore > 0 && !localStorage.getItem('forceSync_v1_modal')) {
-                await window.saveDinoHighScore(maxScore, token, timeElapsed);
+                const currentMonth = new Date().toISOString().substring(0, 7);
+                const localMonthlyScore = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonth)) || 0;
+                await window.saveDinoHighScore(maxScore, token, timeElapsed, localMonthlyScore);
                 localStorage.setItem('forceSync_v1_modal', 'true');
             } else if (localScore > serverScore) {
-                await window.saveDinoHighScore(localScore, token, timeElapsed);
+                const currentMonth = new Date().toISOString().substring(0, 7);
+                const localMonthlyScore = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonth)) || 0;
+                await window.saveDinoHighScore(localScore, token, timeElapsed, localMonthlyScore);
             }
         }
     }
@@ -715,7 +721,9 @@ window.handleLocalLogin = async function() {
     if(currentHS > 0 && window.saveDinoHighScore) {
         const token = localStorage.getItem('dinoHighScoreToken');
         const timeElapsed = localStorage.getItem('dinoTimeElapsed');
-        window.saveDinoHighScore(currentHS, token, timeElapsed);
+        const currentMonth = new Date().toISOString().substring(0, 7);
+        const localMonthlyScore = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonth)) || 0;
+        window.saveDinoHighScore(currentHS, token, timeElapsed, localMonthlyScore);
     }
 }
 
