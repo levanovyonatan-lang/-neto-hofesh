@@ -1657,8 +1657,12 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
    PREMIUM CUSTOM COUNTDOWN THEMES
    ========================================= */
 
-/* Base style for all themes to ensure readability */
-.main-timer-card[class*="theme-"] {
+/* Base style for premium cinematic themes to ensure readability */
+.main-timer-card.theme-vacation,
+.main-timer-card.theme-celebration,
+.main-timer-card.theme-exam,
+.main-timer-card.theme-military,
+.main-timer-card.theme-license {
     position: relative;
     overflow: hidden;
     border: 1px solid rgba(255,255,255,0.1) !important;
@@ -1666,7 +1670,11 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
 }
 
 /* Frosted glass overlay to guarantee text contrast against animated backgrounds */
-.main-timer-card[class*="theme-"]::before {
+.main-timer-card.theme-vacation::before,
+.main-timer-card.theme-celebration::before,
+.main-timer-card.theme-exam::before,
+.main-timer-card.theme-military::before,
+.main-timer-card.theme-license::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -1678,7 +1686,11 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
 }
 
 /* Bring all content above the frosted overlay */
-.main-timer-card[class*="theme-"] > * {
+.main-timer-card.theme-vacation > *,
+.main-timer-card.theme-celebration > *,
+.main-timer-card.theme-exam > *,
+.main-timer-card.theme-military > *,
+.main-timer-card.theme-license > * {
     position: relative;
     z-index: 1;
 }
