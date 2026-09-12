@@ -1667,6 +1667,21 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
 
 /* Frosted glass overlay to guarantee text contrast against animated backgrounds */
 .main-timer-card[class*="theme-"]::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Bring all content above the frosted overlay */
+.main-timer-card[class*="theme-"] > * {
+    position: relative;
+    z-index: 1;
+}
 /* 1. Vacation Theme - Sunset & Clouds */
 .theme-vacation {
     background: linear-gradient(to bottom, #3b82f6 0%, #8b5cf6 50%, #f43f5e 100%) !important;
