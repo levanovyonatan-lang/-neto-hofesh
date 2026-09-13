@@ -1557,8 +1557,19 @@ function selectTarget(id, shouldScroll = true) {
     
     // Manage themes
     timerBg.classList.remove('theme-vacation', 'theme-celebration', 'theme-exam', 'theme-military', 'theme-license');
-    if (target.theme && target.theme !== 'default') {
-        timerBg.classList.add('theme-' + target.theme);
+    
+    let appliedTheme = target.theme && target.theme !== 'default' ? target.theme : null;
+    
+    if (!appliedTheme && window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme && window.currentUserProfile.theme !== 'default') {
+        let globalTheme = window.currentUserProfile.theme;
+        if (globalTheme === 'gold') globalTheme = 'celebration'; 
+        if (['vacation', 'celebration', 'exam', 'military', 'license'].includes(globalTheme)) {
+            appliedTheme = globalTheme;
+        }
+    }
+
+    if (appliedTheme) {
+        timerBg.classList.add('theme-' + appliedTheme);
         timerBg.style.background = '';
     } else {
         if (target.isCustom && target.bg === 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)') {
