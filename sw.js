@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v4379';
-const CACHE_NAME = 'neto-cache-v4379';
+const CACHE_VERSION = 'v4380';
+const CACHE_NAME = 'neto-cache-v4380';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

@@ -929,38 +929,6 @@
         <a href="/about.html" style="color: #64748b; text-decoration: none;">אודות</a>
     </nav>
 
-    <!-- Cookie Consent Banner -->
-    <div id="cookie-banner" style="display: none; position: fixed; bottom: 20px; left: 20px; right: 20px; background: #1e293b; color: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 9999; flex-direction: row; justify-content: space-between; align-items: center; gap: 15px; font-size: 13px; max-width: 800px; margin: 0 auto; direction: rtl;">
-        <div style="flex: 1; line-height: 1.4;">
-            אתר זה עושה שימוש בקובצי Cookie כדי לשפר את חווית הגלישה ולהציג מודעות מותאמות אישית. בהמשך הגלישה באתר הנך מסכים ל<a href="/privacy.html" style="color: #38bdf8; text-decoration: underline;">מדיניות הפרטיות שלנו</a>.
-        </div>
-        <button id="accept-cookies" style="background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: 0.3s;">הבנתי, תודה</button>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!localStorage.getItem('cookie_consent_accepted')) {
-                const banner = document.getElementById('cookie-banner');
-                banner.style.display = 'flex';
-                banner.style.transform = 'translateY(100px)';
-                banner.style.opacity = '0';
-                banner.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-
-                setTimeout(() => {
-                    banner.style.transform = 'translateY(0)';
-                    banner.style.opacity = '1';
-                }, 500);
-
-                document.getElementById('accept-cookies').addEventListener('click', () => {
-                    localStorage.setItem('cookie_consent_accepted', 'true');
-                    banner.style.transform = 'translateY(100px)';
-                    banner.style.opacity = '0';
-                    setTimeout(() => {
-                        banner.style.display = 'none';
-                    }, 500);
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>
