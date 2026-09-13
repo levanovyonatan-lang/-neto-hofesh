@@ -1530,6 +1530,13 @@ function saveCustomCountdown() {
     // Refresh the UI to show the new countdown
     userConfig.targetIntent = newCustom.id;
     showMainScreen();
+    
+    setTimeout(() => {
+        const activeCard = document.querySelector('.holiday-card.active');
+        if (activeCard) {
+            activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    }, 100);
 }
 
 function deleteCustomCountdown(id) {
@@ -1621,7 +1628,11 @@ function selectTarget(id, shouldScroll = true) {
         }
         timerBg.classList.remove('vacation-mode');
 
-        timerBg.classList.add('premium-countdown');
+        if (target.isCustom && (!target.theme || target.theme === 'default')) {
+            timerBg.classList.remove('premium-countdown');
+        } else {
+            timerBg.classList.add('premium-countdown');
+        }
 
         document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
         if (netDaysPrefix) {
