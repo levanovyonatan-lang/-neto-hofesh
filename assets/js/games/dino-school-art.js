@@ -273,6 +273,7 @@
             caption(joke, x + signWidth / 2, y + 16, signWidth - 12);
         }
         function scene(sceneStage, p) {
+            if (sceneStage === 0) return;
             rect(0, 0, width, 170, p[0]);
             if (![0, 5, 11].includes(sceneStage)) rect(0, 136, width, 34, p[1] + '55');
             const scroll = distance * .14, offset = scroll % 450;
