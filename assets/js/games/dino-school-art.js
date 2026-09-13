@@ -20,6 +20,7 @@
     css.textContent = `
         #main-timer-bg.dino-art-active { height:200px !important; padding:0 !important; border-radius:12px !important; border:1px solid #a7b9b2 !important; animation:none !important; isolation:isolate; box-shadow:0 5px 18px #354d4510 !important; }
         .dino-art-canvas { position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+        .dino-art-canvas-fg { position:absolute; inset:0; width:100%; height:100%; z-index:30; pointer-events:none; }
         .dino-art-score { top:7px !important; right:12px !important; z-index:30; min-width:94px; padding:0; color:#304b49 !important; }
         .dino-art-score #dino-score-val { font-size:19px !important; }
         .dino-art-score .dino-score-text { font-size:9px !important; line-height:1.1 !important; }
@@ -67,8 +68,11 @@
         const canvas = document.createElement('canvas');
         canvas.className = 'dino-element dino-art-canvas';
         canvas.setAttribute('aria-hidden', 'true');
-        container.prepend(canvas); container.classList.add('dino-art-active');
-        const ctx = canvas.getContext('2d');
+        const canvasFg = document.createElement('canvas');
+        canvasFg.className = 'dino-element dino-art-canvas-fg';
+        canvasFg.setAttribute('aria-hidden', 'true');
+        container.prepend(canvas); container.appendChild(canvasFg); container.classList.add('dino-art-active');
+        const ctx = canvas.getContext('2d'); const ctxFg = canvasFg.getContext('2d');
         let stage = 0, previousStage = 0, distance = 0, width = 0, height = 0, runSeed = nextScene;
         const rect = (x, y, w, h, color) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); };
         function line(x, y, x2, y2, color, weight = 2) {
@@ -301,23 +305,27 @@
             rect(0, 152, width, 18, p[0] + 'b0');
         }
         function passage(x) {
+            const r = (x, y, w, h, color) => { ctxFg.fillStyle = color; ctxFg.fillRect(x, y, w, h); };
+            const l = (x1, y1, x2, y2, color, weight = 2) => { ctxFg.strokeStyle = color; ctxFg.lineWidth = weight; ctxFg.beginPath(); ctxFg.moveTo(x1, y1); ctxFg.lineTo(x2, y2); ctxFg.stroke(); };
             if ([1, 5, 6, 11].includes(stage)) {
                 // School gates mark entering/leaving the grounds, including the trip return.
-                rect(x - 8, 77, 16, 93, '#b1c2b6'); rect(x - 13, 75, 26, 6, '#d5dfce');
-                for (let n = 1; n <= 5; n++) line(x + n * 9, 107, x + n * 9, 166, '#9eb6a9', 2);
-                line(x + 8, 117, x + 46, 117, '#9eb6a9', 3);
+                r(x - 8, 77, 16, 93, '#b1c2b6'); r(x - 13, 75, 26, 6, '#d5dfce');
+                for (let n = 1; n <= 5; n++) l(x + n * 9, 107, x + n * 9, 166, '#9eb6a9', 2);
+                l(x + 8, 117, x + 46, 117, '#9eb6a9', 3);
             } else {
-                rect(x - 11, 81, 22, 89, '#aabfb5'); rect(x - 5, 87, 10, 83, '#dce5d5');
-                rect(x - 31, 81, 62, 6, '#aabfb5');
-                rect(x + 11, 91, 24, 77, '#bdcdbb'); rect(x + 27, 132, 5, 2, '#829e90');
+                r(x - 11, 81, 22, 89, '#aabfb5'); r(x - 5, 87, 10, 83, '#dce5d5');
+                r(x - 31, 81, 62, 6, '#aabfb5');
+                r(x + 11, 91, 24, 77, '#bdcdbb'); r(x + 27, 132, 5, 2, '#829e90');
             }
         }
         function draw() {
             if (!ctx || !width || !height) return;
             const dpr = Math.min(devicePixelRatio || 1, 2), p = colors.map(hex);
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
+            ctxFg.setTransform(dpr, 0, 0, dpr, 0, 0); ctxFg.clearRect(0, 0, width, height);
             // Scale the artwork only. The player's 30px ground baseline is unchanged.
             ctx.save(); ctx.scale(1, (height - 30) / 170);
+            ctxFg.save(); ctxFg.scale(1, (height - 30) / 170);
             scene(stage, p);
             
             const wipeDistance = distance - transitionDistance;
@@ -327,7 +335,7 @@
                 scene(previousStage, fromColors.map(hex)); ctx.restore();
                 passage(boundary);
             }
-            ctx.restore();
+            ctx.restore(); ctxFg.restore();
             rect(0, height - 30, width, 30, p[2]);
             rect(0, height - 30, width, 1, '#91a89d');
             for (let x = distance % 125 - 125; x < width; x += 125)
@@ -338,7 +346,9 @@
         const observer = new ResizeObserver(() => {
             width = container.clientWidth; height = container.clientHeight;
             const dpr = Math.min(devicePixelRatio || 1, 2);
-            canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr); draw();
+            canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+            canvasFg.width = canvas.width; canvasFg.height = canvas.height;
+            draw();
         });
         observer.observe(container);
         return {
@@ -361,7 +371,7 @@
                 colors = fromColors.map((c, i) => mix(c, palettes[stage][i], eased));
                 draw();
             },
-            destroy() { observer.disconnect(); canvas.remove(); container.classList.remove('dino-art-active'); }
+            destroy() { observer.disconnect(); canvas.remove(); canvasFg.remove(); container.classList.remove('dino-art-active'); }
         };
     }
     window.DinoSchoolArt = { create };
