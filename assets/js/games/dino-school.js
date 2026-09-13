@@ -136,9 +136,11 @@
         const stage = STAGES[stageIndex];
         if (scenery) {
             scenery.setStage(stageIndex);
-            groundLine.style.visibility = stageIndex === 0 ? 'visible' : 'hidden';
+            groundLine.style.transition = 'opacity 2s ease';
+            groundLine.style.opacity = stageIndex === 0 ? '1' : '0';
             obstaclesList.filter(item => item.type === 'cloud').forEach(item => {
-                item.el.style.visibility = stageIndex === 0 ? 'visible' : 'hidden';
+                item.el.style.transition = 'opacity 2s ease';
+                item.el.style.opacity = stageIndex === 0 ? '1' : '0';
             });
         }
         
@@ -404,6 +406,7 @@
         groundLine.style.width = '100%';
         groundLine.style.height = '2px';
         groundLine.style.background = '#666';
+        groundLine.style.opacity = '1';
         gameContainer.appendChild(groundLine);
 
         // Dino
@@ -435,7 +438,6 @@
             closeBtn.onkeydown = e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); cleanupGame(); }
             };
-            groundLine.style.visibility = 'hidden';
         }
         window.addEventListener('keydown', handleInput);
         window.addEventListener('touchstart', handleInput, {passive: false});
@@ -536,7 +538,10 @@
         }
 
         el.textContent = emoji;
-        if (scenery && isCloud) el.style.visibility = currentStageIndex === 0 ? 'visible' : 'hidden';
+        if (scenery && isCloud) {
+            el.style.transition = 'opacity 2s ease';
+            el.style.opacity = currentStageIndex === 0 ? '1' : '0';
+        }
         el.style.position = 'absolute';
         el.style.bottom = bottom;
         el.style.right = '100%';
