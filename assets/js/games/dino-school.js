@@ -30,7 +30,7 @@
         style.textContent = `
         @keyframes flashRed {
             0% { box-shadow: inset 0 0 50px rgba(239,68,68,0.2); }
-            100% { box-shadow: inset 0 0 250px rgba(239,68,68,0.9); }
+            100% { box-shadow: inset 0 0 200px rgba(239,68,68,0.9); }
         }
         @keyframes dinoWalk {
             0% { transform: translateY(0); }
@@ -290,7 +290,7 @@
         gameContainer.style.height = currentHeight + 'px';
         gameContainer.offsetHeight; // force reflow
         gameContainer.style.transition = 'height 0.4s ease, box-shadow 0.4s ease';
-        gameContainer.style.height = '250px';
+        gameContainer.style.height = '200px';
 
         gameContainer.style.position = 'relative';
         gameContainer.style.overflow = 'hidden';
@@ -754,7 +754,7 @@
                     gameContainer.appendChild(floatText);
                     
                     requestAnimationFrame(() => {
-                        floatText.style.bottom = '250px';
+                        floatText.style.bottom = '200px';
                         floatText.style.opacity = '0';
                     });
                     setTimeout(() => { if (floatText.parentNode) floatText.remove(); }, 500);
@@ -1194,7 +1194,7 @@
         if (appContainer) appContainer.style.zIndex = '';
 
         gameContainer.style.transition = '';
-        gameContainer.style.height = '250px'; // Lock before restore
+        gameContainer.style.height = '200px'; // Lock before restore
         gameContainer.style.removeProperty('background');
         
         const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
@@ -1207,7 +1207,7 @@
         gameContainer.style.height = 'auto';
         const targetHeight = gameContainer.getBoundingClientRect().height;
 
-        gameContainer.style.height = '250px';
+        gameContainer.style.height = '200px';
         gameContainer.offsetHeight; // reflow
         gameContainer.style.transition = 'height 0.4s ease';
         gameContainer.style.height = targetHeight + 'px';
@@ -1287,7 +1287,7 @@
         gameContainer.style.height = currentHeight + 'px';
         gameContainer.offsetHeight; // force reflow
         gameContainer.style.transition = 'height 0.4s ease, box-shadow 0.4s ease';
-        gameContainer.style.height = '250px';
+        gameContainer.style.height = '200px';
 
         gameContainer.style.position = 'relative';
         gameContainer.style.overflow = 'hidden';
