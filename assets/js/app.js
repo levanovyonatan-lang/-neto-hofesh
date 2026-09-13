@@ -1629,7 +1629,7 @@ function selectTarget(id, shouldScroll = true) {
             }
         }
         if (absoluteTimer) {
-            absoluteTimer.style.display = target.isCustom ? 'flex' : 'none';
+            absoluteTimer.style.display = 'flex';
         }
         if (totalDaysLabel) totalDaysLabel.style.display = 'block';
         if (vacationMessage) vacationMessage.style.display = 'none';
