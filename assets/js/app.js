@@ -1360,11 +1360,14 @@ function showMainScreen() {
             customCountdowns.forEach(c => {
                 const cDate = new Date(c.date);
                 if (cDate.getTime() > now) {
+                    const hasEmoji = /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/u.test(c.name);
+                    const isDefaultIcon = (!c.icon || c.icon === '📅' || c.icon === '🗓️');
+                    const finalIcon = (hasEmoji && isDefaultIcon) ? '' : (c.icon || '🗓️');
                     activeEventsList.push({
                         id: c.id,
                         name: c.name,
                         date: cDate,
-                        icon: c.icon || '🗓️',
+                        icon: finalIcon,
                         bg: '#f1f5f9',
                         theme: c.theme || 'default',
                         lengthText: 'ספירה אישית',
