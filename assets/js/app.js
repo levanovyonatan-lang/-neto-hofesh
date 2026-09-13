@@ -1305,6 +1305,7 @@ function showMainScreen() {
 
     const now = Date.now();
     activeEventsList = allTargets.filter(e => {
+        if (e.isSchoolDay) return false;
         let isHappening = false;
         e.isHappeningNow = false;
 
@@ -1400,8 +1401,11 @@ function showMainScreen() {
         userConfig.targetIntent = null;
     }
 
+    if (!activeEventsList.some(t => t.id === userConfig.activeTargetId)) {
+        userConfig.activeTargetId = activeEventsList[0].id;
+    }
     renderHolidays();
-    selectTarget(userConfig.activeTargetId || activeEventsList[0].id, false);
+    selectTarget(userConfig.activeTargetId, false);
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
 }
 
