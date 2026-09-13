@@ -136,8 +136,7 @@
         const stage = STAGES[stageIndex];
         if (scenery) {
             scenery.setStage(stageIndex);
-            groundLine.style.transition = 'opacity 2s ease';
-            groundLine.style.opacity = stageIndex === 0 ? '1' : '0';
+            groundLine.style.display = 'none';
             obstaclesList.filter(item => item.type === 'cloud').forEach(item => {
                 item.el.style.transition = 'opacity 2s ease';
                 item.el.style.opacity = stageIndex === 0 ? '1' : '0';
