@@ -1563,10 +1563,9 @@ function selectTarget(id, shouldScroll = true) {
     // Manage themes
     timerBg.classList.remove('theme-vacation', 'theme-celebration', 'theme-exam', 'theme-military', 'theme-license');
     
-    const personalCountdown = target.isCustom === true;
-    let appliedTheme = personalCountdown && target.theme && target.theme !== 'default' ? target.theme : null;
+    let appliedTheme = target.theme && target.theme !== 'default' ? target.theme : null;
     
-    if (personalCountdown && !appliedTheme && window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme && window.currentUserProfile.theme !== 'default') {
+    if (!appliedTheme && window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme && window.currentUserProfile.theme !== 'default') {
         let globalTheme = window.currentUserProfile.theme;
         if (globalTheme === 'gold') globalTheme = 'celebration'; 
         if (['vacation', 'celebration', 'exam', 'military', 'license'].includes(globalTheme)) {
@@ -1645,46 +1644,21 @@ function selectTarget(id, shouldScroll = true) {
             }
         }
         if (absoluteTimer) {
-            absoluteTimer.style.display = personalCountdown ? 'flex' : 'none';
+            absoluteTimer.style.display = 'flex';
         }
         if (totalDaysLabel) totalDaysLabel.style.display = 'block';
         if (vacationMessage) vacationMessage.style.display = 'none';
     }
 
-    timerBg.toggleAttribute('data-personal-countdown', personalCountdown);
     let personalDate = document.getElementById('personal-event-date');
     let personalLabel = document.getElementById('personal-countdown-label');
-    if (absoluteTimer) absoluteTimer.setAttribute('aria-hidden', personalCountdown ? 'false' : 'true');
-    if (personalCountdown) {
-        if (!personalDate) {
-            personalDate = document.createElement('time');
-            personalDate.id = 'personal-event-date';
-            document.getElementById('main-target-title').after(personalDate);
-        }
-        personalDate.dateTime = target.date.toISOString();
-        personalDate.textContent = formatPersonalDate(target.date);
-        if (!personalLabel) {
-            personalLabel = document.createElement('div');
-            personalLabel.id = 'personal-countdown-label';
-            absoluteTimer.before(personalLabel);
-        }
-        personalLabel.textContent = 'הזמן שנותר לאירוע';
-        document.getElementById('main-target-title').textContent = `${target.name} ${target.icon}`;
-        if (netDaysPrefix) netDaysPrefix.textContent = 'עוד';
-        if (netDaysSuffix) netDaysSuffix.textContent = 'ימים לאירוע';
-        if (excludingLabel) excludingLabel.style.display = 'none';
-        if (vacationBox) vacationBox.style.display = 'none';
-        if (totalDaysLabel) totalDaysLabel.style.display = 'none';
-    } else {
-        if (personalDate) personalDate.remove();
-        if (personalLabel) personalLabel.remove();
-    }
+    if (absoluteTimer) absoluteTimer.setAttribute('aria-hidden', 'true');
+    if (personalDate) personalDate.remove();
+    if (personalLabel) personalLabel.remove();
 
     loadDailyState(); renderTipBox(id); updateActiveHolidayCard(id);
     let targetDaysForAnim = 0;
-    if (personalCountdown) {
-        targetDaysForAnim = Math.max(0, Math.floor((target.date.getTime() - Date.now()) / 86400000));
-    } else if (target.isHappeningNow) {
+    if (target.isHappeningNow) {
         const diff = target.endDate.getTime() - Date.now();
         targetDaysForAnim = Math.ceil(diff / 86400000);
     } else {
@@ -1720,12 +1694,6 @@ function updateDashboard() {
 
     if (diff <= 0) {
         setDomText('main-net-days', "הגיע!");
-        if (event.isCustom === true) {
-            setDomText('personal-countdown-label', 'האירוע הגיע!');
-            setDomText('net-days-prefix', '');
-            setDomText('net-days-suffix', 'הגיע הזמן!');
-            ['abs-days', 'abs-hours', 'abs-mins', 'abs-secs'].forEach(id => setDomText(id, '00'));
-        }
         if (!event.isHappeningNow && !confettiFired) { confettiFired = true; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
     } else {
         if (!isAnimatingAbs) {
