@@ -318,12 +318,14 @@
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
             // Scale the artwork only. The player's 30px ground baseline is unchanged.
             ctx.save(); ctx.scale(1, (height - 30) / 170);
-            scene(stage, p);
             if (colorProgress < 1) {
-                const boundary = -55 + (width + 110) * colorProgress;
+                scene(previousStage, fromColors.map(hex));
+                const boundary = width + 55 - (width + 110) * colorProgress;
                 ctx.save(); ctx.beginPath(); ctx.rect(Math.max(0, boundary), 0, width, 170); ctx.clip();
-                scene(previousStage, fromColors.map(hex)); ctx.restore();
+                scene(stage, p); ctx.restore();
                 passage(boundary);
+            } else {
+                scene(stage, p);
             }
             ctx.restore();
             rect(0, height - 30, width, 30, p[2]);
