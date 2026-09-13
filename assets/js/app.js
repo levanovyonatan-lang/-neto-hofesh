@@ -923,6 +923,7 @@ function updateNextVacationButtonText() {
             const days = durationMap[baseName] || 1;
             const endDate = new Date(e.date);
             endDate.setDate(endDate.getDate() + days);
+            endDate.setHours(0, 0, 0, 0);
             if (e.date.getTime() <= now && now < endDate.getTime()) {
                 isVacationNow = true;
                 break;
@@ -1326,6 +1327,7 @@ function showMainScreen() {
             const days = durationMap[baseName] || 1;
             const endDate = new Date(e.date);
             endDate.setDate(endDate.getDate() + days);
+            endDate.setHours(0, 0, 0, 0);
 
             if (!e.isSchoolDay && e.date.getTime() <= now && now < endDate.getTime()) {
                 isHappening = true;
