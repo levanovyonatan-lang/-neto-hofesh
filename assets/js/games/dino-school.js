@@ -335,7 +335,14 @@
         scoreDisplay = document.createElement('div');
         scoreDisplay.className = 'dino-element';
         
-        const highScore = localStorage.getItem('dinoHighScore') || 0;
+        let highScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
+        if (window.currentUserProfile && window.currentUserProfile.dinoHighScore) {
+            let profileHighScore = window.currentUserProfile.dinoHighScore;
+            if (profileHighScore > highScore) {
+                highScore = profileHighScore;
+                localStorage.setItem('dinoHighScore', highScore);
+            }
+        }
         
         let currentMonthStr = new Date().toISOString().substring(0, 7);
         let monthlyScore = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonthStr)) || 0;
@@ -345,6 +352,14 @@
                 monthlyScore = profileMonthly;
                 localStorage.setItem('dinoMonthlyScore_' + currentMonthStr, monthlyScore);
             }
+        }
+
+        // Sanity check: All-time high score should never be less than the monthly score
+        if (monthlyScore > highScore) {
+            highScore = monthlyScore;
+            localStorage.setItem('dinoHighScore', highScore);
+            // We don't automatically trigger a server save here to avoid spamming the DB, 
+            // it will be saved naturally on next game over if needed.
         }
         
         scoreDisplay.innerHTML = `
