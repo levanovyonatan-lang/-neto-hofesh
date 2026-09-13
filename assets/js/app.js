@@ -1633,6 +1633,10 @@ function selectTarget(id, shouldScroll = true) {
             if (target.isSummer) {
                 const endOfSchool = new Date(target.date); endOfSchool.setHours(0, 0, 0, 0); const startOfSchool = new Date(target.date.getFullYear(), 8, 1);
                 lengthText = `<b>${Math.round((startOfSchool - endOfSchool) / 86400000)} ימים</b>`;
+            } else if (target.id === 'kippurSukkot2026') {
+                lengthText = `<b>${userConfig.schoolType === 'high' ? 15 : 14} ימים רצופים!</b>`;
+            } else if (target.id === 'hanukkah2026') {
+                lengthText = '<b>7 ימים</b>';
             } else if (target.lengthText) {
                 lengthText = target.lengthText;
             }
