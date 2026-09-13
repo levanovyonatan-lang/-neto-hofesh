@@ -59,7 +59,7 @@ const holidays2027 = [
     '2026-12-06', '2026-12-07', '2026-12-08', '2026-12-09', '2026-12-10', '2026-12-11', // חנוכה
     '2027-03-23', '2027-03-24', // פורים
     '2027-04-13', '2027-04-14', '2027-04-15', '2027-04-16', '2027-04-18', '2027-04-19', '2027-04-20', '2027-04-21', '2027-04-22', '2027-04-23', '2027-04-25', '2027-04-26', '2027-04-27', '2027-04-28', // פסח
-    '2027-05-12', '2027-05-25', // יום העצמאות ול"ג בעומר
+    '2027-05-12', // יום העצמאות; ל"ג בעומר הוא יום לימודים
     '2027-06-10', '2027-06-11' // שבועות
 ];
 
@@ -70,7 +70,7 @@ const targets2027 = [
     { id: 'purim2027', name: 'פורים', date: new Date('2027-03-23T08:15:00'), icon: '🎭', bg: '#fdf4ff', lengthText: '<b>יומיים</b> מטורפים' },
     { id: 'pesach2027', name: 'פסח', date: new Date('2027-04-13T08:15:00'), icon: '🍷', bg: '#fff7ed', lengthText: '<b>16 ימים!</b>' },
     { id: 'atzmaut2027', name: 'יום העצמאות', date: new Date('2027-05-12T08:15:00'), icon: '🇮🇱', bg: '#f0f9ff', lengthText: '<b>יום אחד</b>' },
-    { id: 'lagbaomer', name: 'ל"ג בעומר', date: new Date('2027-05-25T08:15:00'), icon: '🔥', bg: '#fff7ed', lengthText: '<b>יום אחד</b>' },
+    { id: 'lagbaomer', name: 'ל"ג בעומר', date: new Date('2027-05-25T08:15:00'), icon: '🔥', bg: '#fff7ed', isSchoolDay: true },
     { id: 'shavuot2027', name: 'שבועות', date: new Date('2027-06-10T08:15:00'), icon: '🧀', bg: '#f0fdf4', lengthText: '<b>שלושה ימים</b> כולל שישי-שבת' },
     { id: 'summerHigh2027', name: 'החופש הגדול', date: new Date('2027-06-21T08:15:00'), isSummer: true, type: 'high', icon: '🏖️', bg: '#fefce8' },
     { id: 'summerElem2027', name: 'החופש הגדול', date: new Date('2027-07-01T08:15:00'), isSummer: true, type: 'elem', icon: '🍉', bg: '#fefce8' }
@@ -916,12 +916,13 @@ function updateNextVacationButtonText() {
         } else {
             const durationMap = {
                 'atzmaut': 1, 'lagbaomer': 1, 'shavuot': 3,
-                'roshHashana': 3, 'kippurSukkot': 14, 'hanukkah': 8,
+                'roshHashana': 3, 'kippurSukkot': schoolType === 'high' ? 15 : 14, 'hanukkah': 7,
                 'purim': 2, 'pesach': 16
             };
             const baseName = e.id.replace(/\d+$/, '');
             const days = durationMap[baseName] || 1;
-            const endDate = new Date(e.date.getTime() + days * 86400000);
+            const endDate = new Date(e.date);
+            endDate.setDate(endDate.getDate() + days);
             if (e.date.getTime() <= now && now < endDate.getTime()) {
                 isVacationNow = true;
                 break;
@@ -1230,6 +1231,8 @@ function showMainScreen() {
         allTargets.push(...targets2027);
         activeHolidays.push(...holidays2027);
     }
+    activeHolidays = activeHolidays.filter(date => date !== '2026-10-04');
+    if (userConfig.schoolType === 'high') activeHolidays.push('2026-10-04');
 
     if (userConfig.schoolType === 'elem') {
         if (demoBanner) {
@@ -1303,6 +1306,7 @@ function showMainScreen() {
     const now = Date.now();
     activeEventsList = allTargets.filter(e => {
         let isHappening = false;
+        e.isHappeningNow = false;
 
         if (e.isSummer) {
             const summerEnd = new Date(e.date.getFullYear(), 8, 1);
@@ -1314,14 +1318,15 @@ function showMainScreen() {
         } else {
             const durationMap = {
                 'atzmaut': 1, 'lagbaomer': 1, 'shavuot': 3,
-                'roshHashana': 3, 'kippurSukkot': 14, 'hanukkah': 8,
+                'roshHashana': 3, 'kippurSukkot': userConfig.schoolType === 'high' ? 15 : 14, 'hanukkah': 7,
                 'purim': 2, 'pesach': 16
             };
             const baseName = e.id.replace(/\d+$/, '');
             const days = durationMap[baseName] || 1;
-            const endDate = new Date(e.date.getTime() + days * 86400000);
+            const endDate = new Date(e.date);
+            endDate.setDate(endDate.getDate() + days);
 
-            if (e.date.getTime() <= now && now < endDate.getTime()) {
+            if (!e.isSchoolDay && e.date.getTime() <= now && now < endDate.getTime()) {
                 isHappening = true;
                 e.isHappeningNow = true;
                 e.endDate = endDate;
@@ -1558,9 +1563,10 @@ function selectTarget(id, shouldScroll = true) {
     // Manage themes
     timerBg.classList.remove('theme-vacation', 'theme-celebration', 'theme-exam', 'theme-military', 'theme-license');
     
-    let appliedTheme = target.theme && target.theme !== 'default' ? target.theme : null;
+    const personalCountdown = target.isCustom === true;
+    let appliedTheme = personalCountdown && target.theme && target.theme !== 'default' ? target.theme : null;
     
-    if (!appliedTheme && window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme && window.currentUserProfile.theme !== 'default') {
+    if (personalCountdown && !appliedTheme && window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme && window.currentUserProfile.theme !== 'default') {
         let globalTheme = window.currentUserProfile.theme;
         if (globalTheme === 'gold') globalTheme = 'celebration'; 
         if (['vacation', 'celebration', 'exam', 'military', 'license'].includes(globalTheme)) {
@@ -1639,21 +1645,46 @@ function selectTarget(id, shouldScroll = true) {
             }
         }
         if (absoluteTimer) {
-            absoluteTimer.style.display = 'flex';
+            absoluteTimer.style.display = personalCountdown ? 'flex' : 'none';
         }
         if (totalDaysLabel) totalDaysLabel.style.display = 'block';
         if (vacationMessage) vacationMessage.style.display = 'none';
     }
 
+    timerBg.toggleAttribute('data-personal-countdown', personalCountdown);
     let personalDate = document.getElementById('personal-event-date');
     let personalLabel = document.getElementById('personal-countdown-label');
-    if (absoluteTimer) absoluteTimer.setAttribute('aria-hidden', 'true');
-    if (personalDate) personalDate.remove();
-    if (personalLabel) personalLabel.remove();
+    if (absoluteTimer) absoluteTimer.setAttribute('aria-hidden', personalCountdown ? 'false' : 'true');
+    if (personalCountdown) {
+        if (!personalDate) {
+            personalDate = document.createElement('time');
+            personalDate.id = 'personal-event-date';
+            document.getElementById('main-target-title').after(personalDate);
+        }
+        personalDate.dateTime = target.date.toISOString();
+        personalDate.textContent = formatPersonalDate(target.date);
+        if (!personalLabel) {
+            personalLabel = document.createElement('div');
+            personalLabel.id = 'personal-countdown-label';
+            absoluteTimer.before(personalLabel);
+        }
+        personalLabel.textContent = 'הזמן שנותר לאירוע';
+        document.getElementById('main-target-title').textContent = `${target.name} ${target.icon}`;
+        if (netDaysPrefix) netDaysPrefix.textContent = 'עוד';
+        if (netDaysSuffix) netDaysSuffix.textContent = 'ימים לאירוע';
+        if (excludingLabel) excludingLabel.style.display = 'none';
+        if (vacationBox) vacationBox.style.display = 'none';
+        if (totalDaysLabel) totalDaysLabel.style.display = 'none';
+    } else {
+        if (personalDate) personalDate.remove();
+        if (personalLabel) personalLabel.remove();
+    }
 
     loadDailyState(); renderTipBox(id); updateActiveHolidayCard(id);
     let targetDaysForAnim = 0;
-    if (target.isHappeningNow) {
+    if (personalCountdown) {
+        targetDaysForAnim = Math.max(0, Math.floor((target.date.getTime() - Date.now()) / 86400000));
+    } else if (target.isHappeningNow) {
         const diff = target.endDate.getTime() - Date.now();
         targetDaysForAnim = Math.ceil(diff / 86400000);
     } else {
@@ -1689,6 +1720,12 @@ function updateDashboard() {
 
     if (diff <= 0) {
         setDomText('main-net-days', "הגיע!");
+        if (event.isCustom === true) {
+            setDomText('personal-countdown-label', 'האירוע הגיע!');
+            setDomText('net-days-prefix', '');
+            setDomText('net-days-suffix', 'הגיע הזמן!');
+            ['abs-days', 'abs-hours', 'abs-mins', 'abs-secs'].forEach(id => setDomText(id, '00'));
+        }
         if (!event.isHappeningNow && !confettiFired) { confettiFired = true; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
     } else {
         if (!isAnimatingAbs) {

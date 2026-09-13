@@ -10,6 +10,20 @@
     const celebrationStyle = document.createElement('style');
     celebrationStyle.textContent = `
         .main-timer-card.theme-celebration::before {background:rgba(10,22,26,.08);backdrop-filter:none;-webkit-backdrop-filter:none;}
+        #main-timer-bg[data-personal-countdown] {--personal-ink:#fffaf0;padding:30px 22px !important;min-height:310px;box-sizing:border-box;isolation:isolate;}
+        #main-timer-bg[data-personal-countdown]::before {z-index:1;background:rgba(9,17,25,.52) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;}
+        #main-timer-bg[data-personal-countdown] > :not(canvas) {position:relative;z-index:2;}
+        #main-timer-bg[data-personal-countdown]:not([class*="theme-"]) {--personal-ink:#243e35;background:#f3f7f4 !important;}
+        #main-timer-bg[data-personal-countdown] #main-target-title {font-size:24px !important;line-height:1.4;margin:8px 0 10px !important;overflow-wrap:anywhere;}
+        #personal-event-date {display:block;font-size:14px;line-height:1.7;margin:0 auto 27px;max-width:100%;}
+        #personal-countdown-label {display:block;font-size:13px;font-weight:500;line-height:1.5;margin-bottom:12px;}
+        #main-timer-bg[data-personal-countdown] :is(#main-target-title,#personal-event-date,#personal-countdown-label,.time-val,.time-lbl) {color:var(--personal-ink) !important;-webkit-text-fill-color:var(--personal-ink) !important;background:none !important;filter:none !important;text-shadow:none !important;letter-spacing:0 !important;}
+        #main-timer-bg[data-personal-countdown] :is(.net-days-container,.ai-tools,.tip-box,#excluding-label,#vacation-length-box,#total-days-label) {display:none !important;}
+        #main-timer-bg[data-personal-countdown] #absolute-timer-container {width:100%;margin:0 auto 12px !important;padding:16px 0 !important;max-width:370px;box-sizing:border-box;display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;background:transparent !important;border:0 !important;border-top:1px solid #9caeac55 !important;box-shadow:none !important;border-radius:0 !important;}
+        #main-timer-bg[data-personal-countdown] .time-box {display:flex !important;flex-direction:column;gap:7px;min-width:0;box-sizing:border-box;padding:0 2px;background:transparent !important;border:0 !important;box-shadow:none !important;}
+        #main-timer-bg[data-personal-countdown] .time-val {font-size:30px !important;line-height:1.2;font-weight:700;font-variant-numeric:tabular-nums;min-height:36px;}
+        #main-timer-bg[data-personal-countdown] .time-lbl {font-size:12px !important;font-weight:400;line-height:1.4;}
+        @media(max-width:380px) {#main-timer-bg[data-personal-countdown] .time-val {font-size:24px !important;}#main-timer-bg[data-personal-countdown] #main-target-title{font-size:22px !important;}}
     `;
     document.head.appendChild(celebrationStyle);
 
