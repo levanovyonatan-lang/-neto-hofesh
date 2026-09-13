@@ -290,7 +290,7 @@
         gameContainer.style.height = currentHeight + 'px';
         gameContainer.offsetHeight; // force reflow
         gameContainer.style.transition = 'height 0.4s ease, box-shadow 0.4s ease';
-        gameContainer.style.height = '200px';
+        gameContainer.style.height = '150px';
 
         gameContainer.style.position = 'relative';
         gameContainer.style.overflow = 'hidden';
@@ -1194,7 +1194,7 @@
         if (appContainer) appContainer.style.zIndex = '';
 
         gameContainer.style.transition = '';
-        gameContainer.style.height = '200px'; // Lock before restore
+        gameContainer.style.height = '150px'; // Lock before restore
         gameContainer.style.removeProperty('background');
         
         const hiddenEls = gameContainer.querySelectorAll('[data-hw-prev-display]');
@@ -1207,7 +1207,7 @@
         gameContainer.style.height = 'auto';
         const targetHeight = gameContainer.getBoundingClientRect().height;
 
-        gameContainer.style.height = '200px';
+        gameContainer.style.height = '150px';
         gameContainer.offsetHeight; // reflow
         gameContainer.style.transition = 'height 0.4s ease';
         gameContainer.style.height = targetHeight + 'px';
@@ -1287,7 +1287,7 @@
         gameContainer.style.height = currentHeight + 'px';
         gameContainer.offsetHeight; // force reflow
         gameContainer.style.transition = 'height 0.4s ease, box-shadow 0.4s ease';
-        gameContainer.style.height = '200px';
+        gameContainer.style.height = '150px';
 
         gameContainer.style.position = 'relative';
         gameContainer.style.overflow = 'hidden';

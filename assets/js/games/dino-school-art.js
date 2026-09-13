@@ -18,7 +18,7 @@
     ];
     const css = document.createElement('style');
     css.textContent = `
-        #main-timer-bg.dino-art-active { height:200px !important; padding:0 !important; border-radius:12px !important; border:1px solid #a7b9b2 !important; animation:none !important; isolation:isolate; box-shadow:0 5px 18px #354d4510 !important; }
+        #main-timer-bg.dino-art-active { height:150px !important; padding:0 !important; border-radius:12px !important; border:1px solid #a7b9b2 !important; animation:none !important; isolation:isolate; box-shadow:0 5px 18px #354d4510 !important; }
         .dino-art-canvas { position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
         .dino-art-score { top:7px !important; right:12px !important; z-index:30; min-width:94px; padding:0; color:#304b49 !important; }
         .dino-art-score #dino-score-val { font-size:19px !important; }
@@ -63,7 +63,7 @@
         const base = rgb(startingColor);
         const palettes = themes.map(p => p.map(rgb));
         palettes[0] = [base, mix(base, [106, 137, 132], .28), mix(base, [106, 137, 132], .16)];
-        let colors = palettes[0].map(c => c.slice()), fromColors = colors, colorProgress = 1;
+        let colors = palettes[0].map(c => c.slice()), fromColors = colors, colorProgress = 1, transitionDistance = 0;
         const canvas = document.createElement('canvas');
         canvas.className = 'dino-element dino-art-canvas';
         canvas.setAttribute('aria-hidden', 'true');
@@ -319,9 +319,11 @@
             // Scale the artwork only. The player's 30px ground baseline is unchanged.
             ctx.save(); ctx.scale(1, (height - 30) / 170);
             scene(stage, p);
-            if (colorProgress < 1) {
-                const boundary = -55 + (width + 110) * colorProgress;
-                ctx.save(); ctx.beginPath(); ctx.rect(Math.max(0, boundary), 0, width, 170); ctx.clip();
+            
+            const wipeDistance = distance - transitionDistance;
+            if (wipeDistance < width + 150 && previousStage !== stage) {
+                const boundary = width + 50 - wipeDistance;
+                ctx.save(); ctx.beginPath(); ctx.rect(0, 0, Math.max(0, boundary), 170); ctx.clip();
                 scene(previousStage, fromColors.map(hex)); ctx.restore();
                 passage(boundary);
             }
@@ -346,6 +348,7 @@
                     previousStage = stage;
                     fromColors = colors.map(c => c.slice());
                     colorProgress = 0;
+                    transitionDistance = distance;
                 }
                 stage = nextStage;
                 if (stage === 0) { runSeed = ++nextScene; distance = 0; }
