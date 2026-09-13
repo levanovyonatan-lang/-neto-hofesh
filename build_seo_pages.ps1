@@ -52,6 +52,7 @@ foreach ($holiday in $holidays) {
     }
     $faqsJoined = $faqJsonArray -join ",`r`n"
     $faqAccordionHtml = $faqHtmlItems -join "`r`n"
+    $html = [regex]::Replace($html, '<div class="seo-faq-accordion">.*?</details>\s*</div>', '<div class="seo-faq-accordion">' + $faqAccordionHtml + '</div>', 'Singleline')
 
     # 4. Build Article Paragraphs HTML
     $articleIntroHtml = @()
@@ -113,6 +114,21 @@ $faqsJoined
 "@
 
     $html = $html -replace '</head>', $ogAndSchema
+    $encodedTitle = [System.Net.WebUtility]::HtmlEncode($holiday.title)
+    $encodedDescription = [System.Net.WebUtility]::HtmlEncode($holiday.desc)
+    $html = [regex]::Replace($html, '<meta (property|name)="(og:title|twitter:title)"[^>]*>', { param($m) '<meta ' + $m.Groups[1].Value + '="' + $m.Groups[2].Value + '" content="' + $encodedTitle + '">' })
+    $html = [regex]::Replace($html, '<meta (property|name)="(description|og:description|twitter:description)"[^>]*>', { param($m) '<meta ' + $m.Groups[1].Value + '="' + $m.Groups[2].Value + '" content="' + $encodedDescription + '">' })
+    # Serialize structured data rather than interpolating quotes into JSON/JavaScript.
+    $faqEntities = @($holiday.faqs | ForEach-Object {
+        @{ '@type' = 'Question'; name = $_[0]; acceptedAnswer = @{ '@type' = 'Answer'; text = $_[1] } }
+    })
+    $schema = @{ '@context' = 'https://schema.org'; '@type' = 'FAQPage'; mainEntity = $faqEntities } | ConvertTo-Json -Depth 8
+    $html = [regex]::Replace($html, '<script type="application/ld\+json">.*?</script>', '', 'Singleline')
+    $html = $html.Replace('</head>', "<script type=`"application/ld+json`">$schema</script></head>")
+    $nameLiteral = ConvertTo-Json -InputObject $holiday.name -Compress
+    $html = [regex]::Replace($html, 'window.NETO_HOLIDAY_NAME = .*?;', "window.NETO_HOLIDAY_NAME = $nameLiteral;")
+    $summary = '<section style="padding:20px;line-height:1.7"><h2>' + [System.Net.WebUtility]::HtmlEncode($holiday.articleTitle) + '</h2><p>' + [System.Net.WebUtility]::HtmlEncode($holiday.vacationDatesText + '. ' + $holiday.totalVacationDays + '. ' + $holiday.holidayTip) + '</p></section>'
+    $html = $html.Replace('<div id="main-screen">', $summary + '<div id="main-screen">')
 
 
 
@@ -150,6 +166,7 @@ $faqsJoined
     $html = [System.Text.RegularExpressions.Regex]::Replace($html, 'href="(?:\.\./)?(hanukkah|taanit-esther|purim|pesach|asru-chag|atzmaut|lag-baomer|shavuot|summer-high|summer)/"', 'href="../$1/"')
 
     $outPath = Join-Path $dir "index.html"
+    $html = [regex]::Replace($html, '(?m)^[\t ]+(?=\r?$)', '')
     [System.IO.File]::WriteAllText($outPath, $html, [System.Text.Encoding]::UTF8)
     Write-Host " -> Created: /$($holiday.slug)/index.html ($($holiday.name))" -ForegroundColor Green
 }

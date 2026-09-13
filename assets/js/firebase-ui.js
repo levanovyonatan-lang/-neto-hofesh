@@ -522,7 +522,7 @@ window.showLeaderboard = async function(score, stage, killer, isTabSwitch = fals
         listEl.innerHTML = '';
         
         if(scores.length > 0 && scores[0].isError) {
-            listEl.innerHTML = `<div style="text-align: center; padding: 20px; color: #ef4444; direction: ltr;">${scores[0].message}</div>`;
+            listEl.textContent = String(scores[0].message || 'לא ניתן לטעון את הטבלה כרגע.');
             return;
         }
 
@@ -563,18 +563,19 @@ window.showLeaderboard = async function(score, stage, killer, isTabSwitch = fals
             let premiumClass = s.isPremium ? 'premium-row' : '';
             let vipBadge = s.isPremium ? '<span class="lb-vip-badge" title="משתמש פרימיום">👑</span>' : '';
             let nameClass = s.isPremium ? 'vip-name' : '';
-            let customBioHtml = (s.isPremium && s.customBio) ? `<div class="lb-bio" style="font-size: 12px; color: #64748b; font-weight: normal; margin-top: 2px;">${s.customBio}</div>` : '';
+            const safeText = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+            let customBioHtml = (s.isPremium && s.customBio && !window.containsProfanity(s.customBio)) ? `<div class="lb-bio" style="font-size: 12px; color: #64748b; font-weight: normal; margin-top: 2px;">${safeText(s.customBio)}</div>` : '';
             
             listEl.innerHTML += `
                 <li class="leaderboard-item ${blurClass} ${premiumClass}" ${liId} style="${liStyle}">
                     <div style="display: flex; align-items: center; width: 100%;">
                         <span class="lb-rank">${rankStr}</span>
-                        <span class="lb-emoji">${s.emoji || '👤'}</span>
+                        <span class="lb-emoji">${safeText(s.emoji || '👤')}</span>
                         <div class="lb-name-container" style="flex-grow: 1; overflow: hidden; text-align: right; padding-right: 10px;">
-                            <div class="lb-name ${nameClass}" style="display: inline-block;">${s.nickname || "אנונימי"} ${vipBadge}</div>
+                            <div class="lb-name ${nameClass}" style="display: inline-block;">${safeText(window.containsProfanity(s.nickname || '') ? 'אנונימי' : (s.nickname || 'אנונימי'))} ${vipBadge}</div>
                             ${customBioHtml}
                         </div>
-                        <span class="lb-score">${s.displayScore || s.score}</span>
+                        <span class="lb-score">${safeText(s.displayScore || s.score)}</span>
                     </div>
                 </li>
             `;
