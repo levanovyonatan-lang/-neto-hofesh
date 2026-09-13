@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v4387';
+const CACHE_VERSION = 'v4388';
 const CACHE_NAME = 'neto-cache-v4385';
 
 self.addEventListener('install', e => {
@@ -40,6 +40,23 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const req = e.request;
   const url = req.url || '';
+
+  // Prefer current HTML so an online visit loads the latest versioned scripts.
+  if (req.mode === 'navigate') {
+    e.respondWith(
+      fetch(req, { cache: 'no-store' }).then(response => {
+        if (response.ok) {
+          const copy = response.clone();
+          e.waitUntil(caches.open(CACHE_VERSION).then(cache => cache.put(req, copy)));
+        }
+        return response;
+      }).catch(async () => {
+        const cached = await caches.match(req);
+        return cached || Response.error();
+      })
+    );
+    return;
+  }
 
   // Stale-While-Revalidate for HTML/document navigation and core scripts/styles for instant PWA startup
   if (req.mode === 'navigate' || url.includes('index.html') || url.endsWith('/') || url.includes('.css') || url.includes('.js') || url.includes('manifest.json')) {
