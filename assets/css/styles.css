@@ -90,8 +90,8 @@ body {
     50% { transform: translate3d(0, -8px, 0); }
 }
 
-.setup-header h1 { color: var(--primary); font-size: clamp(28px, 4vh, calc(34px * var(--text-scale, 1))); font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
-.setup-header h1 span { display: block; font-size: clamp(46px, 6.5vh, calc(58px * var(--text-scale, 1))); margin-bottom: clamp(4px, 0.8vh, 6px); letter-spacing: -3px; }
+.setup-header h2 { color: var(--primary); font-size: clamp(28px, 4vh, calc(34px * var(--text-scale, 1))); font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
+.setup-header h2 span { display: block; font-size: clamp(46px, 6.5vh, calc(58px * var(--text-scale, 1))); margin-bottom: clamp(4px, 0.8vh, 6px); letter-spacing: -3px; }
 .setup-header p { color: var(--text-muted); font-size: clamp(15px, 2vh, calc(17px * var(--text-scale, 1))); font-weight: 700; margin-top: clamp(6px, 1.2vh, 12px); }
 .setup-step h3 { font-size: clamp(16px, 2.2vh, calc(18px * var(--text-scale, 1))); color: var(--text-main); margin-bottom: clamp(8px, 1.4vh, 14px); font-weight: 700; text-align: center;}
 
@@ -1244,14 +1244,14 @@ body.theme-gold .toggle-container {
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-body.theme-gold .setup-header h1 {
+body.theme-gold .setup-header h2 {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     line-height: 1.1 !important;
 }
 
-body.theme-gold .setup-header h1 span {
+body.theme-gold .setup-header h2 span {
     display: block !important;
     font-size: 1.4em !important;
     margin-bottom: 5px !important;
@@ -1446,14 +1446,14 @@ body.theme-gold .toggle-container {
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-body.theme-gold .setup-header h1 {
+body.theme-gold .setup-header h2 {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     line-height: 1.1 !important;
 }
 
-body.theme-gold .setup-header h1 span {
+body.theme-gold .setup-header h2 span {
     display: block !important;
     font-size: 1.4em !important;
     margin-bottom: 5px !important;
