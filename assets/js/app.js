@@ -646,6 +646,17 @@ function renderTipBox(targetId, isNewlyClicked = false) {
             if (gameBtn) {
                 gameBtn.style.display = '';
                 gameBtn.style.marginTop = '20px';
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                const isDemoMode = urlParams.get('show_demo') === 'true' || window.location.hostname.includes('github.io');
+                
+                if (targetId && targetId.startsWith('shavuot') && isDemoMode) {
+                    gameBtn.innerHTML = `<span>🏃‍♂️ בואו לשחק - סקול ראש 🏃‍♂️</span>`;
+                    gameBtn.onclick = function() { if (window.startSchoolRush) window.startSchoolRush(); };
+                } else {
+                    gameBtn.innerHTML = `<span>🦖 בואו לשחק - בריחה מבית הספר 🦖</span>`;
+                    gameBtn.onclick = function() { if (window.startDinoGame) window.startDinoGame(); };
+                }
             }
         }
     }
