@@ -130,13 +130,23 @@ function createPainter(canvas, sprites) {
 }
 
 function loadSprites() {
+  let basePath = 'assets/';
+  const scripts = document.getElementsByTagName('script');
+  for (let s of scripts) {
+      if (s.src && s.src.includes('school-rush-renderer.js')) {
+          const url = new URL(s.src);
+          basePath = url.pathname.substring(0, url.pathname.indexOf('assets/')) + 'assets/';
+          break;
+      }
+  }
+  
   const images = {};
   const paths = {
-    boyRunning: 'assets/img/games/school-rush/boy_running.jpg',
-    sunCoin: 'assets/img/games/school-rush/sun_coin.jpg',
-    wallLockers: 'assets/img/games/school-rush/wall_lockers.jpg',
-    wetFloorSign: 'assets/img/games/school-rush/wet_floor_sign.jpg',
-    recycleBin: 'assets/img/games/school-rush/recycle_bin.jpg'
+    boyRunning: basePath + 'img/games/school-rush/boy_running.jpg',
+    sunCoin: basePath + 'img/games/school-rush/sun_coin.jpg',
+    wallLockers: basePath + 'img/games/school-rush/wall_lockers.jpg',
+    wetFloorSign: basePath + 'img/games/school-rush/wet_floor_sign.jpg',
+    recycleBin: basePath + 'img/games/school-rush/recycle_bin.jpg'
   };
 
   let loaded = 0;
