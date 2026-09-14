@@ -1251,13 +1251,7 @@ function showMainScreen() {
         if (highSocial) highSocial.style.display = 'none';
         if (elemSocial) elemSocial.style.display = 'block';
 
-        const modalWhatsappBtn = document.getElementById('modal-whatsapp-join-btn');
-        if (modalWhatsappBtn) modalWhatsappBtn.href = "https://chat.whatsapp.com/D6TsQfLFkA072Xv6Q6pKDc";
 
-        const whatsappCommunityBtn = document.querySelector('.whatsapp-community-btn');
-        if (whatsappCommunityBtn) {
-            whatsappCommunityBtn.setAttribute('onclick', "trackEvent('click_whatsapp_community_elem'); document.getElementById('whatsapp-modal').style.display='flex'; this.style.transform='scale(0.95)'; setTimeout(() => this.style.transform='', 200);");
-        }
 
     } else if (userConfig.schoolType === 'high') {
         if (demoBanner) demoBanner.style.display = 'none';
@@ -1267,13 +1261,7 @@ function showMainScreen() {
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
 
-        const modalWhatsappBtn = document.getElementById('modal-whatsapp-join-btn');
-        if (modalWhatsappBtn) modalWhatsappBtn.href = "https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF";
 
-        const whatsappCommunityBtn = document.querySelector('.whatsapp-community-btn');
-        if (whatsappCommunityBtn) {
-            whatsappCommunityBtn.setAttribute('onclick', "trackEvent('click_whatsapp_community_main'); document.getElementById('whatsapp-modal').style.display='flex'; this.style.transform='scale(0.95)'; setTimeout(() => this.style.transform='', 200);");
-        }
     } else {
         if (demoBanner) demoBanner.style.display = 'none';
         if (avigailBanner) avigailBanner.style.display = 'none';
@@ -1282,13 +1270,7 @@ function showMainScreen() {
         if (highSocial) highSocial.style.display = 'block';
         if (elemSocial) elemSocial.style.display = 'none';
 
-        const modalWhatsappBtn = document.getElementById('modal-whatsapp-join-btn');
-        if (modalWhatsappBtn) modalWhatsappBtn.href = "https://chat.whatsapp.com/HigJwAxaQ4bFo48pSpDmHF";
 
-        const whatsappCommunityBtn = document.querySelector('.whatsapp-community-btn');
-        if (whatsappCommunityBtn) {
-            whatsappCommunityBtn.setAttribute('onclick', "trackEvent('click_whatsapp_community_main'); document.getElementById('whatsapp-modal').style.display='flex'; this.style.transform='scale(0.95)'; setTimeout(() => this.style.transform='', 200);");
-        }
     }
 
     if (userConfig.schoolType === 'elem' && fitnessBanner) {
