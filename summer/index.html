@@ -809,8 +809,8 @@
 
 
     <script src="tips.js?v=tips-file-v2" defer></script>
-    <script src="../assets/js/premium-cinematic-themes.js?v=4254" defer></script>
-    <script src="../assets/js/app.js?v=4254" defer></script>
+    <script src="../assets/js/premium-cinematic-themes.js?v=4255" defer></script>
+    <script src="../assets/js/app.js?v=4255" defer></script>
     <script src="../assets/js/games/dino-school.js?v=22" defer></script>
     <script src="../assets/js/games/emoji-rain.js" defer></script>
 
@@ -895,7 +895,7 @@
 
                 <div id="theme-selector-container">
                     <div class="theme-selector-grid">
-                        <button type="button" class="theme-btn active" data-theme="default" onclick="selectCustomTheme(this)">
+                        <button type="button" class="theme-btn" data-theme="default" onclick="selectCustomTheme(this)">
                             <span class="icon">✨</span><span class="text">רגיל</span>
                         </button>
                         <button type="button" class="theme-btn" data-theme="vacation" onclick="selectCustomTheme(this)">
@@ -931,16 +931,23 @@
                     </div>
                 </div>
 
-                <input type="hidden" id="custom-theme" value="default">
+                <input type="hidden" id="custom-theme" value="">
                 <input type="hidden" id="custom-color" value="#1e293b">
                 <input type="hidden" id="custom-design-type" value="theme">
             </div>
 
             <script>
                 function selectCustomTheme(btn) {
+                    const theme = btn.getAttribute('data-theme');
+                    if (theme === 'default') {
+                        toggleDesignType('color');
+                        document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                        document.getElementById('custom-theme').value = '';
+                        return;
+                    }
                     document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    document.getElementById('custom-theme').value = btn.getAttribute('data-theme');
+                    document.getElementById('custom-theme').value = theme;
                 }
                 function selectCustomColor(btn) {
                     document.querySelectorAll('.color-btn').forEach(b => b.style.borderColor = 'transparent');
