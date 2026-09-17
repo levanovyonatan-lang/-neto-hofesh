@@ -13,7 +13,7 @@
         #main-timer-bg[data-personal-countdown] {--personal-ink:#fffaf0;padding:30px 22px !important;min-height:310px;box-sizing:border-box;isolation:isolate;box-shadow:0 0 35px rgba(250,204,21,0.3),inset 0 0 20px rgba(255,255,255,0.1) !important;border:1px solid rgba(250,204,21,0.4) !important;}
         #main-timer-bg[data-personal-countdown]::before {z-index:1;background:rgba(9,17,25,.52) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;}
         #main-timer-bg[data-personal-countdown] > :not(canvas) {position:relative;z-index:2;}
-        #main-timer-bg[data-personal-countdown]:not([class*="theme-"]) {--personal-ink:#243e35;background:#f3f7f4 !important;}
+        #main-timer-bg[data-personal-countdown]:not([class*="theme-"]) {--personal-ink:#243e35;}
         #main-timer-bg[data-personal-countdown] #main-target-title {font-size:24px !important;line-height:1.4;margin:8px 0 10px !important;overflow-wrap:anywhere;}
         #personal-event-date {display:block;font-size:14px;line-height:1.7;margin:0 auto 20px;max-width:100%;}
         #personal-countdown-label {display:block;font-size:13px;font-weight:500;line-height:1.5;margin-bottom:12px;}

@@ -1458,6 +1458,11 @@ function openCustomCountdownModal() {
     if(window.renderEmojiGrid) {
         window.renderEmojiGrid('custom-emoji-grid', 'custom-emoji');
     }
+    
+    if(typeof toggleDesignType === 'function') {
+        toggleDesignType('color');
+    }
+    
     document.getElementById('custom-countdown-modal').style.display = 'flex';
 }
 
