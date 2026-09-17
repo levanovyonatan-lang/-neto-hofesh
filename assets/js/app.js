@@ -1595,8 +1595,8 @@ function selectTarget(id, shouldScroll = true) {
         }
         if (target.color) {
             timerBg.classList.add('theme-color');
-            timerBg.style.backgroundColor = target.color;
-            timerBg.style.backgroundImage = 'none';
+            timerBg.style.setProperty('--base-color', target.color);
+            timerBg.style.background = 'none';
         } else {
             timerBg.style.background = target.bg;
         }
@@ -1628,8 +1628,8 @@ function selectTarget(id, shouldScroll = true) {
     } else {
         if (!target.theme || target.theme === 'default') {
             if (target.color) {
-                timerBg.style.backgroundColor = target.color;
-                timerBg.style.backgroundImage = 'none';
+                timerBg.style.setProperty('--base-color', target.color);
+                timerBg.style.background = 'none';
             } else {
                 timerBg.style.background = target.bg;
             }
