@@ -1353,6 +1353,7 @@ function showMainScreen() {
                         icon: finalIcon,
                         bg: '#f1f5f9',
                         theme: c.theme || 'default',
+                        color: c.color || null,
                         lengthText: 'ספירה אישית',
                         isCustom: true
                     });
@@ -1479,6 +1480,12 @@ function saveCustomCountdown() {
     const themeInput = document.getElementById('custom-theme');
     const themeStr = themeInput ? themeInput.value : 'default';
     
+    const colorInput = document.getElementById('custom-color');
+    const colorStr = colorInput ? colorInput.value : '';
+    
+    const designTypeInput = document.getElementById('custom-design-type');
+    const designTypeStr = designTypeInput ? designTypeInput.value : 'theme';
+    
     if (!name || !dateStr) {
         alert('יש להזין שם ותאריך לספירה האישית.');
         return;
@@ -1508,7 +1515,8 @@ function saveCustomCountdown() {
         name: name,
         date: targetDate.toISOString(),
         icon: emojiStr,
-        theme: themeStr
+        theme: designTypeStr === 'theme' ? themeStr : 'default',
+        color: designTypeStr === 'color' ? colorStr : null
     };
     
     customCountdowns.push(newCustom);
@@ -1585,7 +1593,7 @@ function selectTarget(id, shouldScroll = true) {
         if (target.isCustom && target.bg === 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)') {
              // Keep the light custom background for standard custom events unless we want dark mode
         }
-        timerBg.style.background = target.bg;
+        timerBg.style.background = target.color || target.bg;
     }
 
     const netDaysPrefix = document.getElementById('net-days-prefix');
@@ -1613,7 +1621,7 @@ function selectTarget(id, shouldScroll = true) {
         if (vacationMessage) vacationMessage.style.display = 'block';
     } else {
         if (!target.theme || target.theme === 'default') {
-            timerBg.style.background = target.bg;
+            timerBg.style.background = target.color || target.bg;
         }
         timerBg.classList.remove('vacation-mode');
 

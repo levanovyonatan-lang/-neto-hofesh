@@ -861,37 +861,87 @@
             <input type="hidden" id="custom-emoji" value="📅">
 
             <div style="text-align: right; margin-bottom: 30px;">
-                <label class="premium-label" style="display: block; margin-bottom: 12px; color: #fef08a;">בחירת עיצוב מיוחד:</label>
-                <div class="theme-selector-grid">
-                    <button type="button" class="theme-btn active" data-theme="default" onclick="selectCustomTheme(this)">
-                        <span class="icon">✨</span><span class="text">רגיל</span>
-                    </button>
-                    <button type="button" class="theme-btn" data-theme="vacation" onclick="selectCustomTheme(this)">
-                        <span class="icon">✈️</span><span class="text">חופשה</span>
-                    </button>
-                    <button type="button" class="theme-btn" data-theme="celebration" onclick="selectCustomTheme(this)">
-                        <span class="icon">🎉</span><span class="text">חגיגה</span>
-                    </button>
-                    <button type="button" class="theme-btn" data-theme="exam" onclick="selectCustomTheme(this)">
-                        <span class="icon">🎓</span><span class="text">מבחן</span>
-                    </button>
-                    <button type="button" class="theme-btn" data-theme="military" onclick="selectCustomTheme(this)">
-                        <span class="icon">🪖</span><span class="text">צבא</span>
-                    </button>
-                    <button type="button" class="theme-btn" data-theme="license" onclick="selectCustomTheme(this)">
-                        <span class="icon">🚗</span><span class="text" style="display:flex;flex-direction:column;align-items:center;line-height:1.1;">נסיעה<span style="font-size:0.75em;font-weight:400;opacity:0.8;">(רישיון)</span></span>
-                    </button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <label class="premium-label" style="color: #fef08a; margin: 0;">עיצוב הספירה:</label>
+                    <div class="design-type-toggle" style="background: rgba(255,255,255,0.05); border-radius: 20px; display: flex; padding: 4px; gap: 4px; border: 1px solid rgba(255,255,255,0.1);">
+                        <button type="button" id="btn-design-theme" onclick="toggleDesignType('theme')" style="background: rgba(255,255,255,0.1); border: none; color: white; padding: 4px 12px; border-radius: 16px; font-size: 13px; cursor: pointer; transition: all 0.2s;">עיצובים</button>
+                        <button type="button" id="btn-design-color" onclick="toggleDesignType('color')" style="background: transparent; border: none; color: #94a3b8; padding: 4px 12px; border-radius: 16px; font-size: 13px; cursor: pointer; transition: all 0.2s;">צבע אחיד</button>
+                    </div>
                 </div>
+
+                <div id="theme-selector-container">
+                    <div class="theme-selector-grid">
+                        <button type="button" class="theme-btn active" data-theme="default" onclick="selectCustomTheme(this)">
+                            <span class="icon">✨</span><span class="text">רגיל</span>
+                        </button>
+                        <button type="button" class="theme-btn" data-theme="vacation" onclick="selectCustomTheme(this)">
+                            <span class="icon">✈️</span><span class="text">חופשה</span>
+                        </button>
+                        <button type="button" class="theme-btn" data-theme="celebration" onclick="selectCustomTheme(this)">
+                            <span class="icon">🎉</span><span class="text">חגיגה</span>
+                        </button>
+                        <button type="button" class="theme-btn" data-theme="exam" onclick="selectCustomTheme(this)">
+                            <span class="icon">🎓</span><span class="text">מבחן</span>
+                        </button>
+                        <button type="button" class="theme-btn" data-theme="military" onclick="selectCustomTheme(this)">
+                            <span class="icon">🪖</span><span class="text">צבא</span>
+                        </button>
+                        <button type="button" class="theme-btn" data-theme="license" onclick="selectCustomTheme(this)">
+                            <span class="icon">🚗</span><span class="text" style="display:flex;flex-direction:column;align-items:center;line-height:1.1;">נסיעה<span style="font-size:0.75em;font-weight:400;opacity:0.8;">(רישיון)</span></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="color-selector-container" style="display: none;">
+                    <div class="color-selector-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px;">
+                        <button type="button" class="color-btn active" data-color="#1e293b" onclick="selectCustomColor(this)" style="background: #1e293b; height: 40px; border-radius: 8px; border: 2px solid white; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#3b82f6" onclick="selectCustomColor(this)" style="background: #3b82f6; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#ec4899" onclick="selectCustomColor(this)" style="background: #ec4899; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#10b981" onclick="selectCustomColor(this)" style="background: #10b981; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#f59e0b" onclick="selectCustomColor(this)" style="background: #f59e0b; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#8b5cf6" onclick="selectCustomColor(this)" style="background: #8b5cf6; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#ef4444" onclick="selectCustomColor(this)" style="background: #ef4444; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#14b8a6" onclick="selectCustomColor(this)" style="background: #14b8a6; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#f97316" onclick="selectCustomColor(this)" style="background: #f97316; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#000000" onclick="selectCustomColor(this)" style="background: #000000; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
+                    </div>
+                </div>
+
                 <input type="hidden" id="custom-theme" value="default">
+                <input type="hidden" id="custom-color" value="#1e293b">
+                <input type="hidden" id="custom-design-type" value="theme">
             </div>
 
             <script>
                 function selectCustomTheme(btn) {
-                    document.querySelectorAll('.theme-btn').forEach(b => {
-                        b.classList.remove('active');
-                    });
+                    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     document.getElementById('custom-theme').value = btn.getAttribute('data-theme');
+                }
+                function selectCustomColor(btn) {
+                    document.querySelectorAll('.color-btn').forEach(b => b.style.borderColor = 'transparent');
+                    btn.style.borderColor = 'white';
+                    document.getElementById('custom-color').value = btn.getAttribute('data-color');
+                }
+                function toggleDesignType(type) {
+                    const elType = document.getElementById('custom-design-type');
+                    if (elType) elType.value = type;
+                    const btnTheme = document.getElementById('btn-design-theme');
+                    const btnColor = document.getElementById('btn-design-color');
+                    const themeContainer = document.getElementById('theme-selector-container');
+                    const colorContainer = document.getElementById('color-selector-container');
+
+                    if (type === 'theme') {
+                        if(themeContainer) themeContainer.style.display = 'block';
+                        if(colorContainer) colorContainer.style.display = 'none';
+                        if(btnTheme) { btnTheme.style.background = 'rgba(255,255,255,0.1)'; btnTheme.style.color = 'white'; }
+                        if(btnColor) { btnColor.style.background = 'transparent'; btnColor.style.color = '#94a3b8'; }
+                    } else {
+                        if(themeContainer) themeContainer.style.display = 'none';
+                        if(colorContainer) colorContainer.style.display = 'block';
+                        if(btnColor) { btnColor.style.background = 'rgba(255,255,255,0.1)'; btnColor.style.color = 'white'; }
+                        if(btnTheme) { btnTheme.style.background = 'transparent'; btnTheme.style.color = '#94a3b8'; }
+                    }
                 }
             </script>
 
