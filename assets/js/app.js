@@ -1564,7 +1564,7 @@ function selectTarget(id, shouldScroll = true) {
     
     let appliedTheme = target.theme && target.theme !== 'default' ? target.theme : null;
     
-    if (!appliedTheme && window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme && window.currentUserProfile.theme !== 'default') {
+    if (!appliedTheme && target.isCustom && window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme && window.currentUserProfile.theme !== 'default') {
         let globalTheme = window.currentUserProfile.theme;
         if (globalTheme === 'gold') globalTheme = 'celebration'; 
         if (['vacation', 'celebration', 'exam', 'military', 'license'].includes(globalTheme)) {
