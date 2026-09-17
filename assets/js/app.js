@@ -1363,7 +1363,7 @@ function showMainScreen() {
     // Add custom countdowns
     try {
         const savedCustoms = localStorage.getItem('neto_customCountdowns');
-        if (savedCustoms && document.body.classList.contains('premium-active')) {
+        if (savedCustoms) {
             const customCountdowns = JSON.parse(savedCustoms);
             customCountdowns.forEach(c => {
                 const cDate = new Date(c.date);
@@ -1777,8 +1777,7 @@ function selectTarget(id, shouldScroll = true) {
 }
 
 function isPersonalCountdownPremium(target) {
-    const params = new URLSearchParams(location.search);
-    return target.isCustom && (params.get('demo_premium') === '1' || params.get('show_demo') === 'true' || (window.currentUserProfile && window.currentUserProfile.isPremium));
+    return target.isCustom;
 }
 
 function formatPersonalDate(date) {
