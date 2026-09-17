@@ -1461,7 +1461,7 @@ function openCustomCountdownModal() {
     }
     
     if(typeof toggleDesignType === 'function') {
-        toggleDesignType('color');
+        toggleDesignType('theme');
     }
     
     document.getElementById('custom-countdown-modal').style.display = 'flex';
