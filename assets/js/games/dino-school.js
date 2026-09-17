@@ -23,6 +23,8 @@
     ];
     
     let gameStartTime = 0;
+    let isPersonalGame = false;
+    let personalGameBg = '';
 
     if (!document.getElementById('dino-styles')) {
         const style = document.createElement('style');
@@ -184,6 +186,20 @@
     async function startGame() {
         if (demoArtReady) await demoArtReady;
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
+
+        isPersonalGame = false;
+        try {
+            const userConf = JSON.parse(localStorage.getItem('neto_userConfig'));
+            const activeEventId = userConf ? userConf.activeTargetId : null;
+            if (activeEventId && window.activeEventsList) {
+                const ev = window.activeEventsList.find(e => e.id === activeEventId);
+                if (ev && ev.isCustom) {
+                    isPersonalGame = true;
+                    // A special celebratory background for personal dates
+                    personalGameBg = 'linear-gradient(135deg, #fef08a 0%, #f97316 100%)'; 
+                }
+            }
+        } catch(e) {}
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
         let isElem = false;
         try { if (typeof userConfig !== 'undefined' && userConfig.schoolType === 'elem') isElem = true; } catch(e) {}
@@ -227,7 +243,8 @@
 
             score = 0;
             currentStageIndex = 0;
-            gameContainer.style.removeProperty('background');
+            const appliedBg = isPersonalGame ? personalGameBg : STAGES[0].bg;
+            gameContainer.style.setProperty('background', appliedBg, 'important');
             gameContainer.style.animation = 'none';
             document.getElementById('dino-score-val').textContent = '0';
             isGameOver = false;
@@ -630,7 +647,8 @@
             currentStageIndex = nextStageIndex;
             const newStage = STAGES[currentStageIndex];
             
-            gameContainer.style.setProperty('background', newStage.bg, 'important');
+            const appliedBg = isPersonalGame ? personalGameBg : newStage.bg;
+            gameContainer.style.setProperty('background', appliedBg, 'important');
             gameContainer.style.transition = 'background 2s ease, height 0.4s ease';
             
             if (currentStageIndex === 9) { // Stage 10: Principal
