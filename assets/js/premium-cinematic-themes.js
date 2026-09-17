@@ -12,6 +12,8 @@
         .main-timer-card.theme-celebration::before {background:rgba(10,22,26,.08);backdrop-filter:none;-webkit-backdrop-filter:none;}
         #main-timer-bg[data-personal-countdown] {--personal-ink:#fffaf0;padding:30px 22px !important;min-height:310px;box-sizing:border-box;isolation:isolate;box-shadow:0 0 35px rgba(250,204,21,0.3),inset 0 0 20px rgba(255,255,255,0.1) !important;border:1px solid rgba(250,204,21,0.4) !important;}
         #main-timer-bg[data-personal-countdown]::before {z-index:1;background:rgba(9,17,25,.52) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;}
+        #main-timer-bg[data-personal-countdown].theme-color {--personal-ink:#ffffff;border:1px solid rgba(255,255,255,0.3) !important;box-shadow:inset 0 0 40px rgba(255,255,255,0.2), 0 15px 40px rgba(0,0,0,0.3) !important;}
+        #main-timer-bg[data-personal-countdown].theme-color::before {background:linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 100%) !important;backdrop-filter:blur(8px) !important;-webkit-backdrop-filter:blur(8px) !important;}
         #main-timer-bg[data-personal-countdown] > :not(canvas) {position:relative;z-index:2;}
         #main-timer-bg[data-personal-countdown]:not([class*="theme-"]) {--personal-ink:#243e35;}
         #main-timer-bg[data-personal-countdown] #main-target-title {font-size:24px !important;line-height:1.4;margin:8px 0 10px !important;overflow-wrap:anywhere;}
