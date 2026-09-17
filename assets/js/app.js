@@ -1144,18 +1144,43 @@ function animateNetDays(finalValue) {
 
 function animateAbsoluteTimer(diff) {
     if (absAnimationId) { cancelAnimationFrame(absAnimationId); absAnimationId = null; }
-    isAnimatingAbs = false;
-    if (diff <= 0) return;
+    if (diff <= 0) {
+        isAnimatingAbs = false;
+        return;
+    }
     
     const finalDays = Math.floor(diff / 86400000);
     const finalHours = Math.floor((diff % 86400000) / 3600000);
     const finalMins = Math.floor((diff % 3600000) / 60000);
     const finalSecs = Math.floor((diff % 60000) / 1000);
     
-    setDomText('abs-days', finalDays);
     setDomText('abs-hours', String(finalHours).padStart(2, '0'));
     setDomText('abs-mins', String(finalMins).padStart(2, '0'));
     setDomText('abs-secs', String(finalSecs).padStart(2, '0'));
+
+    isAnimatingAbs = true;
+    const startValue = finalDays + 75;
+    const duration = 1500;
+    let startTimestamp = null;
+
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        
+        const currentVal = Math.floor(startValue - (startValue - finalDays) * easeProgress);
+        setDomText('abs-days', currentVal);
+
+        if (progress < 1) {
+            absAnimationId = window.requestAnimationFrame(step);
+        } else {
+            setDomText('abs-days', finalDays);
+            isAnimatingAbs = false;
+            absAnimationId = null;
+        }
+    };
+    
+    absAnimationId = window.requestAnimationFrame(step);
 }
 
 function getActiveHolidayFromUrlOrWindow() {
