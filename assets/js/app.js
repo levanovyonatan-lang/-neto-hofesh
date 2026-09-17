@@ -1472,6 +1472,17 @@ function renderHolidays() {
 }
 
 function openCustomCountdownModal() {
+    let currentCountdowns = [];
+    try {
+        const saved = localStorage.getItem('neto_customCountdowns');
+        if (saved) currentCountdowns = JSON.parse(saved);
+    } catch (e) {}
+    
+    if (currentCountdowns.length >= 5) {
+        alert("ניתן להוסיף עד 5 ספירות חשובות. יש למחוק אחת קיימת כדי להוסיף חדשה.");
+        return;
+    }
+
     document.getElementById('custom-name').value = '';
     document.getElementById('custom-date').value = '';
     
