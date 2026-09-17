@@ -2062,3 +2062,15 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
     background-position: right 10px top 0, 0 0;
     background-repeat: no-repeat;
 }
+
+/* Fix loader visibility on dark premium themes */
+.main-timer-card.theme-vacation .loader,
+.main-timer-card.theme-celebration .loader,
+.main-timer-card.theme-exam .loader,
+.main-timer-card.theme-military .loader,
+.main-timer-card.theme-license .loader,
+body.theme-gold .loader,
+body.theme-retro .loader {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-top-color: #ffffff;
+}
