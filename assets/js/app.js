@@ -1658,8 +1658,12 @@ function selectTarget(id, shouldScroll = true) {
         if (vacationMessage) vacationMessage.style.display = 'none';
     }
 
-    const personalPremium = isPersonalCountdownPremium(target);
-    timerBg.toggleAttribute('data-personal-countdown', personalPremium);
+    const personalPremium = Boolean(isPersonalCountdownPremium(target));
+    if (personalPremium) {
+        timerBg.setAttribute('data-personal-countdown', 'true');
+    } else {
+        timerBg.removeAttribute('data-personal-countdown');
+    }
     
     let personalDate = document.getElementById('personal-event-date');
     if (personalPremium) {
