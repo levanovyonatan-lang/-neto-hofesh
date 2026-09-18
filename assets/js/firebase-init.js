@@ -147,8 +147,6 @@ onAuthStateChanged(auth, async (user) => {
                 }
                 if (window.currentUserProfile && window.currentUserProfile.isPremium) {
                     document.body.classList.add('premium-active');
-                    const premiumSelector = document.getElementById('premium-theme-selector');
-                    if (premiumSelector) premiumSelector.style.display = 'block';
                 }
                 
                 console.log("Welcome back, ", window.currentUserProfile.nickname);
@@ -210,8 +208,6 @@ onAuthStateChanged(auth, async (user) => {
         }
         if (window.currentUserProfile && window.currentUserProfile.isPremium) {
             document.body.classList.add('premium-active');
-            const premiumSelector = document.getElementById('premium-theme-selector');
-            if (premiumSelector) premiumSelector.style.display = 'block';
         }
 
         if (window.updateLeaderboardUI) window.updateLeaderboardUI();

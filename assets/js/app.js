@@ -1054,7 +1054,18 @@ function resetApp() {
 
     const premiumSelector = document.getElementById('premium-theme-selector');
     if (premiumSelector) {
-        premiumSelector.style.display = document.body.classList.contains('premium-active') ? 'block' : 'none';
+        if (document.body.classList.contains('premium-active')) {
+            premiumSelector.style.display = 'block';
+            const isGold = document.body.classList.contains('theme-gold');
+            const themeValue = isGold ? 'gold' : 'default';
+            const radio = document.querySelector(`input[name="vipTheme"][value="${themeValue}"]`);
+            if (radio) {
+                radio.checked = true;
+                if (typeof updateThemeSelection === 'function') updateThemeSelection(radio);
+            }
+        } else {
+            premiumSelector.style.display = 'none';
+        }
     }
 
     const btn = document.getElementById('main-ai-btn'); document.getElementById('ai-btn-text').innerHTML = "לחצו לטיפ אופטימיות יומי ✨";
@@ -1072,6 +1083,17 @@ function updateSchoolSelection(radio) {
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
     radio.parentElement.classList.add('selected');
     updateNextVacationButtonText();
+}
+
+function updateThemeSelection(radio) {
+    document.querySelectorAll('input[name="vipTheme"]').forEach(input => {
+        if (input.parentElement) {
+            input.parentElement.classList.remove('selected');
+        }
+    });
+    if (radio && radio.parentElement) {
+        radio.parentElement.classList.add('selected');
+    }
 }
 
 function updateFridayToggle() {
@@ -2058,6 +2080,13 @@ function initSplashScreen() {
 // אתחול מראש של נגן ה-Vimeo לביצועים מהירים
 document.addEventListener('DOMContentLoaded', () => {
     try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDemoPremium = urlParams.get('demo_premium') === '1' || sessionStorage.getItem('demo_premium') === '1';
+        if (isDemoPremium) {
+            document.body.classList.add('premium-active');
+            sessionStorage.setItem('demo_premium', '1');
+        }
+
         const stored = localStorage.getItem('neto_userConfig');
         if (stored) {
             const config = JSON.parse(stored);
@@ -2277,4 +2306,5 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.renderPrivateTimers) window.renderPrivateTimers();
     }, 2000);
 });
+
 

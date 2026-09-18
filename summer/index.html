@@ -261,14 +261,14 @@
             <div id="premium-theme-selector" style="display: none; width: 100%; margin-bottom: 25px; padding: 0 20px;">
                 <div class="setup-step" style="margin-bottom: 0;">
                     <h3 style="margin-bottom: 15px;">סגנון עיצוב למערכת</h3>
-                    <div class="school-grid">
+                    <div class="school-grid" style="grid-template-columns: 1fr 1fr; max-width: 400px; margin: 0 auto; gap: 15px;">
                         <label class="option-card vip-btn-gold" aria-label="יוקרתי">
-                            <input type="radio" name="vipTheme" value="gold" onchange="selectTheme('gold');">
+                            <input type="radio" name="vipTheme" value="gold" onchange="selectTheme('gold'); updateThemeSelection(this);">
                             <span class="option-title">יוקרתי</span>
                             <span class="option-emoji" aria-hidden="true">💎</span>
                         </label>
                         <label class="option-card vip-btn-regular" aria-label="רגיל">
-                            <input type="radio" name="vipTheme" value="default" onchange="selectTheme('default');">
+                            <input type="radio" name="vipTheme" value="default" onchange="selectTheme('default'); updateThemeSelection(this);">
                             <span class="option-title">רגיל</span>
                             <span class="option-emoji" aria-hidden="true">☀️</span>
                         </label>
