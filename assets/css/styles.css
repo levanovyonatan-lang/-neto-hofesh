@@ -1781,7 +1781,7 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
 .premium-modal-content {
     box-sizing: border-box;
     background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-    padding: 25px 20px;
+    padding: 15px 15px;
     border-radius: 24px;
     text-align: center;
     max-width: 95%;
@@ -1823,9 +1823,7 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
     transform: rotate(90deg);
 }
 
-.premium-modal-header {
-    margin-bottom: 25px;
-}
+.premium-modal-header { margin-bottom: 12px; }
 
 .premium-modal-icon {
     font-size: 3rem;
@@ -1854,11 +1852,7 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
     margin: 0;
 }
 
-.premium-input-group {
-    text-align: right;
-    margin-bottom: 18px;
-    position: relative;
-}
+.premium-input-group { text-align: right; margin-bottom: 10px; position: relative; }
 
 .premium-label {
     display: block;
@@ -2079,4 +2073,5 @@ body.theme-retro .loader {
     border-color: rgba(255, 255, 255, 0.2);
     border-top-color: #ffffff;
 }
+
 
