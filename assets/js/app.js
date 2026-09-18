@@ -2317,5 +2317,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2000);
 });
 
+// Add global haptic feedback (vibration) for interactive elements
+document.addEventListener('click', function(e) {
+    const isInteractive = e.target.closest('button, .btn, a, .holiday-card, .option-card, .setup-step, input[type="radio"], input[type="checkbox"], .premium-input');
+    if (isInteractive && navigator.vibrate) {
+        try {
+            // Check if it's a VIP action (gold theme or vip-specific buttons)
+            if (document.body.classList.contains('theme-gold') || isInteractive.closest('.vip-screen-box') || isInteractive.classList.contains('vip-save-btn')) {
+                navigator.vibrate([15, 40, 15]); // Double tap for VIP feel
+            } else {
+                navigator.vibrate(10); // Subtle single tap for normal actions
+            }
+        } catch(err) {}
+    }
+});
+
 
 
