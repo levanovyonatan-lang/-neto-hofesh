@@ -2012,9 +2012,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const config = JSON.parse(stored);
             if (config.schoolType) {
                 const radio = document.querySelector(`input[name="schoolType"][value="${config.schoolType}"]`);
-                if (radio) radio.checked = true;
+                if (radio) {
+                    radio.checked = true;
+                    updateSchoolSelection(radio);
+                }
                 const fridayToggle = document.getElementById('friday-toggle');
-                if (fridayToggle) fridayToggle.checked = !!config.studyFriday;
+                if (fridayToggle) {
+                    fridayToggle.checked = !!config.studyFriday;
+                    updateFridayToggle();
+                }
 
                 // Set a flag so initApp knows not to override active holiday if not needed
                 setTimeout(() => {
