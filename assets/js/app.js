@@ -1365,9 +1365,13 @@ function showMainScreen() {
         const savedCustoms = localStorage.getItem('neto_customCountdowns');
         if (savedCustoms) {
             const customCountdowns = JSON.parse(savedCustoms);
+            let validCountdowns = [];
+            let hasExpired = false;
+            
             customCountdowns.forEach(c => {
                 const cDate = new Date(c.date);
                 if (cDate.getTime() > now) {
+                    validCountdowns.push(c);
                     const hasEmoji = /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/u.test(c.name);
                     const isDefaultIcon = (!c.icon || c.icon === '📅' || c.icon === '🗓️');
                     const finalIcon = (hasEmoji && isDefaultIcon) ? '' : (c.icon || '🗓️');
@@ -1382,8 +1386,14 @@ function showMainScreen() {
                         lengthText: 'ספירה אישית',
                         isCustom: true
                     });
+                } else {
+                    hasExpired = true;
                 }
             });
+            
+            if (hasExpired) {
+                localStorage.setItem('neto_customCountdowns', JSON.stringify(validCountdowns));
+            }
         }
     } catch (e) {}
 
@@ -1583,6 +1593,7 @@ function deleteCustomCountdown(id) {
             
             if (userConfig.activeTargetId === id) {
                 userConfig.targetIntent = 'next';
+                saveUserConfig();
             }
             showMainScreen();
         }
