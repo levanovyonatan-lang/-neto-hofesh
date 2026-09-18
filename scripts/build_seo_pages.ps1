@@ -1,8 +1,8 @@
 # build_seo_pages.ps1 - 100% ASCII script reading UTF-8 JSON and generating rich SEO landing pages
 $ErrorActionPreference = "Stop"
 
-$baseDir = $PSScriptRoot
-if (-not $baseDir) { $baseDir = Get-Location }
+$baseDir = Join-Path $PSScriptRoot ".."
+if (-not $PSScriptRoot) { $baseDir = Get-Location }
 
 $indexFile = Join-Path $baseDir "index.html"
 $jsonFile = Join-Path $baseDir "holidays_seo.json"
