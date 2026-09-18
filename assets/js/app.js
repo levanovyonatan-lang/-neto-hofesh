@@ -2082,8 +2082,17 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         const urlParams = new URLSearchParams(window.location.search);
         const isDemoPremium = urlParams.get('demo_premium') === '1' || sessionStorage.getItem('demo_premium') === '1';
-        if (isDemoPremium) {
+        
+        // Immediately apply saved theme if present
+        const savedTheme = localStorage.getItem('neto_premiumTheme');
+        if (savedTheme || isDemoPremium) {
             document.body.classList.add('premium-active');
+            if (savedTheme && savedTheme !== 'default') {
+                document.body.classList.add('theme-' + savedTheme);
+            }
+        }
+        
+        if (isDemoPremium) {
             sessionStorage.setItem('demo_premium', '1');
         }
 

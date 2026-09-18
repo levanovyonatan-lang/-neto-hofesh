@@ -1051,6 +1051,9 @@ window.applyTheme = function(theme) {
 window.selectTheme = function(theme) {
     if (window.applyTheme) window.applyTheme(theme);
     
+    // Always save locally for instant load next time
+    localStorage.setItem('neto_premiumTheme', theme);
+    
     // Save to user profile if logged in
     if (window.currentUserProfile && window.currentUserProfile.isPremium) {
         window.currentUserProfile.theme = theme;
@@ -1059,8 +1062,6 @@ window.selectTheme = function(theme) {
                 theme: theme
             }).catch(e => console.error("Error saving theme", e));
         }
-    } else if (window.location.search.includes('demo_premium=1') || sessionStorage.getItem('demo_premium') === '1') {
-        localStorage.setItem('demo_theme', theme);
     }
 };
 
@@ -1154,7 +1155,7 @@ window.triggerPremiumUnboxing = function() {
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         if (window.location.search.includes('demo_premium=1')) {
-            const demoTheme = localStorage.getItem('demo_theme') || 'gold';
+            const demoTheme = localStorage.getItem('neto_premiumTheme') || 'gold';
             window.applyTheme(demoTheme);
             document.body.classList.add('premium-active');
             
