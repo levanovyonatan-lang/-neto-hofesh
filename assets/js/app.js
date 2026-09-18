@@ -1657,8 +1657,10 @@ function deleteCustomCountdown(id) {
             if (userConfig.activeTargetId === id) {
                 userConfig.targetIntent = 'next';
                 saveUserConfig();
+                initApp('next');
+            } else {
+                initApp(userConfig.activeTargetId);
             }
-            showMainScreen();
         }
     } catch (e) {}
 }
