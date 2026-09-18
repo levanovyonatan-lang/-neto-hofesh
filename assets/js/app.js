@@ -1847,23 +1847,7 @@ function setDomText(id, val) {
     if (el && el.textContent !== String(val)) el.textContent = String(val);
 }
 
-// --- Dynamic Background based on time of day ---
-function updateTimeOfDayTheme() {
-    const hour = new Date().getHours();
-    let themeClass = 'morning-bg';
-    if (hour >= 12 && hour < 17) themeClass = 'afternoon-bg';
-    else if (hour >= 17 && hour < 20) themeClass = 'evening-bg';
-    else if (hour >= 20 || hour < 6) themeClass = 'night-bg';
-
-    const currentClasses = Array.from(document.body.classList).filter(c => c.endsWith('-bg'));
-    if (!currentClasses.includes(themeClass)) {
-        currentClasses.forEach(c => document.body.classList.remove(c));
-        document.body.classList.add(themeClass);
-    }
-}
-
 function updateDashboard() {
-    updateTimeOfDayTheme();
     const event = activeEventsList.find(e => e.id === userConfig.activeTargetId); if (!event) return;
     const nowTime = new Date(); const todayStr = `${nowTime.getFullYear()}-${nowTime.getMonth() + 1}-${nowTime.getDate()}`;
     if (dailyTipsState.date && dailyTipsState.date !== todayStr) { loadDailyState(); renderTipBox(userConfig.activeTargetId); }

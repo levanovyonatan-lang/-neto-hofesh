@@ -2077,25 +2077,7 @@ body.theme-retro .loader {
     border-top-color: #ffffff;
 }
 
-/* --- Dynamic Time-of-Day Background --- */
-body {
-    transition: background-color 2s ease-in-out;
-}
-body.morning-bg {
-    background: linear-gradient(135deg, #fef9c3 0%, #ffffff 100%);
-}
-body.afternoon-bg {
-    background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
-}
-body.evening-bg {
-    background: linear-gradient(135deg, #ede9fe 0%, #f8fafc 100%);
-}
-body.night-bg {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-}
-body.night-bg .text-main, body.night-bg .main-timer-card {
-    color: #f8fafc;
-}
+
 
 /* --- Tick Pop Micro-Animation --- */
 @keyframes tick-pop {
