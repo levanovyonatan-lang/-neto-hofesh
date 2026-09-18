@@ -1054,7 +1054,7 @@ function resetApp() {
 
     const premiumSelector = document.getElementById('premium-theme-selector');
     if (premiumSelector) {
-        premiumSelector.style.display = 'block';
+        premiumSelector.style.display = document.body.classList.contains('premium-active') ? 'block' : 'none';
     }
 
     const btn = document.getElementById('main-ai-btn'); document.getElementById('ai-btn-text').innerHTML = "לחצו לטיפ אופטימיות יומי ✨";
@@ -2022,14 +2022,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     updateFridayToggle();
                 }
 
-                // Set a flag so initApp knows not to override active holiday if not needed
-                setTimeout(() => {
-                    let intent = 'next';
-                    if (config.activeTargetId && config.activeTargetId.startsWith('summer')) {
-                        intent = 'summer';
-                    }
-                    initApp(intent);
-                }, 1000);
+                // We no longer auto-skip. Wait for the user to click Start Countdown.
             }
         }
     } catch (e) { }
