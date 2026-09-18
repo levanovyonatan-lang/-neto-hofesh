@@ -1669,8 +1669,7 @@ function deleteCustomCountdownFromModal() {
     const idInput = document.getElementById('custom-id');
     if (idInput && idInput.value) {
         if (confirm('למחוק את הספירה האישית הזו?')) {
-            deleteCustomCountdown(idInput.value);
-            document.getElementById('custom-countdown-modal').style.display = 'none';
+            deleteCustomCountdown(idInput.value); document.getElementById('custom-countdown-modal').style.display = 'none'; location.reload();
         }
     }
 }
@@ -2317,5 +2316,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.renderPrivateTimers) window.renderPrivateTimers();
     }, 2000);
 });
+
 
 
