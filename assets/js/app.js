@@ -1771,7 +1771,13 @@ function selectTarget(id, shouldScroll = true) {
     
     let diff = target.date.getTime() - Date.now();
     if (target.isHappeningNow) { diff = target.endDate.getTime() - Date.now(); }
-    animateAbsoluteTimer(diff);
+    
+    if (target.isCustom) {
+        animateAbsoluteTimer(diff);
+    } else {
+        if (absAnimationId) { cancelAnimationFrame(absAnimationId); absAnimationId = null; }
+        isAnimatingAbs = false;
+    }
     
     updateDashboard();
 }
