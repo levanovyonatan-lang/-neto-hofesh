@@ -809,8 +809,8 @@
 
 
     <script src="tips.js?v=tips-file-v2" defer></script>
-    <script src="../assets/js/premium-cinematic-themes.js?v=4265" defer></script>
-    <script src="../assets/js/app.js?v=4265" defer></script>
+    <script src="../assets/js/premium-cinematic-themes.js?v=4266" defer></script>
+    <script src="../assets/js/app.js?v=4266" defer></script>
     <script src="../assets/js/games/dino-school.js?v=22" defer></script>
     <script src="../assets/js/games/emoji-rain.js?v=4258" defer></script>
 
@@ -976,10 +976,17 @@
                 }
             </script>
 
-            <button class="premium-save-btn" onclick="saveCustomCountdown()">
-                <span class="save-icon">💾</span>
-                <span class="save-text">שמור ספירה</span>
-            </button>
+            <input type="hidden" id="custom-id" value="">
+            <div style="display: flex; gap: 10px;">
+                <button class="premium-save-btn" onclick="saveCustomCountdown()" style="flex: 1;">
+                    <span class="save-icon">💾</span>
+                    <span class="save-text">שמור ספירה</span>
+                </button>
+                <button id="custom-delete-btn" class="premium-save-btn" onclick="deleteCustomCountdownFromModal()" style="display: none; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <span class="save-icon">🗑️</span>
+                    <span class="save-text">מחק</span>
+                </button>
+            </div>
         </div>
     </div>
 

@@ -1462,43 +1462,75 @@ function renderHolidays() {
         card.setAttribute('aria-label', `${isPersonalCountdownPremium(ev) ? 'ספירה אישית' : 'ספירה לחג'} ${ev.name}`);
         if (isPersonalCountdownPremium(ev)) card.querySelector('small').textContent = formatPersonalDate(ev.date);
         
-        // Add delete button if it's a custom countdown
+        // Add edit button if it's a custom countdown
         if (ev.isCustom) {
-            const delBtn = document.createElement('span');
-            delBtn.innerHTML = '🗑️';
-            delBtn.style.cssText = 'position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 16px; cursor: pointer; padding: 5px;';
-            delBtn.onclick = (e) => {
+            const editBtn = document.createElement('span');
+            editBtn.innerHTML = '✏️';
+            editBtn.style.cssText = 'position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 16px; cursor: pointer; padding: 5px;';
+            editBtn.onclick = (e) => {
                 e.stopPropagation();
-                if (confirm('למחוק את הספירה האישית הזו?')) {
-                    deleteCustomCountdown(ev.id);
-                }
+                openCustomCountdownModal(ev.id);
             };
             card.style.position = 'relative';
-            card.appendChild(delBtn);
+            card.appendChild(editBtn);
         }
         
         container.appendChild(card);
     });
 }
 
-function openCustomCountdownModal() {
+function openCustomCountdownModal(id = null) {
     let currentCountdowns = [];
     try {
         const saved = localStorage.getItem('neto_customCountdowns');
         if (saved) currentCountdowns = JSON.parse(saved);
     } catch (e) {}
     
-    if (currentCountdowns.length >= 5) {
+    if (!id && currentCountdowns.length >= 5) {
         alert("ניתן להוסיף עד 5 ספירות חשובות. יש למחוק אחת קיימת כדי להוסיף חדשה.");
         return;
     }
 
-    document.getElementById('custom-name').value = '';
-    document.getElementById('custom-date').value = '';
+    const idInput = document.getElementById('custom-id');
+    const deleteBtn = document.getElementById('custom-delete-btn');
+    if (idInput) idInput.value = id || '';
+    if (deleteBtn) deleteBtn.style.display = id ? 'block' : 'none';
+
+    let name = '', dateVal = '', timeVal = '08:00', emojiVal = '📅', themeVal = 'default', colorVal = '', typeVal = 'theme';
+
+    if (id) {
+        const existing = currentCountdowns.find(c => c.id === id);
+        if (existing) {
+            name = existing.name;
+            const d = new Date(existing.date);
+            dateVal = d.toISOString().split('T')[0];
+            timeVal = d.toTimeString().substring(0, 5);
+            emojiVal = existing.icon || '📅';
+            if (existing.color) {
+                typeVal = 'color';
+                colorVal = existing.color;
+            } else {
+                typeVal = 'theme';
+                themeVal = existing.theme || 'default';
+            }
+        }
+    }
+
+    document.getElementById('custom-name').value = name;
+    document.getElementById('custom-date').value = dateVal;
     
     const timeInput = document.getElementById('custom-time');
-    if(timeInput) timeInput.value = '';
+    if(timeInput) timeInput.value = timeVal;
     
+    const emojiInput = document.getElementById('custom-emoji');
+    if(emojiInput) emojiInput.value = emojiVal;
+
+    const themeInput = document.getElementById('custom-theme');
+    if(themeInput) themeInput.value = themeVal;
+
+    const colorInput = document.getElementById('custom-color');
+    if(colorInput) colorInput.value = colorVal;
+
     const emojiWrap = document.getElementById('custom-emoji-grid-wrap');
     if(emojiWrap) emojiWrap.style.display = 'none';
     
@@ -1507,7 +1539,7 @@ function openCustomCountdownModal() {
     }
     
     if(typeof toggleDesignType === 'function') {
-        toggleDesignType('theme');
+        toggleDesignType(typeVal);
     }
     
     document.getElementById('custom-countdown-modal').style.display = 'flex';
@@ -1556,8 +1588,11 @@ function saveCustomCountdown() {
         if (saved) customCountdowns = JSON.parse(saved);
     } catch (e) {}
     
+    const idInput = document.getElementById('custom-id');
+    const existingId = idInput ? idInput.value : '';
+
     const newCustom = {
-        id: 'custom_' + Date.now(),
+        id: existingId || ('custom_' + Date.now()),
         name: name,
         date: targetDate.toISOString(),
         icon: emojiStr,
@@ -1565,7 +1600,13 @@ function saveCustomCountdown() {
         color: designTypeStr === 'color' ? colorStr : null
     };
     
-    customCountdowns.push(newCustom);
+    if (existingId) {
+        const idx = customCountdowns.findIndex(c => c.id === existingId);
+        if (idx !== -1) customCountdowns[idx] = newCustom;
+        else customCountdowns.push(newCustom);
+    } else {
+        customCountdowns.push(newCustom);
+    }
     localStorage.setItem('neto_customCountdowns', JSON.stringify(customCountdowns));
     
     document.getElementById('custom-countdown-modal').style.display = 'none';
@@ -1598,6 +1639,16 @@ function deleteCustomCountdown(id) {
             showMainScreen();
         }
     } catch (e) {}
+}
+
+function deleteCustomCountdownFromModal() {
+    const idInput = document.getElementById('custom-id');
+    if (idInput && idInput.value) {
+        if (confirm('למחוק את הספירה האישית הזו?')) {
+            deleteCustomCountdown(idInput.value);
+            document.getElementById('custom-countdown-modal').style.display = 'none';
+        }
+    }
 }
 
 function selectTarget(id, shouldScroll = true) {
