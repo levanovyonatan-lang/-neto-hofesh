@@ -265,11 +265,7 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
         window.currentUserProfile = profileData;
         console.log("Registration completed successfully!");
         
-        if (sessionStorage.getItem('demo_premium') === '1') {
-            if (window.triggerPremiumUnboxing) {
-                setTimeout(() => window.triggerPremiumUnboxing(), 500);
-            }
-        }
+        
         
         if (localDinoScore > 0 && window.saveDinoHighScore) {
             const token = localStorage.getItem('dinoHighScoreToken');

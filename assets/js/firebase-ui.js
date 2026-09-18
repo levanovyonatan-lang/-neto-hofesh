@@ -1159,10 +1159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.applyTheme(demoTheme);
             document.body.classList.add('premium-active');
             
-            if (window.triggerPremiumUnboxing && !sessionStorage.getItem('demo_unboxed')) {
-                window.triggerPremiumUnboxing();
-                sessionStorage.setItem('demo_unboxed', '1');
-            }
+            
         } else if (window.currentUserProfile && window.currentUserProfile.isPremium && window.currentUserProfile.theme) {
             window.applyTheme(window.currentUserProfile.theme);
             document.body.classList.add('premium-active');
@@ -1234,3 +1231,4 @@ window.savePrivateTimer = async function() {
         if (typeof window.renderPrivateTimers === 'function') window.renderPrivateTimers();
     }
 };
+
