@@ -333,6 +333,11 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 .reset-btn { background: none; border: none; color: var(--text-color); text-decoration: underline; cursor: pointer; padding: 8px; font-size: calc(15px * var(--text-scale, 1)); font-weight: 700; margin-top: 10px; transition: opacity 0.2s ease; }
 .reset-btn:hover { opacity: 0.8; }
 
+.settings-btn { background: #f8fafc; color: #334155; border: 2px solid #e2e8f0; border-radius: 20px; padding: 12px 24px; font-size: calc(16px * var(--text-scale, 1)); font-weight: 800; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 300px; margin: 5px auto 0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+.settings-btn:hover { background: #e2e8f0; border-color: #cbd5e1; transform: translateY(-2px); box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1); }
+body.dark-mode .settings-btn, body.theme-cyberpunk .settings-btn, body.theme-retro .settings-btn, body.theme-gold .settings-btn { background: rgba(255, 255, 255, 0.1); color: #ffffff; border-color: rgba(255, 255, 255, 0.2); }
+body.dark-mode .settings-btn:hover, body.theme-cyberpunk .settings-btn:hover, body.theme-retro .settings-btn:hover, body.theme-gold .settings-btn:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); }
+
 .seo-footer { margin-top: 40px; padding: 30px 10px; border-top: 1px solid #f1f5f9; font-size: calc(14px * var(--text-scale, 1)); color: var(--text-muted); text-align: right; line-height: 1.7; }
 .seo-footer h2 { font-size: calc(18px * var(--text-scale, 1)); margin-bottom: 12px; color: var(--text-main); font-weight: 800; }
 .seo-footer h3 { font-size: calc(16px * var(--text-scale, 1)); margin-top: 20px; margin-bottom: 10px; color: var(--text-main); font-weight: 700; }
