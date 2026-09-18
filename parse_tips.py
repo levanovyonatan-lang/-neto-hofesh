@@ -7,7 +7,7 @@ HEB_MONTHS = {
     "במאי": "05", "ביוני": "06", "ביולי": "07", "באוגוסט": "08"
 }
 
-with open('pypdf_text.txt', 'r', encoding='utf-8') as f:
+with open('new_tips_v3.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
 text = text.replace('\n', ' ')
