@@ -348,7 +348,7 @@ body.dark-mode .settings-btn:hover, body.theme-cyberpunk .settings-btn:hover, bo
 .contact-link { color: var(--accent); text-decoration: none; }
 
 .ios-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; animation: fadeIn 0.3s ease-out; backdrop-filter: blur(5px); }
-.ios-modal-content { background: #ffffff; width: 100%; max-width: 380px; padding: 32px 24px; border-radius: 32px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.8); margin: auto; }
+.ios-modal-content { background: #ffffff; width: 100%; max-width: 420px; padding: 32px 24px; border-radius: 32px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.8); margin: auto; }
 .ios-modal-close { background: #f1f5f9; color: var(--text-main); border: none; padding: 14px 30px; font-weight: 800; border-radius: 16px; font-size: calc(16px * var(--text-scale, 1)); cursor: pointer; width: 100%; transition: background 0.2s; }
 .ios-modal-close:hover { background: #e2e8f0; }
 
@@ -1781,11 +1781,11 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
 .premium-modal-content {
     box-sizing: border-box;
     background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-    padding: 35px 30px;
+    padding: 25px 20px;
     border-radius: 24px;
     text-align: center;
-    max-width: 90%;
-    width: 380px;
+    max-width: 95%;
+    width: 420px;
     position: relative;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 2px 2px rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1962,11 +1962,11 @@ body.premium-active #custom-countdown-btn { display: flex !important; }
     justify-content: center;
     gap: 10px;
     width: 100%;
-    height: 56px;
+    height: 48px;
     background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
     color: #422006;
     border: none;
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 900;
     border-radius: 14px;
     cursor: pointer;
@@ -2079,3 +2079,4 @@ body.theme-retro .loader {
     border-color: rgba(255, 255, 255, 0.2);
     border-top-color: #ffffff;
 }
+
