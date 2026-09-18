@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v1789698904.8904';
+const CACHE_VERSION = 'v1789698905.8905';
 const CACHE_NAME = 'neto-cache-v4400';
 
 self.addEventListener('install', e => {
