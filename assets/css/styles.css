@@ -1567,50 +1567,13 @@ body.premium-active #dino-score-val + div { color: #3b82f6 !important; }
     color: #1e293b; font-size: 1.3rem; margin-bottom: 20px; font-weight: 800; text-align: center;
 }
 .vip-btn-gold {
-    border: 2px solid rgba(254, 240, 138, 0.4); 
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
-    color: #fef08a; 
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-    padding: 15px; 
-    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.2); 
-    border-radius: 16px; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-    cursor: pointer; 
-    height: 100%;
-    position: relative;
-    overflow: hidden;
+    border: 2px solid #e2e8f0; background: #f8fafc; color: #64748b; transition: 0.3s; padding: 15px; box-shadow: none; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; height: 100%;
 }
-
-.vip-btn-gold::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    background: linear-gradient(to right, transparent, rgba(254, 240, 138, 0.15), transparent);
-    transform: rotate(45deg);
-    animation: goldShimmer 3s infinite linear;
-    pointer-events: none;
-}
-
-@keyframes goldShimmer {
-    0% { transform: translateX(-50%) translateY(-50%) rotate(45deg); }
-    100% { transform: translateX(50%) translateY(50%) rotate(45deg); }
-}
-
-.vip-btn-gold:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(234, 179, 8, 0.25);
-    border-color: #facc15;
-}
-
-.vip-btn-gold .option-title { font-weight: 900; font-size: 1.35rem; letter-spacing: 0.5px; z-index: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-.vip-btn-regular .option-title { font-weight: 800; font-size: 1.2rem; z-index: 1; }
-.vip-btn-gold .option-emoji, .vip-btn-regular .option-emoji { font-size: 1.8rem; margin-top: 8px; z-index: 1; position: relative; }
+.vip-btn-gold .option-title, .vip-btn-regular .option-title { font-weight: 800; font-size: 1.2rem; }
+.vip-btn-gold .option-emoji, .vip-btn-regular .option-emoji { font-size: 1.8rem; margin-top: 8px; }
 
 .vip-btn-regular {
-    border: 2px solid #f59e0b; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #b45309; transition: all 0.3s ease; padding: 15px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; height: 100%;
+    border: 2px solid #f59e0b; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #b45309; transition: 0.3s; padding: 15px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; height: 100%;
 }
 .vip-save-btn {
     width: 100%; background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #ffffff; font-weight: 900; border: none; padding: 20px; font-size: 1.3rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(217, 119, 6, 0.4); cursor: pointer; transition: 0.3s;
@@ -1630,19 +1593,10 @@ body.theme-gold .vip-screen-box-title {
     color: #e2e8f0;
 }
 body.theme-gold .vip-btn-gold {
-    border: 2px solid #facc15; 
-    background: linear-gradient(135deg, #451a03 0%, #020617 100%); 
-    color: #fef08a; 
-    box-shadow: 0 0 35px rgba(250, 204, 21, 0.5), inset 0 0 20px rgba(250, 204, 21, 0.3);
-    transform: scale(1.05);
+    border: 2px solid #facc15; background: linear-gradient(135deg, rgba(69,26,3,0.8) 0%, rgba(2,6,23,0.9) 100%); color: #fef08a; box-shadow: 0 0 25px rgba(250, 204, 21, 0.2);
 }
 body.theme-gold .vip-btn-regular {
-    border: 2px solid rgba(255,255,255,0.1); 
-    background: rgba(255,255,255,0.03); 
-    color: #94a3b8; 
-    box-shadow: none;
-    transform: scale(0.95);
-    filter: grayscale(0.8) opacity(0.7);
+    border: 2px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #cbd5e1; box-shadow: none;
 }
 body.theme-gold .vip-save-btn {
     background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #020617; box-shadow: 0 15px 35px rgba(217, 119, 6, 0.5);
