@@ -35,13 +35,18 @@
             setTimeout(() => netDays.classList.remove('emoji-rain-bounce'), 1500);
         }
 
+        // Mobile performance throttling
+        const isMobile = window.innerWidth <= 768;
+        const burstCount = isMobile ? 10 : 20;
+        const intervalMs = isMobile ? 80 : EMOJI_INTERVAL_MS;
+
         // שלב 1: פיצוץ ראשוני של אימוג'ים (burst)
-        for (let i = 0; i < 20; i++) {
-            setTimeout(() => spawnEmoji(true), i * 25);
+        for (let i = 0; i < burstCount; i++) {
+            setTimeout(() => spawnEmoji(true), i * 30);
         }
 
         // שלב 2: גשם רציף
-        const rainInterval = setInterval(() => spawnEmoji(false), EMOJI_INTERVAL_MS);
+        const rainInterval = setInterval(() => spawnEmoji(false), intervalMs);
 
         setTimeout(() => {
             clearInterval(rainInterval);
