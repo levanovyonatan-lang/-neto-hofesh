@@ -1,4 +1,4 @@
-﻿const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
+const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
 const tipsDataVersion = 'tips-file-v2';
 const dailyTipsStorageKey = `holiday_calc_daily_tips_${tipsDataVersion}`;
 const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
@@ -1054,7 +1054,7 @@ function resetApp() {
 
     const premiumSelector = document.getElementById('premium-theme-selector');
     if (premiumSelector) {
-        premiumSelector.style.display = document.body.classList.contains('premium-active') ? 'block' : 'none';
+        premiumSelector.style.display = 'block';
     }
 
     const btn = document.getElementById('main-ai-btn'); document.getElementById('ai-btn-text').innerHTML = "לחצו לטיפ אופטימיות יומי ✨";
