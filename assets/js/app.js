@@ -915,6 +915,46 @@ window.onload = () => {
     setupManualCopyListener();
     const urlParams = new URLSearchParams(window.location.search);
 
+    if (urlParams.get('custom_share') === '1') {
+        const customName = urlParams.get('name');
+        const customDate = urlParams.get('date');
+        
+        if (customName && customDate) {
+            try {
+                let customCountdowns = [];
+                const saved = localStorage.getItem('neto_customCountdowns');
+                if (saved) customCountdowns = JSON.parse(saved);
+                
+                const existing = customCountdowns.find(c => c.name === customName && c.date === customDate);
+                let customId = existing ? existing.id : ('custom_' + Date.now());
+                
+                if (!existing) {
+                    customCountdowns.push({
+                        id: customId,
+                        name: customName,
+                        date: customDate,
+                        emoji: urlParams.get('emoji') || '📅',
+                        theme: urlParams.get('theme') || 'default',
+                        color: urlParams.get('color') || null
+                    });
+                    localStorage.setItem('neto_customCountdowns', JSON.stringify(customCountdowns));
+                    alert(`הספירה לאחור: "${customName}" נוספה בהצלחה!`);
+                }
+                
+                const configStr = localStorage.getItem('neto_userConfig');
+                let config = configStr ? JSON.parse(configStr) : { schoolType: 'elem', studyFriday: false };
+                config.activeTargetId = customId;
+                config.targetIntent = null;
+                localStorage.setItem('neto_userConfig', JSON.stringify(config));
+                
+                // Clean URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } catch(e) {
+                console.error('Failed to import shared custom countdown', e);
+            }
+        }
+    }
+
     if (urlParams.get('show_demo') === 'true') {
         document.title = "מתי באמת החופש? ספירה לאחור בלי שבתות שישי וחגים | נטו חופש";
         const ogTitle = document.querySelector('meta[property="og:title"]');
@@ -1918,28 +1958,55 @@ function shareWhatsApp(event) {
     if (activeHolidayId) {
         const targetObj = activeEventsList.find(t => t.id === activeHolidayId) || allTargets.find(t => t.id === activeHolidayId) || targets2027.find(t => t.id === activeHolidayId);
         if (targetObj) {
-            const slugMap = {
-                'hanukkah2026': 'hanukkah',
-                'purim2027': 'purim',
-                'pesach2027': 'pesach',
-                'atzmaut2027': 'atzmaut',
-                'atzmaut': 'atzmaut',
-                'lagbaomer': 'lag-baomer',
-                'shavuot2027': 'shavuot',
-                'shavuot': 'shavuot',
-                'summerHigh2027': 'summer-high',
-                'summerHigh': 'summer-high',
-                'summerElem2027': 'summer',
-                'summerElem': 'summer'
-            };
-            const slug = slugMap[targetObj.id] || window.NETO_ACTIVE_HOLIDAY_SLUG || '';
-            if (slug) {
-                shareUrl = `https://www.neto-hofesh.co.il/${slug}/`;
+            if (targetObj.isCustom) {
+                try {
+                    const savedCustoms = localStorage.getItem('neto_customCountdowns');
+                    if (savedCustoms) {
+                        const customs = JSON.parse(savedCustoms);
+                        const originalCustom = customs.find(c => c.id === activeHolidayId);
+                        if (originalCustom) {
+                            const params = new URLSearchParams();
+                            params.set('custom_share', '1');
+                            if (originalCustom.name) params.set('name', originalCustom.name);
+                            if (originalCustom.date) params.set('date', originalCustom.date);
+                            if (originalCustom.emoji) params.set('emoji', originalCustom.emoji);
+                            if (originalCustom.theme) params.set('theme', originalCustom.theme);
+                            if (originalCustom.color) params.set('color', originalCustom.color);
+                            shareUrl = `https://www.neto-hofesh.co.il/?${params.toString()}`;
+                        }
+                    }
+                } catch(e) {
+                    console.error('Failed to parse custom countdown for sharing', e);
+                }
+            } else {
+                const slugMap = {
+                    'hanukkah2026': 'hanukkah',
+                    'purim2027': 'purim',
+                    'pesach2027': 'pesach',
+                    'atzmaut2027': 'atzmaut',
+                    'atzmaut': 'atzmaut',
+                    'lagbaomer': 'lag-baomer',
+                    'shavuot2027': 'shavuot',
+                    'shavuot': 'shavuot',
+                    'summerHigh2027': 'summer-high',
+                    'summerHigh': 'summer-high',
+                    'summerElem2027': 'summer',
+                    'summerElem': 'summer'
+                };
+                const slug = slugMap[targetObj.id] || window.NETO_ACTIVE_HOLIDAY_SLUG || '';
+                if (slug) {
+                    shareUrl = `https://www.neto-hofesh.co.il/${slug}/`;
+                }
             }
         }
     }
 
-    const text = `אמאל'ה, קלטתם כמה ימי לימוד נשארו עד החופש? 😱🏃‍♂️ כנסו דחוף לראות את הספירה לאחור >> ${shareUrl}`;
+    let text = `אמאל'ה, קלטתם כמה ימי לימוד נשארו עד החופש? 😱🏃‍♂️ כנסו דחוף לראות את הספירה לאחור >> ${shareUrl}`;
+    if (activeHolidayId && activeHolidayId.startsWith('custom_')) {
+        const customName = activeEventsList.find(t => t.id === activeHolidayId)?.title || 'האירוע שלי';
+        text = `פתחתי ספירה לאחור ל-${customName}! 🎉 כנסו לראות כמה זמן נשאר >> ${shareUrl}`;
+    }
+    
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 }
 
