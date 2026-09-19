@@ -222,6 +222,19 @@
         }
       ]
     }
+    <script>
+        // Anti-flash script for Safari/iOS
+        (function() {
+            try {
+                var theme = localStorage.getItem('neto_premiumTheme');
+                var isDemo = window.location.search.includes('demo_premium=1') || window.location.search.includes('show_demo=true');
+                if (theme === 'gold' || isDemo) {
+                    var metaTheme = document.querySelector('meta[name="theme-color"]');
+                    if (metaTheme) metaTheme.setAttribute('content', '#0f172a');
+                    document.documentElement.style.backgroundColor = '#0f172a';
+                }
+            } catch(e) {}
+        })();
     </script>
 </head>
 
