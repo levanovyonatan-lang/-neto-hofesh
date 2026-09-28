@@ -1025,13 +1025,16 @@ function initApp(countdownTarget = 'summer') {
 
     // שליחת אירוע ספציפי לסוג בית הספר (באנגלית)
     trackEvent('start_' + schoolNameEng);
-    trackEvent('start_countdown_' + countdownTarget);
+    
+    // Prevent flooding analytics with unique timestamps for custom countdowns
+    const safeTargetName = countdownTarget.startsWith('custom_') ? 'custom_personal' : countdownTarget;
+    trackEvent('start_countdown_' + safeTargetName);
 
     // אירוע כללי עם פרמטרים לניתוח קל יותר
     trackEvent('app_start', {
         'school_type': schoolNameEng,
         'study_friday': userConfig.studyFriday ? 'yes' : 'no',
-        'countdown_target': countdownTarget
+        'countdown_target': safeTargetName
     });
 
     showMainScreen();
