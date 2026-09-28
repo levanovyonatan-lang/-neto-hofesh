@@ -1509,6 +1509,13 @@ function renderHolidays() {
 }
 
 function openCustomCountdownModal(id = null) {
+    // --- AdSense Vignette Trigger for SPA ---
+    // Pushing state to history tells AdSense Auto Ads that a "page transition" occurred,
+    // which can trigger a Vignette ad without actually reloading the page or breaking the UI.
+    if (!id && window.location.hash !== '#add-personal') {
+        history.pushState({ modal: 'add-personal' }, '', '#add-personal');
+    }
+
     let currentCountdowns = [];
     try {
         const saved = localStorage.getItem('neto_customCountdowns');
