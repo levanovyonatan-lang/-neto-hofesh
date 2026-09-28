@@ -4,9 +4,8 @@
  */
 
 (function() {
-    // Only run if the demo flag is on
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('show_demo') !== 'true' && urlParams.get('demo_premium') !== '1') return;
+    // The custom countdown feature is now public, so we don't block this script.
+    // (It only affects #main-timer-bg[data-personal-countdown] anyway).
     const celebrationStyle = document.createElement('style');
     celebrationStyle.textContent = `
         .main-timer-card.theme-celebration::before {background:rgba(10,22,26,.08);backdrop-filter:none;-webkit-backdrop-filter:none;}
