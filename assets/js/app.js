@@ -1493,12 +1493,12 @@ function renderHolidays() {
         
         // Add edit button if it's a custom countdown
         if (ev.isCustom) {
-            const editBtn = document.createElement('a');
+            const editBtn = document.createElement('span');
             editBtn.innerHTML = '✏️';
-            editBtn.style.cssText = 'position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 16px; cursor: pointer; padding: 5px; text-decoration: none;';
-            editBtn.href = '?targetIntent=' + (userConfig.activeTargetId || 'next') + '&action=edit_personal&edit_id=' + ev.id;
+            editBtn.style.cssText = 'position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 16px; cursor: pointer; padding: 5px;';
             editBtn.onclick = (e) => {
                 e.stopPropagation();
+                openCustomCountdownModal(ev.id);
             };
             card.style.position = 'relative';
             card.appendChild(editBtn);
@@ -1506,12 +1506,6 @@ function renderHolidays() {
         
         container.appendChild(card);
     });
-    
-    // Update Add button href to preserve current background
-    const addBtn = document.getElementById('custom-countdown-btn');
-    if (addBtn) {
-        addBtn.href = '?targetIntent=' + (userConfig.activeTargetId || 'next') + '&action=add_personal';
-    }
 }
 
 function openCustomCountdownModal(id = null) {
@@ -1646,8 +1640,9 @@ function saveCustomCountdown() {
     
     document.getElementById('custom-countdown-modal').style.display = 'none';
     
-    // Refresh page to load new countdown
-    window.location.href = '?targetIntent=' + newCustom.id;
+    // Refresh the UI to show the new countdown
+    userConfig.targetIntent = newCustom.id;
+    showMainScreen();
     
     setTimeout(() => {
         const activeCard = document.querySelector('.holiday-card.active');
@@ -2176,16 +2171,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('is-android');
         }
     } catch (e) { }
-
-    // --- Auto-open modal if URL tells us to (triggers ad transition) ---
-    const actionParam = new URLSearchParams(window.location.search).get('action');
-    if (actionParam === 'add_personal') {
-        setTimeout(() => openCustomCountdownModal(), 600);
-    } else if (actionParam === 'edit_personal') {
-        const editId = new URLSearchParams(window.location.search).get('edit_id');
-        setTimeout(() => openCustomCountdownModal(editId), 600);
-    }
-    // -------------------------------------------------------------------
     initSplashScreen();
     applyHolidayLandingPageMode();
     try {
