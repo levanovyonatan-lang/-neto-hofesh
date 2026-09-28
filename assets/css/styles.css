@@ -1602,10 +1602,9 @@ body.theme-gold .vip-save-btn {
     background: linear-gradient(135deg, #facc15 0%, #d97706 100%); color: #020617; box-shadow: 0 15px 35px rgba(217, 119, 6, 0.5);
 }
 
-body.premium-active #custom-countdown-btn { display: flex !important; }
-
 /* Custom Countdown Button Styles */
 #custom-countdown-btn {
+    display: flex;
     background: rgba(255, 255, 255, 0.85);
     color: var(--text-color, #1e293b); 
     border: 2px solid rgba(234, 88, 12, 0.3); 
