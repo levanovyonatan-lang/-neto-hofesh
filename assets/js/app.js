@@ -1515,6 +1515,10 @@ function openCustomCountdownModal(id = null) {
     if (!id && window.location.hash !== '#add-personal') {
         history.pushState({ modal: 'add-personal' }, '', '#add-personal');
     }
+    
+    if (!id) {
+        trackEvent('open_custom_countdown_modal');
+    }
 
     let currentCountdowns = [];
     try {
@@ -1637,10 +1641,12 @@ function saveCustomCountdown() {
     };
     
     if (existingId) {
+        trackEvent('update_custom_countdown', { theme: newCustom.theme, color: newCustom.color });
         const idx = customCountdowns.findIndex(c => c.id === existingId);
         if (idx !== -1) customCountdowns[idx] = newCustom;
         else customCountdowns.push(newCustom);
     } else {
+        trackEvent('add_custom_countdown', { theme: newCustom.theme, color: newCustom.color });
         customCountdowns.push(newCustom);
     }
     localStorage.setItem('neto_customCountdowns', JSON.stringify(customCountdowns));
