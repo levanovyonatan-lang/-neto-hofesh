@@ -26,6 +26,8 @@ $html = $html.Replace('</head>', $style + "`n</head>")
 $script = @"
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('premium-active');
+
 
     const modal = document.getElementById('custom-countdown-modal');
     if(modal) {
