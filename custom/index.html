@@ -1093,7 +1093,19 @@ document.addEventListener('DOMContentLoaded', () => {
         window.saveCustomCountdown = function() {
             originalSave();
             setTimeout(() => {
-                window.location.href = '../index.html' + window.location.search;
+                let intentId = '';
+                try {
+                    const saved = JSON.parse(localStorage.getItem('neto_customCountdowns'));
+                    if(saved && saved.length > 0) {
+                        intentId = saved[saved.length - 1].id;
+                    }
+                } catch(e) {}
+                
+                let search = window.location.search;
+                if(intentId) {
+                    search = search ? search + '&intent=' + intentId : '?intent=' + intentId;
+                }
+                window.location.href = '../index.html' + search;
             }, 100);
         };
     }
