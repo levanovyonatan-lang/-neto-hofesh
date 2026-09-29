@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const originalSave = window.saveCustomCountdown;
     if (originalSave) {
         window.saveCustomCountdown = function() {
-            originalSave();
+            if (originalSave() === false) return;
             setTimeout(() => {
                 window.location.href = '../index.html?modal=custom';
             }, 100);

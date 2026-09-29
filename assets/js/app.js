@@ -1620,7 +1620,7 @@ function saveCustomCountdown() {
     
     if (!name || !dateStr) {
         alert('יש להזין שם ותאריך לספירה האישית.');
-        return;
+        return false;
     }
     
     const targetDate = new Date(dateStr);
@@ -1633,7 +1633,7 @@ function saveCustomCountdown() {
     
     if (targetDate.getTime() <= Date.now()) {
         alert('יש לבחור תאריך/שעה בעתיד.');
-        return;
+        return false;
     }
     
     let customCountdowns = [];
@@ -1644,6 +1644,11 @@ function saveCustomCountdown() {
     
     const idInput = document.getElementById('custom-id');
     const existingId = idInput ? idInput.value : '';
+
+    if (!existingId && customCountdowns.length >= 5) {
+        alert('ניתן להוסיף עד 5 ספירות אישיות מקסימום.');
+        return false;
+    }
 
     const newCustom = {
         id: existingId || ('custom_' + Date.now()),
@@ -1678,6 +1683,8 @@ function saveCustomCountdown() {
         }
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);
+    
+    return true;
 }
 
 function deleteCustomCountdown(id) {
