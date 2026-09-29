@@ -30,12 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show custom modal full screen
     const modal = document.getElementById('custom-countdown-modal');
     if(modal) {
-        modal.style.display = 'flex';
+        modal.style.display = 'block';
         modal.style.minHeight = '100vh';
-        modal.style.alignItems = 'center';
-        modal.style.justifyContent = 'center';
         modal.style.position = 'relative';
-        modal.style.background = 'var(--bg-gradient)';
+        modal.style.background = '#0f172a';
         modal.style.zIndex = '1';
         
         const closeBtn = modal.querySelector('.premium-modal-close');
@@ -44,8 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const content = modal.querySelector('.premium-modal-content');
         if(content) {
             content.style.maxWidth = '600px';
-            content.style.width = '90%';
-            content.style.margin = '20px auto';
+            content.style.width = '100%';
+            content.style.minHeight = '100vh';
+            content.style.margin = '0 auto';
+            content.style.border = 'none';
+            content.style.borderRadius = '0';
+            content.style.boxShadow = 'none';
+            content.style.background = 'linear-gradient(145deg, #1e293b 0%, #0f172a 100%)';
+            content.style.padding = '40px 20px';
         }
     }
 
