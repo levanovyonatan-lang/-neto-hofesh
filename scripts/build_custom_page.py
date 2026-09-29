@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('custom-countdown-modal');
     if(modal) {
         modal.style.display = 'block';
+        modal.style.width = '100%';
         modal.style.minHeight = '100vh';
         modal.style.position = 'relative';
         modal.style.background = '#0f172a';
@@ -41,10 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const content = modal.querySelector('.premium-modal-content');
         if(content) {
-            content.style.maxWidth = '600px';
+            content.style.maxWidth = '100%';
             content.style.width = '100%';
             content.style.minHeight = '100vh';
-            content.style.margin = '0 auto';
+            content.style.margin = '0';
             content.style.border = 'none';
             content.style.borderRadius = '0';
             content.style.boxShadow = 'none';
