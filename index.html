@@ -457,10 +457,10 @@
             <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation"
                 aria-label="בחירת חגים"></div>
             
-            <button id="custom-countdown-btn" class="btn-action" onclick="openCustomCountdownModal()" style="display: none !important;">
+            <a href="custom/index.html" id="custom-countdown-btn" class="btn-action" style="display: none !important; text-decoration: none;">
                 <span>הוספת ספירה אישית</span>
                 <span>+</span>
-            </button>
+            </a>
             
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; margin-top: 15px;">
                 <button class="settings-btn" id="main-settings-btn" onclick="resetApp()">
@@ -1046,7 +1046,12 @@
         <a href="/about.html" style="color: #64748b; text-decoration: none;">אודות</a>
     </nav>
 
+<script>
+if(window.location.search.includes('show_demo=true')) {
+    const btn = document.getElementById('custom-countdown-btn');
+    if(btn) btn.style.setProperty('display', 'flex', 'important');
+}
+</script>
 </body>
-
 </html>
 
