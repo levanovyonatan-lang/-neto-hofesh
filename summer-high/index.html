@@ -451,7 +451,7 @@
             <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation"
                 aria-label="בחירת חגים"></div>
 
-            <a href="/custom/" id="custom-countdown-btn" class="btn-action" style="display: none !important; text-decoration: none;">
+            <a href="custom/index.html" id="custom-countdown-btn" class="btn-action" style="display: none !important; text-decoration: none;">
                 <span>הוספת ספירה אישית</span>
                 <span>+</span>
             </a>
@@ -997,7 +997,10 @@
 <script>
 if(window.location.search.includes('show_demo=true')) {
     const btn = document.getElementById('custom-countdown-btn');
-    if(btn) btn.style.setProperty('display', 'flex', 'important');
+    if(btn) {
+        btn.style.setProperty('display', 'flex', 'important');
+        btn.href = 'custom/index.html' + window.location.search;
+    }
 }
 </script>
 </body>

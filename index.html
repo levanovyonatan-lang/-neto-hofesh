@@ -1049,7 +1049,10 @@
 <script>
 if(window.location.search.includes('show_demo=true')) {
     const btn = document.getElementById('custom-countdown-btn');
-    if(btn) btn.style.setProperty('display', 'flex', 'important');
+    if(btn) {
+        btn.style.setProperty('display', 'flex', 'important');
+        btn.href = 'custom/index.html' + window.location.search;
+    }
 }
 </script>
 </body>

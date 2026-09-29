@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.saveCustomCountdown = function() {
             originalSave();
             setTimeout(() => {
-                window.location.href = '../index.html?modal=custom';
+                window.location.href = '../index.html' + window.location.search;
             }, 100);
         };
     }
