@@ -14,13 +14,18 @@ $html = $html.Replace('href="fitness.html"', 'href="../fitness.html"')
 # fix absolute links
 $html = [System.Text.RegularExpressions.Regex]::Replace($html, 'href="(?:\.\./)?(hanukkah|taanit-esther|purim|pesach|asru-chag|atzmaut|lag-baomer|shavuot|summer-high|summer)/"', 'href="../$1/"')
 
+$style = @"
+<style>
+    #main-screen, #setup-screen, .holiday-switcher-wrapper, .settings-btn, #footer {
+        display: none !important;
+    }
+</style>
+"@
+$html = $html.Replace('</head>', $style + "`n</head>")
+
 $script = @"
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const ms = document.getElementById('main-screen');
-    if(ms) ms.style.display = 'none';
-    const ss = document.getElementById('setup-screen');
-    if(ss) ss.style.display = 'none';
 
     const modal = document.getElementById('custom-countdown-modal');
     if(modal) {

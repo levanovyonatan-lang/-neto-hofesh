@@ -253,6 +253,11 @@
             } catch(e) {}
         })();
     </script>
+<style>
+    #main-screen, #setup-screen, .holiday-switcher-wrapper, .settings-btn, #footer {
+        display: none !important;
+    }
+</style>
 </head>
 
 <body class="splash-active">
@@ -457,10 +462,10 @@
             <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation"
                 aria-label="בחירת חגים"></div>
             
-            <button id="custom-countdown-btn" class="btn-action" onclick="openCustomCountdownModal()" style="display: none !important;">
+            <a href="custom/index.html" id="custom-countdown-btn" class="btn-action" style="display: none !important; text-decoration: none;">
                 <span>הוספת ספירה אישית</span>
                 <span>+</span>
-            </button>
+            </a>
             
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; margin-top: 15px;">
                 <button class="settings-btn" id="main-settings-btn" onclick="resetApp()">
@@ -1047,11 +1052,13 @@
     </nav>
 
 <script>
+if(window.location.search.includes('show_demo=true')) {
+    const btn = document.getElementById('custom-countdown-btn');
+    if(btn) btn.style.setProperty('display', 'flex', 'important');
+}
+</script>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
-    const ms = document.getElementById('main-screen');
-    if(ms) ms.style.display = 'none';
-    const ss = document.getElementById('setup-screen');
-    if(ss) ss.style.display = 'none';
 
     const modal = document.getElementById('custom-countdown-modal');
     if(modal) {
@@ -1081,14 +1088,13 @@ document.addEventListener('DOMContentLoaded', () => {
         window.saveCustomCountdown = function() {
             originalSave();
             setTimeout(() => {
-                window.location.href = '../index.html';
+                window.location.href = '../index.html?modal=custom';
             }, 100);
         };
     }
 });
 </script>
 </body>
-
 </html>
 
 
