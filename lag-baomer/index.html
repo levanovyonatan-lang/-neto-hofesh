@@ -29,14 +29,14 @@
     <title>ל"ג בעומר 2027: האם לומדים? | נטו חופש</title>
 
     <!-- Favicon & Apple Touch Icons -->
-    <link rel="icon" type="image/png" href="../official-sun-neto-transparent.png?v=8908">
-    <link rel="apple-touch-icon" href="../icon-neto-sunglasses-white.png?v=8908">
-    <link rel="apple-touch-icon" sizes="180x180" href="../icon-neto-sunglasses-white.png?v=8908">
-    <link rel="apple-touch-icon" sizes="192x192" href="../icon-neto-sunglasses-white.png?v=8908">
-    <link rel="apple-touch-icon" sizes="512x512" href="../icon-neto-sunglasses-white.png?v=8908">
+    <link rel="icon" type="image/png" href="../official-sun-neto-transparent.png?v=9060">
+    <link rel="apple-touch-icon" href="../icon-neto-sunglasses-white.png?v=9060">
+    <link rel="apple-touch-icon" sizes="180x180" href="../icon-neto-sunglasses-white.png?v=9060">
+    <link rel="apple-touch-icon" sizes="192x192" href="../icon-neto-sunglasses-white.png?v=9060">
+    <link rel="apple-touch-icon" sizes="512x512" href="../icon-neto-sunglasses-white.png?v=9060">
 
     <!-- PWA -->
-    <link rel="manifest" href="../manifest.json?v=8908">
+    <link rel="manifest" href="../manifest.json?v=9060">
     <meta name="theme-color" content="#ffffff" id="meta-theme-color">
     <script>
         (function() {
@@ -72,13 +72,30 @@
     <meta property="og:url" content="http://neto-hofesh.co.il/">
     <meta property="og:title" content="ל&quot;ג בעומר 2027: האם לומדים? | נטו חופש">
     <meta property="og:description" content="ל&quot;ג בעומר: 25 במאי 2027. המועד אינו מנוכה כיום חופש מהספירה.">
-    <meta property="og:image" content="http://neto-hofesh.co.il/icon-neto-sunglasses-white.png?v=8908">
+    <meta property="og:image" content="http://neto-hofesh.co.il/icon-neto-sunglasses-white.png?v=9060">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/styles.css?v=8908">
+    <!-- Emergency Cache Clear -->
+    <script>
+        if (window.location.search.includes('clear=1')) {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for(let registration of registrations) {
+                        registration.unregister();
+                    }
+                });
+            }
+            caches.keys().then(function(names) {
+                for (let name of names) caches.delete(name);
+            });
+            setTimeout(() => { window.location.href = window.location.pathname; }, 1000);
+        }
+    </script>
+
+    <link rel="stylesheet" href="../assets/css/styles.css?v=9060">
     <style>
         /* סגנונות לבאנר הדגמה */
         .sticky-banner-container {
@@ -268,23 +285,6 @@
             <!-- Premium Settings Modal (Moved to end of body) -->
 
             <!-- Premium Theme Selector (VIP) -->
-            <div id="premium-theme-selector" style="display: none; width: 100%; margin-bottom: 25px; padding: 0 20px;">
-                <div class="setup-step" style="margin-bottom: 0;">
-                    <h3 style="margin-bottom: 15px;">סגנון עיצוב למערכת</h3>
-                    <div class="school-grid" style="grid-template-columns: 1fr 1fr; max-width: 400px; margin: 0 auto; gap: 15px;">
-                        <label class="option-card vip-btn-gold" aria-label="יוקרתי">
-                            <input type="radio" name="vipTheme" value="gold" onchange="selectTheme('gold'); updateThemeSelection(this);">
-                            <span class="option-title">יוקרתי</span>
-                            <span class="option-emoji" aria-hidden="true">💎</span>
-                        </label>
-                        <label class="option-card vip-btn-regular" aria-label="רגיל">
-                            <input type="radio" name="vipTheme" value="default" onchange="selectTheme('default'); updateThemeSelection(this);">
-                            <span class="option-title">רגיל</span>
-                            <span class="option-emoji" aria-hidden="true">☀️</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
 
             <!-- שלב 1: איפה אתם לומדים? -->
             <div class="setup-step">
@@ -435,7 +435,7 @@
             <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation"
                 aria-label="בחירת חגים"></div>
 
-            <button id="custom-countdown-btn" class="btn-action" onclick="openCustomCountdownModal()" style="display: none;">
+            <button id="custom-countdown-btn" class="btn-action" onclick="openCustomCountdownModal()">
                 <span>הוספת ספירה אישית</span>
                 <span>+</span>
             </button>
@@ -443,7 +443,6 @@
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; margin-top: 15px;">
                 <button class="settings-btn" id="main-settings-btn" onclick="resetApp()">
                     <span class="regular-text">שינוי הגדרות</span>
-                    <span class="premium-text" style="display: none;">שינוי הגדרות ועיצוב</span>
                     <span style="font-size: 1.2em;" aria-hidden="true">⚙️</span>
                 </button>
             </div>
@@ -783,14 +782,14 @@
 
 
     <script src="tips.js?v=tips-file-v2" defer></script>
-    <script src="../assets/js/premium-cinematic-themes.js?v=8908" defer></script>
-    <script src="../assets/js/modules/holidays.js?v=8908" defer></script>
-    <script src="../assets/js/app.js?v=8908" defer></script>
-    <script src="../assets/js/games/dino-school.js?v=8908" defer></script>
-    <script src="../assets/js/games/emoji-rain.js?v=8908" defer></script>
+    <script src="../assets/js/premium-cinematic-themes.js?v=9060" defer></script>
+    <script src="../assets/js/modules/holidays.js?v=9060" defer></script>
+    <script src="../assets/js/app.js?v=9060" defer></script>
+    <script src="../assets/js/games/dino-school.js?v=9060" defer></script>
+    <script src="../assets/js/games/emoji-rain.js?v=9060" defer></script>
 
-    <script type="module" src="../assets/js/firebase-init.js?v=8908" defer></script>
-    <script src="../assets/js/firebase-ui.js?v=8908" defer></script>
+    <script type="module" src="../assets/js/firebase-init.js?v=9060" defer></script>
+    <script src="../assets/js/firebase-ui.js?v=9060" defer></script>
 
     <!-- Creator Networks Modal -->
     <div id="creator-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px); flex-direction: column;" onclick="this.style.display='none'">
@@ -824,13 +823,23 @@
 
 
     <!-- Premium Add Personal Event Modal -->
-    <div id="custom-countdown-modal" class="premium-modal-overlay" style="display: none;" onclick="this.style.display='none'">
+    <div id="custom-countdown-modal" class="premium-modal-overlay" style="display: none;" onclick="if(event.target===this){this.style.display='none'; history.pushState('', document.title, window.location.pathname + window.location.search.replace(/[?&]modal=add-personal/, ''));}">
         <div class="premium-modal-content" onclick="event.stopPropagation()">
-            <button class="premium-modal-close" onclick="document.getElementById('custom-countdown-modal').style.display='none'">&times;</button>
+            <button class="premium-modal-close" onclick="document.getElementById('custom-countdown-modal').style.display='none'; history.pushState('', document.title, window.location.pathname + window.location.search.replace(/[?&]modal=add-personal/, ''));">&times;</button>
             <div class="premium-modal-header">
-
                 <h3 class="premium-modal-title">הוספת ספירה אישית</h3>
                 <p class="premium-modal-subtitle">צור טיימר מעוצב לאירוע שלך</p>
+            </div>
+
+            <!-- AdSense Manual Display Ad (Modal) -->
+            <div id="modal-ad-container" style="width: 100%; min-height: 100px; background: rgba(0,0,0,0.02); border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                <span style="color: #94a3b8; font-size: 13px; position: absolute; z-index: 1;">הפרסומת תופיע כאן ברגע שיוזן קוד (Ad Slot)</span>
+                <ins class="adsbygoogle"
+                     style="display:block; width: 100%; position: relative; z-index: 2;"
+                     data-ad-client="ca-pub-3389455724624040"
+                     data-ad-slot="PASTE_SLOT_ID_HERE"
+                     data-ad-format="horizontal"
+                     data-full-width-responsive="true"></ins>
             </div>
 
             <div class="premium-input-group">

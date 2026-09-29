@@ -457,7 +457,7 @@
             <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation"
                 aria-label="בחירת חגים"></div>
             
-            <button id="custom-countdown-btn" class="btn-action" onclick="openCustomCountdownModal()" style="display: none !important;">
+            <button id="custom-countdown-btn" class="btn-action" onclick="openCustomCountdownModal()">
                 <span>הוספת ספירה אישית</span>
                 <span>+</span>
             </button>
@@ -903,9 +903,19 @@
         <div class="premium-modal-content" onclick="event.stopPropagation()">
             <button class="premium-modal-close" onclick="document.getElementById('custom-countdown-modal').style.display='none'; history.pushState('', document.title, window.location.pathname + window.location.search.replace(/[?&]modal=add-personal/, ''));">&times;</button>
             <div class="premium-modal-header">
-
                 <h3 class="premium-modal-title">הוספת ספירה אישית</h3>
                 <p class="premium-modal-subtitle">צור טיימר מעוצב לאירוע שלך</p>
+            </div>
+            
+            <!-- AdSense Manual Display Ad (Modal) -->
+            <div id="modal-ad-container" style="width: 100%; min-height: 100px; background: rgba(0,0,0,0.02); border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                <span style="color: #94a3b8; font-size: 13px; position: absolute; z-index: 1;">הפרסומת תופיע כאן ברגע שיוזן קוד (Ad Slot)</span>
+                <ins class="adsbygoogle"
+                     style="display:block; width: 100%; position: relative; z-index: 2;"
+                     data-ad-client="ca-pub-3389455724624040"
+                     data-ad-slot="PASTE_SLOT_ID_HERE"
+                     data-ad-format="horizontal"
+                     data-full-width-responsive="true"></ins>
             </div>
             
             <div class="premium-input-group">
