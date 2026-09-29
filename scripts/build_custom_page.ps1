@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 let search = window.location.search;
                 if(intentId) {
-                    search = search ? search + '&intent=' + intentId : '?intent=' + intentId;
+                    search = search ? search + '&targetIntent=' + intentId : '?targetIntent=' + intentId;
                 }
                 window.location.href = '../index.html' + search;
             }, 100);
