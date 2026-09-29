@@ -1588,17 +1588,6 @@ function openCustomCountdownModal(id = null) {
     }
     
     document.getElementById('custom-countdown-modal').style.display = 'flex';
-    
-    // Trigger AdSense if not already loaded in this modal session
-    const adContainer = document.getElementById('modal-ad-container');
-    if (adContainer && !adContainer.hasAttribute('data-ad-loaded')) {
-        try {
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            adContainer.setAttribute('data-ad-loaded', 'true');
-        } catch (e) {
-            console.error('AdSense error in modal:', e);
-        }
-    }
 }
 
 function saveCustomCountdown() {
