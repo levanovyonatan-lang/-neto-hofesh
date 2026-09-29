@@ -1002,6 +1002,12 @@ window.onload = () => {
         setTimeout(() => {
             initApp(urlTarget);
         }, 100);
+    } else if (urlTarget && !urlSchool) {
+        setTimeout(() => {
+            if (userConfig.schoolType || document.querySelector('input[name="schoolType"]:checked')) {
+                initApp(urlTarget);
+            }
+        }, 100);
     }
 };
 
@@ -2178,7 +2184,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Set a flag so initApp knows not to override active holiday if not needed
                 setTimeout(() => {
                     let intent = 'next';
-                    if (config.activeTargetId && config.activeTargetId.startsWith('summer')) {
+                    const urlTarget = new URLSearchParams(window.location.search).get('targetIntent');
+                    if (urlTarget) {
+                        intent = urlTarget;
+                    } else if (config.activeTargetId && config.activeTargetId.startsWith('summer')) {
                         intent = 'summer';
                     }
                     initApp(intent);
