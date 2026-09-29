@@ -40,14 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const content = modal.querySelector('.premium-modal-content');
         if(content) {
-            content.style.maxWidth = '600px';
-            content.style.width = '100%';
-            content.style.height = '100%';
-            content.style.border = 'none';
-            content.style.borderRadius = '0';
-            content.style.boxShadow = 'none';
-            content.style.margin = '0';
-            content.style.background = 'transparent';
+            content.style.margin = '40px auto';
         }
     }
 
