@@ -1432,7 +1432,10 @@ function showMainScreen() {
     activeEventsList.sort((a, b) => a.date - b.date);
 
     const activeHolidayFromUrl = window.NETO_ACTIVE_HOLIDAY || getActiveHolidayFromUrlOrWindow();
-    if (activeHolidayFromUrl && activeEventsList.some(t => t.id === activeHolidayFromUrl)) {
+    if (userConfig.targetIntent && userConfig.targetIntent.startsWith('custom_') && activeEventsList.some(t => t.id === userConfig.targetIntent)) {
+        userConfig.activeTargetId = userConfig.targetIntent;
+        userConfig.targetIntent = null;
+    } else if (activeHolidayFromUrl && activeEventsList.some(t => t.id === activeHolidayFromUrl)) {
         userConfig.activeTargetId = activeHolidayFromUrl;
         userConfig.targetIntent = null;
     } else if (userConfig.targetIntent) {
