@@ -1000,6 +1000,17 @@ if(window.location.search.includes('show_demo=true')) {
     if(btn) {
         btn.style.setProperty('display', 'flex', 'important');
         btn.href = 'custom/index.html' + window.location.search;
+        btn.addEventListener('click', function(e) {
+            let customCountdowns = [];
+            try {
+                const saved = localStorage.getItem('neto_customCountdowns');
+                if (saved) customCountdowns = JSON.parse(saved);
+            } catch(err) {}
+            if(customCountdowns.length >= 5) {
+                e.preventDefault();
+                alert('ניתן להוסיף עד 5 ספירות אישיות מקסימום. יש למחוק אחת קיימת כדי להוסיף חדשה.');
+            }
+        });
     }
 }
 </script>
