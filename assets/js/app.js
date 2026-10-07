@@ -1272,7 +1272,7 @@ function applyHolidayLandingPageMode() {
 
 function showMainScreen() {
     document.getElementById('setup-screen').style.display = 'none'; document.getElementById('main-screen').style.display = 'flex';
-    document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
+    document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בלי חגים ושבת)" : "(בלי חגים, שישי ושבת)";
 
     const demoBanner = document.getElementById('demo-banner');
     const avigailBanner = document.getElementById('avigail-banner');
@@ -1814,9 +1814,9 @@ function selectTarget(id, shouldScroll = true) {
         if (excludingLabel) {
             excludingLabel.style.display = 'block';
             if (target.noFriday) {
-                excludingLabel.textContent = userConfig.studyFriday ? "(בניכוי חגים, שבתות, וימי שישי של קייטנת הקיץ)" : "(בניכוי חגים, שישי ושבת)";
+                excludingLabel.textContent = userConfig.studyFriday ? "(בלי חגים ושבת, וימי שישי של קייטנת הקיץ)" : "(בלי חגים, שישי ושבת)";
             } else {
-                excludingLabel.textContent = userConfig.studyFriday ? "(בניכוי חגים ושבתות)" : "(בניכוי חגים, שישי ושבת)";
+                excludingLabel.textContent = userConfig.studyFriday ? "(בלי חגים ושבת)" : "(בלי חגים, שישי ושבת)";
             }
         }
         if (vacationBox) {
