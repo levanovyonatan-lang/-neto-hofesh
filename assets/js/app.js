@@ -1224,6 +1224,10 @@ function animateAbsoluteTimer(diff) {
 function getActiveHolidayFromUrlOrWindow() {
     if (window.NETO_ACTIVE_HOLIDAY) return window.NETO_ACTIVE_HOLIDAY;
     try {
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#go-')) {
+            return hash.substring(4);
+        }
         const path = window.location.pathname;
         const holidaySlugs = {
             '/hanukkah': 'hanukkah2026',
@@ -1492,9 +1496,10 @@ function updateActiveHolidayCard(id) {
 function renderHolidays() {
     const container = document.getElementById('holidays-container'); container.innerHTML = '';
     activeEventsList.forEach(ev => {
-        const card = document.createElement('button');
+        const card = document.createElement('a');
+        card.href = `#go-${ev.id}`;
         card.className = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
-        card.onclick = () => selectTarget(ev.id);
+        card.style.textDecoration = 'none';
 
         let subText = `ב-${ev.date.toLocaleDateString('he-IL')}`;
         if (ev.description) subText = ev.description;
@@ -2408,6 +2413,18 @@ document.addEventListener('click', function(e) {
                 navigator.vibrate(10); // Subtle single tap for normal actions
             }
         } catch(err) {}
+    }
+});
+
+// Interstitial Ad Trigger for Holidays
+window.addEventListener('hashchange', function() {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#go-')) {
+        const targetId = hash.substring(4);
+        if (window.selectTarget) {
+            window.selectTarget(targetId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     }
 });
 
