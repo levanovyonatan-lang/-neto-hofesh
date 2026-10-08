@@ -2450,6 +2450,12 @@ window.addEventListener('hashchange', function() {
                     if (window.scrollY > 50) {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
+                    
+                    // Re-trigger the numbers animation now that the user can see it!
+                    if (typeof selectTarget === 'function') {
+                        selectTarget(targetId, false);
+                    }
+                    
                     clearInterval(adCheckInterval);
                 }
             }, 150);
