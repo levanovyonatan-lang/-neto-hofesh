@@ -2417,49 +2417,31 @@ document.addEventListener('click', function(e) {
 });
 
 // Interstitial Ad Trigger for Holidays
-function smoothScrollAfterPossibleAd() {
-    setTimeout(() => {
-        let adIsActive = window.location.hash === '#google_vignette' || document.body.style.overflow === 'hidden';
-        
-        if (!adIsActive) {
-            const iframes = document.querySelectorAll('iframe');
-            for(let f of iframes) {
-                if (f.offsetHeight > window.innerHeight * 0.7 && getComputedStyle(f).display !== 'none' && getComputedStyle(f).visibility !== 'hidden') {
-                    adIsActive = true; break;
-                }
-            }
-        }
-
-        if (adIsActive) {
-            let waitInterval = setInterval(() => {
-                let stillActive = window.location.hash === '#google_vignette' || document.body.style.overflow === 'hidden';
-                if (!stillActive) {
-                    let hasFsIframe = false;
-                    const checkIframes = document.querySelectorAll('iframe');
-                    for(let f of checkIframes) {
-                        if (f.offsetHeight > window.innerHeight * 0.7 && getComputedStyle(f).display !== 'none' && getComputedStyle(f).visibility !== 'hidden') {
-                            hasFsIframe = true; break;
-                        }
-                    }
-                    if (!hasFsIframe) {
-                        clearInterval(waitInterval);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                }
-            }, 300);
-        } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }, 600); 
-}
-
 window.addEventListener('hashchange', function() {
     const hash = window.location.hash;
     if (hash && hash.startsWith('#go-')) {
         const targetId = hash.substring(4);
         if (typeof selectTarget === 'function') {
             selectTarget(targetId, false);
-            smoothScrollAfterPossibleAd();
+            // Scroll immediately for fast response
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // If AdSense cancels our scroll, catch it when it closes
+            let adWasOpened = false;
+            let adCheckInterval = setInterval(() => {
+                if (window.location.hash === '#google_vignette') {
+                    adWasOpened = true;
+                } else if (adWasOpened && window.location.hash !== '#google_vignette') {
+                    // Ad closed. Ensure user is at the top.
+                    if (window.scrollY > 50) {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                    clearInterval(adCheckInterval);
+                }
+            }, 100);
+            
+            // Cleanup
+            setTimeout(() => { clearInterval(adCheckInterval); }, 20000);
             setTimeout(() => { history.replaceState(null, null, ' '); }, 500);
         }
     }
