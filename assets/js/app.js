@@ -2426,7 +2426,9 @@ window.addEventListener('hashchange', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
             let adWasOpened = false;
+            let checkCount = 0;
             let adCheckInterval = setInterval(() => {
+                checkCount++;
                 let isAdVisible = false;
                 
                 // Check if Google AdSense locked the screen
@@ -2456,6 +2458,9 @@ window.addEventListener('hashchange', function() {
                         selectTarget(targetId, false);
                     }
                     
+                    clearInterval(adCheckInterval);
+                } else if (!adWasOpened && checkCount > 30) {
+                    // No ad opened after 4.5 seconds. Clear interval to prevent memory leaks and false triggers (like Dino game)
                     clearInterval(adCheckInterval);
                 }
             }, 150);
