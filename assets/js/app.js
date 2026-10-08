@@ -2018,7 +2018,24 @@ function shareWhatsApp(event) {
                     console.error('Failed to parse custom countdown for sharing', e);
                 }
             } else {
-                shareUrl = `https://www.neto-hofesh.co.il/#go-${targetObj.id}`;
+                const slugMap = {
+                    'hanukkah2026': 'hanukkah',
+                    'purim2027': 'purim',
+                    'pesach2027': 'pesach',
+                    'atzmaut2027': 'atzmaut',
+                    'atzmaut': 'atzmaut',
+                    'lagbaomer': 'lag-baomer',
+                    'shavuot2027': 'shavuot',
+                    'shavuot': 'shavuot',
+                    'summerHigh2027': 'summer-high',
+                    'summerHigh': 'summer-high',
+                    'summerElem2027': 'summer',
+                    'summerElem': 'summer'
+                };
+                const slug = slugMap[targetObj.id] || window.NETO_ACTIVE_HOLIDAY_SLUG || '';
+                if (slug) {
+                    shareUrl = `https://www.neto-hofesh.co.il/${slug}/`;
+                }
             }
         }
     }

@@ -127,9 +127,6 @@ $faqsJoined
     $html = $html.Replace('</head>', "<script type=`"application/ld+json`">$schema</script></head>")
     $nameLiteral = ConvertTo-Json -InputObject $holiday.name -Compress
     $html = [regex]::Replace($html, 'window.NETO_HOLIDAY_NAME = .*?;', "window.NETO_HOLIDAY_NAME = $nameLiteral;")
-    $summary = '<section style="padding:20px;line-height:1.7"><h2>' + [System.Net.WebUtility]::HtmlEncode($holiday.articleTitle) + '</h2><p>' + [System.Net.WebUtility]::HtmlEncode($holiday.vacationDatesText + '. ' + $holiday.totalVacationDays + '. ' + $holiday.holidayTip) + '</p></section>'
-    $html = $html.Replace('<div id="main-screen">', $summary + '<div id="main-screen">')
-
 
 
     # 7.5 Replace setup screen demo buttons with ONE large yellow button specific to THIS holiday (except Summer pages)
