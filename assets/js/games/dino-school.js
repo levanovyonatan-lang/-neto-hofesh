@@ -188,20 +188,6 @@
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
 
         isPersonalGame = false;
-        
-        const adContainer = document.getElementById('dino-ad-container');
-        if (adContainer) {
-            adContainer.innerHTML = `
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-3389455724624040"
-                     data-ad-slot="6383804812"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-            `;
-            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-        }
-
         try {
             const userConf = JSON.parse(localStorage.getItem('neto_userConfig'));
             const activeEventId = userConf ? userConf.activeTargetId : null;
