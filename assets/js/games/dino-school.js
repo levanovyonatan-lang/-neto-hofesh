@@ -1142,7 +1142,25 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        const playAgainBtn = document.createElement('button');
+        let dinoDeaths = parseInt(localStorage.getItem('neto_dino_deaths') || '0');
+        dinoDeaths++;
+        localStorage.setItem('neto_dino_deaths', dinoDeaths.toString());
+
+        let playAgainBtn;
+        if (dinoDeaths >= 3) {
+            localStorage.setItem('neto_dino_deaths', '0');
+            playAgainBtn = document.createElement('a');
+            playAgainBtn.href = '#replayDino';
+            playAgainBtn.style.textDecoration = 'none';
+            playAgainBtn.style.display = 'inline-block';
+        } else {
+            playAgainBtn = document.createElement('button');
+            playAgainBtn.onclick = (e) => {
+                e.stopPropagation();
+                startGame();
+            };
+        }
+
         playAgainBtn.textContent = 'שחק מחדש 🔄';
         playAgainBtn.style.padding = '6px 14px';
         playAgainBtn.style.background = '#ef4444';
@@ -1153,10 +1171,6 @@
         playAgainBtn.style.cursor = 'pointer';
         playAgainBtn.style.fontSize = '14px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
-        playAgainBtn.onclick = (e) => {
-            e.stopPropagation();
-            startGame();
-        };
 
         const leaderboardBtn = document.createElement('button');
         leaderboardBtn.textContent = 'צפה בטבלת השיאים 🏆';
@@ -1396,4 +1410,14 @@
         // Show game over UI directly
         gameOver(killerEmoji || '💥');
     };
+
+    // Hashchange listener for Interstitial Ad redirects
+    window.addEventListener('hashchange', function() {
+        if (window.location.hash === '#replayDino') {
+            history.replaceState(null, null, ' ');
+            if (typeof window.startDinoGame === 'function') {
+                window.startDinoGame();
+            }
+        }
+    });
 })();
