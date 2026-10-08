@@ -2432,7 +2432,7 @@ window.addEventListener('hashchange', function() {
                     vignettePendingScroll = false;
                     setTimeout(() => { history.replaceState(null, null, ' '); }, 500);
                 }
-            }, 150); // wait slightly to see if AdSense intercepts
+            }, 600); // Wait 600ms for AdSense to potentially trigger Vignette
         }
     } else {
         if (vignettePendingScroll && window.location.hash !== '#google_vignette') {
