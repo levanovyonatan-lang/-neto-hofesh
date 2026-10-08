@@ -201,14 +201,8 @@
             }
         } catch(e) {}
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
-        let isElem = false;
-        try { if (typeof userConfig !== 'undefined' && userConfig.schoolType === 'elem') isElem = true; } catch(e) {}
-        if (gameSponsorBanner && isElem && (!window.currentUserProfile || !window.currentUserProfile.isPremium)) {
-            gameSponsorBanner.style.display = 'flex';
-            gameSponsorBanner.style.opacity = '1';
-            gameSponsorBanner.style.position = 'relative';
-            gameSponsorBanner.style.zIndex = '1005';
-            gameSponsorBanner.style.visibility = 'visible';
+        if (gameSponsorBanner) {
+            gameSponsorBanner.style.display = 'none';
         }
 
         const appContainer = document.querySelector('.app-container');

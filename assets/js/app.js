@@ -1,5 +1,5 @@
 const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנרגיות לקיץ... ☀️", "מחפש כוח רצון... 🔍"];
-const tipsDataVersion = 'tips-file-v2';
+const tipsDataVersion = 'tips-file-v3';
 const dailyTipsStorageKey = `holiday_calc_daily_tips_${tipsDataVersion}`;
 const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
 const tipsScriptSrc = `tips.js?v=${tipsDataVersion}`;
