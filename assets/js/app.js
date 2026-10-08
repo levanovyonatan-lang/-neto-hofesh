@@ -2423,24 +2423,37 @@ window.addEventListener('hashchange', function() {
         const targetId = hash.substring(4);
         if (typeof selectTarget === 'function') {
             selectTarget(targetId, false);
-            // Scroll immediately for fast response
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // If AdSense cancels our scroll, catch it when it closes
             let adWasOpened = false;
             let adCheckInterval = setInterval(() => {
-                if (window.location.hash === '#google_vignette') {
+                let isAdVisible = false;
+                
+                // Check if Google AdSense locked the screen
+                if (document.body.style.overflow === 'hidden') {
+                    isAdVisible = true;
+                }
+                
+                // Check for full-screen iframes (Google Vignette)
+                const iframes = document.querySelectorAll('iframe');
+                for (let i = 0; i < iframes.length; i++) {
+                    const f = iframes[i];
+                    if (f.offsetHeight > window.innerHeight * 0.7 && getComputedStyle(f).display !== 'none' && getComputedStyle(f).visibility !== 'hidden') {
+                        isAdVisible = true; break;
+                    }
+                }
+
+                if (isAdVisible) {
                     adWasOpened = true;
-                } else if (adWasOpened && window.location.hash !== '#google_vignette') {
-                    // Ad closed. Ensure user is at the top.
+                } else if (adWasOpened && !isAdVisible) {
+                    // Ad was closed!
                     if (window.scrollY > 50) {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                     clearInterval(adCheckInterval);
                 }
-            }, 100);
+            }, 150);
             
-            // Cleanup
             setTimeout(() => { clearInterval(adCheckInterval); }, 20000);
             setTimeout(() => { history.replaceState(null, null, ' '); }, 500);
         }
