@@ -2421,9 +2421,13 @@ window.addEventListener('hashchange', function() {
     const hash = window.location.hash;
     if (hash && hash.startsWith('#go-')) {
         const targetId = hash.substring(4);
-        if (window.selectTarget) {
-            window.selectTarget(targetId);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        history.replaceState(null, null, ' ');
+        if (typeof selectTarget === 'function') {
+            selectTarget(targetId, false);
+            window.scrollTo(0, 0);
+            setTimeout(() => window.scrollTo(0, 0), 100);
+            setTimeout(() => window.scrollTo(0, 0), 1000);
+            setTimeout(() => window.scrollTo(0, 0), 3000);
         }
     }
 });
