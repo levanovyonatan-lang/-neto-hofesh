@@ -324,7 +324,7 @@
 
         setTimeout(() => {
             window.scrollTo({
-                top: gameContainer.getBoundingClientRect().top + window.scrollY - 15,
+                top: gameContainer.getBoundingClientRect().top + window.scrollY - 80,
                 behavior: 'smooth'
             });
         }, 400);
@@ -1353,7 +1353,7 @@
 
         setTimeout(() => {
             window.scrollTo({
-                top: gameContainer.getBoundingClientRect().top + window.scrollY - 15,
+                top: gameContainer.getBoundingClientRect().top + window.scrollY - 80,
                 behavior: 'smooth'
             });
         }, 400);
