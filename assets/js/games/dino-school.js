@@ -188,6 +188,20 @@
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
 
         isPersonalGame = false;
+        
+        const adContainer = document.getElementById('dino-ad-container');
+        if (adContainer) {
+            adContainer.innerHTML = `
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3389455724624040"
+                     data-ad-slot="6383804812"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            `;
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+        }
+
         try {
             const userConf = JSON.parse(localStorage.getItem('neto_userConfig'));
             const activeEventId = userConf ? userConf.activeTargetId : null;
@@ -1204,6 +1218,8 @@
     function cleanupGame() {
         if (!isGameActive || !gameContainer) return;
         isGameActive = false;
+        const adContainer = document.getElementById('dino-ad-container');
+        if (adContainer) adContainer.remove();
         if (gameLoopId) cancelAnimationFrame(gameLoopId);
         
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
@@ -1406,6 +1422,26 @@
         dino.style.transform = `translateY(0px) rotate(-90deg)`;
         
         document.getElementById('dino-score-val').textContent = score;
+        
+        let adContainer = document.getElementById('dino-ad-container');
+        if (!adContainer) {
+            adContainer = document.createElement('div');
+            adContainer.id = 'dino-ad-container';
+            adContainer.className = 'dino-element';
+            adContainer.style.width = '100%';
+            adContainer.style.textAlign = 'center';
+            adContainer.style.margin = '30px 0 20px 0';
+            adContainer.innerHTML = `
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3389455724624040"
+                     data-ad-slot="6383804812"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            `;
+            gameContainer.parentNode.insertBefore(adContainer, gameContainer.nextSibling);
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+        }
         
         // Show game over UI directly
         gameOver(killerEmoji || '💥');
