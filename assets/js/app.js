@@ -2417,17 +2417,27 @@ document.addEventListener('click', function(e) {
 });
 
 // Interstitial Ad Trigger for Holidays
+let vignettePendingScroll = false;
 window.addEventListener('hashchange', function() {
     const hash = window.location.hash;
-    if (hash && hash.startsWith('#go-')) {
+    if (hash === '#google_vignette') {
+        vignettePendingScroll = true;
+    } else if (hash && hash.startsWith('#go-')) {
         const targetId = hash.substring(4);
-        history.replaceState(null, null, ' ');
         if (typeof selectTarget === 'function') {
             selectTarget(targetId, false);
-            window.scrollTo(0, 0);
-            setTimeout(() => window.scrollTo(0, 0), 100);
-            setTimeout(() => window.scrollTo(0, 0), 1000);
-            setTimeout(() => window.scrollTo(0, 0), 3000);
+            setTimeout(() => {
+                if (window.location.hash !== '#google_vignette') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    vignettePendingScroll = false;
+                    setTimeout(() => { history.replaceState(null, null, ' '); }, 500);
+                }
+            }, 150); // wait slightly to see if AdSense intercepts
+        }
+    } else {
+        if (vignettePendingScroll && window.location.hash !== '#google_vignette') {
+            vignettePendingScroll = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
 });
