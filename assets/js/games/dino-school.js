@@ -225,6 +225,37 @@
         overlay.style.display = 'block';
         document.body.style.overflow = 'hidden';
 
+        let dinoAd = document.getElementById('dino-bottom-ad-container');
+        if (!dinoAd) {
+            dinoAd = document.createElement('div');
+            dinoAd.id = 'dino-bottom-ad-container';
+            dinoAd.style.position = 'fixed';
+            dinoAd.style.bottom = '0px';
+            dinoAd.style.left = '50%';
+            dinoAd.style.transform = 'translateX(-50%)';
+            dinoAd.style.width = '320px';
+            dinoAd.style.height = '50px';
+            dinoAd.style.zIndex = '1005';
+            dinoAd.style.backgroundColor = 'transparent';
+            dinoAd.style.display = 'flex';
+            dinoAd.style.alignItems = 'center';
+            dinoAd.style.justifyContent = 'center';
+            dinoAd.innerHTML = `
+                <!-- מודעה תחתית משחק דינוזאור -->
+                <ins class="adsbygoogle"
+                     style="display:inline-block;width:320px;height:50px"
+                     data-ad-client="ca-pub-3389455724624040"
+                     data-ad-slot="הכנס_את_המספר_כאן"></ins>
+            `;
+            document.body.appendChild(dinoAd);
+            try {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+                console.error("AdSense Error: ", e);
+            }
+        }
+        dinoAd.style.display = 'flex';
+
         if (isGameActive) {
             const title = document.getElementById('dino-game-over');
             if (title) title.remove();
@@ -1195,6 +1226,11 @@
         const gameSponsorBanner = document.getElementById('game-sponsor-banner');
         if (gameSponsorBanner) gameSponsorBanner.style.display = 'none';
         if (objectiveTimeoutId) clearTimeout(objectiveTimeoutId);
+        
+        const dinoAd = document.getElementById('dino-bottom-ad-container');
+        if (dinoAd) {
+            dinoAd.remove();
+        }
         
         if (scenery) { scenery.destroy(); scenery = null; }
         // Remove dynamic game elements
