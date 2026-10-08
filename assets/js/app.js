@@ -2417,27 +2417,50 @@ document.addEventListener('click', function(e) {
 });
 
 // Interstitial Ad Trigger for Holidays
-let vignettePendingScroll = false;
+function smoothScrollAfterPossibleAd() {
+    setTimeout(() => {
+        let adIsActive = window.location.hash === '#google_vignette' || document.body.style.overflow === 'hidden';
+        
+        if (!adIsActive) {
+            const iframes = document.querySelectorAll('iframe');
+            for(let f of iframes) {
+                if (f.offsetHeight > window.innerHeight * 0.7 && getComputedStyle(f).display !== 'none' && getComputedStyle(f).visibility !== 'hidden') {
+                    adIsActive = true; break;
+                }
+            }
+        }
+
+        if (adIsActive) {
+            let waitInterval = setInterval(() => {
+                let stillActive = window.location.hash === '#google_vignette' || document.body.style.overflow === 'hidden';
+                if (!stillActive) {
+                    let hasFsIframe = false;
+                    const checkIframes = document.querySelectorAll('iframe');
+                    for(let f of checkIframes) {
+                        if (f.offsetHeight > window.innerHeight * 0.7 && getComputedStyle(f).display !== 'none' && getComputedStyle(f).visibility !== 'hidden') {
+                            hasFsIframe = true; break;
+                        }
+                    }
+                    if (!hasFsIframe) {
+                        clearInterval(waitInterval);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                }
+            }, 300);
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, 600); 
+}
+
 window.addEventListener('hashchange', function() {
     const hash = window.location.hash;
-    if (hash === '#google_vignette') {
-        vignettePendingScroll = true;
-    } else if (hash && hash.startsWith('#go-')) {
+    if (hash && hash.startsWith('#go-')) {
         const targetId = hash.substring(4);
         if (typeof selectTarget === 'function') {
             selectTarget(targetId, false);
-            setTimeout(() => {
-                if (window.location.hash !== '#google_vignette') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    vignettePendingScroll = false;
-                    setTimeout(() => { history.replaceState(null, null, ' '); }, 500);
-                }
-            }, 600); // Wait 600ms for AdSense to potentially trigger Vignette
-        }
-    } else {
-        if (vignettePendingScroll && window.location.hash !== '#google_vignette') {
-            vignettePendingScroll = false;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            smoothScrollAfterPossibleAd();
+            setTimeout(() => { history.replaceState(null, null, ' '); }, 500);
         }
     }
 });
