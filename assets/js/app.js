@@ -2427,7 +2427,9 @@ window.addEventListener('hashchange', function() {
             
             let adWasOpened = false;
             let checkCount = 0;
-            let adCheckInterval = setInterval(() => {
+            if (window.netoAdCheckInterval) clearInterval(window.netoAdCheckInterval);
+            
+            window.netoAdCheckInterval = setInterval(() => {
                 checkCount++;
                 let isAdVisible = false;
                 
@@ -2458,10 +2460,10 @@ window.addEventListener('hashchange', function() {
                         selectTarget(targetId, false);
                     }
                     
-                    clearInterval(adCheckInterval);
+                    clearInterval(window.netoAdCheckInterval);
                 } else if (!adWasOpened && checkCount > 30) {
                     // No ad opened after 4.5 seconds. Clear interval to prevent memory leaks and false triggers (like Dino game)
-                    clearInterval(adCheckInterval);
+                    clearInterval(window.netoAdCheckInterval);
                 }
             }, 150);
             
