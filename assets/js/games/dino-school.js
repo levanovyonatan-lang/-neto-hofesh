@@ -1197,6 +1197,26 @@
         }
         btnContainer.appendChild(leaderboardBtn);
         title.appendChild(btnContainer);
+        
+        let adContainer = document.getElementById('dino-ad-container');
+        if (!adContainer) {
+            adContainer = document.createElement('div');
+            adContainer.id = 'dino-ad-container';
+            adContainer.className = 'dino-element';
+            adContainer.style.width = '100%';
+            adContainer.style.textAlign = 'center';
+            adContainer.style.margin = '30px 0 20px 0';
+            adContainer.innerHTML = `
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3389455724624040"
+                     data-ad-slot="6383804812"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            `;
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+            gameContainer.appendChild(adContainer);
+        }
     }
 
 
