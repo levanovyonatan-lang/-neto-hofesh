@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=10148').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=10149').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -232,18 +232,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=10148&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses.png?v=10148&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-white.png?v=10148&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-transparent.png?v=10148&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('manifest.json?v=10149&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses.png?v=10149&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-white.png?v=10149&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-transparent.png?v=10149&cb=' + cb, { cache: 'reload' }).catch(() => { });
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=10148&cb=' + cb;
+            link.href = baseHref + '?v=10149&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=10148&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=10149&cb=' + cb;
         }
     } catch (e) { }
 }
@@ -1012,14 +1012,7 @@ window.onload = () => {
 };
 
 function initApp(countdownTarget = 'summer', forceStart = false) {
-    let choice = document.querySelector('input[name="schoolType"]:checked');
-    if (!choice && forceStart) {
-        const fallback = document.querySelector('input[name="schoolType"][value="elem"]');
-        if (fallback) {
-            fallback.checked = true;
-            choice = fallback;
-        }
-    }
+    const choice = document.querySelector('input[name="schoolType"]:checked');
     if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
@@ -1311,7 +1304,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=10148';
+        script.src = 'assets/js/games/dino-school.js?v=10149';
         document.body.appendChild(script);
     }
 
@@ -2520,32 +2513,6 @@ window.addEventListener('hashchange', function() {
             setTimeout(() => { clearInterval(adCheckInterval); }, 20000);
             setTimeout(() => { history.replaceState(null, null, ' '); }, 500);
         }
-    }
-});
-
-// Check if page was loaded via ?dino=1 (used to trigger AdSense Vignettes on game replay)
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('dino') === '1') {
-        // Remove the query param from URL so manual refresh doesn't auto-start dino
-        urlParams.delete('dino');
-        let newUrl = window.location.pathname;
-        let newSearch = urlParams.toString();
-        if (newSearch) newUrl += '?' + newSearch;
-        newUrl += window.location.hash;
-        window.history.replaceState(null, '', newUrl);
-
-        // Wait for the UI to settle and dino-school.js to load, then start the Dino game
-        let attempts = 0;
-        function tryStartDino() {
-            if (typeof window.startDinoGame === 'function' && document.getElementById('main-timer-bg')) {
-                window.startDinoGame();
-            } else if (attempts < 100) { // Try for up to 5 seconds
-                attempts++;
-                setTimeout(tryStartDino, 50);
-            }
-        }
-        setTimeout(tryStartDino, 50);
     }
 });
 

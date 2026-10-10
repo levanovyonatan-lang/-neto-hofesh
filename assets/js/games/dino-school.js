@@ -212,9 +212,6 @@
         const appContainer = document.querySelector('.app-container');
         if (appContainer) appContainer.style.zIndex = '1001';
 
-        const timerCard = document.getElementById('main-timer-bg');
-        if (!timerCard) { isGameActive = false; return; }
-
         let overlay = document.getElementById('game-lock-overlay');
         if (!overlay) {
             overlay = document.createElement('div');
@@ -232,7 +229,51 @@
         overlay.style.display = 'block';
         document.body.style.overflow = 'hidden';
 
-        if (isGameActive) return;
+        if (isGameActive) {
+            const title = document.getElementById('dino-game-over');
+            if (title) title.remove();
+
+            obstaclesList.forEach(obs => {
+                if (obs.el && obs.el.parentNode) obs.el.remove();
+            });
+            obstaclesList = [];
+            obstacleQueue = [];
+
+            score = 0;
+            currentStageIndex = 0;
+            const appliedBg = isPersonalGame ? personalGameBg : STAGES[0].bg;
+            gameContainer.style.setProperty('background', appliedBg, 'important');
+            gameContainer.style.animation = 'none';
+            document.getElementById('dino-score-val').textContent = '0';
+            isGameOver = false;
+            gameSpeed = GAME_SPEED_START;
+            spawnTimer = 60;
+            frameCount = 0;
+            lastFrameTime = 0;
+            gameStartTime = Date.now();
+            dinoY = 0;
+            dinoVelocity = 0;
+            isJumping = false;
+            dino.style.transform = `translateY(0px)`;
+            dino.innerHTML = '<span class="dino-inner walking">🦖</span>';
+            dino.style.filter = 'none';
+            dino.style.opacity = '1';
+            
+            if (objectiveTimeoutId) clearTimeout(objectiveTimeoutId);
+            if (objectiveDisplay) {
+                objectiveDisplay.style.opacity = '1';
+                objectiveDisplay.style.display = 'none';
+            }
+            window.addEventListener('keydown', handleInput);
+            window.addEventListener('touchstart', handleInput, {passive: false});
+            window.addEventListener('mousedown', handleInput);
+
+            if (gameLoopId) cancelAnimationFrame(gameLoopId);
+            gameLoopId = requestAnimationFrame(gameLoop);
+
+            announceStage(0);
+            return;
+        }
 
         // Remove focus from the trigger button so Space/Enter only fires
         // the jump handler, not the button's click event again.
@@ -251,6 +292,9 @@
         spawnTimer = 60; // Initial delay
 
         if (navigator.vibrate) navigator.vibrate([30]);
+
+        const timerCard = document.getElementById('main-timer-bg');
+        if (!timerCard) { isGameActive = false; return; }
 
         gameContainer = timerCard;
         
@@ -1146,10 +1190,11 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        const playAgainBtn = document.createElement('a');
-        playAgainBtn.href = '?started=true&dino=1' + window.location.hash;
-        playAgainBtn.style.textDecoration = 'none';
-        playAgainBtn.style.display = 'inline-block';
+        const playAgainBtn = document.createElement('button');
+        playAgainBtn.onclick = (e) => {
+            e.stopPropagation();
+            startGame();
+        };
 
         playAgainBtn.textContent = 'שחק מחדש 🔄';
         playAgainBtn.style.padding = '6px 14px';
@@ -1161,14 +1206,6 @@
         playAgainBtn.style.cursor = 'pointer';
         playAgainBtn.style.fontSize = '14px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
-
-        // Prevent accidental instant clicks on mobile when dying
-        playAgainBtn.style.pointerEvents = 'none';
-        playAgainBtn.style.opacity = '0.5';
-        setTimeout(() => {
-            playAgainBtn.style.pointerEvents = 'auto';
-            playAgainBtn.style.opacity = '1';
-        }, 800);
 
         const leaderboardBtn = document.createElement('button');
         leaderboardBtn.textContent = 'צפה בטבלת השיאים 🏆';
