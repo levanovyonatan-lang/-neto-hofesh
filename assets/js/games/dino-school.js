@@ -1217,6 +1217,14 @@
         playAgainBtn.style.fontSize = '14px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
 
+        // Prevent accidental instant clicks on mobile when dying
+        playAgainBtn.style.pointerEvents = 'none';
+        playAgainBtn.style.opacity = '0.5';
+        setTimeout(() => {
+            playAgainBtn.style.pointerEvents = 'auto';
+            playAgainBtn.style.opacity = '1';
+        }, 800);
+
         const leaderboardBtn = document.createElement('button');
         leaderboardBtn.textContent = 'צפה בטבלת השיאים 🏆';
         leaderboardBtn.style.padding = '4px 8px';
