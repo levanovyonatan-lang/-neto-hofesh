@@ -100,7 +100,7 @@
     const demoArtEnabled = urlParams.get('show_demo') === 'true';
     const demoArtReady = demoArtEnabled ? new Promise(resolve => {
         const script = document.createElement('script');
-        script.src = new URL('dino-school-art.js?v=13', document.currentScript.src).href;
+        script.src = 'assets/js/games/dino-school-art.js?v=13';
         script.onload = script.onerror = resolve;
         document.head.appendChild(script);
     }) : null;
@@ -184,6 +184,7 @@
     }
 
     async function startGame() {
+        try {
         if (window.netoAdCheckInterval) clearInterval(window.netoAdCheckInterval);
         if (demoArtReady) await demoArtReady;
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
@@ -496,6 +497,10 @@
         gameLoopId = requestAnimationFrame(gameLoop);
 
         announceStage(0);
+        } catch(err) {
+            alert("Dino Error: " + err.message + "\n" + err.stack);
+            isGameActive = false;
+        }
     }
 
     function handleInput(e) {
