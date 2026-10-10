@@ -1267,7 +1267,7 @@
                 playAgainBtn.style.cursor = 'wait';
 
                 // Trigger AdSense Vignette via History API (SPA mode) without a page reload
-                window.history.pushState(null, '', '#go-' + intent + '-dinorestart');
+                window.history.pushState(null, '', '#go-' + intent + '-dinorestart-' + Date.now());
 
                 let adShown = false;
                 let checkCount = 0;
