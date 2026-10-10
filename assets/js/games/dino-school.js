@@ -184,6 +184,9 @@
     }
 
     async function startGame() {
+        if (!sessionStorage.getItem('dinoLastAdTime')) {
+            sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
+        }
         try {
         const existingAd = document.getElementById('dino-ad-container');
         
@@ -1190,11 +1193,26 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        const playAgainBtn = document.createElement('button');
-        playAgainBtn.onclick = (e) => {
-            e.stopPropagation();
-            startGame();
-        };
+        const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
+        const shouldRefresh = (Date.now() - lastAdTime) > 120000;
+
+        const playAgainBtn = document.createElement(shouldRefresh ? 'a' : 'button');
+        if (shouldRefresh) {
+            let intent = 'summer';
+            try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
+            playAgainBtn.href = '?started=true&dino=1#go-' + intent;
+            playAgainBtn.style.textDecoration = 'none';
+            playAgainBtn.style.display = 'inline-block';
+            playAgainBtn.onclick = (e) => {
+                e.stopPropagation();
+                sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
+            };
+        } else {
+            playAgainBtn.onclick = (e) => {
+                e.stopPropagation();
+                startGame();
+            };
+        }
 
         playAgainBtn.textContent = 'שחק מחדש 🔄';
         playAgainBtn.style.padding = '6px 14px';
