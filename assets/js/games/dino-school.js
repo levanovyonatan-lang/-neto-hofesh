@@ -260,23 +260,9 @@
             if (objectiveDisplay) {
                 objectiveDisplay.style.opacity = '1';
                 objectiveDisplay.style.display = 'none';
-            let touchArea = document.getElementById('dino-touch-area');
-            if (!touchArea) {
-                touchArea = document.createElement('div');
-                touchArea.id = 'dino-touch-area';
-                touchArea.className = 'dino-element';
-                touchArea.style.position = 'absolute';
-                touchArea.style.top = '0';
-                touchArea.style.left = '0';
-                touchArea.style.width = '100%';
-                touchArea.style.height = '100%';
-                touchArea.style.zIndex = '150';
-                gameContainer.appendChild(touchArea);
-            }
-            
             window.addEventListener('keydown', handleInput);
-            touchArea.addEventListener('touchstart', handleInput, {passive: false});
-            touchArea.addEventListener('mousedown', handleInput);
+            window.addEventListener('touchstart', handleInput, {passive: false});
+            window.addEventListener('mousedown', handleInput);
 
             if (gameLoopId) cancelAnimationFrame(gameLoopId);
             gameLoopId = requestAnimationFrame(gameLoop);
@@ -476,19 +462,6 @@
             closeBtn.onkeydown = e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); cleanupGame(); }
             };
-        let touchArea = document.getElementById('dino-touch-area');
-        if (!touchArea) {
-            touchArea = document.createElement('div');
-            touchArea.id = 'dino-touch-area';
-            touchArea.className = 'dino-element';
-            touchArea.style.position = 'fixed';
-            touchArea.style.top = '0';
-            touchArea.style.left = '0';
-            touchArea.style.width = '100vw';
-            touchArea.style.height = '100vh';
-            touchArea.style.zIndex = '1000'; // Under gameContainer (1001) but above overlay (999)
-            document.body.appendChild(touchArea);
-        }
         
         let adContainer = document.getElementById('dino-ad-container');
         if (!adContainer) {
@@ -515,8 +488,8 @@
             gameContainer.appendChild(adContainer);
         }
         window.addEventListener('keydown', handleInput);
-        touchArea.addEventListener('touchstart', handleInput, {passive: false});
-        touchArea.addEventListener('mousedown', handleInput);
+        window.addEventListener('touchstart', handleInput, {passive: false});
+        window.addEventListener('mousedown', handleInput);
 
         // Start Loop
         gameLoopId = requestAnimationFrame(gameLoop);
@@ -1184,12 +1157,8 @@
         dino.style.transform = `translateY(${dinoY}px) rotate(-90deg)`;
 
         window.removeEventListener('keydown', handleInput);
-        const touchArea = document.getElementById('dino-touch-area');
-        if (touchArea) {
-            touchArea.removeEventListener('touchstart', handleInput);
-            touchArea.removeEventListener('mousedown', handleInput);
-            touchArea.remove();
-        }
+        window.removeEventListener('touchstart', handleInput);
+        window.removeEventListener('mousedown', handleInput);
 
         const btnContainer = document.createElement('div');
         btnContainer.style.marginTop = '10px';
@@ -1300,12 +1269,8 @@
         els.forEach(el => el.remove());
 
         window.removeEventListener('keydown', handleInput);
-        const touchArea = document.getElementById('dino-touch-area');
-        if (touchArea) {
-            touchArea.removeEventListener('touchstart', handleInput);
-            touchArea.removeEventListener('mousedown', handleInput);
-            touchArea.remove();
-        }
+        window.removeEventListener('touchstart', handleInput);
+        window.removeEventListener('mousedown', handleInput);
 
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
