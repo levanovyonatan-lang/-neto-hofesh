@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=10146').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=10147').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -232,18 +232,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=10146&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses.png?v=10146&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-white.png?v=10146&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-transparent.png?v=10146&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('manifest.json?v=10147&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses.png?v=10147&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-white.png?v=10147&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-transparent.png?v=10147&cb=' + cb, { cache: 'reload' }).catch(() => { });
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=10146&cb=' + cb;
+            link.href = baseHref + '?v=10147&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=10146&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=10147&cb=' + cb;
         }
     } catch (e) { }
 }
@@ -1311,7 +1311,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=10146';
+        script.src = 'assets/js/games/dino-school.js?v=10147';
         document.body.appendChild(script);
     }
 
