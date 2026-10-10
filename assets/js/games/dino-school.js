@@ -254,7 +254,7 @@
             document.getElementById('dino-score-val').textContent = '0';
             isGameOver = false;
             gameSpeed = GAME_SPEED_START;
-            spawnTimer = 60;
+            spawnTimer = 120;
             frameCount = 0;
             lastFrameTime = 0;
             gameStartTime = Date.now();
@@ -296,7 +296,7 @@
         frameCount = 0;
         lastFrameTime = 0;
         gameStartTime = Date.now();
-        spawnTimer = 60; // Initial delay
+        spawnTimer = 120; // 2 seconds delay to allow AdSense to pop up before obstacles spawn
 
         if (navigator.vibrate) navigator.vibrate([30]);
 
