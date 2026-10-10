@@ -1190,13 +1190,10 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        let dinoDeaths = parseInt(localStorage.getItem('neto_dino_deaths') || '0');
-        dinoDeaths++;
-        localStorage.setItem('neto_dino_deaths', dinoDeaths.toString());
-
+        let lastVignetteTime = parseInt(localStorage.getItem('neto_dino_vignette_time') || '0');
         let playAgainBtn;
-        if (dinoDeaths >= 3) {
-            localStorage.setItem('neto_dino_deaths', '0');
+        if (Date.now() - lastVignetteTime > 4 * 60 * 1000) { // 4 minutes
+            localStorage.setItem('neto_dino_vignette_time', Date.now().toString());
             playAgainBtn = document.createElement('a');
             playAgainBtn.href = '#replayDino';
             playAgainBtn.style.textDecoration = 'none';
