@@ -185,8 +185,6 @@
 
     async function startGame() {
         try {
-        const existingAd = document.getElementById('dino-ad-container');
-        if (existingAd) existingAd.remove();
         
         if (window.netoAdCheckInterval) clearInterval(window.netoAdCheckInterval);
         if (demoArtReady) await demoArtReady;
