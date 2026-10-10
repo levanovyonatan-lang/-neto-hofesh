@@ -508,8 +508,20 @@
         if (e.target && e.target.closest && e.target.closest('#dino-ad-container')) {
             return;
         }
+
+        if (e.type === 'mousedown' || e.type === 'touchstart') {
+            const clientY = e.type === 'touchstart' ? (e.touches[0] ? e.touches[0].clientY : e.changedTouches[0].clientY) : e.clientY;
+            if (gameContainer) {
+                const rect = gameContainer.getBoundingClientRect();
+                if (clientY > rect.bottom) {
+                    if (e.type === 'touchstart' && e.cancelable) e.preventDefault();
+                    return;
+                }
+            }
+        }
+
         if (e.type === 'keydown' && e.code !== 'Space' && e.code !== 'ArrowUp') return;
-        if (e.type === 'touchstart') e.preventDefault();
+        if (e.type === 'touchstart' && e.cancelable) e.preventDefault();
         
         if (isGameOver) return;
 
