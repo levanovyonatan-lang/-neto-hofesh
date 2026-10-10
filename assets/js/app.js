@@ -1000,31 +1000,48 @@ window.onload = () => {
             updateSchoolSelection(radio);
         }
         setTimeout(() => {
-            initApp(urlTarget);
+            initApp(urlTarget, true);
         }, 100);
     } else if (urlTarget && !urlSchool) {
         setTimeout(() => {
             if (userConfig.schoolType || document.querySelector('input[name="schoolType"]:checked')) {
-                initApp(urlTarget);
+                initApp(urlTarget, true);
             }
         }, 100);
     }
 };
 
-function initApp(countdownTarget = 'summer') {
+function initApp(countdownTarget = 'summer', forceStart = false) {
     const choice = document.querySelector('input[name="schoolType"]:checked');
     if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
+    userConfig.targetIntent = countdownTarget;
 
     try {
         localStorage.setItem('neto_userConfig', JSON.stringify({
             schoolType: userConfig.schoolType,
-            studyFriday: userConfig.studyFriday
+            studyFriday: userConfig.studyFriday,
+            targetIntent: userConfig.targetIntent,
+            activeTargetId: userConfig.activeTargetId
         }));
     } catch (e) { }
 
-    userConfig.targetIntent = countdownTarget;
+    const urlParams = new URLSearchParams(window.location.search);
+    if (!forceStart && !urlParams.get('started')) {
+        urlParams.set('started', 'true');
+        urlParams.set('schoolType', userConfig.schoolType);
+        urlParams.set('targetIntent', userConfig.targetIntent);
+        const nextUrl = window.location.pathname + '?' + urlParams.toString() + window.location.hash;
+        
+        const a = document.createElement('a');
+        a.href = nextUrl;
+        document.body.appendChild(a);
+        a.click();
+        return;
+    } else if (forceStart && urlParams.get('started') === 'true') {
+        window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+    }
 
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
     const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
@@ -2196,14 +2213,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Set a flag so initApp knows not to override active holiday if not needed
                 setTimeout(() => {
                     let intent = 'next';
-                    const urlTarget = new URLSearchParams(window.location.search).get('targetIntent');
+                    const urlParamsLocal = new URLSearchParams(window.location.search);
+                    const urlTarget = urlParamsLocal.get('targetIntent');
                     if (urlTarget) {
                         intent = urlTarget;
                     } else if (config.activeTargetId && config.activeTargetId.startsWith('summer')) {
                         intent = 'summer';
                     }
-                    initApp(intent);
-                }, 1000);
+                    
+                    if (urlParamsLocal.get('started') === 'true') {
+                        initApp(intent, true);
+                    }
+                }, 100);
             }
         }
     } catch (e) { }
