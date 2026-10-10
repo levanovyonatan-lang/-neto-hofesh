@@ -1576,7 +1576,12 @@ function renderHolidays() {
     const container = document.getElementById('holidays-container'); container.innerHTML = '';
     activeEventsList.forEach(ev => {
         const card = document.createElement('a');
-        card.href = `#go-${ev.id}`;
+        card.href = 'javascript:void(0)';
+        card.onclick = (e) => {
+            e.preventDefault();
+            selectTarget(ev.id);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
         card.className = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
         card.style.textDecoration = 'none';
 
