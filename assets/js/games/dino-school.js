@@ -464,6 +464,7 @@
             closeBtn.onkeydown = e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); cleanupGame(); }
             };
+        }
         
         let adContainer = document.getElementById('dino-ad-container');
         if (!adContainer) {
