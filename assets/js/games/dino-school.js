@@ -210,6 +210,8 @@
         const existingAd = document.getElementById('dino-ad-container');
         
         if (window.netoAdCheckInterval) clearInterval(window.netoAdCheckInterval);
+        if (window.netoInitAdCheckInterval) clearInterval(window.netoInitAdCheckInterval);
+        
         if (demoArtReady) await demoArtReady;
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
 
