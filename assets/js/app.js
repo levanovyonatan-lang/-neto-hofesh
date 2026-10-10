@@ -2535,17 +2535,17 @@ document.addEventListener('DOMContentLoaded', () => {
         newUrl += window.location.hash;
         window.history.replaceState(null, '', newUrl);
 
-        // Wait for the UI and AdSense to settle, and for dino-school.js to load, then start the Dino game
+        // Wait for the UI to settle and dino-school.js to load, then start the Dino game
         let attempts = 0;
         function tryStartDino() {
-            if (typeof window.startDinoGame === 'function') {
+            if (typeof window.startDinoGame === 'function' && document.getElementById('main-timer-bg')) {
                 window.startDinoGame();
-            } else if (attempts < 50) { // Try for up to 5 seconds
+            } else if (attempts < 100) { // Try for up to 5 seconds
                 attempts++;
-                setTimeout(tryStartDino, 100);
+                setTimeout(tryStartDino, 50);
             }
         }
-        setTimeout(tryStartDino, 800);
+        setTimeout(tryStartDino, 50);
     }
 });
 
