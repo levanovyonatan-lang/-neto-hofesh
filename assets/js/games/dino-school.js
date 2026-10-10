@@ -1192,7 +1192,7 @@
         
         let lastVignetteTime = parseInt(localStorage.getItem('neto_dino_vignette_time') || '0');
         let playAgainBtn;
-        if (Date.now() - lastVignetteTime > 4 * 60 * 1000) { // 4 minutes
+        if (Date.now() - lastVignetteTime > 2 * 60 * 1000) { // 2 minutes
             localStorage.setItem('neto_dino_vignette_time', Date.now().toString());
             playAgainBtn = document.createElement('a');
             playAgainBtn.href = '#replayDino';
