@@ -2089,3 +2089,6 @@ body.theme-retro .loader {
 }
 
 
+
+@media (max-height: 450px) { #dino-ad-container { display: none !important; } }
+
