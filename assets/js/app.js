@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=10154').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=10155').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -232,18 +232,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=10154&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses.png?v=10154&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-white.png?v=10154&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-transparent.png?v=10154&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('manifest.json?v=10155&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses.png?v=10155&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-white.png?v=10155&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-transparent.png?v=10155&cb=' + cb, { cache: 'reload' }).catch(() => { });
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=10154&cb=' + cb;
+            link.href = baseHref + '?v=10155&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=10154&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=10155&cb=' + cb;
         }
     } catch (e) { }
 }
@@ -453,7 +453,7 @@ async function loadDailyTipsDatabase() {
     if (dailyTipsPromise) return dailyTipsPromise;
 
     // Use absolute URL from origin to avoid 404s on subpages
-    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10154';
+    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10155';
 
     dailyTipsPromise = fetch(fetchUrl)
         .then(response => {
@@ -1061,31 +1061,6 @@ function initApp(countdownTarget = 'summer', forceStart = false) {
         const isAndroid = /Android/i.test(navigator.userAgent);
         window.scrollTo({ top: isAndroid ? 15 : 50, behavior: 'smooth' });
     }, 100);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('dino') === '1') {
-        urlParams.delete('dino');
-        const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
-        window.history.replaceState({}, '', newUrl);
-        
-        setTimeout(() => {
-            document.documentElement.classList.remove('dino-restarting');
-            if (typeof window.startDinoGame === 'function') {
-                window.startDinoGame();
-            } else {
-                // If dino script hasn't loaded yet, try a few times
-                let attempts = 0;
-                const tryStart = setInterval(() => {
-                    if (typeof window.startDinoGame === 'function') {
-                        clearInterval(tryStart);
-                        window.startDinoGame();
-                    } else if (attempts++ > 20) {
-                        clearInterval(tryStart);
-                    }
-                }, 100);
-            }
-        }, 500); // 500ms delay ensures UI is fully settled before unhiding
-    }
 }
 
 function resetApp() {
@@ -1329,7 +1304,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=10154';
+        script.src = 'assets/js/games/dino-school.js?v=10155';
         document.body.appendChild(script);
     }
 
