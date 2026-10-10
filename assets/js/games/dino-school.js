@@ -185,6 +185,9 @@
 
     async function startGame() {
         try {
+        const existingAd = document.getElementById('dino-ad-container');
+        if (existingAd) existingAd.remove();
+        
         if (window.netoAdCheckInterval) clearInterval(window.netoAdCheckInterval);
         if (demoArtReady) await demoArtReady;
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
@@ -475,14 +478,15 @@
             adContainer.style.bottom = '20px';
             adContainer.style.left = '50%';
             adContainer.style.transform = 'translateX(-50%)';
-            adContainer.style.width = '320px';
-            adContainer.style.height = '50px';
+            adContainer.style.width = '100%';
+            adContainer.style.maxWidth = '480px';
+            adContainer.style.height = '60px';
             adContainer.style.textAlign = 'center';
             adContainer.style.zIndex = '1005';
             adContainer.style.pointerEvents = 'auto'; // ensure it's clickable
             adContainer.innerHTML = `
                 <ins class="adsbygoogle"
-                     style="display:inline-block;width:320px;height:50px"
+                     style="display:block;width:100%;height:60px"
                      data-ad-client="ca-pub-3389455724624040"
                      data-ad-slot="6383804812"></ins>
             `;
@@ -1251,14 +1255,15 @@
             adContainer.style.bottom = '20px';
             adContainer.style.left = '50%';
             adContainer.style.transform = 'translateX(-50%)';
-            adContainer.style.width = '320px';
-            adContainer.style.height = '50px';
+            adContainer.style.width = '100%';
+            adContainer.style.maxWidth = '480px';
+            adContainer.style.height = '60px';
             adContainer.style.textAlign = 'center';
             adContainer.style.zIndex = '1005';
             adContainer.style.pointerEvents = 'auto';
             adContainer.innerHTML = `
                 <ins class="adsbygoogle"
-                     style="display:inline-block;width:320px;height:50px"
+                     style="display:block;width:100%;height:60px"
                      data-ad-client="ca-pub-3389455724624040"
                      data-ad-slot="6383804812"></ins>
             `;
@@ -1486,14 +1491,15 @@
             adContainer.style.bottom = '20px';
             adContainer.style.left = '50%';
             adContainer.style.transform = 'translateX(-50%)';
-            adContainer.style.width = '320px';
-            adContainer.style.height = '50px';
+            adContainer.style.width = '100%';
+            adContainer.style.maxWidth = '480px';
+            adContainer.style.height = '60px';
             adContainer.style.textAlign = 'center';
             adContainer.style.zIndex = '1005';
             adContainer.style.pointerEvents = 'auto';
             adContainer.innerHTML = `
                 <ins class="adsbygoogle"
-                     style="display:inline-block;width:320px;height:50px"
+                     style="display:block;width:100%;height:60px"
                      data-ad-client="ca-pub-3389455724624040"
                      data-ad-slot="6383804812"></ins>
             `;
