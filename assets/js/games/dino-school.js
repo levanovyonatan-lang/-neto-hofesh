@@ -229,6 +229,9 @@
         if (isGameActive) {
             const title = document.getElementById('dino-game-over');
             if (title) title.remove();
+            
+            const adContainer = document.getElementById('dino-ad-container');
+            if (adContainer) adContainer.remove();
 
             obstaclesList.forEach(obs => {
                 if (obs.el && obs.el.parentNode) obs.el.remove();
@@ -260,11 +263,23 @@
             if (objectiveDisplay) {
                 objectiveDisplay.style.opacity = '1';
                 objectiveDisplay.style.display = 'none';
+            let touchArea = document.getElementById('dino-touch-area');
+            if (!touchArea) {
+                touchArea = document.createElement('div');
+                touchArea.id = 'dino-touch-area';
+                touchArea.className = 'dino-element';
+                touchArea.style.position = 'absolute';
+                touchArea.style.top = '0';
+                touchArea.style.left = '0';
+                touchArea.style.width = '100%';
+                touchArea.style.height = '100%';
+                touchArea.style.zIndex = '150';
+                gameContainer.appendChild(touchArea);
             }
             
             window.addEventListener('keydown', handleInput);
-            gameContainer.addEventListener('touchstart', handleInput, {passive: false});
-            gameContainer.addEventListener('mousedown', handleInput);
+            touchArea.addEventListener('touchstart', handleInput, {passive: false});
+            touchArea.addEventListener('mousedown', handleInput);
 
             if (gameLoopId) cancelAnimationFrame(gameLoopId);
             gameLoopId = requestAnimationFrame(gameLoop);
@@ -464,10 +479,22 @@
             closeBtn.onkeydown = e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); cleanupGame(); }
             };
+        let touchArea = document.getElementById('dino-touch-area');
+        if (!touchArea) {
+            touchArea = document.createElement('div');
+            touchArea.id = 'dino-touch-area';
+            touchArea.className = 'dino-element';
+            touchArea.style.position = 'absolute';
+            touchArea.style.top = '0';
+            touchArea.style.left = '0';
+            touchArea.style.width = '100%';
+            touchArea.style.height = '100%';
+            touchArea.style.zIndex = '150';
+            gameContainer.appendChild(touchArea);
         }
         window.addEventListener('keydown', handleInput);
-        gameContainer.addEventListener('touchstart', handleInput, {passive: false});
-        gameContainer.addEventListener('mousedown', handleInput);
+        touchArea.addEventListener('touchstart', handleInput, {passive: false});
+        touchArea.addEventListener('mousedown', handleInput);
 
         // Start Loop
         gameLoopId = requestAnimationFrame(gameLoop);
@@ -1135,8 +1162,11 @@
         dino.style.transform = `translateY(${dinoY}px) rotate(-90deg)`;
 
         window.removeEventListener('keydown', handleInput);
-        gameContainer.removeEventListener('touchstart', handleInput);
-        gameContainer.removeEventListener('mousedown', handleInput);
+        const touchArea = document.getElementById('dino-touch-area');
+        if (touchArea) {
+            touchArea.removeEventListener('touchstart', handleInput);
+            touchArea.removeEventListener('mousedown', handleInput);
+        }
 
         const btnContainer = document.createElement('div');
         btnContainer.style.marginTop = '10px';
@@ -1247,8 +1277,11 @@
         els.forEach(el => el.remove());
 
         window.removeEventListener('keydown', handleInput);
-        gameContainer.removeEventListener('touchstart', handleInput);
-        gameContainer.removeEventListener('mousedown', handleInput);
+        const touchArea = document.getElementById('dino-touch-area');
+        if (touchArea) {
+            touchArea.removeEventListener('touchstart', handleInput);
+            touchArea.removeEventListener('mousedown', handleInput);
+        }
 
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
