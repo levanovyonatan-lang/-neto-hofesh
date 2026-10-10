@@ -639,6 +639,20 @@
     function gameLoop(timestamp) {
         if (!isGameActive) return;
 
+        // Auto-pause if a Google Vignette Ad is covering the screen
+        let adVisible = false;
+        const iframes = document.querySelectorAll('iframe');
+        for (let i = 0; i < iframes.length; i++) {
+            if (iframes[i].offsetHeight > window.innerHeight * 0.7 && getComputedStyle(iframes[i]).display !== 'none' && getComputedStyle(iframes[i]).visibility !== 'hidden') {
+                adVisible = true; break;
+            }
+        }
+        if (adVisible) {
+            lastFrameTime = timestamp;
+            gameLoopId = requestAnimationFrame(gameLoop);
+            return;
+        }
+
         // Delta-time normalization: scale everything so the game feels the
         // same on 60 Hz phones, 120 Hz laptops, and anything in between.
         if (!lastFrameTime) lastFrameTime = timestamp;
@@ -1196,16 +1210,13 @@
         const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
         const shouldRefresh = (Date.now() - lastAdTime) > 120000;
 
-        const playAgainBtn = document.createElement(shouldRefresh ? 'a' : 'button');
+        const playAgainBtn = document.createElement('button');
         if (shouldRefresh) {
-            let intent = 'summer';
-            try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
-            playAgainBtn.href = '?started=true&dino=1#go-' + intent;
-            playAgainBtn.style.textDecoration = 'none';
-            playAgainBtn.style.display = 'inline-block';
             playAgainBtn.onclick = (e) => {
                 e.stopPropagation();
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
+                window.history.pushState(null, '', window.location.pathname + window.location.search + '#dino-restart-' + Date.now());
+                startGame();
             };
         } else {
             playAgainBtn.onclick = (e) => {
