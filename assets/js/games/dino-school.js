@@ -229,9 +229,6 @@
         if (isGameActive) {
             const title = document.getElementById('dino-game-over');
             if (title) title.remove();
-            
-            const adContainer = document.getElementById('dino-ad-container');
-            if (adContainer) adContainer.remove();
 
             obstaclesList.forEach(obs => {
                 if (obs.el && obs.el.parentNode) obs.el.remove();
@@ -484,13 +481,38 @@
             touchArea = document.createElement('div');
             touchArea.id = 'dino-touch-area';
             touchArea.className = 'dino-element';
-            touchArea.style.position = 'absolute';
+            touchArea.style.position = 'fixed';
             touchArea.style.top = '0';
             touchArea.style.left = '0';
-            touchArea.style.width = '100%';
-            touchArea.style.height = '100%';
-            touchArea.style.zIndex = '150';
-            gameContainer.appendChild(touchArea);
+            touchArea.style.width = '100vw';
+            touchArea.style.height = '100vh';
+            touchArea.style.zIndex = '1000'; // Under gameContainer (1001) but above overlay (999)
+            document.body.appendChild(touchArea);
+        }
+        
+        let adContainer = document.getElementById('dino-ad-container');
+        if (!adContainer) {
+            adContainer = document.createElement('div');
+            adContainer.id = 'dino-ad-container';
+            adContainer.className = 'dino-element';
+            adContainer.style.position = 'absolute';
+            adContainer.style.bottom = '10px';
+            adContainer.style.left = '50%';
+            adContainer.style.transform = 'translateX(-50%)';
+            adContainer.style.width = '100%';
+            adContainer.style.maxWidth = '320px';
+            adContainer.style.textAlign = 'center';
+            adContainer.style.zIndex = '200';
+            adContainer.innerHTML = `
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3389455724624040"
+                     data-ad-slot="6383804812"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            `;
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+            gameContainer.appendChild(adContainer);
         }
         window.addEventListener('keydown', handleInput);
         touchArea.addEventListener('touchstart', handleInput, {passive: false});
@@ -1166,6 +1188,7 @@
         if (touchArea) {
             touchArea.removeEventListener('touchstart', handleInput);
             touchArea.removeEventListener('mousedown', handleInput);
+            touchArea.remove();
         }
 
         const btnContainer = document.createElement('div');
@@ -1281,6 +1304,7 @@
         if (touchArea) {
             touchArea.removeEventListener('touchstart', handleInput);
             touchArea.removeEventListener('mousedown', handleInput);
+            touchArea.remove();
         }
 
         document.body.style.touchAction = ''; 
