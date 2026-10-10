@@ -232,92 +232,7 @@
         overlay.style.display = 'block';
         document.body.style.overflow = 'hidden';
 
-        if (isGameActive) {
-            const title = document.getElementById('dino-game-over');
-            if (title) title.remove();
-            
-            let adContainer = document.getElementById('dino-ad-container');
-            if (adContainer) adContainer.remove();
-
-            if (overlay) overlay.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-
-            // Re-hide original elements that were restored in gameOver
-            const currentHeight = gameContainer.getBoundingClientRect().height;
-            gameContainer.dataset.hwPrevHeight = gameContainer.style.height || '';
-            gameContainer.style.height = currentHeight + 'px';
-            gameContainer.offsetHeight; // force reflow
-            gameContainer.style.transition = 'height 0.4s ease, box-shadow 0.4s ease';
-            gameContainer.style.height = '200px';
-
-            gameContainer.dataset.hwPrevZIndex = gameContainer.style.zIndex || '';
-            gameContainer.style.zIndex = '1000';
-
-            setTimeout(() => {
-                window.scrollTo({
-                    top: gameContainer.getBoundingClientRect().top + window.scrollY - 80,
-                    behavior: 'smooth'
-                });
-            }, 400);
-
-            const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor, .net-days, .absolute-timer, #excluding-label, #vacation-message, #main-target-title, .net-days-container, #total-days-label');
-            hiddenEls.forEach(el => { 
-                if(el.dataset.hwPrevDisplay === undefined) {
-                    el.dataset.hwPrevDisplay = el.style.display || getComputedStyle(el).display; 
-                }
-                el.style.transition = 'opacity 0.2s ease';
-                el.style.opacity = '0'; 
-            });
-
-            setTimeout(() => {
-                hiddenEls.forEach(el => { 
-                    el.style.display = 'none'; 
-                    el.style.opacity = '';
-                    el.style.transition = '';
-                });
-            }, 200);
-
-            obstaclesList.forEach(obs => {
-                if (obs.el && obs.el.parentNode) obs.el.remove();
-            });
-            obstaclesList = [];
-            obstacleQueue = [];
-
-            score = 0;
-            currentStageIndex = 0;
-            const appliedBg = isPersonalGame ? personalGameBg : STAGES[0].bg;
-            gameContainer.style.setProperty('background', appliedBg, 'important');
-            gameContainer.style.animation = 'none';
-            document.getElementById('dino-score-val').textContent = '0';
-            isGameOver = false;
-            gameSpeed = GAME_SPEED_START;
-            spawnTimer = 60;
-            frameCount = 0;
-            lastFrameTime = 0;
-            gameStartTime = Date.now();
-            dinoY = 0;
-            dinoVelocity = 0;
-            isJumping = false;
-            dino.style.transform = `translateY(0px)`;
-            dino.innerHTML = '<span class="dino-inner walking">🦖</span>';
-            dino.style.filter = 'none';
-            dino.style.opacity = '1';
-            
-            if (objectiveTimeoutId) clearTimeout(objectiveTimeoutId);
-            if (objectiveDisplay) {
-                objectiveDisplay.style.opacity = '1';
-                objectiveDisplay.style.display = 'none';
-            }
-            window.addEventListener('keydown', handleInput);
-            window.addEventListener('touchstart', handleInput, {passive: false});
-            window.addEventListener('mousedown', handleInput);
-
-            if (gameLoopId) cancelAnimationFrame(gameLoopId);
-            gameLoopId = requestAnimationFrame(gameLoop);
-
-            announceStage(0);
-            return;
-        }
+        if (isGameActive) return;
 
         // Remove focus from the trigger button so Space/Enter only fires
         // the jump handler, not the button's click event again.
@@ -1231,21 +1146,10 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        let lastVignetteTime = parseInt(localStorage.getItem('neto_dino_vignette_time') || '0');
-        let playAgainBtn;
-        if (Date.now() - lastVignetteTime > 2 * 60 * 1000) { // 2 minutes
-            localStorage.setItem('neto_dino_vignette_time', Date.now().toString());
-            playAgainBtn = document.createElement('a');
-            playAgainBtn.href = '?started=true&dino=1' + window.location.hash;
-            playAgainBtn.style.textDecoration = 'none';
-            playAgainBtn.style.display = 'inline-block';
-        } else {
-            playAgainBtn = document.createElement('button');
-            playAgainBtn.onclick = (e) => {
-                e.stopPropagation();
-                startGame();
-            };
-        }
+        const playAgainBtn = document.createElement('a');
+        playAgainBtn.href = '?started=true&dino=1' + window.location.hash;
+        playAgainBtn.style.textDecoration = 'none';
+        playAgainBtn.style.display = 'inline-block';
 
         playAgainBtn.textContent = 'שחק מחדש 🔄';
         playAgainBtn.style.padding = '6px 14px';
