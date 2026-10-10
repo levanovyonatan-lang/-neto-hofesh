@@ -1250,14 +1250,20 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
+        let gamesSinceLastAd = parseInt(sessionStorage.getItem('dinoGamesSinceLastAd') || '0') + 1;
+        sessionStorage.setItem('dinoGamesSinceLastAd', gamesSinceLastAd.toString());
+
         const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
-        const shouldRefresh = (Date.now() - lastAdTime) > 120000;
+        const timePassed = (Date.now() - lastAdTime);
+        // Ideal timing: at least 160 seconds (~2.7 minutes), at least 3 games played, and not right after breaking a personal record!
+        const shouldRefresh = (timePassed > 160000) && (gamesSinceLastAd >= 3) && !isNewRecord;
 
         let playAgainBtn = document.createElement('button');
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
             if (shouldRefresh) {
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
+                sessionStorage.setItem('dinoGamesSinceLastAd', '0');
                 let intent = 'summer';
                 try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
 
