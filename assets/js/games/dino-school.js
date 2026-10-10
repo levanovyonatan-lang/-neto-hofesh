@@ -260,6 +260,7 @@
             if (objectiveDisplay) {
                 objectiveDisplay.style.opacity = '1';
                 objectiveDisplay.style.display = 'none';
+            }
             window.addEventListener('keydown', handleInput);
             window.addEventListener('touchstart', handleInput, {passive: false});
             window.addEventListener('mousedown', handleInput);
