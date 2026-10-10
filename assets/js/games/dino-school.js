@@ -1214,25 +1214,19 @@
         const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
         const shouldRefresh = (Date.now() - lastAdTime) > 120000;
 
-        let playAgainBtn;
-        if (shouldRefresh) {
-            playAgainBtn = document.createElement('a');
-            let intent = 'summer';
-            try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
-            // Full page reload guarantees AdSense Vignettes. Game state is preserved by ?dino=1 and early overlay display.
-            playAgainBtn.href = '?started=true&dino=1#go-' + intent;
-            playAgainBtn.style.textDecoration = 'none';
-            playAgainBtn.style.display = 'inline-block';
-            playAgainBtn.onclick = () => {
+        let playAgainBtn = document.createElement('button');
+        playAgainBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (shouldRefresh) {
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
-            };
-        } else {
-            playAgainBtn = document.createElement('button');
-            playAgainBtn.onclick = (e) => {
-                e.stopPropagation();
-                startGame();
-            };
-        }
+                let intent = 'summer';
+                try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
+                
+                // Trigger AdSense Vignette via History API (SPA mode) without a page reload
+                window.history.pushState(null, '', '#go-' + intent + '-dinorestart');
+            }
+            startGame();
+        };
 
         playAgainBtn.textContent = 'שחק מחדש 🔄';
         playAgainBtn.style.padding = '6px 14px';
