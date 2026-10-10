@@ -1195,7 +1195,7 @@
         if (Date.now() - lastVignetteTime > 2 * 60 * 1000) { // 2 minutes
             localStorage.setItem('neto_dino_vignette_time', Date.now().toString());
             playAgainBtn = document.createElement('a');
-            playAgainBtn.href = '#replayDino';
+            playAgainBtn.href = '?dino=1' + window.location.hash;
             playAgainBtn.style.textDecoration = 'none';
             playAgainBtn.style.display = 'inline-block';
         } else {
@@ -1510,13 +1510,6 @@
         gameOver(killerEmoji || '💥');
     };
 
-    // Hashchange listener for Interstitial Ad redirects
-    window.addEventListener('hashchange', function() {
-        if (window.location.hash === '#replayDino') {
-            history.replaceState(null, null, ' ');
-            if (typeof window.startDinoGame === 'function') {
-                window.startDinoGame();
-            }
-        }
-    });
+    // We now use ?dino=1 query param to force a real page load for Vignette ads.
+    // The query param is handled in app.js
 })();
