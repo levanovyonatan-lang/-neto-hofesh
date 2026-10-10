@@ -2492,7 +2492,13 @@ document.addEventListener('click', function(e) {
 window.addEventListener('hashchange', function() {
     const hash = window.location.hash;
     if (hash && hash.startsWith('#go-')) {
-        if (hash.includes('-dinorestart')) return;
+        if (hash.includes('-dinorestart')) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+            if (typeof window.startDinoGame === 'function') {
+                window.startDinoGame();
+            }
+            return;
+        }
 
         const targetId = hash.substring(4);
         if (typeof selectTarget === 'function') {

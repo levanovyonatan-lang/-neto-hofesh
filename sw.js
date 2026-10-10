@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261011-dino-unique-hash-1';
+const CACHE_VERSION = 'v20261011-revert-dino-clean-1';
 const CACHE_NAME = 'neto-cache-v1790694490';
 
 self.addEventListener('install', e => {
