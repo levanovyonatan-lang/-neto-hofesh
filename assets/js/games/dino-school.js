@@ -186,9 +186,6 @@
     async function startGame() {
         try {
         const existingAd = document.getElementById('dino-ad-container');
-        if (existingAd && window.dinoAdLastLoadTime && (Date.now() - window.dinoAdLastLoadTime > 60000)) {
-            existingAd.remove(); // Safe to refresh
-        }
         
         if (window.netoAdCheckInterval) clearInterval(window.netoAdCheckInterval);
         if (demoArtReady) await demoArtReady;
