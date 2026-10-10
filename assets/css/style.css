@@ -1,0 +1,5 @@
+
+/* Hide main UI completely when dino=1 reload happens to prevent flashing */
+html.dino-restarting #setup-screen, html.dino-restarting #main-timer-bg { display: none !important; }
+html.dino-restarting body { background-color: #1e293b !important; }
+

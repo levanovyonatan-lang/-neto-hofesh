@@ -1212,14 +1212,16 @@
 
         let playAgainBtn;
         if (shouldRefresh) {
-            // Use native <a> tag navigation so Google AdSense detects the click intent
+            // We use a hard reload because AdSense Vignettes only trigger reliably on full page loads for this game setup.
+            // The visual glitch is prevented by the 'dino-restarting' CSS class in index.html.
             playAgainBtn = document.createElement('a');
-            playAgainBtn.href = '#dino-restart-' + Date.now();
+            let intent = 'summer';
+            try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
+            playAgainBtn.href = '?started=true&dino=1#go-' + intent;
             playAgainBtn.style.textDecoration = 'none';
             playAgainBtn.style.display = 'inline-block';
             playAgainBtn.onclick = () => {
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
-                // Do NOT call e.stopPropagation() or e.preventDefault(), let the browser navigate natively!
             };
         } else {
             playAgainBtn = document.createElement('button');
@@ -1533,13 +1535,6 @@
         gameOver(killerEmoji || '💥');
     };
 
-    // Listen for SPA hash changes to restart game natively (so AdSense can intercept the navigation)
-    window.addEventListener('hashchange', () => {
-        const hash = window.location.hash;
-        if (hash && hash.startsWith('#dino-restart-')) {
-            window.history.replaceState(null, '', window.location.pathname + window.location.search);
-            if (typeof startGame === 'function') startGame();
-        }
-    });
+    // Listen for SPA hash changes is no longer needed since we do hard reloads.
 
 })();
