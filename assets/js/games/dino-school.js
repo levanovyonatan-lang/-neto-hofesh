@@ -1190,11 +1190,21 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        const playAgainBtn = document.createElement('button');
-        playAgainBtn.onclick = (e) => {
-            e.stopPropagation();
-            startGame();
-        };
+        let lastVignetteTime = parseInt(localStorage.getItem('neto_dino_vignette_time') || '0');
+        let playAgainBtn;
+        if (Date.now() - lastVignetteTime > 2 * 60 * 1000) { // 2 minutes
+            localStorage.setItem('neto_dino_vignette_time', Date.now().toString());
+            playAgainBtn = document.createElement('a');
+            playAgainBtn.href = '?dino=1' + window.location.hash;
+            playAgainBtn.style.textDecoration = 'none';
+            playAgainBtn.style.display = 'inline-block';
+        } else {
+            playAgainBtn = document.createElement('button');
+            playAgainBtn.onclick = (e) => {
+                e.stopPropagation();
+                startGame();
+            };
+        }
 
         playAgainBtn.textContent = 'שחק מחדש 🔄';
         playAgainBtn.style.padding = '6px 14px';
