@@ -263,7 +263,7 @@
             }
             
             window.addEventListener('keydown', handleInput);
-            window.addEventListener('touchstart', handleInput, {passive: false});
+            gameContainer.addEventListener('touchstart', handleInput, {passive: false});
             gameContainer.addEventListener('mousedown', handleInput);
 
             if (gameLoopId) cancelAnimationFrame(gameLoopId);
@@ -466,7 +466,7 @@
             };
         }
         window.addEventListener('keydown', handleInput);
-        window.addEventListener('touchstart', handleInput, {passive: false});
+        gameContainer.addEventListener('touchstart', handleInput, {passive: false});
         gameContainer.addEventListener('mousedown', handleInput);
 
         // Start Loop
@@ -476,6 +476,9 @@
     }
 
     function handleInput(e) {
+        if (e.target && e.target.closest && e.target.closest('#dino-ad-container')) {
+            return;
+        }
         if (e.type === 'keydown' && e.code !== 'Space' && e.code !== 'ArrowUp') return;
         if (e.type === 'touchstart') e.preventDefault();
         
@@ -1132,7 +1135,7 @@
         dino.style.transform = `translateY(${dinoY}px) rotate(-90deg)`;
 
         window.removeEventListener('keydown', handleInput);
-        window.removeEventListener('touchstart', handleInput);
+        gameContainer.removeEventListener('touchstart', handleInput);
         gameContainer.removeEventListener('mousedown', handleInput);
 
         const btnContainer = document.createElement('div');
@@ -1244,7 +1247,7 @@
         els.forEach(el => el.remove());
 
         window.removeEventListener('keydown', handleInput);
-        window.removeEventListener('touchstart', handleInput);
+        gameContainer.removeEventListener('touchstart', handleInput);
         gameContainer.removeEventListener('mousedown', handleInput);
 
         document.body.style.touchAction = ''; 
