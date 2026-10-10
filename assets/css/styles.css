@@ -854,6 +854,9 @@ body.hw-crosshair-mode, body.hw-crosshair-mode * { cursor: crosshair !important;
 }
 .btn-demo-next, .btn-demo-summer {
     flex: 1;
+    font-family: inherit;
+    text-decoration: none;
+    text-align: center;
     font-weight: 900;
     font-size: clamp(17px, 2.5vh, calc(19px * var(--text-scale, 1)));
     padding: clamp(18px, 2.6vh, 22px) 8px;

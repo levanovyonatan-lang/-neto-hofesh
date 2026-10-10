@@ -139,9 +139,9 @@ $faqsJoined
         }
         $customButtonHtml = @"
                 <div class="demo-buttons-row" style="display: flex; justify-content: center; width: 100%;">
-                    <button id="btn-demo-holiday" class="btn-demo-summer" style="width: 100%; max-width: 360px; font-size: calc(20px * var(--text-scale, 1)); padding: 18px 24px; border-radius: 22px; box-shadow: 0 12px 28px rgba(234, 179, 8, 0.4); font-weight: 900; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #0f172a; border: 3px solid #fef08a; cursor: pointer; transition: all 0.2s ease-out; letter-spacing: -0.5px;" onclick="initApp('$($holiday.targetId)')">
+                    <a id="btn-demo-holiday" class="btn-demo-summer" href="?started=true&amp;targetIntent=$($holiday.targetId)" data-countdown-start="$($holiday.targetId)" style="width: 100%; max-width: 360px; font-size: calc(20px * var(--text-scale, 1)); padding: 18px 24px; border-radius: 22px; box-shadow: 0 12px 28px rgba(234, 179, 8, 0.4); font-weight: 900; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #0f172a; border: 3px solid #fef08a; cursor: pointer; transition: all 0.2s ease-out; letter-spacing: -0.5px;" onclick="return prepareCountdownNavigation(event, this)">
                         $btnText $btnIcon
-                    </button>
+                    </a>
                 </div>
 "@
         $html = [System.Text.RegularExpressions.Regex]::Replace($html, '<div class="demo-buttons-row">.*?</div>', $customButtonHtml, [System.Text.RegularExpressions.RegexOptions]::Singleline)

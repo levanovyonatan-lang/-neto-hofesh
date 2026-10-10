@@ -101,7 +101,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="../assets/css/styles.css?v=9060">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=countdown-navigation-1">
     <style>
         /* סגנונות לבאנר הדגמה */
         .sticky-banner-container {
@@ -339,9 +339,9 @@
             <div id="demo-action-buttons" class="demo-action-buttons-container">
                 <h3 class="demo-buttons-title">התחל ספירה לאחור עד:</h3>
                                 <div class="demo-buttons-row" style="display: flex; justify-content: center; width: 100%;">
-                    <button id="btn-demo-holiday" class="btn-demo-summer" style="width: 100%; max-width: 360px; font-size: calc(20px * var(--text-scale, 1)); padding: 18px 24px; border-radius: 22px; box-shadow: 0 12px 28px rgba(234, 179, 8, 0.4); font-weight: 900; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #0f172a; border: 3px solid #fef08a; cursor: pointer; transition: all 0.2s ease-out; letter-spacing: -0.5px;" onclick="initApp('pesach2027')">
+                    <a id="btn-demo-holiday" class="btn-demo-summer" href="?started=true&amp;targetIntent=pesach2027" data-countdown-start="pesach2027" style="width: 100%; max-width: 360px; font-size: calc(20px * var(--text-scale, 1)); padding: 18px 24px; border-radius: 22px; box-shadow: 0 12px 28px rgba(234, 179, 8, 0.4); font-weight: 900; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #0f172a; border: 3px solid #fef08a; cursor: pointer; transition: all 0.2s ease-out; letter-spacing: -0.5px;" onclick="return prepareCountdownNavigation(event, this)">
                         ׳₪׳¡׳— נ·
-                    </button>
+                    </a>
                 </div>
             </div>
             <!-- DEMO_BUTTONS_END -->
@@ -790,7 +790,7 @@
     <script src="tips.js?v=tips-file-v3" defer></script>
     <script src="../assets/js/premium-cinematic-themes.js?v=9083" defer></script>
     <script src="../assets/js/modules/holidays.js?v=9083" defer></script>
-    <script src="../assets/js/app.js?v=9083" defer></script>
+    <script src="../assets/js/app.js?v=countdown-navigation-1" defer></script>
     <script src="../assets/js/games/dino-school.js?v=9083" defer></script>
     <script src="../assets/js/games/emoji-rain.js?v=9083" defer></script>
 

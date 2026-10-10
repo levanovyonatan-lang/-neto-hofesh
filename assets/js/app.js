@@ -989,27 +989,73 @@ window.onload = () => {
             document.getElementById('a11y-menu').style.display = 'none';
         }
     });
-
-    // תמיכה בשיתוף קישורים (Deep Linking)
-    const urlSchool = urlParams.get('schoolType');
-    const urlTarget = urlParams.get('targetIntent');
-    if (urlSchool && urlTarget) {
-        const radio = document.querySelector(`input[name="schoolType"][value="${urlSchool}"]`);
-        if (radio) {
-            radio.checked = true;
-            updateSchoolSelection(radio);
-        }
-        setTimeout(() => {
-            initApp(urlTarget, true);
-        }, 100);
-    } else if (urlTarget && !urlSchool) {
-        setTimeout(() => {
-            if (userConfig.schoolType || document.querySelector('input[name="schoolType"]:checked')) {
-                initApp(urlTarget, true);
-            }
-        }, 100);
-    }
 };
+
+function getCountdownNavigationUrl(target) {
+    const url = new URL(window.location.href);
+    const choice = document.querySelector('input[name="schoolType"]:checked');
+    url.hash = '';
+    url.searchParams.delete('dino');
+    url.searchParams.delete('modal');
+    url.searchParams.set('started', 'true');
+    url.searchParams.set('targetIntent', target);
+    if (choice) url.searchParams.set('schoolType', choice.value);
+    else url.searchParams.delete('schoolType');
+    url.searchParams.set('studyFriday', document.getElementById('friday-toggle').checked ? '1' : '0');
+    return url.href;
+}
+
+function updateCountdownStartLinks() {
+    const hasSchool = !!document.querySelector('input[name="schoolType"]:checked');
+    document.querySelectorAll('[data-countdown-start]').forEach(link => {
+        link.href = hasSchool ? getCountdownNavigationUrl(link.dataset.countdownStart) : '#setup-screen';
+    });
+}
+
+function prepareCountdownNavigation(event, link) {
+    const choice = document.querySelector('input[name="schoolType"]:checked');
+    if (!choice) {
+        event.preventDefault();
+        document.getElementById('error-message').style.display = 'block';
+        return false;
+    }
+    link.href = getCountdownNavigationUrl(link.dataset.countdownStart);
+    try {
+        localStorage.setItem('neto_userConfig', JSON.stringify({
+            schoolType: choice.value,
+            studyFriday: document.getElementById('friday-toggle').checked,
+            targetIntent: link.dataset.countdownStart,
+            activeTargetId: userConfig.activeTargetId
+        }));
+    } catch (e) { }
+    // Leave the real link click intact: AdSense may intercept it before navigation.
+    return true;
+}
+
+function startCountdownFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const school = params.get('schoolType');
+    if (['elem', 'middle', 'high'].includes(school)) {
+        const radio = document.querySelector(`input[name="schoolType"][value="${school}"]`);
+        radio.checked = true;
+        updateSchoolSelection(radio);
+    }
+    const friday = params.get('studyFriday');
+    if (friday === '0' || friday === '1') {
+        document.getElementById('friday-toggle').checked = friday === '1';
+        updateFridayToggle();
+    }
+    updateCountdownStartLinks();
+    const target = params.get('targetIntent') || (params.get('started') === 'true' ? 'next' : null);
+    if (!target || !document.querySelector('input[name="schoolType"]:checked')) return false;
+
+    // This document loads after an offered vignette is dismissed, or immediately if none is served.
+    const splash = document.getElementById('neto-splash');
+    if (splash) splash.style.display = 'none';
+    document.body.classList.remove('splash-active');
+    initApp(target, true);
+    return true;
+}
 
 function initApp(countdownTarget = 'summer', forceStart = false) {
     const choice = document.querySelector('input[name="schoolType"]:checked');
@@ -1026,17 +1072,6 @@ function initApp(countdownTarget = 'summer', forceStart = false) {
             activeTargetId: userConfig.activeTargetId
         }));
     } catch (e) { }
-
-    // Trigger AdSense Vignette via Hash Navigation (SPA mode)
-    const targetHash = '#go-' + countdownTarget;
-    if (!forceStart && window.location.hash !== targetHash) {
-        // Change the hash to trigger Google's History API listener for Auto Ads
-        // Don't return, we want to run the normal SPA transition seamlessly!
-        window.history.pushState(null, '', targetHash);
-        
-        // Also trigger the physical hash event just in case Google needs it
-        window.location.hash = targetHash;
-    }
 
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
     const schoolNameEng = schoolNamesEng[userConfig.schoolType] || userConfig.schoolType;
@@ -1101,6 +1136,10 @@ function resetApp() {
         return;
     }
     if (window.cleanupDinoGame) window.cleanupDinoGame();
+    const setupUrl = new URL(window.location.href);
+    ['started', 'targetIntent', 'schoolType', 'studyFriday'].forEach(key => setupUrl.searchParams.delete(key));
+    if (setupUrl.hash.startsWith('#go-')) setupUrl.hash = '';
+    window.history.replaceState(null, '', setupUrl.href);
     if (timerInterval) clearInterval(timerInterval);
     userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' }; confettiFired = false;
     document.getElementById('main-screen').style.display = 'none'; document.getElementById('setup-screen').style.display = 'flex';
@@ -1135,7 +1174,9 @@ function resetApp() {
 function updateSchoolSelection(radio) {
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
     radio.parentElement.classList.add('selected');
+    document.getElementById('error-message').style.display = 'none';
     updateNextVacationButtonText();
+    updateCountdownStartLinks();
 }
 
 function updateThemeSelection(radio) {
@@ -1154,6 +1195,7 @@ function updateFridayToggle() {
     const hint = document.getElementById('friday-hint-text');
     hint.textContent = toggle.checked ? 'כן, יש לנו לימודים בשישי ☹️' : 'לא, אצלנו שישי זה חופש 😊';
     hint.style.color = toggle.checked ? '#ef4444' : 'var(--text-muted)';
+    updateCountdownStartLinks();
 }
 
 const netDaysCache = {};
@@ -1513,33 +1555,6 @@ function showMainScreen() {
     renderHolidays();
     selectTarget(userConfig.activeTargetId, false);
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
-
-    // Watch for AdSense Interstitial and re-trigger animation when it closes
-    let adWasOpened = false;
-    let checkCount = 0;
-    if (window.netoInitAdCheckInterval) clearInterval(window.netoInitAdCheckInterval);
-    
-    window.netoInitAdCheckInterval = setInterval(() => {
-        checkCount++;
-        let isAdVisible = false;
-        if (document.body.style.overflow === 'hidden') isAdVisible = true;
-        const iframes = document.querySelectorAll('iframe');
-        for (let i = 0; i < iframes.length; i++) {
-            const f = iframes[i];
-            if (f.offsetHeight > window.innerHeight * 0.7 && getComputedStyle(f).display !== 'none' && getComputedStyle(f).visibility !== 'hidden') {
-                isAdVisible = true; break;
-            }
-        }
-        
-        if (isAdVisible) {
-            adWasOpened = true;
-        } else if (adWasOpened && !isAdVisible) {
-            if (typeof selectTarget === 'function') selectTarget(userConfig.activeTargetId, false);
-            clearInterval(window.netoInitAdCheckInterval);
-        } else if (!adWasOpened && checkCount > 30) {
-            clearInterval(window.netoInitAdCheckInterval);
-        }
-    }, 150);
 }
 
 function updateActiveHolidayCard(id) {
@@ -2256,22 +2271,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     fridayToggle.checked = !!config.studyFriday;
                     updateFridayToggle();
                 }
-
-                // Set a flag so initApp knows not to override active holiday if not needed
-                setTimeout(() => {
-                    let intent = 'next';
-                    const urlParamsLocal = new URLSearchParams(window.location.search);
-                    const urlTarget = urlParamsLocal.get('targetIntent');
-                    if (urlTarget) {
-                        intent = urlTarget;
-                    } else if (config.activeTargetId && config.activeTargetId.startsWith('summer')) {
-                        intent = 'summer';
-                    }
-                    
-                    if (urlParamsLocal.get('started') === 'true') {
-                        initApp(intent, true);
-                    }
-                }, 100);
             }
         }
     } catch (e) { }
@@ -2281,8 +2280,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('is-android');
         }
     } catch (e) { }
-    initSplashScreen();
     applyHolidayLandingPageMode();
+    if (!startCountdownFromUrl()) initSplashScreen();
     try {
         if (shouldOpenInstallVideo) {
             openSafariInstallVideoModal();
