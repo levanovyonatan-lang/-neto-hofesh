@@ -1215,7 +1215,9 @@
             playAgainBtn.onclick = (e) => {
                 e.stopPropagation();
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
-                window.history.pushState(null, '', window.location.pathname + window.location.search + '#dino-restart-' + Date.now());
+                const newHash = '#dino-restart-' + Date.now();
+                window.history.pushState(null, '', newHash);
+                window.location.hash = newHash;
                 startGame();
             };
         } else {
