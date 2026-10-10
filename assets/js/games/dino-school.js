@@ -486,8 +486,8 @@
                      data-ad-client="ca-pub-3389455724624040"
                      data-ad-slot="6383804812"></ins>
             `;
-            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
             document.body.appendChild(adContainer);
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
         }
         window.addEventListener('keydown', handleInput);
         window.addEventListener('touchstart', handleInput, {passive: false});
@@ -1262,8 +1262,8 @@
                      data-ad-client="ca-pub-3389455724624040"
                      data-ad-slot="6383804812"></ins>
             `;
-            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
             document.body.appendChild(adContainer);
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
         }
     }
 
@@ -1497,8 +1497,8 @@
                      data-ad-client="ca-pub-3389455724624040"
                      data-ad-slot="6383804812"></ins>
             `;
-            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
             document.body.appendChild(adContainer);
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
         }
         
         // Show game over UI directly
