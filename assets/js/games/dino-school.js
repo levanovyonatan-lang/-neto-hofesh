@@ -1210,17 +1210,19 @@
         const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
         const shouldRefresh = (Date.now() - lastAdTime) > 120000;
 
-        const playAgainBtn = document.createElement('button');
+        let playAgainBtn;
         if (shouldRefresh) {
-            playAgainBtn.onclick = (e) => {
-                e.stopPropagation();
+            // Use native <a> tag navigation so Google AdSense detects the click intent
+            playAgainBtn = document.createElement('a');
+            playAgainBtn.href = '#dino-restart-' + Date.now();
+            playAgainBtn.style.textDecoration = 'none';
+            playAgainBtn.style.display = 'inline-block';
+            playAgainBtn.onclick = () => {
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
-                const newHash = '#dino-restart-' + Date.now();
-                window.history.pushState(null, '', newHash);
-                window.location.hash = newHash;
-                startGame();
+                // Do NOT call e.stopPropagation() or e.preventDefault(), let the browser navigate natively!
             };
         } else {
+            playAgainBtn = document.createElement('button');
             playAgainBtn.onclick = (e) => {
                 e.stopPropagation();
                 startGame();
@@ -1530,5 +1532,14 @@
         // Show game over UI directly
         gameOver(killerEmoji || '💥');
     };
+
+    // Listen for SPA hash changes to restart game natively (so AdSense can intercept the navigation)
+    window.addEventListener('hashchange', () => {
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#dino-restart-')) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+            if (typeof startGame === 'function') startGame();
+        }
+    });
 
 })();
