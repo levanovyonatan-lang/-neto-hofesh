@@ -2516,29 +2516,5 @@ window.addEventListener('hashchange', function() {
     }
 });
 
-// Check if page was loaded via ?dino=1 (used to trigger AdSense Vignettes on game replay)
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('dino') === '1') {
-        // Remove the query param from URL so manual refresh doesn't auto-start dino
-        urlParams.delete('dino');
-        let newUrl = window.location.pathname;
-        let newSearch = urlParams.toString();
-        if (newSearch) newUrl += '?' + newSearch;
-        newUrl += window.location.hash;
-        window.history.replaceState(null, '', newUrl);
-
-        // Wait a tiny bit for the UI to settle, then start the Dino game
-        setTimeout(() => {
-            const gameBtn = document.getElementById('main-game-btn');
-            if (gameBtn) {
-                gameBtn.click();
-            } else if (typeof window.startDinoGame === 'function') {
-                window.startDinoGame();
-            }
-        }, 300);
-    }
-});
-
 
 
