@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            fetch('/log', {
+                method: 'POST',
+                body: JSON.stringify({type: 'error', message: message, lineno: lineno, colno: colno})
+            });
+            return true;
+        };
+    </script>
+    <script src="assets/js/games/dino-school.js"></script>
+    <script>
+        window.onload = function() {
+            fetch('/log', {
+                method: 'POST',
+                body: JSON.stringify({type: 'success', isStartDinoGameDefined: typeof window.startDinoGame})
+            });
+        };
+    </script>
+</head>
+<body></body>
+</html>

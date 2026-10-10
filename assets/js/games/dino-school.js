@@ -212,6 +212,9 @@
         const appContainer = document.querySelector('.app-container');
         if (appContainer) appContainer.style.zIndex = '1001';
 
+        const timerCard = document.getElementById('main-timer-bg');
+        if (!timerCard) { isGameActive = false; return; }
+
         let overlay = document.getElementById('game-lock-overlay');
         if (!overlay) {
             overlay = document.createElement('div');
@@ -292,9 +295,6 @@
         spawnTimer = 60; // Initial delay
 
         if (navigator.vibrate) navigator.vibrate([30]);
-
-        const timerCard = document.getElementById('main-timer-bg');
-        if (!timerCard) { isGameActive = false; return; }
 
         gameContainer = timerCard;
         
@@ -1195,7 +1195,7 @@
         if (Date.now() - lastVignetteTime > 2 * 60 * 1000) { // 2 minutes
             localStorage.setItem('neto_dino_vignette_time', Date.now().toString());
             playAgainBtn = document.createElement('a');
-            playAgainBtn.href = '?dino=1' + window.location.hash;
+            playAgainBtn.href = '?started=true&dino=1' + window.location.hash;
             playAgainBtn.style.textDecoration = 'none';
             playAgainBtn.style.display = 'inline-block';
         } else {
