@@ -1207,11 +1207,29 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        const playAgainBtn = document.createElement('button');
-        playAgainBtn.onclick = (e) => {
-            e.stopPropagation();
-            startGame();
-        };
+        const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
+        const shouldRefresh = (Date.now() - lastAdTime) > 120000;
+
+        let playAgainBtn;
+        if (shouldRefresh) {
+            // We use a hard reload because AdSense Vignettes only trigger reliably on full page loads for this game setup.
+            // The visual glitch is prevented by the 'dino-restarting' CSS class in index.html.
+            playAgainBtn = document.createElement('a');
+            let intent = 'summer';
+            try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
+            playAgainBtn.href = '?started=true&dino=1#go-' + intent;
+            playAgainBtn.style.textDecoration = 'none';
+            playAgainBtn.style.display = 'inline-block';
+            playAgainBtn.onclick = () => {
+                sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
+            };
+        } else {
+            playAgainBtn = document.createElement('button');
+            playAgainBtn.onclick = (e) => {
+                e.stopPropagation();
+                startGame();
+            };
+        }
 
         playAgainBtn.textContent = 'שחק מחדש 🔄';
         playAgainBtn.style.padding = '6px 14px';

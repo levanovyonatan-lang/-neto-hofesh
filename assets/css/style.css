@@ -3,3 +3,7 @@
 html.dino-restarting #setup-screen, html.dino-restarting #main-timer-bg { display: none !important; }
 html.dino-restarting body { background-color: #1e293b !important; }
 
+
+/* Hide splash screen as well */
+html.dino-restarting #neto-splash { display: none !important; opacity: 0 !important; visibility: hidden !important; }
+
