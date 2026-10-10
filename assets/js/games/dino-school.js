@@ -183,6 +183,52 @@
         }, 4500);
     }
 
+    function isAdOnScreen() {
+        try {
+            // 1. Check for active focus inside an ad iframe
+            if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
+                if (!document.activeElement.closest('#dino-ad-container')) {
+                    return true;
+                }
+            }
+
+            // 2. Check all iframes on page (excluding our bottom dino banner)
+            const iframes = document.querySelectorAll('iframe');
+            for (let i = 0; i < iframes.length; i++) {
+                const frame = iframes[i];
+                if (frame.closest('#dino-ad-container')) continue;
+                
+                const style = window.getComputedStyle(frame);
+                if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') continue;
+
+                const rect = frame.getBoundingClientRect();
+                if (rect.width > 150 && rect.height > 150 && rect.bottom > 0 && rect.top < window.innerHeight) {
+                    const parent = frame.parentElement;
+                    const parentStyle = parent ? window.getComputedStyle(parent) : null;
+                    if (style.position === 'fixed' || (parentStyle && parentStyle.position === 'fixed') || rect.height > window.innerHeight * 0.35 || rect.width > window.innerWidth * 0.5) {
+                        return true;
+                    }
+                }
+            }
+
+            // 3. Check for Google Vignette specific containers/elements
+            const vignetteContainers = document.querySelectorAll('ins.adsbygoogle, div[id*="google_ads"], div[class*="google_ads"], div[aria-label="Advertisement"]');
+            for (let i = 0; i < vignetteContainers.length; i++) {
+                const el = vignetteContainers[i];
+                if (el.closest('#dino-ad-container')) continue;
+                const style = window.getComputedStyle(el);
+                if (style.display === 'none' || style.visibility === 'hidden') continue;
+                if (style.position === 'fixed' && (parseInt(style.zIndex || '0') >= 1000 || el.getAttribute('data-ad-status') === 'filled')) {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.width > 180 && rect.height > 180) {
+                        return true;
+                    }
+                }
+            }
+        } catch(e) {}
+        return false;
+    }
+
     async function startGame() {
         if (!sessionStorage.getItem('dinoLastAdTime')) {
             sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
@@ -644,14 +690,7 @@
         if (!isGameActive) return;
 
         // Auto-pause if a Google Vignette Ad is covering the screen
-        let adVisible = false;
-        const iframes = document.querySelectorAll('iframe');
-        for (let i = 0; i < iframes.length; i++) {
-            if (iframes[i].offsetHeight > window.innerHeight * 0.7 && getComputedStyle(iframes[i]).display !== 'none' && getComputedStyle(iframes[i]).visibility !== 'hidden') {
-                adVisible = true; break;
-            }
-        }
-        if (adVisible) {
+        if (isAdOnScreen()) {
             lastFrameTime = timestamp;
             gameLoopId = requestAnimationFrame(gameLoop);
             return;
@@ -1221,9 +1260,54 @@
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
                 let intent = 'summer';
                 try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
-                
+
+                playAgainBtn.textContent = 'טוען... ⏳';
+                playAgainBtn.disabled = true;
+                playAgainBtn.style.opacity = '0.7';
+                playAgainBtn.style.cursor = 'wait';
+
                 // Trigger AdSense Vignette via History API (SPA mode) without a page reload
                 window.history.pushState(null, '', '#go-' + intent + '-dinorestart');
+
+                let adShown = false;
+                let checkCount = 0;
+                const maxWaitWithoutAd = 15; // 1.5 seconds fallback if no ad appears
+                let finished = false;
+
+                const runStart = () => {
+                    if (finished) return;
+                    finished = true;
+                    clearInterval(adCheckTimer);
+                    window.removeEventListener('focus', onFocusAfterAd);
+                    if (window.location.hash.includes('-dinorestart')) {
+                        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+                    }
+                    startGame();
+                };
+
+                const adCheckTimer = setInterval(() => {
+                    checkCount++;
+                    const adActive = isAdOnScreen();
+
+                    if (adActive) {
+                        adShown = true;
+                    }
+
+                    // If ad was shown and now has been closed, OR if no ad showed within 1.5s
+                    if ((adShown && !adActive) || (!adShown && checkCount >= maxWaitWithoutAd)) {
+                        runStart();
+                    }
+                }, 100);
+
+                const onFocusAfterAd = () => {
+                    setTimeout(() => {
+                        if (adShown && !isAdOnScreen()) {
+                            runStart();
+                        }
+                    }, 250);
+                };
+                window.addEventListener('focus', onFocusAfterAd);
+                return;
             }
             startGame();
         };
