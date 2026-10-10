@@ -1212,12 +1212,12 @@
 
         let playAgainBtn;
         if (shouldRefresh) {
-            // We use a hard reload because AdSense Vignettes only trigger reliably on full page loads for this game setup.
-            // The visual glitch is prevented by the 'dino-restarting' CSS class in index.html.
             playAgainBtn = document.createElement('a');
             let intent = 'summer';
             try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
-            playAgainBtn.href = '?started=true&dino=1#go-' + intent;
+            // This triggers Google AdSense Vignette without reloading the page!
+            // app.js catches this hash, clears it, and restarts the game smoothly.
+            playAgainBtn.href = '#go-' + intent + '-dinorestart';
             playAgainBtn.style.textDecoration = 'none';
             playAgainBtn.style.display = 'inline-block';
             playAgainBtn.onclick = () => {

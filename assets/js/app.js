@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=10156').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=10157').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -232,18 +232,18 @@ function closeIosModal() {
 function refreshPWAIconsSilently() {
     try {
         const cb = Date.now();
-        fetch('manifest.json?v=10156&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses.png?v=10156&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-white.png?v=10156&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-transparent.png?v=10156&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('manifest.json?v=10157&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses.png?v=10157&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-white.png?v=10157&cb=' + cb, { cache: 'reload' }).catch(() => { });
+        fetch('icon-neto-sunglasses-transparent.png?v=10157&cb=' + cb, { cache: 'reload' }).catch(() => { });
 
         document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
             const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=10156&cb=' + cb;
+            link.href = baseHref + '?v=10157&cb=' + cb;
         });
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=10156&cb=' + cb;
+            manifestLink.href = 'manifest.json?v=10157&cb=' + cb;
         }
     } catch (e) { }
 }
@@ -453,7 +453,7 @@ async function loadDailyTipsDatabase() {
     if (dailyTipsPromise) return dailyTipsPromise;
 
     // Use absolute URL from origin to avoid 404s on subpages
-    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10156';
+    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10157';
 
     dailyTipsPromise = fetch(fetchUrl)
         .then(response => {
@@ -1329,7 +1329,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=10156';
+        script.src = 'assets/js/games/dino-school.js?v=10157';
         document.body.appendChild(script);
     }
 
@@ -2488,6 +2488,14 @@ document.addEventListener('click', function(e) {
 window.addEventListener('hashchange', function() {
     const hash = window.location.hash;
     if (hash && hash.startsWith('#go-')) {
+        if (hash.includes('-dinorestart')) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+            if (typeof window.startDinoGame === 'function') {
+                window.startDinoGame();
+            }
+            return;
+        }
+
         const targetId = hash.substring(4);
         if (typeof selectTarget === 'function') {
             selectTarget(targetId, false);
