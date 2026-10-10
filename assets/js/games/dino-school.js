@@ -471,24 +471,23 @@
             adContainer = document.createElement('div');
             adContainer.id = 'dino-ad-container';
             adContainer.className = 'dino-element';
-            adContainer.style.position = 'absolute';
-            adContainer.style.bottom = '10px';
+            adContainer.style.position = 'fixed';
+            adContainer.style.bottom = '20px';
             adContainer.style.left = '50%';
             adContainer.style.transform = 'translateX(-50%)';
-            adContainer.style.width = '100%';
-            adContainer.style.maxWidth = '320px';
+            adContainer.style.width = '320px';
+            adContainer.style.height = '50px';
             adContainer.style.textAlign = 'center';
-            adContainer.style.zIndex = '200';
+            adContainer.style.zIndex = '1005';
+            adContainer.style.pointerEvents = 'auto'; // ensure it's clickable
             adContainer.innerHTML = `
                 <ins class="adsbygoogle"
-                     style="display:block"
+                     style="display:inline-block;width:320px;height:50px"
                      data-ad-client="ca-pub-3389455724624040"
-                     data-ad-slot="6383804812"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
+                     data-ad-slot="6383804812"></ins>
             `;
             try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-            gameContainer.appendChild(adContainer);
+            document.body.appendChild(adContainer);
         }
         window.addEventListener('keydown', handleInput);
         window.addEventListener('touchstart', handleInput, {passive: false});
