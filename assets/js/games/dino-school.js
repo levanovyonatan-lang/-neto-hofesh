@@ -235,6 +235,12 @@
         if (isGameActive) {
             const title = document.getElementById('dino-game-over');
             if (title) title.remove();
+            
+            let adContainer = document.getElementById('dino-ad-container');
+            if (adContainer) adContainer.remove();
+
+            if (overlay) overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
 
             obstaclesList.forEach(obs => {
                 if (obs.el && obs.el.parentNode) obs.el.remove();
