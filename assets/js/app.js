@@ -1027,20 +1027,15 @@ function initApp(countdownTarget = 'summer', forceStart = false) {
         }));
     } catch (e) { }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    if (!forceStart && !urlParams.get('started')) {
-        urlParams.set('started', 'true');
-        urlParams.set('schoolType', userConfig.schoolType);
-        urlParams.set('targetIntent', userConfig.targetIntent);
-        const nextUrl = window.location.pathname + '?' + urlParams.toString() + window.location.hash;
+    // Trigger AdSense Vignette via Hash Navigation (SPA mode)
+    const targetHash = '#go-' + countdownTarget;
+    if (!forceStart && window.location.hash !== targetHash) {
+        // Change the hash to trigger Google's History API listener for Auto Ads
+        // Don't return, we want to run the normal SPA transition seamlessly!
+        window.history.pushState(null, '', targetHash);
         
-        const a = document.createElement('a');
-        a.href = nextUrl;
-        document.body.appendChild(a);
-        a.click();
-        return;
-    } else if (forceStart && urlParams.get('started') === 'true') {
-        window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+        // Also trigger the physical hash event just in case Google needs it
+        window.location.hash = targetHash;
     }
 
     const schoolNamesEng = { 'elem': 'elementary', 'middle': 'middle', 'high': 'high' };
@@ -1493,6 +1488,33 @@ function showMainScreen() {
     renderHolidays();
     selectTarget(userConfig.activeTargetId, false);
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
+
+    // Watch for AdSense Interstitial and re-trigger animation when it closes
+    let adWasOpened = false;
+    let checkCount = 0;
+    if (window.netoInitAdCheckInterval) clearInterval(window.netoInitAdCheckInterval);
+    
+    window.netoInitAdCheckInterval = setInterval(() => {
+        checkCount++;
+        let isAdVisible = false;
+        if (document.body.style.overflow === 'hidden') isAdVisible = true;
+        const iframes = document.querySelectorAll('iframe');
+        for (let i = 0; i < iframes.length; i++) {
+            const f = iframes[i];
+            if (f.offsetHeight > window.innerHeight * 0.7 && getComputedStyle(f).display !== 'none' && getComputedStyle(f).visibility !== 'hidden') {
+                isAdVisible = true; break;
+            }
+        }
+        
+        if (isAdVisible) {
+            adWasOpened = true;
+        } else if (adWasOpened && !isAdVisible) {
+            if (typeof selectTarget === 'function') selectTarget(userConfig.activeTargetId, false);
+            clearInterval(window.netoInitAdCheckInterval);
+        } else if (!adWasOpened && checkCount > 30) {
+            clearInterval(window.netoInitAdCheckInterval);
+        }
+    }, 150);
 }
 
 function updateActiveHolidayCard(id) {
