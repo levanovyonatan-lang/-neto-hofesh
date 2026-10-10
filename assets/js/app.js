@@ -2528,15 +2528,17 @@ document.addEventListener('DOMContentLoaded', () => {
         newUrl += window.location.hash;
         window.history.replaceState(null, '', newUrl);
 
-        // Wait a bit for the UI and AdSense to settle, then start the Dino game automatically
-        setTimeout(() => {
-            const gameBtn = document.getElementById('main-game-btn');
-            if (gameBtn) {
-                gameBtn.click();
-            } else if (typeof window.startDinoGame === 'function') {
+        // Wait for the UI and AdSense to settle, and for dino-school.js to load, then start the Dino game
+        let attempts = 0;
+        function tryStartDino() {
+            if (typeof window.startDinoGame === 'function') {
                 window.startDinoGame();
+            } else if (attempts < 50) { // Try for up to 5 seconds
+                attempts++;
+                setTimeout(tryStartDino, 100);
             }
-        }, 800);
+        }
+        setTimeout(tryStartDino, 800);
     }
 });
 
