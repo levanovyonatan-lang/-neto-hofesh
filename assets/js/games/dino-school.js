@@ -185,6 +185,10 @@
 
     async function startGame() {
         try {
+        const existingAd = document.getElementById('dino-ad-container');
+        if (existingAd && window.dinoAdLastLoadTime && (Date.now() - window.dinoAdLastLoadTime > 60000)) {
+            existingAd.remove(); // Safe to refresh
+        }
         
         if (window.netoAdCheckInterval) clearInterval(window.netoAdCheckInterval);
         if (demoArtReady) await demoArtReady;
@@ -489,6 +493,7 @@
                      data-ad-slot="6383804812"></ins>
             `;
             document.body.appendChild(adContainer);
+            window.dinoAdLastLoadTime = Date.now();
             try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
         }
         window.addEventListener('keydown', handleInput);
@@ -1266,6 +1271,7 @@
                      data-ad-slot="6383804812"></ins>
             `;
             document.body.appendChild(adContainer);
+            window.dinoAdLastLoadTime = Date.now();
             try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
         }
     }
@@ -1502,6 +1508,7 @@
                      data-ad-slot="6383804812"></ins>
             `;
             document.body.appendChild(adContainer);
+            window.dinoAdLastLoadTime = Date.now();
             try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
         }
         
