@@ -187,6 +187,25 @@
         if (!sessionStorage.getItem('dinoLastAdTime')) {
             sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
         }
+        
+        // INSTANTLY create and show overlay to prevent main UI flash on reload
+        let overlay = document.getElementById('game-lock-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'game-lock-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.zIndex = '999';
+            overlay.style.background = 'transparent';
+            overlay.style.transition = 'background 0.4s ease';
+            document.body.appendChild(overlay);
+        }
+        overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+
         try {
         const existingAd = document.getElementById('dino-ad-container');
         
@@ -214,23 +233,6 @@
 
         const appContainer = document.querySelector('.app-container');
         if (appContainer) appContainer.style.zIndex = '1001';
-
-        let overlay = document.getElementById('game-lock-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'game-lock-overlay';
-            overlay.style.position = 'fixed';
-            overlay.style.top = '0';
-            overlay.style.left = '0';
-            overlay.style.width = '100vw';
-            overlay.style.height = '100vh';
-            overlay.style.zIndex = '999';
-            overlay.style.background = 'transparent';
-            overlay.style.transition = 'background 0.4s ease';
-            document.body.appendChild(overlay);
-        }
-        overlay.style.display = 'block';
-        document.body.style.overflow = 'hidden';
 
         if (isGameActive) {
             const title = document.getElementById('dino-game-over');
@@ -1215,9 +1217,8 @@
             playAgainBtn = document.createElement('a');
             let intent = 'summer';
             try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
-            // This triggers Google AdSense Vignette without reloading the page!
-            // app.js catches this hash, clears it, and restarts the game smoothly.
-            playAgainBtn.href = '#go-' + intent + '-dinorestart';
+            // Full page reload guarantees AdSense Vignettes. Game state is preserved by ?dino=1 and early overlay display.
+            playAgainBtn.href = '?started=true&dino=1#go-' + intent;
             playAgainBtn.style.textDecoration = 'none';
             playAgainBtn.style.display = 'inline-block';
             playAgainBtn.onclick = () => {
