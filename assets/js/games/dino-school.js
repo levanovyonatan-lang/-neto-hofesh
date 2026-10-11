@@ -183,6 +183,27 @@
         }, 4500);
     }
 
+    function isVignetteActive() {
+        try {
+            if (window.location.hash.includes('google_vignette')) return true;
+            if (document.hidden) return true;
+
+            const fullOverlays = document.querySelectorAll('ins.adsbygoogle, div[aria-label="Advertisement"]');
+            for (let i = 0; i < fullOverlays.length; i++) {
+                const el = fullOverlays[i];
+                if (el.closest('#dino-ad-container')) continue;
+                const s = window.getComputedStyle(el);
+                if (s.position === 'fixed' && parseInt(s.zIndex || '0', 10) >= 10000) {
+                    const r = el.getBoundingClientRect();
+                    if (r.width > window.innerWidth * 0.7 && r.height > window.innerHeight * 0.7) {
+                        return true;
+                    }
+                }
+            }
+        } catch(e) {}
+        return false;
+    }
+
     async function startGame() {
         if (!sessionStorage.getItem('dinoLastAdTime')) {
             sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
@@ -617,15 +638,9 @@
         if (!isGameActive) return;
 
         // Auto-pause if a Google Vignette Ad is covering the screen
-        let adVisible = false;
-        const iframes = document.querySelectorAll('iframe');
-        for (let i = 0; i < iframes.length; i++) {
-            if (iframes[i].offsetHeight > window.innerHeight * 0.7 && getComputedStyle(iframes[i]).display !== 'none' && getComputedStyle(iframes[i]).visibility !== 'hidden') {
-                adVisible = true; break;
-            }
-        }
-        if (adVisible) {
+        if (isVignetteActive()) {
             lastFrameTime = timestamp;
+            if (spawnTimer < 90) spawnTimer = 90;
             gameLoopId = requestAnimationFrame(gameLoop);
             return;
         }
@@ -1215,6 +1230,30 @@
             playAgainBtn.onclick = () => {
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
                 document.documentElement.classList.add('dino-restarting');
+                playAgainBtn.textContent = 'טוען... ⏳';
+
+                let resumed = false;
+                const resumeAfterAd = () => {
+                    if (resumed) return;
+                    resumed = true;
+                    window.removeEventListener('focus', resumeAfterAd);
+                    window.removeEventListener('hashchange', resumeAfterAd);
+                    window.removeEventListener('popstate', resumeAfterAd);
+                    document.removeEventListener('visibilitychange', checkVisibility);
+                    
+                    setTimeout(() => {
+                        startGame();
+                    }, 100);
+                };
+
+                const checkVisibility = () => {
+                    if (!document.hidden) resumeAfterAd();
+                };
+
+                window.addEventListener('focus', resumeAfterAd);
+                window.addEventListener('hashchange', resumeAfterAd);
+                window.addEventListener('popstate', resumeAfterAd);
+                document.addEventListener('visibilitychange', checkVisibility);
             };
         } else {
             playAgainBtn = document.createElement('button');
