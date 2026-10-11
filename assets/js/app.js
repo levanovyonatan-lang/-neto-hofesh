@@ -1088,6 +1088,11 @@ async function resumeDinoGameAfterAd() {
     const pending = sessionStorage.getItem('dinoRestartPending') === '1';
     if ((!restartUrl && (!pending || !document.getElementById('dino-game-over'))) || dinoRestartInFlight) return;
 
+    if (!restartUrl && [...document.querySelectorAll('iframe')].some(frame =>
+        frame.offsetHeight > window.innerHeight * 0.7 &&
+        getComputedStyle(frame).display !== 'none' &&
+        getComputedStyle(frame).visibility !== 'hidden')) return;
+
     if (typeof window.startDinoGame !== 'function') {
         if (++dinoRestartAttempts <= 20) setTimeout(resumeDinoGameAfterAd, 100);
         else document.documentElement.classList.remove('dino-restarting');
@@ -1112,6 +1117,16 @@ async function resumeDinoGameAfterAd() {
 
 window.addEventListener('pageshow', event => {
     if (event.persisted) resumeDinoGameAfterAd();
+});
+
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && sessionStorage.getItem('dinoRestartPending') === '1') {
+        resumeDinoGameAfterAd();
+    }
+});
+
+window.addEventListener('focus', () => {
+    if (sessionStorage.getItem('dinoRestartPending') === '1') resumeDinoGameAfterAd();
 });
 
 function initApp(countdownTarget = 'summer', forceStart = false) {
