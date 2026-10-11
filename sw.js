@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261012-dino-autostart-ad-close-1';
-const CACHE_NAME = 'neto-cache-v1790694502';
+const CACHE_VERSION = 'v20261012-dino-auto-resume-v2';
+const CACHE_NAME = 'neto-cache-v1790694503';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

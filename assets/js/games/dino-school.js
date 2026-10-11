@@ -183,25 +183,71 @@
         }, 4500);
     }
 
-    function isVignetteActive() {
+    function isAdOverlayActive() {
         try {
             if (window.location.hash.includes('google_vignette')) return true;
             if (document.hidden) return true;
 
-            const fullOverlays = document.querySelectorAll('ins.adsbygoogle, div[aria-label="Advertisement"]');
+            // Check iframes covering large portion of the viewport (Google Vignette iframe)
+            const iframes = document.querySelectorAll('iframe');
+            for (let i = 0; i < iframes.length; i++) {
+                const ifr = iframes[i];
+                if (ifr.id === 'promo-video' || ifr.closest('#promo-video-container')) continue;
+                const r = ifr.getBoundingClientRect();
+                if (r.width > window.innerWidth * 0.65 && r.height > window.innerHeight * 0.65) {
+                    return true;
+                }
+            }
+
+            // Check full overlays (ins or containers)
+            const fullOverlays = document.querySelectorAll('ins.adsbygoogle, div[id*="google"], div[aria-label="Advertisement"]');
             for (let i = 0; i < fullOverlays.length; i++) {
                 const el = fullOverlays[i];
                 if (el.closest('#dino-ad-container')) continue;
                 const s = window.getComputedStyle(el);
-                if (s.position === 'fixed' && parseInt(s.zIndex || '0', 10) >= 10000) {
+                if (s.position === 'fixed' && parseInt(s.zIndex || '0', 10) >= 1000) {
                     const r = el.getBoundingClientRect();
-                    if (r.width > window.innerWidth * 0.7 && r.height > window.innerHeight * 0.7) {
+                    if (r.width > window.innerWidth * 0.65 && r.height > window.innerHeight * 0.65) {
                         return true;
                     }
                 }
             }
         } catch(e) {}
         return false;
+    }
+
+    let adWatchInterval = null;
+    function watchForAdDismissal() {
+        if (adWatchInterval) clearInterval(adWatchInterval);
+        const clickTime = parseInt(sessionStorage.getItem('dinoPendingRestart') || '0', 10) || Date.now();
+
+        adWatchInterval = setInterval(() => {
+            const pending = sessionStorage.getItem('dinoPendingRestart');
+            if (!pending) {
+                clearInterval(adWatchInterval);
+                return;
+            }
+
+            const elapsed = Date.now() - clickTime;
+            // Wait at least 1500ms so AdSense has ample time to launch the vignette
+            if (elapsed < 1500) return;
+
+            // When ad overlay is closed and document is visible:
+            if (!isAdOverlayActive() && !document.hidden) {
+                clearInterval(adWatchInterval);
+                sessionStorage.removeItem('dinoPendingRestart');
+
+                const title = document.getElementById('dino-game-over');
+                if (title) title.remove();
+                document.documentElement.classList.remove('dino-restarting');
+
+                startGame();
+            } else if (elapsed > 120000) {
+                // Safety cutoff after 2 minutes
+                clearInterval(adWatchInterval);
+                sessionStorage.removeItem('dinoPendingRestart');
+            }
+        }, 300);
     }
 
     async function startGame() {
@@ -259,7 +305,11 @@
         const appContainer = document.querySelector('.app-container');
         if (appContainer) appContainer.style.zIndex = '1001';
 
-        if (isGameActive) {
+        if (isGameActive && !isGameOver) {
+            return;
+        }
+
+        if (isGameActive && isGameOver) {
             const title = document.getElementById('dino-game-over');
             if (title) title.remove();
 
@@ -277,7 +327,7 @@
             document.getElementById('dino-score-val').textContent = '0';
             isGameOver = false;
             gameSpeed = GAME_SPEED_START;
-            spawnTimer = 120;
+            spawnTimer = 180;
             frameCount = 0;
             lastFrameTime = 0;
             gameStartTime = Date.now();
@@ -319,7 +369,7 @@
         frameCount = 0;
         lastFrameTime = 0;
         gameStartTime = Date.now();
-        spawnTimer = 120; // 2 seconds delay to allow AdSense to pop up before obstacles spawn
+        spawnTimer = 180; // 3 seconds reaction runway
 
         if (navigator.vibrate) navigator.vibrate([30]);
 
@@ -637,10 +687,10 @@
     function gameLoop(timestamp) {
         if (!isGameActive) return;
 
-        // Auto-pause if a Google Vignette Ad is covering the screen
-        if (isVignetteActive()) {
+        // Auto-pause if a Google Vignette Ad or overlay is covering the screen
+        if (isAdOverlayActive()) {
             lastFrameTime = timestamp;
-            if (spawnTimer < 90) spawnTimer = 90;
+            if (spawnTimer < 180) spawnTimer = 180;
             gameLoopId = requestAnimationFrame(gameLoop);
             return;
         }
@@ -1222,38 +1272,16 @@
             let navUrl = `?started=true&dino=1&targetIntent=${encodeURIComponent(intent)}`;
             if (school) navUrl += `&schoolType=${encodeURIComponent(school)}`;
             if (friday) navUrl += `&studyFriday=${encodeURIComponent(friday)}`;
-            navUrl += `#go-${encodeURIComponent(intent)}`;
+            navUrl += `&_r=${Date.now()}`;
 
             playAgainBtn.href = navUrl;
             playAgainBtn.style.textDecoration = 'none';
             playAgainBtn.style.display = 'inline-block';
             playAgainBtn.onclick = () => {
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
+                sessionStorage.setItem('dinoPendingRestart', Date.now().toString());
                 document.documentElement.classList.add('dino-restarting');
-                playAgainBtn.textContent = 'טוען... ⏳';
-
-                let resumed = false;
-                const resumeAfterAd = () => {
-                    if (resumed) return;
-                    resumed = true;
-                    window.removeEventListener('focus', resumeAfterAd);
-                    window.removeEventListener('hashchange', resumeAfterAd);
-                    window.removeEventListener('popstate', resumeAfterAd);
-                    document.removeEventListener('visibilitychange', checkVisibility);
-                    
-                    setTimeout(() => {
-                        startGame();
-                    }, 100);
-                };
-
-                const checkVisibility = () => {
-                    if (!document.hidden) resumeAfterAd();
-                };
-
-                window.addEventListener('focus', resumeAfterAd);
-                window.addEventListener('hashchange', resumeAfterAd);
-                window.addEventListener('popstate', resumeAfterAd);
-                document.addEventListener('visibilitychange', checkVisibility);
+                watchForAdDismissal();
             };
         } else {
             playAgainBtn = document.createElement('button');
@@ -1524,6 +1552,39 @@
         gameOver(killerEmoji || '💥');
     };
 
-    // Listen for SPA hash changes is no longer needed since we do hard reloads.
+    // Auto-start dino if loaded via restart link or reload
+    (function checkAutoStart() {
+        const params = new URLSearchParams(window.location.search);
+        const hasDinoParam = params.get('dino') === '1';
+        const hasPendingRestart = sessionStorage.getItem('dinoPendingRestart') !== null;
+        
+        if (hasDinoParam || hasPendingRestart) {
+            sessionStorage.removeItem('dinoPendingRestart');
+            try {
+                if (hasDinoParam) {
+                    params.delete('dino');
+                    params.delete('_r');
+                    const cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
+                    window.history.replaceState({}, '', cleanUrl);
+                }
+            } catch(e) {}
+
+            const tryStart = () => {
+                const timerBg = document.getElementById('main-timer-bg');
+                if (timerBg) {
+                    document.documentElement.classList.remove('dino-restarting');
+                    startGame();
+                } else {
+                    setTimeout(tryStart, 50);
+                }
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', tryStart);
+            } else {
+                tryStart();
+            }
+        }
+    })();
 
 })();
