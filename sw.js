@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261011-dino-restart-in-place-1';
+const CACHE_VERSION = 'v20261011-dino-startup-fix-1';
 const CACHE_NAME = 'neto-cache-v1790694492';
 
 self.addEventListener('install', e => {

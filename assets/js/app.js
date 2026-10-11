@@ -1422,7 +1422,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=dino-ad-live-1';
+        script.src = 'assets/js/games/dino-school.js?v=dino-startup-fix-1';
         document.body.appendChild(script);
     }
 

@@ -132,6 +132,8 @@
     let isGameOver = false;
     let lastFrameTime = 0; // For delta-time normalization
     let adEligibilityTimerId = null;
+    let hideOriginalTimeoutId = null;
+    let scrollToGameTimeoutId = null;
 
     // trigger button logic removed
 
@@ -334,7 +336,10 @@
             behavior: restartingFromUrl ? 'auto' : 'smooth'
         });
         if (restartingFromUrl) scrollToGame();
-        else setTimeout(scrollToGame, 400);
+        else scrollToGameTimeoutId = setTimeout(() => {
+            scrollToGameTimeoutId = null;
+            scrollToGame();
+        }, 400);
 
         // Hide original elements
         const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor, .net-days, .absolute-timer, #excluding-label, #vacation-message, #main-target-title, .net-days-container, #total-days-label');
@@ -353,8 +358,11 @@
                 el.style.transition = '';
             });
         };
-        if (restartingDemo) hideOriginalContent();
-        else setTimeout(hideOriginalContent, 200);
+        if (restartingFromUrl) hideOriginalContent();
+        else hideOriginalTimeoutId = setTimeout(() => {
+            hideOriginalTimeoutId = null;
+            hideOriginalContent();
+        }, 200);
 
         // Block pointer events on other original elements
         Array.from(gameContainer.children).forEach(el => {
@@ -522,8 +530,13 @@
 
         announceStage(0);
         } catch(err) {
-            alert("Dino Error: " + err.message + "\n" + err.stack);
+            console.error('Dino game failed to start:', err);
+            try { cleanupGame(); } catch (cleanupError) { console.error('Dino cleanup failed:', cleanupError); }
             isGameActive = false;
+            overlay.style.display = 'none';
+            document.body.style.overflow = '';
+            const appContainer = document.querySelector('.app-container');
+            if (appContainer) appContainer.style.zIndex = '';
         }
     }
 
@@ -1352,6 +1365,10 @@
 
     function cleanupGame() {
         window.NetoDinoRestart?.cancel();
+        if (hideOriginalTimeoutId) clearTimeout(hideOriginalTimeoutId);
+        hideOriginalTimeoutId = null;
+        if (scrollToGameTimeoutId) clearTimeout(scrollToGameTimeoutId);
+        scrollToGameTimeoutId = null;
         if (!isGameActive || !gameContainer) return;
         if (adEligibilityTimerId) {
             clearTimeout(adEligibilityTimerId);

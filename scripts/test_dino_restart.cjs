@@ -17,10 +17,12 @@ const server = http.createServer((req, res) => {
     res.end(fs.readFileSync(file));
 });
 
-async function setup(browser, base, { demo = false, legacy = false, ad = null, viewport, pathname = '/' } = {}) {
+async function setup(browser, base, { demo = false, legacy = false, ad = null, viewport, pathname = '/', finish = true } = {}) {
     const page = await browser.newPage({ viewport: viewport || { width: 1100, height: 820 }, serviceWorkers: 'block' });
     let documents = 0;
+    const dialogs = [];
     page.on('request', request => { if (request.isNavigationRequest() && request.frame() === page.mainFrame()) documents++; });
+    page.on('dialog', async dialog => { dialogs.push(dialog.message()); await dialog.dismiss(); });
     await page.route('**/*', route => route.request().url().startsWith(base) ? route.continue() : route.abort());
     await page.addInitScript(({ legacy, ad }) => {
         if (legacy) Object.defineProperty(window, 'navigation', { value: undefined });
@@ -58,7 +60,15 @@ async function setup(browser, base, { demo = false, legacy = false, ad = null, v
         localStorage.setItem('dinoHighScore', '999999');
         sessionStorage.setItem('dinoLastAdTime', String(Date.now() - 181000));
         sessionStorage.setItem('dinoGamesSinceAd', '3');
-        await window.startDinoGame();
+        const gameTarget = activeEventsList.find((event, index) => index > 0 && index < activeEventsList.length - 1);
+        selectTarget(gameTarget.id, false);
+    });
+    await page.locator('#main-game-btn').click();
+    await page.locator('#dino-score-val').waitFor();
+    assert.deepEqual(dialogs, [], 'Opening the game must not show a startup error');
+    assert.equal(await page.locator('#dino-game-over').count(), 0);
+    if (!finish) return { page, documents: () => documents };
+    await page.evaluate(() => {
         window.showDinoGameOver(0, 0, '');
         window.__banner = document.getElementById('dino-ad-container');
         window.__adElement = window.__banner.firstElementChild;
@@ -113,6 +123,18 @@ async function assertRunning(fixture) {
             } finally { await page.close(); }
         }
 
+        for (const demo of [false, true]) {
+            const page = await browser.newPage({ serviceWorkers: 'block' });
+            await page.route('**/*', route => route.request().url().startsWith(base) ? route.continue() : route.abort());
+            try {
+                await page.goto(base + '/?schoolType=elem&studyFriday=0&targetIntent=summer&dino=1' +
+                    (demo ? '&show_demo=true' : ''));
+                await page.locator('#dino-score-val').waitFor();
+                await page.waitForFunction(() => !new URL(location.href).searchParams.has('dino'));
+                console.log('PASS direct restart URL', demo ? 'demo' : 'main');
+            } finally { await page.close(); }
+        }
+
         for (const gate of ['games', 'time', 'record']) {
             const fixture = await setup(browser, base);
             const { page } = fixture;
@@ -140,5 +162,30 @@ async function assertRunning(fixture) {
         assert.equal(await canceled.page.locator('#dino-score-val').count(), 0, 'Closing the game cancels the pending replay');
         await canceled.page.close();
         console.log('PASS cancel pending replay');
+
+        const natural = await setup(browser, base, { finish: false });
+        try {
+            await natural.page.locator('#dino-game-over').waitFor({ timeout: 15000 });
+            await natural.page.locator('[data-dino-restart]').click();
+            await natural.page.waitForFunction(() =>
+                !!document.getElementById('dino-score-val') && !document.getElementById('dino-game-over'));
+            console.log('PASS real collision and replay');
+        } finally { await natural.page.close(); }
+
+        const recovery = await setup(browser, base, { finish: false });
+        try {
+            await recovery.page.evaluate(() => {
+                window.cleanupDinoGame();
+                window.trackEvent = () => { throw new Error('injected startup failure'); };
+            });
+            await recovery.page.locator('#main-game-btn').click();
+            await recovery.page.waitForFunction(() => document.getElementById('game-lock-overlay').style.display === 'none');
+            assert.equal(await recovery.page.locator('#dino-score-val').count(), 0);
+            assert.equal(await recovery.page.evaluate(() => document.body.style.overflow), '');
+            await recovery.page.evaluate(() => { window.trackEvent = () => {}; });
+            await recovery.page.locator('#main-game-btn').click();
+            await recovery.page.locator('#dino-score-val').waitFor();
+            console.log('PASS startup error recovery');
+        } finally { await recovery.page.close(); }
     } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; }).finally(() => server.close());
