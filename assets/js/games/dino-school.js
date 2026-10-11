@@ -1239,14 +1239,23 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
-        const shouldRefresh = (Date.now() - lastAdTime) > 120000;
+        let gamesSinceLastAd = parseInt(sessionStorage.getItem('dinoGamesSinceLastAd') || '0') + 1;
+        sessionStorage.setItem('dinoGamesSinceLastAd', gamesSinceLastAd.toString());
 
         let playAgainBtn = document.createElement('button');
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
+
+            const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
+            const timePassed = Date.now() - lastAdTime;
+            const currentGames = parseInt(sessionStorage.getItem('dinoGamesSinceLastAd') || '0');
+
+            // Requirements: 3 minutes, at least 3 games (until disqualification), and record was not broken
+            const shouldRefresh = (timePassed >= 180000) && (currentGames >= 3) && !isNewRecord;
+
             if (shouldRefresh) {
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
+                sessionStorage.setItem('dinoGamesSinceLastAd', '0');
                 let intent = 'summer';
                 try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
 

@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261011-dino-2min-ad-1';
+const CACHE_VERSION = 'v20261011-dino-3min-3games-1';
 const CACHE_NAME = 'neto-cache-v1790694490';
 
 self.addEventListener('install', e => {
