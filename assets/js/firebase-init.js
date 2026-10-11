@@ -134,11 +134,11 @@ onAuthStateChanged(auth, async (user) => {
                 
                 // One-time sync to fix users whose scores didn't make it to the leaderboard
                 const maxScore = Math.max(serverDinoScore, localDinoScore);
-                if (!localStorage.getItem('forceSync_v1') && maxScore > 0) {
+                if (!localStorage.getItem('forceSync_v2') && maxScore > 0) {
                     if (window.saveDinoHighScore) {
-                        window.saveDinoHighScore(maxScore);
+                        window.saveDinoHighScore(maxScore, null, null, true);
                     }
-                    localStorage.setItem('forceSync_v1', 'true');
+                    localStorage.setItem('forceSync_v2', 'true');
                 }
                 if (window.location.search.includes('demo_premium=1')) {
                     if (!window.currentUserProfile) window.currentUserProfile = {};
@@ -193,6 +193,15 @@ onAuthStateChanged(auth, async (user) => {
                         const timeElapsed = localStorage.getItem('dinoTimeElapsed');
                         window.saveDinoHighScore(localDinoScore, token, timeElapsed);
                     }
+                }
+
+                // סנכרון שיא לטבלת השיאים למשתמש מקומי
+                const maxDeviceScore = Math.max(serverDinoScore, localDinoScore);
+                if (!localStorage.getItem('forceSync_local_v2') && maxDeviceScore > 0) {
+                    if (window.saveDinoHighScore) {
+                        window.saveDinoHighScore(maxDeviceScore, null, null, true);
+                    }
+                    localStorage.setItem('forceSync_local_v2', 'true');
                 }
             } else {
                 window.currentUserProfile = null;
@@ -286,7 +295,7 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
 };
 
 // פונקציה לשמירת שיא בדינוזאור
-window.saveDinoHighScore = async (score, token, timeElapsed) => {
+window.saveDinoHighScore = async (score, token, timeElapsed, force = false) => {
     const user = auth.currentUser;
     const uid = user ? user.uid : window.currentUid;
     if (!uid || !window.currentUserProfile) return false;
@@ -299,7 +308,10 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
     }
 
     let isValid = false;
-    if (score <= 3000 && !token) {
+    // Allow score if it was already verified and saved on the server profile
+    if (score <= (window.currentUserProfile.dinoHighScore || 0)) {
+        isValid = true;
+    } else if (score <= 3000 && !token) {
         // Legacy scores up to 3000 are allowed without token for smooth transition
         isValid = true;
     } else if (token && timeElapsed) {
@@ -324,8 +336,10 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
     const currentMonth = new Date().toISOString().substring(0, 7);
     const serverAllTime = window.currentUserProfile.dinoHighScore || 0;
     const serverMonthly = (window.currentUserProfile.monthlyScores && window.currentUserProfile.monthlyScores[currentMonth]) ? window.currentUserProfile.monthlyScores[currentMonth] : 0;
+    const localHighScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
+    const finalAllTime = Math.max(score, serverAllTime, localHighScore);
 
-    let updated = false;
+    let updated = force === true;
     let userMergeData = {};
     let scoreMergeData = {
         updatedAt: new Date().toISOString()
@@ -342,10 +356,18 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
         scoreMergeData.customBio = "";
     }
 
-    if (score > serverAllTime) {
-        userMergeData.dinoHighScore = score;
-        scoreMergeData.score = score;
-        window.currentUserProfile.dinoHighScore = score;
+    // שדה 'score' הוא קריטי ביותר - בלעדיו שאילתת טבלת כל הזמנים של פיירבייס מדלגת על המסמך לחלוטין!
+    if (finalAllTime > 0) {
+        scoreMergeData.score = finalAllTime;
+    }
+
+    if (score > serverAllTime || finalAllTime > serverAllTime) {
+        userMergeData.dinoHighScore = finalAllTime;
+        scoreMergeData.score = finalAllTime;
+        window.currentUserProfile.dinoHighScore = finalAllTime;
+        localStorage.setItem('dinoHighScore', finalAllTime);
+        const hsEl = document.getElementById('dino-high-score-val');
+        if (hsEl) hsEl.textContent = finalAllTime;
         updated = true;
     }
 
@@ -355,6 +377,8 @@ window.saveDinoHighScore = async (score, token, timeElapsed) => {
         userMergeData.monthlyScores = { [currentMonth]: score };
         scoreMergeData.monthlyScores = { [currentMonth]: score };
         updated = true;
+    } else if (force && serverMonthly > 0) {
+        scoreMergeData.monthlyScores = { [currentMonth]: serverMonthly };
     }
 
     if (updated) {

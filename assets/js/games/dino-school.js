@@ -185,7 +185,39 @@
 
     function isAdOnScreen() {
         try {
-            // Check for true full-screen interstitial Google Vignette iframes or containers
+            // 1. Check if an ad iframe currently has active focus (user interacting with an ad)
+            if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
+                if (!document.activeElement.closest('#dino-ad-container')) {
+                    return true;
+                }
+            }
+
+            // 2. Check for Google Vignette specific overlays / containers
+            const vignetteSelectors = [
+                '#google-vignette',
+                'div[id*="google-vignette"]',
+                '.grippy-host',
+                'div[aria-label="Advertisement"]',
+                'div[id*="aswift_"]',
+                'ins.adsbygoogle[data-ad-status="filled"]'
+            ];
+            for (const selector of vignetteSelectors) {
+                const els = document.querySelectorAll(selector);
+                for (let i = 0; i < els.length; i++) {
+                    const el = els[i];
+                    if (el.closest('#dino-ad-container')) continue;
+                    const style = window.getComputedStyle(el);
+                    if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') continue;
+                    if (style.position === 'fixed') {
+                        const rect = el.getBoundingClientRect();
+                        if (rect.width > 120 && rect.height > 120) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            // 3. Check all iframes on page (excluding our bottom dino banner)
             const iframes = document.querySelectorAll('iframe');
             for (let i = 0; i < iframes.length; i++) {
                 const frame = iframes[i];
@@ -195,23 +227,20 @@
                 if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') continue;
 
                 const rect = frame.getBoundingClientRect();
-                // A true interstitial vignette covers at least 75% of screen width and 60% of height
-                if (rect.width >= window.innerWidth * 0.75 && rect.height >= window.innerHeight * 0.6) {
+                if (rect.bottom <= 0 || rect.top >= window.innerHeight || rect.right <= 0 || rect.left >= window.innerWidth) continue;
+
+                // An interstitial ad iframe covers significant area or is fixed/centered
+                const parent = frame.parentElement;
+                const parentStyle = parent ? window.getComputedStyle(parent) : null;
+                const isFixed = style.position === 'fixed' || (parentStyle && parentStyle.position === 'fixed');
+
+                if (isFixed && rect.width > 150 && rect.height > 150) {
                     return true;
                 }
-            }
 
-            const vignetteContainers = document.querySelectorAll('ins.adsbygoogle[data-ad-status="filled"], div[aria-label="Advertisement"]');
-            for (let i = 0; i < vignetteContainers.length; i++) {
-                const el = vignetteContainers[i];
-                if (el.closest('#dino-ad-container')) continue;
-                const style = window.getComputedStyle(el);
-                if (style.display === 'none' || style.visibility === 'hidden') continue;
-                if (style.position === 'fixed') {
-                    const rect = el.getBoundingClientRect();
-                    if (rect.width >= window.innerWidth * 0.75 && rect.height >= window.innerHeight * 0.6) {
-                        return true;
-                    }
+                // If iframe is large (at least 50% width and 35% height)
+                if (rect.width >= window.innerWidth * 0.5 && rect.height >= window.innerHeight * 0.35) {
+                    return true;
                 }
             }
         } catch(e) {}
@@ -1254,8 +1283,6 @@
             const shouldRefresh = (timePassed >= 180000) && (currentGames >= 3) && !isNewRecord;
 
             if (shouldRefresh) {
-                sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
-                sessionStorage.setItem('dinoGamesSinceLastAd', '0');
                 let intent = 'summer';
                 try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
 
@@ -1269,7 +1296,7 @@
 
                 let adShown = false;
                 let checkCount = 0;
-                const maxWaitWithoutAd = 15; // 1.5 seconds fallback if no ad appears
+                const maxWaitWithoutAd = 35; // 3.5 seconds fallback to allow AdSense auction & render
                 let finished = false;
 
                 const runStart = () => {
@@ -1280,6 +1307,8 @@
                     if (window.location.hash.includes('-dinorestart')) {
                         window.history.replaceState(null, '', window.location.pathname + window.location.search);
                     }
+                    sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
+                    sessionStorage.setItem('dinoGamesSinceLastAd', '0');
                     startGame();
                 };
 
@@ -1291,7 +1320,7 @@
                         adShown = true;
                     }
 
-                    // If ad was shown and now has been closed, OR if no ad showed within 1.5s
+                    // If ad was shown and now has been closed, OR if no ad showed within 3.5s
                     if ((adShown && !adActive) || (!adShown && checkCount >= maxWaitWithoutAd)) {
                         runStart();
                     }
