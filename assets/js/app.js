@@ -1080,39 +1080,7 @@ function startCountdownFromUrl() {
     return true;
 }
 
-let dinoRestartInFlight = false;
-let dinoRestartAttempts = 0;
 
-async function resumeDinoGameAfterAd() {
-    const params = new URLSearchParams(window.location.search);
-    const restartUrl = params.get('dino') === '1';
-    if (!restartUrl || dinoRestartInFlight) return;
-
-    if (typeof window.startDinoGame !== 'function') {
-        if (++dinoRestartAttempts <= 20) setTimeout(resumeDinoGameAfterAd, 100);
-        else document.documentElement.classList.remove('dino-restarting');
-        return;
-    }
-
-    dinoRestartInFlight = true;
-    try {
-        await window.startDinoGame();
-        if (!document.getElementById('dino-score-val') || document.getElementById('dino-game-over')) return;
-        sessionStorage.removeItem('dinoRestartPending');
-        if (restartUrl) {
-            params.delete('dino');
-            const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
-            window.history.replaceState({}, '', newUrl);
-        }
-    } finally {
-        document.documentElement.classList.remove('dino-restarting');
-        dinoRestartInFlight = false;
-    }
-}
-
-window.addEventListener('pageshow', event => {
-    if (event.persisted) resumeDinoGameAfterAd();
-});
 
 function initApp(countdownTarget = 'summer', forceStart = false) {
     let choice = document.querySelector('input[name="schoolType"]:checked');
@@ -1162,16 +1130,10 @@ function initApp(countdownTarget = 'summer', forceStart = false) {
 
     showMainScreen();
     // גלילה קלה למטה כדי שיראו את ה"בחרו יעד ספירה" והבאנר לא יסתיר
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('dino') !== '1') {
-        setTimeout(() => {
-            const isAndroid = /Android/i.test(navigator.userAgent);
-            window.scrollTo({ top: isAndroid ? 15 : 50, behavior: 'smooth' });
-        }, 100);
-    }
-    if (urlParams.get('dino') === '1') {
-        resumeDinoGameAfterAd();
-    }
+    setTimeout(() => {
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        window.scrollTo({ top: isAndroid ? 15 : 50, behavior: 'smooth' });
+    }, 100);
 }
 
 function resetApp() {
@@ -2549,7 +2511,13 @@ document.addEventListener('click', function(e) {
 window.addEventListener('hashchange', function() {
     const hash = window.location.hash;
     if (hash && hash.startsWith('#go-')) {
-        if (hash.includes('-dinorestart')) return;
+        if (hash.includes('-dinorestart')) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+            if (typeof window.startDinoGame === 'function') {
+                window.startDinoGame();
+            }
+            return;
+        }
 
         const targetId = hash.substring(4);
         if (typeof selectTarget === 'function') {

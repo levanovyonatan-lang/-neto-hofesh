@@ -98,8 +98,6 @@
     const TARGET_MS_PER_FRAME = 1000 / 60; // 16.67ms — game is designed for 60fps
     const urlParams = new URLSearchParams(window.location.search);
     const demoArtEnabled = urlParams.get('show_demo') === 'true';
-    const DINO_AD_INTERVAL_MS = 180000;
-    const DINO_AD_MIN_GAMES = 3;
     const demoArtReady = demoArtEnabled ? new Promise(resolve => {
         const script = document.createElement('script');
         script.src = 'assets/js/games/dino-school-art.js?v=13';
@@ -131,9 +129,6 @@
     let frameCount = 0;
     let isGameOver = false;
     let lastFrameTime = 0; // For delta-time normalization
-    let adEligibilityTimerId = null;
-    let hideOriginalTimeoutId = null;
-    let scrollToGameTimeoutId = null;
 
     // trigger button logic removed
 
@@ -189,11 +184,6 @@
     }
 
     async function startGame() {
-        window.NetoDinoRestart?.cancel();
-        if (adEligibilityTimerId) {
-            clearTimeout(adEligibilityTimerId);
-            adEligibilityTimerId = null;
-        }
         if (!sessionStorage.getItem('dinoLastAdTime')) {
             sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
         }
@@ -264,7 +254,7 @@
             document.getElementById('dino-score-val').textContent = '0';
             isGameOver = false;
             gameSpeed = GAME_SPEED_START;
-            spawnTimer = 60;
+            spawnTimer = 120;
             frameCount = 0;
             lastFrameTime = 0;
             gameStartTime = Date.now();
@@ -306,7 +296,7 @@
         frameCount = 0;
         lastFrameTime = 0;
         gameStartTime = Date.now();
-        spawnTimer = 60; // Initial delay
+        spawnTimer = 120; // 2 seconds delay to allow AdSense to pop up before obstacles spawn
 
         if (navigator.vibrate) navigator.vibrate([30]);
 
@@ -316,14 +306,11 @@
         gameContainer = timerCard;
         
         const currentHeight = gameContainer.getBoundingClientRect().height;
-        const restartingFromUrl = new URLSearchParams(window.location.search).get('dino') === '1';
         gameContainer.dataset.hwPrevHeight = gameContainer.style.height || '';
         
-        if (!restartingFromUrl) {
-            gameContainer.style.height = currentHeight + 'px';
-            gameContainer.offsetHeight; // force reflow
-        }
-        gameContainer.style.transition = restartingFromUrl ? 'none' : 'height 0.4s ease, box-shadow 0.4s ease';
+        gameContainer.style.height = currentHeight + 'px';
+        gameContainer.offsetHeight; // force reflow
+        gameContainer.style.transition = 'height 0.4s ease, box-shadow 0.4s ease';
         gameContainer.style.height = '200px';
 
         gameContainer.style.position = 'relative';
@@ -331,14 +318,11 @@
         gameContainer.dataset.hwPrevZIndex = gameContainer.style.zIndex || '';
         gameContainer.style.zIndex = '1000';
 
-        const scrollToGame = () => window.scrollTo({
-            top: gameContainer.getBoundingClientRect().top + window.scrollY - 80,
-            behavior: restartingFromUrl ? 'auto' : 'smooth'
-        });
-        if (restartingFromUrl) scrollToGame();
-        else scrollToGameTimeoutId = setTimeout(() => {
-            scrollToGameTimeoutId = null;
-            scrollToGame();
+        setTimeout(() => {
+            window.scrollTo({
+                top: gameContainer.getBoundingClientRect().top + window.scrollY - 80,
+                behavior: 'smooth'
+            });
         }, 400);
 
         // Hide original elements
@@ -347,21 +331,16 @@
             if(el.dataset.hwPrevDisplay === undefined) {
                 el.dataset.hwPrevDisplay = el.style.display || getComputedStyle(el).display; 
             }
-            el.style.transition = restartingFromUrl ? 'none' : 'opacity 0.2s ease';
+            el.style.transition = 'opacity 0.2s ease';
             el.style.opacity = '0'; 
         });
 
-        const hideOriginalContent = () => {
+        setTimeout(() => {
             hiddenEls.forEach(el => { 
                 el.style.display = 'none'; 
                 el.style.opacity = '';
                 el.style.transition = '';
             });
-        };
-        if (restartingFromUrl) hideOriginalContent();
-        else hideOriginalTimeoutId = setTimeout(() => {
-            hideOriginalTimeoutId = null;
-            hideOriginalContent();
         }, 200);
 
         // Block pointer events on other original elements
@@ -530,13 +509,8 @@
 
         announceStage(0);
         } catch(err) {
-            console.error('Dino game failed to start:', err);
-            try { cleanupGame(); } catch (cleanupError) { console.error('Dino cleanup failed:', cleanupError); }
+            alert("Dino Error: " + err.message + "\n" + err.stack);
             isGameActive = false;
-            overlay.style.display = 'none';
-            document.body.style.overflow = '';
-            const appContainer = document.querySelector('.app-container');
-            if (appContainer) appContainer.style.zIndex = '';
         }
     }
 
@@ -1098,8 +1072,7 @@
         return msgs[stageIndex] || "נפסלת! 💥";
     }
 
-    function gameOver(killerEmoji, countAsFinishedGame = true) {
-        if (document.getElementById('dino-game-over')) return;
+    function gameOver(killerEmoji) {
         isGameOver = true;
         if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
         
@@ -1238,62 +1211,21 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        if (countAsFinishedGame) {
-            const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
-            sessionStorage.setItem('dinoGamesSinceAd', String(completed + 1));
-        }
+        const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
+        const shouldRefresh = (Date.now() - lastAdTime) > 120000;
 
-        // Replay stays in this document so the existing banner is not requested again.
-        const playAgainBtn = document.createElement('a');
-        const restartUrl = new URL(window.location.href);
-        let savedConfig = {};
-        try { savedConfig = JSON.parse(localStorage.getItem('neto_userConfig')) || {}; } catch (e) {}
-        restartUrl.searchParams.set('targetIntent', savedConfig.activeTargetId || savedConfig.targetIntent || 'summer');
-        if (savedConfig.schoolType) restartUrl.searchParams.set('schoolType', savedConfig.schoolType);
-        if (savedConfig.studyFriday !== undefined) {
-            restartUrl.searchParams.set('studyFriday', savedConfig.studyFriday ? '1' : '0');
-        }
-        restartUrl.searchParams.set('dino', '1');
-        restartUrl.hash = '';
-        playAgainBtn.tabIndex = 0;
-        playAgainBtn.setAttribute('role', 'button');
-        playAgainBtn.setAttribute('data-google-vignette', 'false');
-        const enableAdOpportunity = () => {
-            if (!window.NetoDinoRestart?.canKeepDocument) return;
-            playAgainBtn.href = restartUrl.href;
-            playAgainBtn.removeAttribute('data-google-vignette');
-        };
-        const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
-        if (!isNewRecord && completed >= DINO_AD_MIN_GAMES) {
-            const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || 0;
-            const remaining = DINO_AD_INTERVAL_MS - (Date.now() - lastAdTime);
-            if (remaining <= 0) {
-                enableAdOpportunity();
-            } else {
-                adEligibilityTimerId = setTimeout(() => {
-                    if (playAgainBtn.isConnected) enableAdOpportunity();
-                    adEligibilityTimerId = null;
-                }, remaining);
+        let playAgainBtn = document.createElement('button');
+        playAgainBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (shouldRefresh) {
+                sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
+                let intent = 'summer';
+                try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
+                
+                // Trigger AdSense Vignette via History API (SPA mode) without a page reload
+                window.history.pushState(null, '', '#go-' + intent + '-dinorestart');
             }
-        }
-        if (window.NetoDinoRestart) {
-            window.NetoDinoRestart.bind(playAgainBtn, {
-                restart: startGame,
-                onAdShown() {
-                    sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
-                    sessionStorage.setItem('dinoGamesSinceAd', '0');
-                }
-            });
-        } else {
-            playAgainBtn.onclick = e => {
-                e.preventDefault(); startGame();
-            };
-        }
-        playAgainBtn.onkeydown = (e) => {
-            if (e.key === ' ' || (e.key === 'Enter' && !playAgainBtn.hasAttribute('href'))) {
-                e.preventDefault();
-                playAgainBtn.click();
-            }
+            startGame();
         };
 
         playAgainBtn.textContent = 'שחק מחדש 🔄';
@@ -1306,7 +1238,6 @@
         playAgainBtn.style.cursor = 'pointer';
         playAgainBtn.style.fontSize = '14px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
-        playAgainBtn.style.textDecoration = 'none';
 
         const leaderboardBtn = document.createElement('button');
         leaderboardBtn.textContent = 'צפה בטבלת השיאים 🏆';
@@ -1364,16 +1295,7 @@
 
 
     function cleanupGame() {
-        window.NetoDinoRestart?.cancel();
-        if (hideOriginalTimeoutId) clearTimeout(hideOriginalTimeoutId);
-        hideOriginalTimeoutId = null;
-        if (scrollToGameTimeoutId) clearTimeout(scrollToGameTimeoutId);
-        scrollToGameTimeoutId = null;
         if (!isGameActive || !gameContainer) return;
-        if (adEligibilityTimerId) {
-            clearTimeout(adEligibilityTimerId);
-            adEligibilityTimerId = null;
-        }
         isGameActive = false;
         const adContainer = document.getElementById('dino-ad-container');
         if (adContainer) adContainer.remove();
@@ -1607,7 +1529,9 @@
         }
         
         // Show game over UI directly
-        gameOver(killerEmoji || '💥', false);
+        gameOver(killerEmoji || '💥');
     };
+
+    // Listen for SPA hash changes is no longer needed since we do hard reloads.
 
 })();
