@@ -1405,7 +1405,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=10160';
+        script.src = 'assets/js/games/dino-school.js?v=dino-ad-live-1';
         document.body.appendChild(script);
     }
 

@@ -1219,81 +1219,65 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        if (demoArtEnabled && countAsFinishedGame) {
+        if (countAsFinishedGame) {
             const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
             sessionStorage.setItem('dinoGamesSinceAd', String(completed + 1));
         }
 
         // AdSense vignettes are considered on real link navigation, not pushState.
-        // Keep this behavior on the demo until it is approved for the main site.
-        let playAgainBtn = document.createElement(demoArtEnabled ? 'a' : 'button');
-        if (demoArtEnabled) {
-            const restartUrl = new URL(window.location.href);
-            let savedConfig = {};
-            try { savedConfig = JSON.parse(localStorage.getItem('neto_userConfig')) || {}; } catch (e) {}
-            restartUrl.searchParams.set('targetIntent', savedConfig.activeTargetId || savedConfig.targetIntent || 'summer');
-            if (savedConfig.schoolType) restartUrl.searchParams.set('schoolType', savedConfig.schoolType);
-            if (savedConfig.studyFriday !== undefined) {
-                restartUrl.searchParams.set('studyFriday', savedConfig.studyFriday ? '1' : '0');
-            }
-            restartUrl.searchParams.set('dino', '1');
-            restartUrl.hash = '';
-            playAgainBtn.tabIndex = 0;
-            playAgainBtn.setAttribute('role', 'button');
-            const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
-            if (!isNewRecord && completed >= DINO_AD_MIN_GAMES) {
-                const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || 0;
-                const remaining = DINO_AD_INTERVAL_MS - (Date.now() - lastAdTime);
-                if (remaining <= 0) {
-                    playAgainBtn.href = restartUrl.href;
-                    playAgainBtn.removeAttribute('role');
-                } else {
-                    adEligibilityTimerId = setTimeout(() => {
-                        if (playAgainBtn.isConnected) {
-                            playAgainBtn.href = restartUrl.href;
-                            playAgainBtn.removeAttribute('role');
-                        }
-                        adEligibilityTimerId = null;
-                    }, remaining);
-                }
-            }
-            playAgainBtn.onclick = (e) => {
-                const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || 0;
-                const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
-                const eligible = Date.now() - lastAdTime >= DINO_AD_INTERVAL_MS &&
-                    completed >= DINO_AD_MIN_GAMES && !isNewRecord && playAgainBtn.hasAttribute('href');
-
-                if (!eligible) {
-                    e.preventDefault();
-                    startGame();
-                    return;
-                }
-
-                playAgainBtn.style.pointerEvents = 'none';
-                sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
-                sessionStorage.setItem('dinoGamesSinceAd', '0');
-                // Let the anchor's native navigation run so AdSense can show a vignette.
-            };
-            playAgainBtn.onkeydown = (e) => {
-                if (!playAgainBtn.hasAttribute('href') && (e.key === 'Enter' || e.key === ' ')) {
-                    e.preventDefault();
-                    playAgainBtn.click();
-                }
-            };
-        } else {
-            const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
-            const shouldRefresh = (Date.now() - lastAdTime) > 120000;
-            playAgainBtn.onclick = (e) => {
-                e.stopPropagation();
-                if (shouldRefresh) {
-                    sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
-                    let intent = 'summer';
-                    try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
-                    window.history.pushState(null, '', '#go-' + intent + '-dinorestart');
-                }
-                startGame();
-            };
+        const playAgainBtn = document.createElement('a');
+        const restartUrl = new URL(window.location.href);
+        let savedConfig = {};
+        try { savedConfig = JSON.parse(localStorage.getItem('neto_userConfig')) || {}; } catch (e) {}
+        restartUrl.searchParams.set('targetIntent', savedConfig.activeTargetId || savedConfig.targetIntent || 'summer');
+        if (savedConfig.schoolType) restartUrl.searchParams.set('schoolType', savedConfig.schoolType);
+        if (savedConfig.studyFriday !== undefined) {
+            restartUrl.searchParams.set('studyFriday', savedConfig.studyFriday ? '1' : '0');
         }
+        restartUrl.searchParams.set('dino', '1');
+        restartUrl.hash = '';
+        playAgainBtn.tabIndex = 0;
+        playAgainBtn.setAttribute('role', 'button');
+        const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
+        if (!isNewRecord && completed >= DINO_AD_MIN_GAMES) {
+            const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || 0;
+            const remaining = DINO_AD_INTERVAL_MS - (Date.now() - lastAdTime);
+            if (remaining <= 0) {
+                playAgainBtn.href = restartUrl.href;
+                playAgainBtn.removeAttribute('role');
+            } else {
+                adEligibilityTimerId = setTimeout(() => {
+                    if (playAgainBtn.isConnected) {
+                        playAgainBtn.href = restartUrl.href;
+                        playAgainBtn.removeAttribute('role');
+                    }
+                    adEligibilityTimerId = null;
+                }, remaining);
+            }
+        }
+        playAgainBtn.onclick = (e) => {
+            const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || 0;
+            const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
+            const eligible = Date.now() - lastAdTime >= DINO_AD_INTERVAL_MS &&
+                completed >= DINO_AD_MIN_GAMES && !isNewRecord && playAgainBtn.hasAttribute('href');
+
+            if (!eligible) {
+                e.preventDefault();
+                startGame();
+                return;
+            }
+
+            playAgainBtn.style.pointerEvents = 'none';
+            sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
+            sessionStorage.setItem('dinoGamesSinceAd', '0');
+            // Let the anchor's native navigation run so AdSense can show a vignette.
+        };
+        playAgainBtn.onkeydown = (e) => {
+            if (!playAgainBtn.hasAttribute('href') && (e.key === 'Enter' || e.key === ' ')) {
+                e.preventDefault();
+                playAgainBtn.click();
+            }
+        };
 
         playAgainBtn.textContent = 'שחק מחדש 🔄';
         playAgainBtn.style.padding = '6px 14px';
@@ -1305,7 +1289,7 @@
         playAgainBtn.style.cursor = 'pointer';
         playAgainBtn.style.fontSize = '14px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
-        if (demoArtEnabled) playAgainBtn.style.textDecoration = 'none';
+        playAgainBtn.style.textDecoration = 'none';
 
         const leaderboardBtn = document.createElement('button');
         leaderboardBtn.textContent = 'צפה בטבלת השיאים 🏆';
