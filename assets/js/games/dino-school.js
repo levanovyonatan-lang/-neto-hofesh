@@ -183,42 +183,6 @@
         }, 4500);
     }
 
-    function isAdOnScreen() {
-        try {
-            if (document.hidden) return true;
-
-            const iframes = document.querySelectorAll('iframe');
-            for (let i = 0; i < iframes.length; i++) {
-                const frame = iframes[i];
-                if (frame.closest('#dino-ad-container')) continue;
-                
-                const style = window.getComputedStyle(frame);
-                if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') continue;
-
-                const rect = frame.getBoundingClientRect();
-                if ((rect.width >= window.innerWidth * 0.5 && rect.height >= window.innerHeight * 0.4) ||
-                    (style.position === 'fixed' && rect.height > 150)) {
-                    return true;
-                }
-            }
-
-            const vignetteContainers = document.querySelectorAll('ins.adsbygoogle, div[id*="google_ads"], div[class*="google_ads"], div[aria-label="Advertisement"]');
-            for (let i = 0; i < vignetteContainers.length; i++) {
-                const el = vignetteContainers[i];
-                if (el.closest('#dino-ad-container')) continue;
-                const style = window.getComputedStyle(el);
-                if (style.display === 'none' || style.visibility === 'hidden') continue;
-                if (style.position === 'fixed' && (parseInt(style.zIndex || '0', 10) >= 100 || el.getAttribute('data-ad-status') === 'filled')) {
-                    const rect = el.getBoundingClientRect();
-                    if (rect.width >= window.innerWidth * 0.5 && rect.height >= window.innerHeight * 0.4) {
-                        return true;
-                    }
-                }
-            }
-        } catch(e) {}
-        return false;
-    }
-
     async function startGame() {
         if (!sessionStorage.getItem('dinoLastAdTime')) {
             sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
@@ -243,6 +207,7 @@
         document.body.style.overflow = 'hidden';
 
         try {
+        document.documentElement.classList.remove('dino-restarting');
         const existingAd = document.getElementById('dino-ad-container');
         if (existingAd) existingAd.remove();
         
@@ -520,7 +485,6 @@
         gameLoopId = requestAnimationFrame(gameLoop);
 
         announceStage(0);
-        document.documentElement.classList.remove('dino-restarting');
         } catch(err) {
             alert("Dino Error: " + err.message + "\n" + err.stack);
             isGameActive = false;
@@ -653,10 +617,15 @@
         if (!isGameActive) return;
 
         // Auto-pause if a Google Vignette Ad is covering the screen
-        if (isAdOnScreen()) {
+        let adVisible = false;
+        const iframes = document.querySelectorAll('iframe');
+        for (let i = 0; i < iframes.length; i++) {
+            if (iframes[i].offsetHeight > window.innerHeight * 0.7 && getComputedStyle(iframes[i]).display !== 'none' && getComputedStyle(iframes[i]).visibility !== 'hidden') {
+                adVisible = true; break;
+            }
+        }
+        if (adVisible) {
             lastFrameTime = timestamp;
-            // While ad is showing, keep spawnTimer at 90 so player gets reaction buffer right after ad dismissal
-            if (spawnTimer < 90) spawnTimer = 90;
             gameLoopId = requestAnimationFrame(gameLoop);
             return;
         }
@@ -1516,15 +1485,6 @@
         gameOver(killerEmoji || '💥');
     };
 
-    window.addEventListener('focus', () => {
-        if (isGameActive) {
-            lastFrameTime = performance.now();
-        }
-    });
-    document.addEventListener('visibilitychange', () => {
-        if (isGameActive && !document.hidden) {
-            lastFrameTime = performance.now();
-        }
-    });
+    // Listen for SPA hash changes is no longer needed since we do hard reloads.
 
 })();
