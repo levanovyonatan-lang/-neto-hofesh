@@ -475,6 +475,8 @@
             closeBtn.onkeydown = e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); cleanupGame(); }
             };
+        }
+
         window.addEventListener('keydown', handleInput);
         window.addEventListener('touchstart', handleInput, {passive: false});
         window.addEventListener('mousedown', handleInput);
