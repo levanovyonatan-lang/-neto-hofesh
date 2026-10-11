@@ -209,6 +209,7 @@
         try {
         document.documentElement.classList.remove('dino-restarting');
         const existingAd = document.getElementById('dino-ad-container');
+        if (existingAd) existingAd.remove();
         
         if (window.netoAdCheckInterval) clearInterval(window.netoAdCheckInterval);
         if (window.netoInitAdCheckInterval) clearInterval(window.netoInitAdCheckInterval);
@@ -474,33 +475,6 @@
             closeBtn.onkeydown = e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); cleanupGame(); }
             };
-        }
-        
-        let adContainer = document.getElementById('dino-ad-container');
-        if (!adContainer) {
-            adContainer = document.createElement('div');
-            adContainer.id = 'dino-ad-container';
-            adContainer.className = 'dino-element';
-            adContainer.style.position = 'fixed';
-            adContainer.style.bottom = '20px';
-            adContainer.style.left = '50%';
-            adContainer.style.transform = 'translateX(-50%)';
-            adContainer.style.width = '100%';
-            adContainer.style.maxWidth = '480px';
-            adContainer.style.height = '60px';
-            adContainer.style.textAlign = 'center';
-            adContainer.style.zIndex = '1005';
-            adContainer.style.pointerEvents = 'auto'; // ensure it's clickable
-            adContainer.innerHTML = `
-                <ins class="adsbygoogle"
-                     style="display:block;width:100%;height:60px"
-                     data-ad-client="ca-pub-3389455724624040"
-                     data-ad-slot="6383804812"></ins>
-            `;
-            document.body.appendChild(adContainer);
-            window.dinoAdLastLoadTime = Date.now();
-            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-        }
         window.addEventListener('keydown', handleInput);
         window.addEventListener('touchstart', handleInput, {passive: false});
         window.addEventListener('mousedown', handleInput);
@@ -516,10 +490,6 @@
     }
 
     function handleInput(e) {
-        if (e.target && e.target.closest && e.target.closest('#dino-ad-container')) {
-            return;
-        }
-
         if (e.type === 'mousedown' || e.type === 'touchstart') {
             const clientY = e.type === 'touchstart' ? (e.touches[0] ? e.touches[0].clientY : e.changedTouches[0].clientY) : e.clientY;
             if (gameContainer) {
@@ -1262,32 +1232,6 @@
         }
         btnContainer.appendChild(leaderboardBtn);
         title.appendChild(btnContainer);
-        
-        let adContainer = document.getElementById('dino-ad-container');
-        if (!adContainer) {
-            adContainer = document.createElement('div');
-            adContainer.id = 'dino-ad-container';
-            adContainer.className = 'dino-element';
-            adContainer.style.position = 'fixed';
-            adContainer.style.bottom = '20px';
-            adContainer.style.left = '50%';
-            adContainer.style.transform = 'translateX(-50%)';
-            adContainer.style.width = '100%';
-            adContainer.style.maxWidth = '480px';
-            adContainer.style.height = '60px';
-            adContainer.style.textAlign = 'center';
-            adContainer.style.zIndex = '1005';
-            adContainer.style.pointerEvents = 'auto';
-            adContainer.innerHTML = `
-                <ins class="adsbygoogle"
-                     style="display:block;width:100%;height:60px"
-                     data-ad-client="ca-pub-3389455724624040"
-                     data-ad-slot="6383804812"></ins>
-            `;
-            document.body.appendChild(adContainer);
-            window.dinoAdLastLoadTime = Date.now();
-            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-        }
     }
 
 
@@ -1500,32 +1444,6 @@
         dino.style.transform = `translateY(0px) rotate(-90deg)`;
         
         document.getElementById('dino-score-val').textContent = score;
-        
-        let adContainer = document.getElementById('dino-ad-container');
-        if (!adContainer) {
-            adContainer = document.createElement('div');
-            adContainer.id = 'dino-ad-container';
-            adContainer.className = 'dino-element';
-            adContainer.style.position = 'fixed';
-            adContainer.style.bottom = '20px';
-            adContainer.style.left = '50%';
-            adContainer.style.transform = 'translateX(-50%)';
-            adContainer.style.width = '100%';
-            adContainer.style.maxWidth = '480px';
-            adContainer.style.height = '60px';
-            adContainer.style.textAlign = 'center';
-            adContainer.style.zIndex = '1005';
-            adContainer.style.pointerEvents = 'auto';
-            adContainer.innerHTML = `
-                <ins class="adsbygoogle"
-                     style="display:block;width:100%;height:60px"
-                     data-ad-client="ca-pub-3389455724624040"
-                     data-ad-slot="6383804812"></ins>
-            `;
-            document.body.appendChild(adContainer);
-            window.dinoAdLastLoadTime = Date.now();
-            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-        }
         
         // Show game over UI directly
         gameOver(killerEmoji || '💥');
