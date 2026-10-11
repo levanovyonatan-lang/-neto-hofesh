@@ -185,14 +185,7 @@
 
     function isAdOnScreen() {
         try {
-            // 1. Check for active focus inside an ad iframe
-            if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
-                if (!document.activeElement.closest('#dino-ad-container')) {
-                    return true;
-                }
-            }
-
-            // 2. Check all iframes on page (excluding our bottom dino banner)
+            // Check for true full-screen interstitial Google Vignette iframes or containers
             const iframes = document.querySelectorAll('iframe');
             for (let i = 0; i < iframes.length; i++) {
                 const frame = iframes[i];
@@ -202,25 +195,21 @@
                 if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') continue;
 
                 const rect = frame.getBoundingClientRect();
-                if (rect.width > 150 && rect.height > 150 && rect.bottom > 0 && rect.top < window.innerHeight) {
-                    const parent = frame.parentElement;
-                    const parentStyle = parent ? window.getComputedStyle(parent) : null;
-                    if (style.position === 'fixed' || (parentStyle && parentStyle.position === 'fixed') || rect.height > window.innerHeight * 0.35 || rect.width > window.innerWidth * 0.5) {
-                        return true;
-                    }
+                // A true interstitial vignette covers at least 75% of screen width and 60% of height
+                if (rect.width >= window.innerWidth * 0.75 && rect.height >= window.innerHeight * 0.6) {
+                    return true;
                 }
             }
 
-            // 3. Check for Google Vignette specific containers/elements
-            const vignetteContainers = document.querySelectorAll('ins.adsbygoogle, div[id*="google_ads"], div[class*="google_ads"], div[aria-label="Advertisement"]');
+            const vignetteContainers = document.querySelectorAll('ins.adsbygoogle[data-ad-status="filled"], div[aria-label="Advertisement"]');
             for (let i = 0; i < vignetteContainers.length; i++) {
                 const el = vignetteContainers[i];
                 if (el.closest('#dino-ad-container')) continue;
                 const style = window.getComputedStyle(el);
                 if (style.display === 'none' || style.visibility === 'hidden') continue;
-                if (style.position === 'fixed' && (parseInt(style.zIndex || '0') >= 1000 || el.getAttribute('data-ad-status') === 'filled')) {
+                if (style.position === 'fixed') {
                     const rect = el.getBoundingClientRect();
-                    if (rect.width > 180 && rect.height > 180) {
+                    if (rect.width >= window.innerWidth * 0.75 && rect.height >= window.innerHeight * 0.6) {
                         return true;
                     }
                 }
@@ -689,8 +678,8 @@
     function gameLoop(timestamp) {
         if (!isGameActive) return;
 
-        // Auto-pause if a Google Vignette Ad is covering the screen
-        if (isAdOnScreen()) {
+        // Auto-pause if a Google Vignette Ad is covering the screen or tab is hidden
+        if (isAdOnScreen() || document.hidden) {
             lastFrameTime = timestamp;
             gameLoopId = requestAnimationFrame(gameLoop);
             return;
@@ -1250,20 +1239,14 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        let gamesSinceLastAd = parseInt(sessionStorage.getItem('dinoGamesSinceLastAd') || '0') + 1;
-        sessionStorage.setItem('dinoGamesSinceLastAd', gamesSinceLastAd.toString());
-
         const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
-        const timePassed = (Date.now() - lastAdTime);
-        // Ideal timing: at least 160 seconds (~2.7 minutes), at least 3 games played, and not right after breaking a personal record!
-        const shouldRefresh = (timePassed > 160000) && (gamesSinceLastAd >= 3) && !isNewRecord;
+        const shouldRefresh = (Date.now() - lastAdTime) > 120000;
 
         let playAgainBtn = document.createElement('button');
         playAgainBtn.onclick = (e) => {
             e.stopPropagation();
             if (shouldRefresh) {
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
-                sessionStorage.setItem('dinoGamesSinceLastAd', '0');
                 let intent = 'summer';
                 try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
 
@@ -1273,7 +1256,7 @@
                 playAgainBtn.style.cursor = 'wait';
 
                 // Trigger AdSense Vignette via History API (SPA mode) without a page reload
-                window.history.pushState(null, '', '#go-' + intent + '-dinorestart');
+                window.history.pushState(null, '', '#go-' + intent + '-dinorestart-' + Date.now());
 
                 let adShown = false;
                 let checkCount = 0;
@@ -1463,6 +1446,12 @@
 
     window.startDinoGame = startGame;
     window.cleanupDinoGame = cleanupGame;
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            lastFrameTime = performance.now();
+        }
+    });
     
     window.showDinoGameOver = function(savedScore, savedStage, killerEmoji) {
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');
