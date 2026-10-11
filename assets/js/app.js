@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=10160').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=20261011-dino-vignette-real-nav-1').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -1381,10 +1381,33 @@ function showMainScreen() {
     const urlParams = new URLSearchParams(window.location.search);
     const isDemo = urlParams.get('show_demo') === 'true' || isExperimentalSite;
 
+    if (urlParams.get('dino') === '1') {
+        urlParams.delete('dino');
+        const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
+        window.history.replaceState({}, '', newUrl);
+        
+        setTimeout(() => {
+            document.documentElement.classList.remove('dino-restarting');
+            if (typeof window.startDinoGame === 'function') {
+                window.startDinoGame();
+            } else {
+                let attempts = 0;
+                const tryStart = setInterval(() => {
+                    if (typeof window.startDinoGame === 'function') {
+                        clearInterval(tryStart);
+                        window.startDinoGame();
+                    } else if (attempts++ > 30) {
+                        clearInterval(tryStart);
+                    }
+                }, 100);
+            }
+        }, 300);
+    }
+
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=dino-startup-fix-1';
+        script.src = 'assets/js/games/dino-school.js?v=20261011-dino-vignette-real-nav-1';
         document.body.appendChild(script);
     }
 

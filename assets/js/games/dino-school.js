@@ -207,6 +207,7 @@
         document.body.style.overflow = 'hidden';
 
         try {
+        document.documentElement.classList.remove('dino-restarting');
         const existingAd = document.getElementById('dino-ad-container');
         
         if (window.netoAdCheckInterval) clearInterval(window.netoAdCheckInterval);
@@ -1214,18 +1215,48 @@
         const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
         const shouldRefresh = (Date.now() - lastAdTime) > 120000;
 
-        let playAgainBtn = document.createElement('button');
-        playAgainBtn.onclick = (e) => {
-            e.stopPropagation();
-            if (shouldRefresh) {
+        let playAgainBtn;
+        if (shouldRefresh) {
+            playAgainBtn = document.createElement('a');
+            let intent = 'summer';
+            let school = '';
+            let friday = '';
+            try {
+                const saved = JSON.parse(localStorage.getItem('neto_userConfig')) || {};
+                intent = saved.targetIntent || saved.activeTargetId || window.userConfig?.targetIntent || window.userConfig?.activeTargetId || 'summer';
+                if (saved.schoolType || window.userConfig?.schoolType) {
+                    school = saved.schoolType || window.userConfig.schoolType;
+                }
+                if (saved.studyFriday !== undefined || window.userConfig?.studyFriday !== undefined) {
+                    friday = (saved.studyFriday ?? window.userConfig.studyFriday) ? '1' : '0';
+                }
+            } catch(e) {}
+
+            let navUrl = `?started=true&dino=1&targetIntent=${encodeURIComponent(intent)}`;
+            if (school) navUrl += `&schoolType=${encodeURIComponent(school)}`;
+            if (friday) navUrl += `&studyFriday=${encodeURIComponent(friday)}`;
+            navUrl += `#go-${encodeURIComponent(intent)}`;
+
+            playAgainBtn.href = navUrl;
+            playAgainBtn.style.textDecoration = 'none';
+            playAgainBtn.style.display = 'inline-block';
+            playAgainBtn.onclick = () => {
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
-                let intent = 'summer';
-                try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
-                
-                // Trigger AdSense Vignette via History API (SPA mode) without a page reload
-                window.history.pushState(null, '', '#go-' + intent + '-dinorestart');
+            };
+        } else {
+            playAgainBtn = document.createElement('button');
+            playAgainBtn.onclick = (e) => {
+                e.stopPropagation();
+                startGame();
+            };
+        }
+
+        playAgainBtn.tabIndex = 0;
+        playAgainBtn.onkeydown = (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                playAgainBtn.click();
             }
-            startGame();
         };
 
         playAgainBtn.textContent = 'שחק מחדש 🔄';
@@ -1325,6 +1356,7 @@
 
         const overlay = document.getElementById('game-lock-overlay');
         if (overlay) overlay.style.display = 'none';
+        document.documentElement.classList.remove('dino-restarting');
 
         const appContainer = document.querySelector('.app-container');
         if (appContainer) appContainer.style.zIndex = '';
