@@ -28,6 +28,9 @@
     <script>
         if (window.location.search.includes('dino=1')) {
             document.documentElement.classList.add('dino-restarting');
+            if (new URLSearchParams(window.location.search).get('show_demo') === 'true') {
+                document.documentElement.classList.add('dino-demo-restarting');
+            }
         }
     </script>
 
@@ -101,7 +104,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="../assets/css/styles.css?v=countdown-navigation-1">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=dino-restart-demo-3">
     <style>
         /* סגנונות לבאנר הדגמה */
         .sticky-banner-container {
@@ -560,9 +563,9 @@
                 <!-- קישורים משפטיים ונגישות - מיושרים לימין אחד מתחת לשני -->
                 <div
                     style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 20px; font-size: calc(12px * var(--text-scale, 1)); font-weight: 700;">
-                    <a href="/terms.html"
+                    <a href="/terms.html" data-google-vignette="false"
                         style="color: #64748b; text-decoration: underline;">תנאי שימוש</a>
-                    <a href="/terms.html#privacy"
+                    <a href="/terms.html#privacy" data-google-vignette="false"
                         style="color: #64748b; text-decoration: underline;">מדיניות פרטיות</a>
                     <a href="javascript:void(0)" onclick="openLegalModal('accessibility')"
                         style="color: #64748b; text-decoration: underline;" data-google-vignette="false">הצהרת נגישות</a>
@@ -814,8 +817,8 @@
     <script src="tips.js?v=tips-file-v3" defer></script>
     <script src="../assets/js/premium-cinematic-themes.js?v=9083" defer></script>
     <script src="../assets/js/modules/holidays.js?v=9083" defer></script>
-    <script src="../assets/js/app.js?v=countdown-navigation-1" defer></script>
-    <script src="../assets/js/games/dino-school.js?v=dino-ad-live-1" defer></script>
+    <script src="../assets/js/app.js?v=dino-restart-demo-3" defer></script>
+    <script src="../assets/js/games/dino-school.js?v=dino-restart-demo-2" defer></script>
     <script src="../assets/js/games/emoji-rain.js?v=9083" defer></script>
 
     <script type="module" src="../assets/js/firebase-init.js?v=9060" defer></script>
@@ -994,10 +997,10 @@
 
     <!-- Footer Links (moved outside main card) -->
     <nav aria-label="קישורים" style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;padding:40px 20px;font-size:14px;background:var(--bg-color);">
-        <a href="/terms.html" style="color: #64748b; text-decoration: none;">תנאי שימוש</a>
-        <a href="/privacy.html" style="color: #64748b; text-decoration: none;">מדיניות פרטיות</a>
-        <a href="/contact.html" style="color: #64748b; text-decoration: none;">צור קשר</a>
-        <a href="/about.html" style="color: #64748b; text-decoration: none;">אודות</a>
+        <a href="/terms.html" data-google-vignette="false" style="color: #64748b; text-decoration: none;">תנאי שימוש</a>
+        <a href="/privacy.html" data-google-vignette="false" style="color: #64748b; text-decoration: none;">מדיניות פרטיות</a>
+        <a href="/contact.html" data-google-vignette="false" style="color: #64748b; text-decoration: none;">צור קשר</a>
+        <a href="/about.html" data-google-vignette="false" style="color: #64748b; text-decoration: none;">אודות</a>
     </nav>
 
 <script>

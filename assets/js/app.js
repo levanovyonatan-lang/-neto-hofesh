@@ -2350,6 +2350,12 @@ document.addEventListener('DOMContentLoaded', () => {
             sessionStorage.setItem('demo_premium', '1');
         }
 
+        try {
+            document.querySelectorAll('a[href*="terms"], a[href*="privacy"], a[href*="about"], a[href*="contact"]').forEach(a => {
+                a.setAttribute('data-google-vignette', 'false');
+            });
+        } catch (e) { }
+
         const stored = localStorage.getItem('neto_userConfig');
         if (stored) {
             const config = JSON.parse(stored);

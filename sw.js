@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261011-dino-restart-demo-2';
-const CACHE_NAME = 'neto-cache-v1790694491';
+const CACHE_VERSION = 'v20261011-disable-legal-vignettes-1';
+const CACHE_NAME = 'neto-cache-v1790694492';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
