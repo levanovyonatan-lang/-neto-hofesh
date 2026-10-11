@@ -13,6 +13,35 @@ html.dino-restarting #neto-splash,
 html.dino-restarting #setup-screen { display: none !important; }
 html.dino-restarting body.splash-active .app-container { visibility: visible !important; }
 
+/* Seamless Dino Restart: Hide non-game elements immediately to prevent visual flash */
+html.dino-restarting .holiday-selector-container,
+html.dino-restarting .silo-hub-wrapper,
+html.dino-restarting footer,
+html.dino-restarting .site-header,
+html.dino-restarting #private-timers-container,
+html.dino-restarting .tip-box,
+html.dino-restarting .vacation-length-box,
+html.dino-restarting [id*="tip"],
+html.dino-restarting .ai-tools,
+html.dino-restarting .ai-btn,
+html.dino-restarting .ai-sponsor,
+html.dino-restarting .net-days,
+html.dino-restarting .absolute-timer,
+html.dino-restarting #excluding-label,
+html.dino-restarting #vacation-message,
+html.dino-restarting #main-target-title,
+html.dino-restarting .net-days-container,
+html.dino-restarting #total-days-label {
+    display: none !important;
+}
+
+html.dino-restarting #main-timer-bg {
+    height: 200px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
 * { 
     box-sizing: border-box; 
     margin: 0; 

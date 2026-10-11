@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=20261012-dino-interstitial-2min-1').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=20261012-dino-smooth-resume-1').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -1386,8 +1386,7 @@ function showMainScreen() {
         const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
         window.history.replaceState({}, '', newUrl);
         
-        setTimeout(() => {
-            document.documentElement.classList.remove('dino-restarting');
+        const launchDino = () => {
             if (typeof window.startDinoGame === 'function') {
                 window.startDinoGame();
             } else {
@@ -1396,18 +1395,19 @@ function showMainScreen() {
                     if (typeof window.startDinoGame === 'function') {
                         clearInterval(tryStart);
                         window.startDinoGame();
-                    } else if (attempts++ > 30) {
+                    } else if (attempts++ > 40) {
                         clearInterval(tryStart);
                     }
-                }, 100);
+                }, 50);
             }
-        }, 300);
+        };
+        launchDino();
     }
 
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=20261012-dino-interstitial-2min-1';
+        script.src = 'assets/js/games/dino-school.js?v=20261012-dino-smooth-resume-1';
         document.body.appendChild(script);
     }
 
