@@ -183,41 +183,6 @@
         }, 4500);
     }
 
-    function isAdOnScreen() {
-        try {
-            // Check for true full-screen interstitial Google Vignette iframes or containers
-            const iframes = document.querySelectorAll('iframe');
-            for (let i = 0; i < iframes.length; i++) {
-                const frame = iframes[i];
-                if (frame.closest('#dino-ad-container')) continue;
-                
-                const style = window.getComputedStyle(frame);
-                if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') continue;
-
-                const rect = frame.getBoundingClientRect();
-                // A true interstitial vignette covers at least 75% of screen width and 60% of height
-                if (rect.width >= window.innerWidth * 0.75 && rect.height >= window.innerHeight * 0.6) {
-                    return true;
-                }
-            }
-
-            const vignetteContainers = document.querySelectorAll('ins.adsbygoogle[data-ad-status="filled"], div[aria-label="Advertisement"]');
-            for (let i = 0; i < vignetteContainers.length; i++) {
-                const el = vignetteContainers[i];
-                if (el.closest('#dino-ad-container')) continue;
-                const style = window.getComputedStyle(el);
-                if (style.display === 'none' || style.visibility === 'hidden') continue;
-                if (style.position === 'fixed') {
-                    const rect = el.getBoundingClientRect();
-                    if (rect.width >= window.innerWidth * 0.75 && rect.height >= window.innerHeight * 0.6) {
-                        return true;
-                    }
-                }
-            }
-        } catch(e) {}
-        return false;
-    }
-
     async function startGame() {
         if (!sessionStorage.getItem('dinoLastAdTime')) {
             sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
@@ -289,7 +254,7 @@
             document.getElementById('dino-score-val').textContent = '0';
             isGameOver = false;
             gameSpeed = GAME_SPEED_START;
-            spawnTimer = 120;
+            spawnTimer = 60;
             frameCount = 0;
             lastFrameTime = 0;
             gameStartTime = Date.now();
@@ -331,7 +296,7 @@
         frameCount = 0;
         lastFrameTime = 0;
         gameStartTime = Date.now();
-        spawnTimer = 120; // 2 seconds delay to allow AdSense to pop up before obstacles spawn
+        spawnTimer = 60; // Initial delay
 
         if (navigator.vibrate) navigator.vibrate([30]);
 
@@ -678,8 +643,15 @@
     function gameLoop(timestamp) {
         if (!isGameActive) return;
 
-        // Auto-pause if a Google Vignette Ad is covering the screen or tab is hidden
-        if (isAdOnScreen() || document.hidden) {
+        // Auto-pause if a Google Vignette Ad is covering the screen
+        let adVisible = false;
+        const iframes = document.querySelectorAll('iframe');
+        for (let i = 0; i < iframes.length; i++) {
+            if (iframes[i].offsetHeight > window.innerHeight * 0.7 && getComputedStyle(iframes[i]).display !== 'none' && getComputedStyle(iframes[i]).visibility !== 'hidden') {
+                adVisible = true; break;
+            }
+        }
+        if (adVisible) {
             lastFrameTime = timestamp;
             gameLoopId = requestAnimationFrame(gameLoop);
             return;
@@ -1249,54 +1221,9 @@
                 sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
                 let intent = 'summer';
                 try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
-
-                playAgainBtn.textContent = 'טוען... ⏳';
-                playAgainBtn.disabled = true;
-                playAgainBtn.style.opacity = '0.7';
-                playAgainBtn.style.cursor = 'wait';
-
+                
                 // Trigger AdSense Vignette via History API (SPA mode) without a page reload
-                window.history.pushState(null, '', '#go-' + intent + '-dinorestart-' + Date.now());
-
-                let adShown = false;
-                let checkCount = 0;
-                const maxWaitWithoutAd = 15; // 1.5 seconds fallback if no ad appears
-                let finished = false;
-
-                const runStart = () => {
-                    if (finished) return;
-                    finished = true;
-                    clearInterval(adCheckTimer);
-                    window.removeEventListener('focus', onFocusAfterAd);
-                    if (window.location.hash.includes('-dinorestart')) {
-                        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-                    }
-                    startGame();
-                };
-
-                const adCheckTimer = setInterval(() => {
-                    checkCount++;
-                    const adActive = isAdOnScreen();
-
-                    if (adActive) {
-                        adShown = true;
-                    }
-
-                    // If ad was shown and now has been closed, OR if no ad showed within 1.5s
-                    if ((adShown && !adActive) || (!adShown && checkCount >= maxWaitWithoutAd)) {
-                        runStart();
-                    }
-                }, 100);
-
-                const onFocusAfterAd = () => {
-                    setTimeout(() => {
-                        if (adShown && !isAdOnScreen()) {
-                            runStart();
-                        }
-                    }, 250);
-                };
-                window.addEventListener('focus', onFocusAfterAd);
-                return;
+                window.history.pushState(null, '', '#go-' + intent + '-dinorestart');
             }
             startGame();
         };
@@ -1446,12 +1373,6 @@
 
     window.startDinoGame = startGame;
     window.cleanupDinoGame = cleanupGame;
-
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-            lastFrameTime = performance.now();
-        }
-    });
     
     window.showDinoGameOver = function(savedScore, savedStage, killerEmoji) {
         if (typeof trackEvent === 'function') trackEvent('dino_game_play');

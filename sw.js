@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261011-dino-2min-ad-restore';
-const CACHE_NAME = 'neto-cache-v1790694490';
+const CACHE_VERSION = 'v20261011-dino-2min-exact-50e0c0f-safari-1';
+const CACHE_NAME = 'neto-cache-v1790694491';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

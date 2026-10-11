@@ -1015,11 +1015,12 @@ function updateCountdownStartLinks() {
 function prepareCountdownNavigation(event, link) {
     const choice = document.querySelector('input[name="schoolType"]:checked');
     if (!choice) {
-        event.preventDefault();
+        if (event) event.preventDefault();
         document.getElementById('error-message').style.display = 'block';
         return false;
     }
-    link.href = getCountdownNavigationUrl(link.dataset.countdownStart);
+    const navUrl = getCountdownNavigationUrl(link.dataset.countdownStart);
+    link.href = navUrl;
     try {
         localStorage.setItem('neto_userConfig', JSON.stringify({
             schoolType: choice.value,
@@ -1028,22 +1029,42 @@ function prepareCountdownNavigation(event, link) {
             activeTargetId: userConfig.activeTargetId
         }));
     } catch (e) { }
-    // Leave the real link click intact: AdSense may intercept it before navigation.
+    if (event) {
+        event.preventDefault();
+        window.location.href = navUrl;
+    }
     return true;
 }
 
 function startCountdownFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    const school = params.get('schoolType');
+    let school = params.get('schoolType');
+    if (!school) {
+        try {
+            const saved = JSON.parse(localStorage.getItem('neto_userConfig'));
+            if (saved && saved.schoolType) school = saved.schoolType;
+        } catch (e) { }
+    }
     if (['elem', 'middle', 'high'].includes(school)) {
         const radio = document.querySelector(`input[name="schoolType"][value="${school}"]`);
-        radio.checked = true;
-        updateSchoolSelection(radio);
+        if (radio) {
+            radio.checked = true;
+            updateSchoolSelection(radio);
+        }
     }
-    const friday = params.get('studyFriday');
+    let friday = params.get('studyFriday');
+    if (friday === null || friday === undefined) {
+        try {
+            const saved = JSON.parse(localStorage.getItem('neto_userConfig'));
+            if (saved && saved.studyFriday !== undefined) friday = saved.studyFriday ? '1' : '0';
+        } catch (e) { }
+    }
     if (friday === '0' || friday === '1') {
-        document.getElementById('friday-toggle').checked = friday === '1';
-        updateFridayToggle();
+        const toggle = document.getElementById('friday-toggle');
+        if (toggle) {
+            toggle.checked = friday === '1';
+            updateFridayToggle();
+        }
     }
     updateCountdownStartLinks();
     const target = params.get('targetIntent') || (params.get('started') === 'true' ? 'next' : null);
@@ -1058,7 +1079,20 @@ function startCountdownFromUrl() {
 }
 
 function initApp(countdownTarget = 'summer', forceStart = false) {
-    const choice = document.querySelector('input[name="schoolType"]:checked');
+    let choice = document.querySelector('input[name="schoolType"]:checked');
+    if (!choice) {
+        try {
+            const saved = JSON.parse(localStorage.getItem('neto_userConfig'));
+            if (saved && saved.schoolType) {
+                const radio = document.querySelector(`input[name="schoolType"][value="${saved.schoolType}"]`);
+                if (radio) {
+                    radio.checked = true;
+                    updateSchoolSelection(radio);
+                    choice = radio;
+                }
+            }
+        } catch (e) { }
+    }
     if (!choice) { document.getElementById('error-message').style.display = 'block'; return; }
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
