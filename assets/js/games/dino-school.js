@@ -98,6 +98,8 @@
     const TARGET_MS_PER_FRAME = 1000 / 60; // 16.67ms — game is designed for 60fps
     const urlParams = new URLSearchParams(window.location.search);
     const demoArtEnabled = urlParams.get('show_demo') === 'true';
+    const DINO_AD_INTERVAL_MS = 180000;
+    const DINO_AD_MIN_GAMES = 3;
     const demoArtReady = demoArtEnabled ? new Promise(resolve => {
         const script = document.createElement('script');
         script.src = 'assets/js/games/dino-school-art.js?v=13';
@@ -129,6 +131,7 @@
     let frameCount = 0;
     let isGameOver = false;
     let lastFrameTime = 0; // For delta-time normalization
+    let adEligibilityTimerId = null;
 
     // trigger button logic removed
 
@@ -184,6 +187,10 @@
     }
 
     async function startGame() {
+        if (adEligibilityTimerId) {
+            clearTimeout(adEligibilityTimerId);
+            adEligibilityTimerId = null;
+        }
         if (!sessionStorage.getItem('dinoLastAdTime')) {
             sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
         }
@@ -1072,7 +1079,8 @@
         return msgs[stageIndex] || "נפסלת! 💥";
     }
 
-    function gameOver(killerEmoji) {
+    function gameOver(killerEmoji, countAsFinishedGame = true) {
+        if (document.getElementById('dino-game-over')) return;
         isGameOver = true;
         if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
         
@@ -1211,22 +1219,81 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
-        const shouldRefresh = (Date.now() - lastAdTime) > 120000;
+        if (demoArtEnabled && countAsFinishedGame) {
+            const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
+            sessionStorage.setItem('dinoGamesSinceAd', String(completed + 1));
+        }
 
-        let playAgainBtn = document.createElement('button');
-        playAgainBtn.onclick = (e) => {
-            e.stopPropagation();
-            if (shouldRefresh) {
-                sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
-                let intent = 'summer';
-                try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
-                
-                // Trigger AdSense Vignette via History API (SPA mode) without a page reload
-                window.history.pushState(null, '', '#go-' + intent + '-dinorestart');
+        // AdSense vignettes are considered on real link navigation, not pushState.
+        // Keep this behavior on the demo until it is approved for the main site.
+        let playAgainBtn = document.createElement(demoArtEnabled ? 'a' : 'button');
+        if (demoArtEnabled) {
+            const restartUrl = new URL(window.location.href);
+            let savedConfig = {};
+            try { savedConfig = JSON.parse(localStorage.getItem('neto_userConfig')) || {}; } catch (e) {}
+            restartUrl.searchParams.set('targetIntent', savedConfig.activeTargetId || savedConfig.targetIntent || 'summer');
+            if (savedConfig.schoolType) restartUrl.searchParams.set('schoolType', savedConfig.schoolType);
+            if (savedConfig.studyFriday !== undefined) {
+                restartUrl.searchParams.set('studyFriday', savedConfig.studyFriday ? '1' : '0');
             }
-            startGame();
-        };
+            restartUrl.searchParams.set('dino', '1');
+            restartUrl.hash = '';
+            playAgainBtn.tabIndex = 0;
+            playAgainBtn.setAttribute('role', 'button');
+            const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
+            if (!isNewRecord && completed >= DINO_AD_MIN_GAMES) {
+                const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || 0;
+                const remaining = DINO_AD_INTERVAL_MS - (Date.now() - lastAdTime);
+                if (remaining <= 0) {
+                    playAgainBtn.href = restartUrl.href;
+                    playAgainBtn.removeAttribute('role');
+                } else {
+                    adEligibilityTimerId = setTimeout(() => {
+                        if (playAgainBtn.isConnected) {
+                            playAgainBtn.href = restartUrl.href;
+                            playAgainBtn.removeAttribute('role');
+                        }
+                        adEligibilityTimerId = null;
+                    }, remaining);
+                }
+            }
+            playAgainBtn.onclick = (e) => {
+                const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || 0;
+                const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
+                const eligible = Date.now() - lastAdTime >= DINO_AD_INTERVAL_MS &&
+                    completed >= DINO_AD_MIN_GAMES && !isNewRecord && playAgainBtn.hasAttribute('href');
+
+                if (!eligible) {
+                    e.preventDefault();
+                    startGame();
+                    return;
+                }
+
+                playAgainBtn.style.pointerEvents = 'none';
+                sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
+                sessionStorage.setItem('dinoGamesSinceAd', '0');
+                // Let the anchor's native navigation run so AdSense can show a vignette.
+            };
+            playAgainBtn.onkeydown = (e) => {
+                if (!playAgainBtn.hasAttribute('href') && (e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault();
+                    playAgainBtn.click();
+                }
+            };
+        } else {
+            const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
+            const shouldRefresh = (Date.now() - lastAdTime) > 120000;
+            playAgainBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (shouldRefresh) {
+                    sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
+                    let intent = 'summer';
+                    try { intent = window.userConfig?.targetIntent || 'summer'; } catch(e) {}
+                    window.history.pushState(null, '', '#go-' + intent + '-dinorestart');
+                }
+                startGame();
+            };
+        }
 
         playAgainBtn.textContent = 'שחק מחדש 🔄';
         playAgainBtn.style.padding = '6px 14px';
@@ -1238,6 +1305,7 @@
         playAgainBtn.style.cursor = 'pointer';
         playAgainBtn.style.fontSize = '14px';
         playAgainBtn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+        if (demoArtEnabled) playAgainBtn.style.textDecoration = 'none';
 
         const leaderboardBtn = document.createElement('button');
         leaderboardBtn.textContent = 'צפה בטבלת השיאים 🏆';
@@ -1296,6 +1364,10 @@
 
     function cleanupGame() {
         if (!isGameActive || !gameContainer) return;
+        if (adEligibilityTimerId) {
+            clearTimeout(adEligibilityTimerId);
+            adEligibilityTimerId = null;
+        }
         isGameActive = false;
         const adContainer = document.getElementById('dino-ad-container');
         if (adContainer) adContainer.remove();
@@ -1529,7 +1601,7 @@
         }
         
         // Show game over UI directly
-        gameOver(killerEmoji || '💥');
+        gameOver(killerEmoji || '💥', false);
     };
 
     // Listen for SPA hash changes is no longer needed since we do hard reloads.
