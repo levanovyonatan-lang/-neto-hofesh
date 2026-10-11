@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261011-dino-vignette-real-nav-1';
-const CACHE_NAME = 'neto-cache-v1790694494';
+const CACHE_VERSION = 'v20261012-dino-clean-restart-1';
+const CACHE_NAME = 'neto-cache-v1790694495';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
