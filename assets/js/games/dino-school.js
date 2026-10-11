@@ -1268,6 +1268,7 @@
             }
 
             playAgainBtn.style.pointerEvents = 'none';
+            if (demoArtEnabled) sessionStorage.setItem('dinoRestartPending', '1');
             sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
             sessionStorage.setItem('dinoGamesSinceAd', '0');
             // Let the anchor's native navigation run so AdSense can show a vignette.

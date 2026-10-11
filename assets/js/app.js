@@ -1078,6 +1078,42 @@ function startCountdownFromUrl() {
     return true;
 }
 
+let dinoRestartInFlight = false;
+let dinoRestartAttempts = 0;
+
+async function resumeDinoGameAfterAd() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('show_demo') !== 'true') return;
+    const restartUrl = params.get('dino') === '1';
+    const pending = sessionStorage.getItem('dinoRestartPending') === '1';
+    if ((!restartUrl && (!pending || !document.getElementById('dino-game-over'))) || dinoRestartInFlight) return;
+
+    if (typeof window.startDinoGame !== 'function') {
+        if (++dinoRestartAttempts <= 20) setTimeout(resumeDinoGameAfterAd, 100);
+        else document.documentElement.classList.remove('dino-restarting');
+        return;
+    }
+
+    dinoRestartInFlight = true;
+    try {
+        await window.startDinoGame();
+        if (!document.getElementById('dino-score-val') || document.getElementById('dino-game-over')) return;
+        sessionStorage.removeItem('dinoRestartPending');
+        if (restartUrl) {
+            params.delete('dino');
+            const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
+            window.history.replaceState({}, '', newUrl);
+        }
+    } finally {
+        document.documentElement.classList.remove('dino-restarting');
+        dinoRestartInFlight = false;
+    }
+}
+
+window.addEventListener('pageshow', event => {
+    if (event.persisted) resumeDinoGameAfterAd();
+});
+
 function initApp(countdownTarget = 'summer', forceStart = false) {
     let choice = document.querySelector('input[name="schoolType"]:checked');
     if (!choice) {
@@ -1133,27 +1169,29 @@ function initApp(countdownTarget = 'summer', forceStart = false) {
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('dino') === '1') {
-        urlParams.delete('dino');
-        const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
-        window.history.replaceState({}, '', newUrl);
-        
-        setTimeout(() => {
-            document.documentElement.classList.remove('dino-restarting');
-            if (typeof window.startDinoGame === 'function') {
-                window.startDinoGame();
-            } else {
-                // If dino script hasn't loaded yet, try a few times
-                let attempts = 0;
-                const tryStart = setInterval(() => {
-                    if (typeof window.startDinoGame === 'function') {
-                        clearInterval(tryStart);
-                        window.startDinoGame();
-                    } else if (attempts++ > 20) {
-                        clearInterval(tryStart);
-                    }
-                }, 100);
-            }
-        }, 500); // 500ms delay ensures UI is fully settled before unhiding
+        if (urlParams.get('show_demo') === 'true') {
+            setTimeout(resumeDinoGameAfterAd, 500);
+        } else {
+            urlParams.delete('dino');
+            const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
+            window.history.replaceState({}, '', newUrl);
+            setTimeout(() => {
+                document.documentElement.classList.remove('dino-restarting');
+                if (typeof window.startDinoGame === 'function') {
+                    window.startDinoGame();
+                } else {
+                    let attempts = 0;
+                    const tryStart = setInterval(() => {
+                        if (typeof window.startDinoGame === 'function') {
+                            clearInterval(tryStart);
+                            window.startDinoGame();
+                        } else if (attempts++ > 20) {
+                            clearInterval(tryStart);
+                        }
+                    }, 100);
+                }
+            }, 500);
+        }
     }
 }
 
