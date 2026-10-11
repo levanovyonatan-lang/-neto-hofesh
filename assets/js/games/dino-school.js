@@ -313,11 +313,14 @@
         gameContainer = timerCard;
         
         const currentHeight = gameContainer.getBoundingClientRect().height;
+        const restartingDemo = demoArtEnabled && new URLSearchParams(window.location.search).get('dino') === '1';
         gameContainer.dataset.hwPrevHeight = gameContainer.style.height || '';
         
-        gameContainer.style.height = currentHeight + 'px';
-        gameContainer.offsetHeight; // force reflow
-        gameContainer.style.transition = 'height 0.4s ease, box-shadow 0.4s ease';
+        if (!restartingDemo) {
+            gameContainer.style.height = currentHeight + 'px';
+            gameContainer.offsetHeight; // force reflow
+        }
+        gameContainer.style.transition = restartingDemo ? 'none' : 'height 0.4s ease, box-shadow 0.4s ease';
         gameContainer.style.height = '200px';
 
         gameContainer.style.position = 'relative';
@@ -325,12 +328,12 @@
         gameContainer.dataset.hwPrevZIndex = gameContainer.style.zIndex || '';
         gameContainer.style.zIndex = '1000';
 
-        setTimeout(() => {
-            window.scrollTo({
-                top: gameContainer.getBoundingClientRect().top + window.scrollY - 80,
-                behavior: 'smooth'
-            });
-        }, 400);
+        const scrollToGame = () => window.scrollTo({
+            top: gameContainer.getBoundingClientRect().top + window.scrollY - 80,
+            behavior: restartingDemo ? 'auto' : 'smooth'
+        });
+        if (restartingDemo) scrollToGame();
+        else setTimeout(scrollToGame, 400);
 
         // Hide original elements
         const hiddenEls = gameContainer.querySelectorAll('.tip-box, .vacation-length-box, [id*="tip"], .ai-tools, .ai-btn, .ai-sponsor, .net-days, .absolute-timer, #excluding-label, #vacation-message, #main-target-title, .net-days-container, #total-days-label');
@@ -338,17 +341,19 @@
             if(el.dataset.hwPrevDisplay === undefined) {
                 el.dataset.hwPrevDisplay = el.style.display || getComputedStyle(el).display; 
             }
-            el.style.transition = 'opacity 0.2s ease';
+            el.style.transition = restartingDemo ? 'none' : 'opacity 0.2s ease';
             el.style.opacity = '0'; 
         });
 
-        setTimeout(() => {
+        const hideOriginalContent = () => {
             hiddenEls.forEach(el => { 
                 el.style.display = 'none'; 
                 el.style.opacity = '';
                 el.style.transition = '';
             });
-        }, 200);
+        };
+        if (restartingDemo) hideOriginalContent();
+        else setTimeout(hideOriginalContent, 200);
 
         // Block pointer events on other original elements
         Array.from(gameContainer.children).forEach(el => {

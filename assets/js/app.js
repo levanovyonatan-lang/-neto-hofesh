@@ -1162,15 +1162,16 @@ function initApp(countdownTarget = 'summer', forceStart = false) {
 
     showMainScreen();
     // גלילה קלה למטה כדי שיראו את ה"בחרו יעד ספירה" והבאנר לא יסתיר
-    setTimeout(() => {
-        const isAndroid = /Android/i.test(navigator.userAgent);
-        window.scrollTo({ top: isAndroid ? 15 : 50, behavior: 'smooth' });
-    }, 100);
-
     const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('dino') !== '1' || urlParams.get('show_demo') !== 'true') {
+        setTimeout(() => {
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            window.scrollTo({ top: isAndroid ? 15 : 50, behavior: 'smooth' });
+        }, 100);
+    }
     if (urlParams.get('dino') === '1') {
         if (urlParams.get('show_demo') === 'true') {
-            setTimeout(resumeDinoGameAfterAd, 500);
+            resumeDinoGameAfterAd();
         } else {
             urlParams.delete('dino');
             const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
