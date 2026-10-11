@@ -9,9 +9,9 @@
     --text-scale: 1; /* משתנה חכם ששולט על גודל כל הטקסטים באתר */
 }
 
-html.dino-demo-restarting #neto-splash,
-html.dino-demo-restarting #setup-screen { display: none !important; }
-html.dino-demo-restarting body.splash-active .app-container { visibility: visible !important; }
+html.dino-restarting #neto-splash,
+html.dino-restarting #setup-screen { display: none !important; }
+html.dino-restarting body.splash-active .app-container { visibility: visible !important; }
 
 * { 
     box-sizing: border-box; 

@@ -67,6 +67,8 @@ function initPWA() {
         }).catch(() => { });
 
         navigator.serviceWorker.addEventListener('controllerchange', () => {
+            // An update must not interrupt a run, a replay, or its ad break.
+            if (document.getElementById('dino-score-val')) return;
 
             if (hadController && !isRefreshing) {
                 const lastReload = sessionStorage.getItem('pwa_last_reload');
@@ -1083,15 +1085,8 @@ let dinoRestartAttempts = 0;
 
 async function resumeDinoGameAfterAd() {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('show_demo') !== 'true') return;
     const restartUrl = params.get('dino') === '1';
-    const pending = sessionStorage.getItem('dinoRestartPending') === '1';
-    if ((!restartUrl && (!pending || !document.getElementById('dino-game-over'))) || dinoRestartInFlight) return;
-
-    if (!restartUrl && [...document.querySelectorAll('iframe')].some(frame =>
-        frame.offsetHeight > window.innerHeight * 0.7 &&
-        getComputedStyle(frame).display !== 'none' &&
-        getComputedStyle(frame).visibility !== 'hidden')) return;
+    if (!restartUrl || dinoRestartInFlight) return;
 
     if (typeof window.startDinoGame !== 'function') {
         if (++dinoRestartAttempts <= 20) setTimeout(resumeDinoGameAfterAd, 100);
@@ -1117,16 +1112,6 @@ async function resumeDinoGameAfterAd() {
 
 window.addEventListener('pageshow', event => {
     if (event.persisted) resumeDinoGameAfterAd();
-});
-
-document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && sessionStorage.getItem('dinoRestartPending') === '1') {
-        resumeDinoGameAfterAd();
-    }
-});
-
-window.addEventListener('focus', () => {
-    if (sessionStorage.getItem('dinoRestartPending') === '1') resumeDinoGameAfterAd();
 });
 
 function initApp(countdownTarget = 'summer', forceStart = false) {
@@ -1178,36 +1163,14 @@ function initApp(countdownTarget = 'summer', forceStart = false) {
     showMainScreen();
     // גלילה קלה למטה כדי שיראו את ה"בחרו יעד ספירה" והבאנר לא יסתיר
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('dino') !== '1' || urlParams.get('show_demo') !== 'true') {
+    if (urlParams.get('dino') !== '1') {
         setTimeout(() => {
             const isAndroid = /Android/i.test(navigator.userAgent);
             window.scrollTo({ top: isAndroid ? 15 : 50, behavior: 'smooth' });
         }, 100);
     }
     if (urlParams.get('dino') === '1') {
-        if (urlParams.get('show_demo') === 'true') {
-            resumeDinoGameAfterAd();
-        } else {
-            urlParams.delete('dino');
-            const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
-            window.history.replaceState({}, '', newUrl);
-            setTimeout(() => {
-                document.documentElement.classList.remove('dino-restarting');
-                if (typeof window.startDinoGame === 'function') {
-                    window.startDinoGame();
-                } else {
-                    let attempts = 0;
-                    const tryStart = setInterval(() => {
-                        if (typeof window.startDinoGame === 'function') {
-                            clearInterval(tryStart);
-                            window.startDinoGame();
-                        } else if (attempts++ > 20) {
-                            clearInterval(tryStart);
-                        }
-                    }, 100);
-                }
-            }, 500);
-        }
+        resumeDinoGameAfterAd();
     }
 }
 

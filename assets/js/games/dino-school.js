@@ -187,6 +187,7 @@
     }
 
     async function startGame() {
+        window.NetoDinoRestart?.cancel();
         if (adEligibilityTimerId) {
             clearTimeout(adEligibilityTimerId);
             adEligibilityTimerId = null;
@@ -313,14 +314,14 @@
         gameContainer = timerCard;
         
         const currentHeight = gameContainer.getBoundingClientRect().height;
-        const restartingDemo = demoArtEnabled && new URLSearchParams(window.location.search).get('dino') === '1';
+        const restartingFromUrl = new URLSearchParams(window.location.search).get('dino') === '1';
         gameContainer.dataset.hwPrevHeight = gameContainer.style.height || '';
         
-        if (!restartingDemo) {
+        if (!restartingFromUrl) {
             gameContainer.style.height = currentHeight + 'px';
             gameContainer.offsetHeight; // force reflow
         }
-        gameContainer.style.transition = restartingDemo ? 'none' : 'height 0.4s ease, box-shadow 0.4s ease';
+        gameContainer.style.transition = restartingFromUrl ? 'none' : 'height 0.4s ease, box-shadow 0.4s ease';
         gameContainer.style.height = '200px';
 
         gameContainer.style.position = 'relative';
@@ -330,9 +331,9 @@
 
         const scrollToGame = () => window.scrollTo({
             top: gameContainer.getBoundingClientRect().top + window.scrollY - 80,
-            behavior: restartingDemo ? 'auto' : 'smooth'
+            behavior: restartingFromUrl ? 'auto' : 'smooth'
         });
-        if (restartingDemo) scrollToGame();
+        if (restartingFromUrl) scrollToGame();
         else setTimeout(scrollToGame, 400);
 
         // Hide original elements
@@ -341,7 +342,7 @@
             if(el.dataset.hwPrevDisplay === undefined) {
                 el.dataset.hwPrevDisplay = el.style.display || getComputedStyle(el).display; 
             }
-            el.style.transition = restartingDemo ? 'none' : 'opacity 0.2s ease';
+            el.style.transition = restartingFromUrl ? 'none' : 'opacity 0.2s ease';
             el.style.opacity = '0'; 
         });
 
@@ -1229,7 +1230,7 @@
             sessionStorage.setItem('dinoGamesSinceAd', String(completed + 1));
         }
 
-        // AdSense vignettes are considered on real link navigation, not pushState.
+        // Replay stays in this document so the existing banner is not requested again.
         const playAgainBtn = document.createElement('a');
         const restartUrl = new URL(window.location.href);
         let savedConfig = {};
@@ -1243,43 +1244,40 @@
         restartUrl.hash = '';
         playAgainBtn.tabIndex = 0;
         playAgainBtn.setAttribute('role', 'button');
+        playAgainBtn.setAttribute('data-google-vignette', 'false');
+        const enableAdOpportunity = () => {
+            if (!window.NetoDinoRestart?.canKeepDocument) return;
+            playAgainBtn.href = restartUrl.href;
+            playAgainBtn.removeAttribute('data-google-vignette');
+        };
         const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
         if (!isNewRecord && completed >= DINO_AD_MIN_GAMES) {
             const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || 0;
             const remaining = DINO_AD_INTERVAL_MS - (Date.now() - lastAdTime);
             if (remaining <= 0) {
-                playAgainBtn.href = restartUrl.href;
-                playAgainBtn.removeAttribute('role');
+                enableAdOpportunity();
             } else {
                 adEligibilityTimerId = setTimeout(() => {
-                    if (playAgainBtn.isConnected) {
-                        playAgainBtn.href = restartUrl.href;
-                        playAgainBtn.removeAttribute('role');
-                    }
+                    if (playAgainBtn.isConnected) enableAdOpportunity();
                     adEligibilityTimerId = null;
                 }, remaining);
             }
         }
-        playAgainBtn.onclick = (e) => {
-            const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || 0;
-            const completed = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
-            const eligible = Date.now() - lastAdTime >= DINO_AD_INTERVAL_MS &&
-                completed >= DINO_AD_MIN_GAMES && !isNewRecord && playAgainBtn.hasAttribute('href');
-
-            if (!eligible) {
-                e.preventDefault();
-                startGame();
-                return;
-            }
-
-            playAgainBtn.style.pointerEvents = 'none';
-            if (demoArtEnabled) sessionStorage.setItem('dinoRestartPending', '1');
-            sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
-            sessionStorage.setItem('dinoGamesSinceAd', '0');
-            // Let the anchor's native navigation run so AdSense can show a vignette.
-        };
+        if (window.NetoDinoRestart) {
+            window.NetoDinoRestart.bind(playAgainBtn, {
+                restart: startGame,
+                onAdShown() {
+                    sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
+                    sessionStorage.setItem('dinoGamesSinceAd', '0');
+                }
+            });
+        } else {
+            playAgainBtn.onclick = e => {
+                e.preventDefault(); startGame();
+            };
+        }
         playAgainBtn.onkeydown = (e) => {
-            if (!playAgainBtn.hasAttribute('href') && (e.key === 'Enter' || e.key === ' ')) {
+            if (e.key === ' ' || (e.key === 'Enter' && !playAgainBtn.hasAttribute('href'))) {
                 e.preventDefault();
                 playAgainBtn.click();
             }
@@ -1353,6 +1351,7 @@
 
 
     function cleanupGame() {
+        window.NetoDinoRestart?.cancel();
         if (!isGameActive || !gameContainer) return;
         if (adEligibilityTimerId) {
             clearTimeout(adEligibilityTimerId);
@@ -1593,7 +1592,5 @@
         // Show game over UI directly
         gameOver(killerEmoji || '💥', false);
     };
-
-    // Listen for SPA hash changes is no longer needed since we do hard reloads.
 
 })();
