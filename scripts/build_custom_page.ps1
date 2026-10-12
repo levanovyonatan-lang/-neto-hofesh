@@ -60,7 +60,7 @@ $style = @"
 "@
 $html = $html.Replace('</head>', $style + "`n</head>")
 
-$script = @"
+$script = @'
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.remove('splash-active');
@@ -89,19 +89,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeBtn = modal.querySelector('.premium-modal-close');
         if(closeBtn) {
             closeBtn.style.display = 'block';
-            closeBtn.onclick = function() {
-                if (window.history.length > 1) {
-                    window.history.back();
-                } else {
-                    window.location.href = '../index.html';
+            closeBtn.onclick = function(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
+                closeCustomModal();
             };
         }
     }
 });
 </script>
 </body>
-"@
+'@
 
 $html = $html.Replace('</body>', $script)
 Set-Content custom\index.html $html -Encoding UTF8

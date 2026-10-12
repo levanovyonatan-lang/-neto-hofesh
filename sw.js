@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261012-modal-close-fix-6';
+const CACHE_VERSION = 'v20261013-holiday-return-close-8';
 const CACHE_NAME = 'neto-cache-v1790694508';
 
 self.addEventListener('install', e => {

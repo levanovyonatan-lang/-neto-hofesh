@@ -1856,13 +1856,51 @@ function openCustomCountdownModal(id = null) {
 function closeCustomModal() {
     const modal = document.getElementById('custom-countdown-modal');
     if (modal) modal.style.display = 'none';
-    const isSubpage = window.location.pathname.includes('/custom/') || 
-                      window.location.pathname.endsWith('/custom') ||
-                      (window.location.pathname.split('/').filter(Boolean).length > 0 && !window.location.pathname.endsWith('index.html'));
-    if (isSubpage) {
+
+    // Check strictly if this is the dedicated /custom/ page
+    const isCustomPage = window.location.pathname.includes('/custom/') || 
+                         window.location.pathname.endsWith('/custom');
+
+    if (isCustomPage) {
+        // Return to the specific holiday countdown screen the user came from
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const fromUrl = params.get('from');
+            if (fromUrl) {
+                const parsed = new URL(fromUrl, window.location.origin);
+                if (parsed.origin === window.location.origin) {
+                    window.location.href = parsed.href;
+                    return;
+                }
+            }
+        } catch (e) {}
+
+        if (document.referrer && document.referrer.includes(window.location.host) && !document.referrer.includes('/custom')) {
+            window.location.href = document.referrer;
+            return;
+        }
+
+        if (window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+
+        try {
+            const saved = localStorage.getItem('neto_userConfig');
+            if (saved) {
+                const cfg = JSON.parse(saved);
+                if (cfg && cfg.targetIntent && cfg.targetIntent !== 'next') {
+                    window.location.href = '../index.html?started=true&targetIntent=' + encodeURIComponent(cfg.targetIntent);
+                    return;
+                }
+            }
+        } catch (e) {}
+
         window.location.href = '../index.html';
         return;
     }
+
+    // On in-page modals (both main page and holiday landing pages), closing simply keeps user on their current countdown screen
     try {
         if (window.location.search.includes('modal=add-personal')) {
             history.pushState('', document.title, window.location.pathname + window.location.search.replace(/[?&]modal=add-personal/, ''));
