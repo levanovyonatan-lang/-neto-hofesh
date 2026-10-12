@@ -155,9 +155,10 @@ $faqsJoined
     $html = $html.Replace('href="manifest.json', 'href="../manifest.json')
     $html = $html.Replace('href="assets/', 'href="../assets/')
     $html = $html.Replace('src="assets/', 'src="../assets/')
-    $html = $html.Replace('src="tips.js"', 'src="../tips.js"')
+    $html = $html.Replace('src="tips.js', 'src="../tips.js')
     $html = $html.Replace('href="avigail-camp.html"', 'href="../avigail-camp.html"')
     $html = $html.Replace('href="fitness.html"', 'href="../fitness.html"')
+    $html = $html.Replace('custom/index.html', '../custom/index.html')
 
     # Fix relative links in the home hub grid if needed (safe regex without doubling ../)
     $html = [System.Text.RegularExpressions.Regex]::Replace($html, 'href="(?:\.\./)?(hanukkah|taanit-esther|purim|pesach|asru-chag|atzmaut|lag-baomer|shavuot|summer-high|summer)/"', 'href="../$1/"')

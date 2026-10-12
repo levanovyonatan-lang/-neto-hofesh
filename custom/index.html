@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="he" dir="rtl">
 
 <head>
@@ -12,7 +12,6 @@
         gtag('config', 'G-6DYJ3S4PW0');
     </script>
 
-    <!-- Register replay intent before AdSense can intercept a click. -->
 
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3389455724624040" crossorigin="anonymous"></script>
@@ -64,8 +63,8 @@
     <meta name="apple-mobile-web-app-title" content="נטו חופש">
 
     <!-- Confetti & Video Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    <script src="https://player.vimeo.com/api/player.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+    <script src="https://player.vimeo.com/api/player.js" defer></script>
 
     <meta name="description"
         content="כמה ימים עד החופש הקרוב? מחשבון חופשות שמראה לכם בדיוק מתי החופש הגדול 2027 וכמה ימי לימוד נטו נשארו עד לחופש, בלי שבתות, בלי שישי ובלי חגים. נטו חופש!">
@@ -137,7 +136,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="../assets/css/styles.css?v=dino-restart-in-place-1">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20261012-target-select-scroll-fix-2">
     <style>
         /* סגנונות לבאנר הדגמה */
         .sticky-banner-container {
@@ -475,7 +474,7 @@
             <div id="holidays-container" style="display: flex; flex-direction: column; gap: 8px;" role="navigation"
                 aria-label="בחירת חגים"></div>
             
-            <a href="custom/index.html" id="custom-countdown-btn" class="btn-action" style="display: none !important; text-decoration: none;">
+            <a href="custom/index.html" id="custom-countdown-btn" class="btn-action" style="text-decoration: none;">
                 <span>הוספת ספירה אישית</span>
                 <span>+</span>
             </a>
@@ -875,11 +874,11 @@
     </div>
 
 
-    <script src="tips.js?v=tips-file-v3" defer></script>
+    <script src="../tips.js?v=tips-file-v3" defer></script>
     <script src="../assets/js/premium-cinematic-themes.js?v=9083" defer></script>
     <script src="../assets/js/modules/holidays.js?v=20261012-vacation-days-range-1" defer></script>
-    <script src="../assets/js/app.js?v=20261012-vacation-days-range-1" defer></script>
-    <script src="../assets/js/games/dino-school.js?v=20261012-dino-fix-run-3" defer></script>
+    <script src="../assets/js/app.js?v=20261012-distant-holiday-anim-1" defer></script>
+    <script src="../assets/js/games/dino-school.js?v=20261012-perf-instant-startup-5" defer></script>
     <script src="../assets/js/games/emoji-rain.js?v=9083" defer></script>
 
     <script type="module" src="../assets/js/firebase-init.js?v=9060" defer></script>
@@ -1065,23 +1064,22 @@
     </nav>
 
 <script>
-if(window.location.search.includes('show_demo=true')) {
-    const btn = document.getElementById('custom-countdown-btn');
-    if(btn) {
-        btn.style.setProperty('display', 'flex', 'important');
-        btn.href = 'custom/index.html' + window.location.search;
-        btn.addEventListener('click', function(e) {
-            let customCountdowns = [];
-            try {
-                const saved = localStorage.getItem('neto_customCountdowns');
-                if (saved) customCountdowns = JSON.parse(saved);
-            } catch(err) {}
-            if(customCountdowns.length >= 5) {
-                e.preventDefault();
-                alert('ניתן להוסיף עד 5 ספירות אישיות מקסימום. יש למחוק אחת קיימת כדי להוסיף חדשה.');
-            }
-        });
+const customBtn = document.getElementById('custom-countdown-btn');
+if(customBtn) {
+    if(window.location.search) {
+        customBtn.href = 'custom/index.html' + window.location.search;
     }
+    customBtn.addEventListener('click', function(e) {
+        let customCountdowns = [];
+        try {
+            const saved = localStorage.getItem('neto_customCountdowns');
+            if (saved) customCountdowns = JSON.parse(saved);
+        } catch(err) {}
+        if(customCountdowns.length >= 5) {
+            e.preventDefault();
+            alert('ניתן להוסיף עד 5 ספירות אישיות מקסימום. יש למחוק אחת קיימת כדי להוסיף חדשה.');
+        }
+    });
 }
 </script>
 <script>
@@ -1099,7 +1097,16 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.zIndex = '1';
         
         const closeBtn = modal.querySelector('.premium-modal-close');
-        if(closeBtn) closeBtn.style.display = 'none';
+        if(closeBtn) {
+            closeBtn.style.display = 'block';
+            closeBtn.onclick = function() {
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    window.location.href = '../index.html';
+                }
+            };
+        }
         
         const content = modal.querySelector('.premium-modal-content');
         if(content) {

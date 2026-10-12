@@ -7,7 +7,7 @@ $html = $html.Replace('src="icon-neto-sunglasses-white.png', 'src="../icon-neto-
 $html = $html.Replace('href="manifest.json', 'href="../manifest.json')
 $html = $html.Replace('href="assets/', 'href="../assets/')
 $html = $html.Replace('src="assets/', 'src="../assets/')
-$html = $html.Replace('src="tips.js"', 'src="../tips.js"')
+$html = $html.Replace('src="tips.js', 'src="../tips.js')
 $html = $html.Replace('href="avigail-camp.html"', 'href="../avigail-camp.html"')
 $html = $html.Replace('href="fitness.html"', 'href="../fitness.html"')
 
@@ -44,7 +44,16 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.zIndex = '1';
         
         const closeBtn = modal.querySelector('.premium-modal-close');
-        if(closeBtn) closeBtn.style.display = 'none';
+        if(closeBtn) {
+            closeBtn.style.display = 'block';
+            closeBtn.onclick = function() {
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    window.location.href = '../index.html';
+                }
+            };
+        }
         
         const content = modal.querySelector('.premium-modal-content');
         if(content) {
