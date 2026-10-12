@@ -10,6 +10,7 @@ $html = $html.Replace('src="assets/', 'src="../assets/')
 $html = $html.Replace('src="tips.js', 'src="../tips.js')
 $html = $html.Replace('href="avigail-camp.html"', 'href="../avigail-camp.html"')
 $html = $html.Replace('href="fitness.html"', 'href="../fitness.html"')
+$html = $html.Replace('id="custom-save-btn" href="index.html"', 'id="custom-save-btn" href="../index.html"')
 
 # fix absolute links
 $html = [System.Text.RegularExpressions.Regex]::Replace($html, 'href="(?:\.\./)?(hanukkah|taanit-esther|purim|pesach|asru-chag|atzmaut|lag-baomer|shavuot|summer-high|summer)/"', 'href="../$1/"')
@@ -65,31 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
             content.style.borderRadius = '0';
             content.style.boxShadow = 'none';
             content.style.background = 'linear-gradient(145deg, #1e293b 0%, #0f172a 100%)';
-            content.style.padding = '40px 20px';
+            content.style.padding = '22px 16px';
         }
     }
 
-    const originalSave = window.saveCustomCountdown;
-    if (originalSave) {
-        window.saveCustomCountdown = function() {
-            if (originalSave() === false) return;
-            setTimeout(() => {
-                let intentId = '';
-                try {
-                    const saved = JSON.parse(localStorage.getItem('neto_customCountdowns'));
-                    if(saved && saved.length > 0) {
-                        intentId = saved[saved.length - 1].id;
-                    }
-                } catch(e) {}
-                
-                let search = window.location.search;
-                if(intentId) {
-                    search = search ? search + '&targetIntent=' + intentId : '?targetIntent=' + intentId;
-                }
-                window.location.href = '../index.html' + search;
-            }, 100);
-        };
-    }
+
 });
 </script>
 </body>

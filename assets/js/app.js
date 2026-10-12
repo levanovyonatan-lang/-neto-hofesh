@@ -1729,6 +1729,9 @@ function renderHolidays() {
             editBtn.style.cssText = 'position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 16px; cursor: pointer; padding: 5px;';
             editBtn.onclick = (e) => {
                 e.stopPropagation();
+                if (typeof trackEvent === 'function') {
+                    trackEvent('click_edit_custom_countdown');
+                }
                 openCustomCountdownModal(ev.id);
             };
             card.style.position = 'relative';
@@ -1896,16 +1899,20 @@ function saveCustomCountdown() {
     
     if (existingId) {
         trackEvent('update_custom_countdown', { theme: newCustom.theme, color: newCustom.color });
+        trackEvent('update_custom_countdown_success', { theme: newCustom.theme, color: newCustom.color });
         const idx = customCountdowns.findIndex(c => c.id === existingId);
         if (idx !== -1) customCountdowns[idx] = newCustom;
         else customCountdowns.push(newCustom);
     } else {
         trackEvent('add_custom_countdown', { theme: newCustom.theme, color: newCustom.color });
+        trackEvent('add_custom_countdown_success', { theme: newCustom.theme, color: newCustom.color, total_count: customCountdowns.length + 1 });
+        trackEvent('complete_add_personal_target', { theme: newCustom.theme, color: newCustom.color });
         customCountdowns.push(newCustom);
     }
     localStorage.setItem('neto_customCountdowns', JSON.stringify(customCountdowns));
     
-    document.getElementById('custom-countdown-modal').style.display = 'none';
+    const modal = document.getElementById('custom-countdown-modal');
+    if (modal) modal.style.display = 'none';
     
     // Refresh the UI to show the new countdown
     userConfig.targetIntent = newCustom.id;
@@ -1919,10 +1926,47 @@ function saveCustomCountdown() {
         scrollToAppTop();
     }, 100);
     
+    return newCustom;
+}
+
+function handleSaveCustomCountdown(event, link) {
+    const savedCustom = saveCustomCountdown();
+    if (!savedCustom) {
+        if (event) event.preventDefault();
+        return false;
+    }
+
+    const isStandalone = typeof isNetoStandalone === 'function' && isNetoStandalone();
+    const isSubpage = window.location.pathname.includes('/custom/') || 
+                      window.location.pathname.endsWith('/custom') ||
+                      (window.location.pathname.split('/').filter(Boolean).length > 0 && !window.location.pathname.endsWith('index.html'));
+    
+    let destUrl = isSubpage ? '../index.html' : 'index.html';
+    let searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('targetIntent', savedCustom.id);
+    destUrl += '?' + searchParams.toString();
+
+    if (link) {
+        link.href = destUrl;
+    }
+
+    if (isStandalone) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        return false;
+    }
+
+    // Natural navigation on <a href="..."> allows Google AdSense Auto Ads
+    // to intercept the user click and display full-screen Vignette transition ads!
     return true;
 }
 
 function deleteCustomCountdown(id) {
+    if (typeof trackEvent === 'function') {
+        trackEvent('delete_custom_countdown');
+    }
     try {
         const saved = localStorage.getItem('neto_customCountdowns');
         if (saved) {

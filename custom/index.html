@@ -136,7 +136,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20261012-target-select-scroll-fix-2">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20261012-flatter-theme-tiles-1">
     <style>
         /* סגנונות לבאנר הדגמה */
         .sticky-banner-container {
@@ -877,7 +877,7 @@
     <script src="../tips.js?v=tips-file-v3" defer></script>
     <script src="../assets/js/premium-cinematic-themes.js?v=9083" defer></script>
     <script src="../assets/js/modules/holidays.js?v=20261012-vacation-days-range-1" defer></script>
-    <script src="../assets/js/app.js?v=20261012-distant-holiday-anim-1" defer></script>
+    <script src="../assets/js/app.js?v=20261012-custom-vignette-1" defer></script>
     <script src="../assets/js/games/dino-school.js?v=20261012-perf-instant-startup-5" defer></script>
     <script src="../assets/js/games/emoji-rain.js?v=9083" defer></script>
 
@@ -951,12 +951,12 @@
 
             <input type="hidden" id="custom-emoji" value="📅">
 
-            <div style="text-align: right; margin-bottom: 15px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <label class="premium-label" style="color: #fef08a; margin: 0;">עיצוב הספירה:</label>
-                    <div class="design-type-toggle" style="background: rgba(255,255,255,0.05); border-radius: 20px; display: flex; padding: 4px; gap: 4px; border: 1px solid rgba(255,255,255,0.1);">
-                        <button type="button" id="btn-design-theme" onclick="toggleDesignType('theme')" style="background: rgba(255,255,255,0.1); border: none; color: white; padding: 4px 12px; border-radius: 16px; font-size: 13px; cursor: pointer; transition: all 0.2s;">עיצובים</button>
-                        <button type="button" id="btn-design-color" onclick="toggleDesignType('color')" style="background: transparent; border: none; color: #94a3b8; padding: 4px 12px; border-radius: 16px; font-size: 13px; cursor: pointer; transition: all 0.2s;">צבע אחיד</button>
+            <div style="text-align: right; margin-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <label class="premium-label" style="color: #fef08a; margin: 0; font-size: 0.9rem;">עיצוב הספירה:</label>
+                    <div class="design-type-toggle" style="background: rgba(255,255,255,0.05); border-radius: 20px; display: flex; padding: 3px; gap: 3px; border: 1px solid rgba(255,255,255,0.1);">
+                        <button type="button" id="btn-design-theme" onclick="toggleDesignType('theme')" style="background: rgba(255,255,255,0.1); border: none; color: white; padding: 3px 10px; border-radius: 14px; font-size: 12px; cursor: pointer; transition: all 0.2s;">עיצובים</button>
+                        <button type="button" id="btn-design-color" onclick="toggleDesignType('color')" style="background: transparent; border: none; color: #94a3b8; padding: 3px 10px; border-radius: 14px; font-size: 12px; cursor: pointer; transition: all 0.2s;">צבע אחיד</button>
                     </div>
                 </div>
                 
@@ -984,17 +984,17 @@
                 </div>
 
                 <div id="color-selector-container" style="display: none;">
-                    <div class="color-selector-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px;">
-                        <button type="button" class="color-btn active" data-color="#1e293b" onclick="selectCustomColor(this)" style="background: #1e293b; height: 40px; border-radius: 8px; border: 2px solid white; cursor: pointer;"></button>
-                        <button type="button" class="color-btn" data-color="#3b82f6" onclick="selectCustomColor(this)" style="background: #3b82f6; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
-                        <button type="button" class="color-btn" data-color="#ec4899" onclick="selectCustomColor(this)" style="background: #ec4899; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
-                        <button type="button" class="color-btn" data-color="#10b981" onclick="selectCustomColor(this)" style="background: #10b981; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
-                        <button type="button" class="color-btn" data-color="#f59e0b" onclick="selectCustomColor(this)" style="background: #f59e0b; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
-                        <button type="button" class="color-btn" data-color="#8b5cf6" onclick="selectCustomColor(this)" style="background: #8b5cf6; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
-                        <button type="button" class="color-btn" data-color="#ef4444" onclick="selectCustomColor(this)" style="background: #ef4444; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
-                        <button type="button" class="color-btn" data-color="#14b8a6" onclick="selectCustomColor(this)" style="background: #14b8a6; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
-                        <button type="button" class="color-btn" data-color="#f97316" onclick="selectCustomColor(this)" style="background: #f97316; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
-                        <button type="button" class="color-btn" data-color="#000000" onclick="selectCustomColor(this)" style="background: #000000; height: 40px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;"></button>
+                    <div class="color-selector-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 8px;">
+                        <button type="button" class="color-btn active" data-color="#1e293b" onclick="selectCustomColor(this)" style="background: #1e293b; height: 32px; border-radius: 6px; border: 2px solid white; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#3b82f6" onclick="selectCustomColor(this)" style="background: #3b82f6; height: 32px; border-radius: 6px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#ec4899" onclick="selectCustomColor(this)" style="background: #ec4899; height: 32px; border-radius: 6px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#10b981" onclick="selectCustomColor(this)" style="background: #10b981; height: 32px; border-radius: 6px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#f59e0b" onclick="selectCustomColor(this)" style="background: #f59e0b; height: 32px; border-radius: 6px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#8b5cf6" onclick="selectCustomColor(this)" style="background: #8b5cf6; height: 32px; border-radius: 6px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#ef4444" onclick="selectCustomColor(this)" style="background: #ef4444; height: 32px; border-radius: 6px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#14b8a6" onclick="selectCustomColor(this)" style="background: #14b8a6; height: 32px; border-radius: 6px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#f97316" onclick="selectCustomColor(this)" style="background: #f97316; height: 32px; border-radius: 6px; border: 2px solid transparent; cursor: pointer;"></button>
+                        <button type="button" class="color-btn" data-color="#000000" onclick="selectCustomColor(this)" style="background: #000000; height: 32px; border-radius: 6px; border: 2px solid transparent; cursor: pointer;"></button>
                     </div>
                 </div>
 
@@ -1045,9 +1045,9 @@
             
             <input type="hidden" id="custom-id" value="">
             <div style="display: flex; gap: 10px;">
-                <button class="premium-save-btn" onclick="saveCustomCountdown()" style="flex: 1;">
+                <a id="custom-save-btn" href="../index.html" class="premium-save-btn" onclick="return handleSaveCustomCountdown(event, this);" style="flex: 1; text-decoration: none;">
                     <span class="save-text">שמור ספירה</span>
-                </button>
+                </a>
                 <button id="custom-delete-btn" class="premium-save-btn" onclick="deleteCustomCountdownFromModal()" style="display: none; flex: 1; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);">
                     <span class="save-text">מחק ספירה</span>
                 </button>
@@ -1077,7 +1077,20 @@ if(customBtn) {
         } catch(err) {}
         if(customCountdowns.length >= 5) {
             e.preventDefault();
+            if (typeof trackEvent === 'function') {
+                trackEvent('custom_countdown_limit_reached');
+            } else if (typeof gtag === 'function') {
+                gtag('event', 'custom_countdown_limit_reached', { transport: 'beacon' });
+            }
             alert('ניתן להוסיף עד 5 ספירות אישיות מקסימום. יש למחוק אחת קיימת כדי להוסיף חדשה.');
+        } else {
+            if (typeof trackEvent === 'function') {
+                trackEvent('click_add_custom_countdown');
+                trackEvent('click_add_personal_target');
+            } else if (typeof gtag === 'function') {
+                gtag('event', 'click_add_custom_countdown', { transport: 'beacon' });
+                gtag('event', 'click_add_personal_target', { transport: 'beacon' });
+            }
         }
     });
 }
@@ -1118,31 +1131,11 @@ document.addEventListener('DOMContentLoaded', () => {
             content.style.borderRadius = '0';
             content.style.boxShadow = 'none';
             content.style.background = 'linear-gradient(145deg, #1e293b 0%, #0f172a 100%)';
-            content.style.padding = '40px 20px';
+            content.style.padding = '22px 16px';
         }
     }
 
-    const originalSave = window.saveCustomCountdown;
-    if (originalSave) {
-        window.saveCustomCountdown = function() {
-            if (originalSave() === false) return;
-            setTimeout(() => {
-                let intentId = '';
-                try {
-                    const saved = JSON.parse(localStorage.getItem('neto_customCountdowns'));
-                    if(saved && saved.length > 0) {
-                        intentId = saved[saved.length - 1].id;
-                    }
-                } catch(e) {}
-                
-                let search = window.location.search;
-                if(intentId) {
-                    search = search ? search + '&targetIntent=' + intentId : '?targetIntent=' + intentId;
-                }
-                window.location.href = '../index.html' + search;
-            }, 100);
-        };
-    }
+
 });
 </script>
 </body>

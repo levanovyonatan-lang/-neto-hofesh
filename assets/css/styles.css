@@ -2015,50 +2015,51 @@ body.theme-gold .vip-save-btn {
 .theme-selector-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 6px;
 }
 
 .theme-btn {
     position: relative;
-    padding: 10px 5px;
-    border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 4px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
     color: white;
     font-family: inherit;
-    font-weight: bold;
-    font-size: 0.95rem;
+    font-weight: 700;
+    font-size: 0.88rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    gap: 3px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
 .theme-btn .icon {
-    font-size: 1.2rem;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
-    transition: transform 0.3s ease;
+    font-size: 1.1rem;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
+    transition: transform 0.25s ease;
+    line-height: 1;
 }
 
 .theme-btn:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
     border-color: rgba(255,255,255,0.3);
 }
 
 .theme-btn:hover .icon {
-    transform: scale(1.15) rotate(5deg);
+    transform: scale(1.1);
 }
 
 .theme-btn.active {
     border-color: #fef08a !important;
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(254, 240, 138, 0.3);
+    transform: scale(1.03);
+    box-shadow: 0 0 14px rgba(254, 240, 138, 0.35);
     z-index: 10;
 }
 
