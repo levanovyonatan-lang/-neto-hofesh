@@ -90,6 +90,10 @@
             padding: 5px;
             margin: -5px;
         }
+        @keyframes dinoDustFade {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.7; }
+            100% { transform: scale(1.4) translate(25px, -10px); opacity: 0; }
+        }
         .dino-element {
             -webkit-user-select: none;
             user-select: none;
@@ -555,19 +559,11 @@
             dust.style.bottom = '30px';
             dust.style.right = '40px';
             dust.style.fontSize = '20px';
-            dust.style.opacity = '0.7';
-            dust.style.transition = 'all 0.5s ease-out';
             dust.style.zIndex = '2';
             dust.style.pointerEvents = 'none';
+            dust.style.animation = 'dinoDustFade 0.25s ease-out forwards';
             gameContainer.appendChild(dust);
-            
-            requestAnimationFrame(() => {
-                dust.style.right = '10px';
-                dust.style.bottom = '40px';
-                dust.style.opacity = '0';
-                dust.style.transform = 'scale(1.5)';
-            });
-            setTimeout(() => { if(dust.parentNode) dust.remove(); }, 500);
+            setTimeout(() => { if (dust.parentNode) dust.remove(); }, 260);
         }
     }
 
@@ -616,8 +612,8 @@
         } else if (isCloud) {
             emoji = CLOUDS[Math.floor(Math.random() * CLOUDS.length)];
             bottom = Math.floor(Math.random() * 60 + 100) + 'px'; // Random sky height
-            speedMult = 0.2 + Math.random() * 0.3; // Parallax slow
-            size = Math.floor(Math.random() * 20 + 30) + 'px';
+            speedMult = 0.65 + Math.random() * 0.25; // Smooth drifting speed
+            size = Math.floor(Math.random() * 15 + 28) + 'px';
             el.style.opacity = '0.6';
             el.style.zIndex = '1';
         }
@@ -792,8 +788,8 @@
             }
         }
         
-        // Randomly spawn clouds
-        if (currentStageIndex !== 4 && currentStageIndex !== 5 && Math.random() < 0.015) {
+        // Randomly spawn clouds at relaxed pace (prevents crowding)
+        if (currentStageIndex !== 4 && currentStageIndex !== 5 && Math.random() < 0.005) {
             spawnEntity('cloud');
         }
 
@@ -871,10 +867,26 @@
                 document.getElementById('dino-score-val').textContent = score;
             }
 
-            // Remove off-screen immediately as soon as it clears the edge
-            if (obs.x < (obs.type === 'cloud' ? -50 : -30)) {
-                obs.el.remove();
-                obstaclesList.splice(i, 1);
+            // Clean, graceful fade-out and instant removal:
+            // Eliminates lingering, sticking, or piles of objects behind the dino
+            if (obs.type === 'cloud') {
+                if (obs.x < 25) {
+                    obs.el.style.opacity = Math.max(0, (obs.x / 25) * 0.6);
+                }
+                if (obs.x <= 0) {
+                    obs.el.remove();
+                    obstaclesList.splice(i, 1);
+                    continue;
+                }
+            } else {
+                if (obs.x < 14) {
+                    obs.el.style.opacity = Math.max(0, obs.x / 14);
+                }
+                if (obs.x <= 0) {
+                    obs.el.remove();
+                    obstaclesList.splice(i, 1);
+                    continue;
+                }
             }
         }
 

@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261012-perf-instant-startup-3';
+const CACHE_VERSION = 'v20261012-perf-instant-startup-4';
 const CACHE_NAME = 'neto-cache-v1790694504';
 
 self.addEventListener('install', e => {
