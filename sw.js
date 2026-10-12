@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261012-safari-single-start-fix-1';
+const CACHE_VERSION = 'v20261012-target-select-scroll-fix-1';
 const CACHE_NAME = 'neto-cache-v1790694504';
 
 self.addEventListener('install', e => {

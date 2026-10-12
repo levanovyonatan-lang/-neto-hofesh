@@ -514,12 +514,16 @@ function normalizeDailyTipState(state) {
 }
 
 function getDailyTipState(targetId) {
+    if (!dailyTipsState || typeof dailyTipsState !== 'object') dailyTipsState = { date: '', targets: {} };
+    if (!dailyTipsState.targets || typeof dailyTipsState.targets !== 'object') dailyTipsState.targets = {};
     const keyedState = dailyTipsState.targets[getDailyTipStateKey(targetId)];
     if (keyedState) return normalizeDailyTipState(keyedState);
     return normalizeDailyTipState(dailyTipsState.targets[targetId]);
 }
 
 function setDailyTipState(targetId, state) {
+    if (!dailyTipsState || typeof dailyTipsState !== 'object') dailyTipsState = { date: '', targets: {} };
+    if (!dailyTipsState.targets || typeof dailyTipsState.targets !== 'object') dailyTipsState.targets = {};
     dailyTipsState.targets[getDailyTipStateKey(targetId)] = normalizeDailyTipState(state);
 }
 
@@ -1640,9 +1644,11 @@ function showMainScreen() {
 
 function updateActiveHolidayCard(id) {
     const container = document.getElementById('holidays-container');
-    if (container && container.children.length === activeEventsList.length) {
-        Array.from(container.children).forEach((card, idx) => {
-            if (activeEventsList[idx] && activeEventsList[idx].id === id) {
+    if (!container) return;
+    const cards = container.querySelectorAll('.holiday-card');
+    if (cards.length > 0) {
+        cards.forEach(card => {
+            if (card.dataset && card.dataset.targetId === id) {
                 card.classList.add('active');
             } else {
                 card.classList.remove('active');
@@ -1654,17 +1660,16 @@ function updateActiveHolidayCard(id) {
 }
 
 function renderHolidays() {
-    const container = document.getElementById('holidays-container'); container.innerHTML = '';
+    const container = document.getElementById('holidays-container');
+    if (!container) return;
+    container.innerHTML = '';
     activeEventsList.forEach(ev => {
-        const card = document.createElement('a');
-        card.href = 'javascript:void(0)';
-        card.onclick = (e) => {
-            e.preventDefault();
-            selectTarget(ev.id);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
+        const card = document.createElement('div');
         card.className = `holiday-card ${ev.id === userConfig.activeTargetId ? 'active' : ''}`;
-        card.style.textDecoration = 'none';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.dataset.targetId = ev.id;
+        card.style.cursor = 'pointer';
 
         let subText = `ב-${ev.date.toLocaleDateString('he-IL')}`;
         if (ev.description) subText = ev.description;
@@ -1685,6 +1690,22 @@ function renderHolidays() {
             card.style.position = 'relative';
             card.appendChild(editBtn);
         }
+        
+        const handleCardSelect = (e) => {
+            if (e) {
+                if (e.target && e.target.textContent === '✏️') return;
+                e.preventDefault();
+            }
+            selectTarget(ev.id, true);
+        };
+
+        card.addEventListener('click', handleCardSelect);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleCardSelect(e);
+            }
+        });
         
         container.appendChild(card);
     });
@@ -1851,7 +1872,7 @@ function saveCustomCountdown() {
         if (activeCard) {
             activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        scrollToAppTop();
     }, 100);
     
     return true;
@@ -1885,11 +1906,41 @@ function deleteCustomCountdownFromModal() {
     }
 }
 
+function scrollToAppTop() {
+    const mainTimer = document.getElementById('main-timer-bg') || document.getElementById('main-screen');
+    if (mainTimer && typeof mainTimer.scrollIntoView === 'function') {
+        try { mainTimer.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { }
+    }
+    try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    } catch (e) {
+        window.scrollTo(0, 0);
+    }
+    setTimeout(() => {
+        const currentY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        if (currentY > 30) {
+            try { window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); } catch (e) { }
+            setTimeout(() => {
+                const finalY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+                if (finalY > 30) {
+                    window.scrollTo(0, 0);
+                    if (document.documentElement) document.documentElement.scrollTop = 0;
+                    if (document.body) document.body.scrollTop = 0;
+                }
+            }, 80);
+        }
+    }, 60);
+}
+
 function selectTarget(id, shouldScroll = true) {
-    if (window.cleanupDinoGame) window.cleanupDinoGame();
-    if (userConfig.activeTargetId !== id && userConfig.activeTargetId !== '') trackEvent('select_target_holiday', { 'holiday_id': id });
+    if (window.cleanupDinoGame) {
+        try { window.cleanupDinoGame(); } catch (e) { }
+    }
+    if (userConfig.activeTargetId !== id && userConfig.activeTargetId !== '') {
+        try { trackEvent('select_target_holiday', { 'holiday_id': id }); } catch (e) { }
+    }
     if (shouldScroll) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        scrollToAppTop();
     }
     userConfig.activeTargetId = id; confettiFired = false;
 
@@ -2067,7 +2118,9 @@ function selectTarget(id, shouldScroll = true) {
     }
     if (absoluteTimer) absoluteTimer.setAttribute('aria-hidden', 'true');
 
-    loadDailyState(); renderTipBox(id); updateActiveHolidayCard(id);
+    try { loadDailyState(); } catch (e) { console.warn('loadDailyState error', e); }
+    try { renderTipBox(id); } catch (e) { console.warn('renderTipBox error', e); }
+    try { updateActiveHolidayCard(id); } catch (e) { console.warn('updateActiveHolidayCard error', e); }
     let targetDaysForAnim = 0;
     if (personalPremium) {
         targetDaysForAnim = Math.max(0, Math.floor((target.date.getTime() - Date.now()) / 86400000));
@@ -2607,8 +2660,7 @@ window.addEventListener('hashchange', function() {
 
         const targetId = hash.substring(4);
         if (typeof selectTarget === 'function') {
-            selectTarget(targetId, false);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            selectTarget(targetId, true);
         }
     }
 });
