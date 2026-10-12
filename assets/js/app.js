@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=20261012-perf-instant-startup-5').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=20261012-vignette-restore-1').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -1016,10 +1016,7 @@ function prepareCountdownNavigation(event, link) {
             activeTargetId: userConfig.activeTargetId
         }));
     } catch (e) { }
-    if (event) {
-        event.preventDefault();
-        window.location.href = navUrl;
-    }
+    // Leave the natural link navigation intact so Google AdSense Auto Ads can intercept it and show Vignette transition ads
     return true;
 }
 
@@ -2306,6 +2303,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const stored = localStorage.getItem('neto_userConfig');
         if (stored) {
             const config = JSON.parse(stored);
+            if (config.activeTargetId) {
+                userConfig.activeTargetId = config.activeTargetId;
+            }
             if (config.schoolType) {
                 const radio = document.querySelector(`input[name="schoolType"][value="${config.schoolType}"]`);
                 if (radio) {
@@ -2319,6 +2319,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
+        updateCountdownStartLinks();
     } catch (e) { }
 
     try {
