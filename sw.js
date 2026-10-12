@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261012-vacation-days-range-1';
+const CACHE_VERSION = 'v20261012-pwa-manifest-ready-1';
 const CACHE_NAME = 'neto-cache-v1790694504';
 
 self.addEventListener('install', e => {
