@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "il.co.neto_hofesh.www.twa",
+      "sha256_cert_fingerprints": [
+        "A2:C3:C0:F6:47:08:5D:3B:B4:8B:D1:FA:41:4F:BD:E5:81:E2:15:85:B1:B6:87:0B:1F:E9:AE:EF:E5:DB:E2:82"
+      ]
+    }
+  }
+]
