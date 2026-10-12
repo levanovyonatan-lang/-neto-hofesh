@@ -1804,50 +1804,77 @@ body.theme-gold .vip-save-btn {
 
 .premium-modal-content {
     box-sizing: border-box;
-    background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-    padding: 15px 15px;
-    border-radius: 24px;
+    background: linear-gradient(150deg, #1e293b 0%, #0f172a 100%);
+    padding: 20px 18px 18px;
+    border-radius: 22px;
     text-align: center;
-    max-width: 95%;
-    width: 420px;
+    max-width: 440px;
+    width: 92%;
     position: relative;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 2px 2px rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    animation: slideUpModal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    animation: slideUpModal 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     max-height: 90vh;
     overflow-y: auto;
 }
 
+@media (max-width: 480px) {
+    .premium-modal-content {
+        padding: 16px 14px 14px;
+        width: 95%;
+        border-radius: 18px;
+    }
+}
+
 @keyframes slideUpModal {
-    from { transform: translateY(40px) scale(0.95); opacity: 0; }
+    from { transform: translateY(30px) scale(0.97); opacity: 0; }
     to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .premium-modal-close {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
+    top: 14px;
+    right: 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
     color: #94a3b8;
-    font-size: 22px;
+    font-size: 20px;
     cursor: pointer;
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
+    z-index: 5;
 }
 
 .premium-modal-close:hover {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.18);
     color: white;
     transform: rotate(90deg);
 }
 
-.premium-modal-header { margin-bottom: 12px; }
+.premium-modal-header {
+    margin-bottom: 14px;
+    padding-top: 4px;
+}
+
+.premium-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 12px;
+    border-radius: 20px;
+    background: rgba(254, 240, 138, 0.12);
+    border: 1px solid rgba(254, 240, 138, 0.3);
+    color: #fef08a;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+}
 
 .premium-modal-icon {
     font-size: 3rem;
@@ -1863,48 +1890,59 @@ body.theme-gold .vip-save-btn {
 
 .premium-modal-title {
     color: #fef08a;
-    margin: 0 0 5px 0;
-    font-size: 1.6rem;
+    margin: 0 0 4px 0;
+    font-size: 1.45rem;
     font-weight: 900;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    letter-spacing: -0.5px;
+    letter-spacing: -0.3px;
 }
 
 .premium-modal-subtitle {
     color: #94a3b8;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     margin: 0;
 }
 
-.premium-input-group { text-align: right; margin-bottom: 10px; position: relative; }
+.premium-input-group {
+    text-align: right;
+    margin-bottom: 10px;
+    position: relative;
+}
 
 .premium-label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #e2e8f0;
-    font-size: 0.95rem;
+    margin-bottom: 5px;
+    font-weight: 700;
+    color: #cbd5e1;
+    font-size: 0.86rem;
+}
+
+.date-time-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .premium-input-wrapper {
     position: relative;
     border-radius: 12px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.25);
 }
 
 .premium-input {
     box-sizing: border-box;
     display: block;
     width: 100%;
-    padding: 14px 15px;
+    padding: 10px 13px;
     border-radius: 12px;
-    border: 2px solid #334155;
-    background: transparent;
+    border: 1.5px solid #334155;
+    background: rgba(15, 23, 42, 0.55);
     color: white;
     font-family: inherit;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     line-height: normal;
-    transition: all 0.3s;
+    transition: all 0.25s;
     -webkit-appearance: none;
     appearance: none;
     margin: 0;
@@ -1984,13 +2022,13 @@ body.theme-gold .vip-save-btn {
     background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
     color: #422006;
     border: none;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 900;
     border-radius: 14px;
     cursor: pointer;
     box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3), inset 0 -2px 4px rgba(0,0,0,0.1);
     transition: all 0.2s;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 .premium-save-btn:hover {
@@ -2015,20 +2053,21 @@ body.theme-gold .vip-save-btn {
 .theme-selector-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    gap: 7px;
 }
 
 .theme-btn {
     position: relative;
-    padding: 6px 4px;
-    border-radius: 8px;
+    padding: 7px 4px;
+    min-height: 52px;
+    border-radius: 10px;
     border: 1.5px solid rgba(255, 255, 255, 0.12);
     color: white;
     font-family: inherit;
     font-weight: 700;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -2040,10 +2079,15 @@ body.theme-gold .vip-save-btn {
 }
 
 .theme-btn .icon {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
-    transition: transform 0.25s ease;
+    transition: transform 0.2s ease;
     line-height: 1;
+}
+
+.theme-btn .text {
+    line-height: 1.1;
+    white-space: nowrap;
 }
 
 .theme-btn:hover {
@@ -2058,7 +2102,7 @@ body.theme-gold .vip-save-btn {
 
 .theme-btn.active {
     border-color: #fef08a !important;
-    transform: scale(1.03);
+    transform: scale(1.02);
     box-shadow: 0 0 14px rgba(254, 240, 138, 0.35);
     z-index: 10;
 }

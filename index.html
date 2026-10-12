@@ -923,19 +923,21 @@
                 </div>
             </div>
             
-            <div class="premium-input-group">
-                <label for="custom-date" class="premium-label">תאריך היעד:</label>
-                <div class="premium-input-wrapper">
-                    <input type="date" id="custom-date" class="premium-input date-time-input">
-                    <div class="input-glow"></div>
+            <div class="date-time-grid">
+                <div class="premium-input-group" style="margin-bottom: 0;">
+                    <label for="custom-date" class="premium-label">תאריך היעד 📅</label>
+                    <div class="premium-input-wrapper">
+                        <input type="date" id="custom-date" class="premium-input date-time-input">
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="premium-input-group">
-                <label for="custom-time" class="premium-label">שעת האירוע:</label>
-                <div class="premium-input-wrapper">
-                    <input type="time" id="custom-time" value="08:00" class="premium-input date-time-input">
-                    <div class="input-glow"></div>
+                <div class="premium-input-group" style="margin-bottom: 0;">
+                    <label for="custom-time" class="premium-label">שעת היעד ⏰</label>
+                    <div class="premium-input-wrapper">
+                        <input type="time" id="custom-time" value="08:00" class="premium-input date-time-input">
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
             </div>
 
@@ -945,8 +947,8 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <label class="premium-label" style="color: #fef08a; margin: 0; font-size: 0.9rem;">עיצוב הספירה:</label>
                     <div class="design-type-toggle" style="background: rgba(255,255,255,0.05); border-radius: 20px; display: flex; padding: 3px; gap: 3px; border: 1px solid rgba(255,255,255,0.1);">
-                        <button type="button" id="btn-design-theme" onclick="toggleDesignType('theme')" style="background: rgba(255,255,255,0.1); border: none; color: white; padding: 3px 10px; border-radius: 14px; font-size: 12px; cursor: pointer; transition: all 0.2s;">עיצובים</button>
-                        <button type="button" id="btn-design-color" onclick="toggleDesignType('color')" style="background: transparent; border: none; color: #94a3b8; padding: 3px 10px; border-radius: 14px; font-size: 12px; cursor: pointer; transition: all 0.2s;">צבע אחיד</button>
+                        <button type="button" id="btn-design-theme" onclick="toggleDesignType('theme')" style="background: rgba(255,255,255,0.1); border: none; color: white; padding: 3px 12px; border-radius: 14px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;">עיצובים</button>
+                        <button type="button" id="btn-design-color" onclick="toggleDesignType('color')" style="background: transparent; border: none; color: #94a3b8; padding: 3px 12px; border-radius: 14px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;">צבע אחיד</button>
                     </div>
                 </div>
                 
@@ -968,7 +970,7 @@
                             <span class="icon">🪖</span><span class="text">צבא</span>
                         </button>
                         <button type="button" class="theme-btn" data-theme="license" onclick="selectCustomTheme(this)">
-                            <span class="icon">🚗</span><span class="text" style="display:flex;flex-direction:column;align-items:center;line-height:1.1;">נסיעה<span style="font-size:0.75em;font-weight:400;opacity:0.8;">(רישיון)</span></span>
+                            <span class="icon">🚗</span><span class="text">רישיון</span>
                         </button>
                     </div>
                 </div>

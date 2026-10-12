@@ -21,9 +21,14 @@ $style = @"
         display: none !important;
     }
     body {
-        padding: 0 !important;
+        padding: 12px 10px !important;
         margin: 0 !important;
         background: #0f172a !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+        min-height: 100vh !important;
+        box-sizing: border-box !important;
     }
 </style>
 "@
@@ -37,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const modal = document.getElementById('custom-countdown-modal');
     if(modal) {
-        modal.style.display = 'block';
+        modal.style.display = 'flex';
+        modal.style.justifyContent = 'center';
         modal.style.width = '100%';
         modal.style.minHeight = '100vh';
         modal.style.position = 'relative';
@@ -58,15 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const content = modal.querySelector('.premium-modal-content');
         if(content) {
-            content.style.maxWidth = '100%';
+            content.style.maxWidth = '440px';
             content.style.width = '100%';
-            content.style.minHeight = '100vh';
-            content.style.margin = '0';
-            content.style.border = 'none';
-            content.style.borderRadius = '0';
-            content.style.boxShadow = 'none';
-            content.style.background = 'linear-gradient(145deg, #1e293b 0%, #0f172a 100%)';
-            content.style.padding = '22px 16px';
+            content.style.minHeight = 'auto';
+            content.style.margin = '10px auto';
+            content.style.border = '1px solid rgba(255, 255, 255, 0.12)';
+            content.style.borderRadius = '22px';
+            content.style.boxShadow = '0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.12)';
+            content.style.background = 'linear-gradient(150deg, #1e293b 0%, #0f172a 100%)';
+            content.style.padding = '20px 18px 18px';
         }
     }
 
