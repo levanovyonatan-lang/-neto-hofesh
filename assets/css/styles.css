@@ -1988,11 +1988,28 @@ body.theme-gold .vip-save-btn {
     opacity: 1;
 }
 
-/* Perfect centering for time and date values */
+/* Perfect centering for time and date values (iOS Safari, WebKit, Blink) */
+.date-time-input,
 #custom-time,
 #custom-date {
     text-align: center !important;
+    text-align-last: center !important;
     direction: ltr !important;
+    -webkit-text-align: center !important;
+}
+
+/* iOS Safari specific date & time container centering */
+.date-time-input::-webkit-date-and-time-value,
+#custom-time::-webkit-date-and-time-value,
+#custom-date::-webkit-date-and-time-value {
+    text-align: center !important;
+    text-align-last: center !important;
+    min-height: auto !important;
+    line-height: 46px !important;
+    height: 46px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    display: block !important;
 }
 
 #custom-time::-webkit-datetime-edit,
@@ -2002,7 +2019,7 @@ body.theme-gold .vip-save-btn {
     text-align: center !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    padding-left: 20px !important;
+    padding-left: 18px !important;
 }
 
 #custom-time::-webkit-datetime-edit-fields-wrapper,
@@ -2010,6 +2027,7 @@ body.theme-gold .vip-save-btn {
     display: inline-flex !important;
     justify-content: center !important;
     text-align: center !important;
+    margin: 0 auto !important;
 }
 
 #custom-time::-webkit-datetime-edit-text,

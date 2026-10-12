@@ -17,17 +17,43 @@ $html = [System.Text.RegularExpressions.Regex]::Replace($html, 'href="(?:\.\./)?
 
 $style = @"
 <style>
-    #main-screen, #setup-screen, .holiday-switcher-wrapper, .settings-btn, #footer {
+    #main-screen, #setup-screen, .holiday-switcher-wrapper, .settings-btn, #footer, #neto-splash, #fitness-banner, #jobs-banner {
         display: none !important;
     }
-    body {
-        padding: 12px 10px !important;
+    html, body {
         margin: 0 !important;
+        padding: 0 !important;
         background: #0f172a !important;
+        min-height: 100% !important;
+        overflow-x: hidden !important;
+    }
+    #custom-countdown-modal {
         display: flex !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: #0f172a !important;
+        z-index: 10000 !important;
+        align-items: center !important;
         justify-content: center !important;
-        align-items: flex-start !important;
-        min-height: 100vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 16px 12px !important;
+        box-sizing: border-box !important;
+    }
+    #custom-countdown-modal .premium-modal-content {
+        margin: auto !important;
+        max-width: 440px !important;
+        width: 100% !important;
+        border-radius: 22px !important;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        background: linear-gradient(150deg, #1e293b 0%, #0f172a 100%) !important;
+        padding: 22px 18px 18px !important;
         box-sizing: border-box !important;
     }
 </style>
@@ -37,18 +63,28 @@ $html = $html.Replace('</head>', $style + "`n</head>")
 $script = @"
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.remove('splash-active');
     document.body.classList.add('premium-active');
 
+    const splash = document.getElementById('neto-splash');
+    if (splash) splash.remove();
+
+    // Pre-populate date if empty
+    const dateInput = document.getElementById('custom-date');
+    if (dateInput && !dateInput.value) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const yyyy = tomorrow.getFullYear();
+        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const dd = String(tomorrow.getDate()).padStart(2, '0');
+        dateInput.value = `${yyyy}-${mm}-${dd}`;
+        const today = new Date();
+        dateInput.min = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    }
 
     const modal = document.getElementById('custom-countdown-modal');
     if(modal) {
         modal.style.display = 'flex';
-        modal.style.justifyContent = 'center';
-        modal.style.width = '100%';
-        modal.style.minHeight = '100vh';
-        modal.style.position = 'relative';
-        modal.style.background = '#0f172a';
-        modal.style.zIndex = '1';
         
         const closeBtn = modal.querySelector('.premium-modal-close');
         if(closeBtn) {
@@ -61,22 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
         }
-        
-        const content = modal.querySelector('.premium-modal-content');
-        if(content) {
-            content.style.maxWidth = '440px';
-            content.style.width = '100%';
-            content.style.minHeight = 'auto';
-            content.style.margin = '10px auto';
-            content.style.border = '1px solid rgba(255, 255, 255, 0.12)';
-            content.style.borderRadius = '22px';
-            content.style.boxShadow = '0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.12)';
-            content.style.background = 'linear-gradient(150deg, #1e293b 0%, #0f172a 100%)';
-            content.style.padding = '20px 18px 18px';
-        }
     }
-
-
 });
 </script>
 </body>

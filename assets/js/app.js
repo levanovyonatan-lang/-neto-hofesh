@@ -1806,10 +1806,26 @@ function openCustomCountdownModal(id = null) {
                 themeVal = existing.theme || 'default';
             }
         }
+    } else {
+        // Pre-fill tomorrow as default future date
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const yyyy = tomorrow.getFullYear();
+        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const dd = String(tomorrow.getDate()).padStart(2, '0');
+        dateVal = `${yyyy}-${mm}-${dd}`;
     }
 
-    document.getElementById('custom-name').value = name;
-    document.getElementById('custom-date').value = dateVal;
+    const nameInput = document.getElementById('custom-name');
+    if (nameInput) nameInput.value = name;
+    
+    const dateInput = document.getElementById('custom-date');
+    if (dateInput) {
+        const today = new Date();
+        const minStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        dateInput.min = minStr;
+        dateInput.value = dateVal;
+    }
     
     const timeInput = document.getElementById('custom-time');
     if(timeInput) timeInput.value = timeVal;
@@ -1838,8 +1854,11 @@ function openCustomCountdownModal(id = null) {
 }
 
 function saveCustomCountdown() {
-    const name = document.getElementById('custom-name').value.trim();
-    const dateStr = document.getElementById('custom-date').value;
+    const nameInput = document.getElementById('custom-name');
+    const name = nameInput ? nameInput.value.trim() : '';
+    
+    const dateInput = document.getElementById('custom-date');
+    const dateStr = dateInput ? dateInput.value : '';
     
     const timeInput = document.getElementById('custom-time');
     const timeStr = timeInput ? timeInput.value : '';
@@ -1856,21 +1875,34 @@ function saveCustomCountdown() {
     const designTypeInput = document.getElementById('custom-design-type');
     const designTypeStr = designTypeInput ? designTypeInput.value : 'theme';
     
-    if (!name || !dateStr) {
-        alert('יש להזין שם ותאריך לספירה האישית.');
+    if (!name) {
+        alert('יש להזין שם לספירה האישית.');
+        if (nameInput) nameInput.focus();
         return false;
     }
     
-    const targetDate = new Date(dateStr);
-    if (timeStr) {
-        const [hours, minutes] = timeStr.split(':').map(Number);
-        targetDate.setHours(hours, minutes, 0, 0);
+    if (!dateStr) {
+        alert('יש לבחור תאריך יעד לספירה.');
+        if (dateInput) dateInput.focus();
+        return false;
+    }
+    
+    let targetDate;
+    if (dateStr.includes('-')) {
+        const parts = dateStr.split('-').map(Number);
+        const [hours, minutes] = (timeStr && timeStr.includes(':')) ? timeStr.split(':').map(Number) : [8, 0];
+        targetDate = new Date(parts[0], parts[1] - 1, parts[2], hours, minutes, 0, 0);
     } else {
-        targetDate.setHours(8, 15, 0, 0); // Default to morning time
+        targetDate = new Date(dateStr);
+    }
+    
+    if (isNaN(targetDate.getTime())) {
+        alert('תאריך היעד שהוזן אינו תקין.');
+        return false;
     }
     
     if (targetDate.getTime() <= Date.now()) {
-        alert('יש לבחור תאריך/שעה בעתיד.');
+        alert('יש לבחור תאריך או שעה בעתיד.');
         return false;
     }
     
@@ -1950,17 +1982,23 @@ function handleSaveCustomCountdown(event, link) {
         link.href = destUrl;
     }
 
-    if (isStandalone) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
+    if (isSubpage) {
+        if (isStandalone) {
+            if (event) event.preventDefault();
+            window.location.href = destUrl;
+            return false;
         }
-        return false;
+        // Normal web navigation for Google AdSense Vignettes
+        setTimeout(() => { window.location.href = destUrl; }, 200);
+        return true;
     }
 
-    // Natural navigation on <a href="..."> allows Google AdSense Auto Ads
-    // to intercept the user click and display full-screen Vignette transition ads!
-    return true;
+    // When inside the in-page modal on index.html: stay on page smoothly
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    return false;
 }
 
 function deleteCustomCountdown(id) {

@@ -1021,13 +1021,25 @@ if(customBtn) {
                 gtag('event', 'custom_countdown_limit_reached', { transport: 'beacon' });
             }
             alert('ניתן להוסיף עד 5 ספירות אישיות מקסימום. יש למחוק אחת קיימת כדי להוסיף חדשה.');
-        } else {
-            if (typeof trackEvent === 'function') {
-                trackEvent('click_add_custom_countdown');
-                trackEvent('click_add_personal_target');
-            } else if (typeof gtag === 'function') {
-                gtag('event', 'click_add_custom_countdown', { transport: 'beacon' });
-                gtag('event', 'click_add_personal_target', { transport: 'beacon' });
+            return;
+        }
+
+        if (typeof trackEvent === 'function') {
+            trackEvent('click_add_custom_countdown');
+            trackEvent('click_add_personal_target');
+        } else if (typeof gtag === 'function') {
+            gtag('event', 'click_add_custom_countdown', { transport: 'beacon' });
+            gtag('event', 'click_add_personal_target', { transport: 'beacon' });
+        }
+
+        const isStandalone = typeof isNetoStandalone === 'function' && isNetoStandalone();
+        if (isStandalone) {
+            e.preventDefault();
+            if (typeof openCustomModal === 'function') {
+                openCustomModal();
+            } else {
+                const modal = document.getElementById('custom-countdown-modal');
+                if (modal) modal.style.display = 'flex';
             }
         }
     });
