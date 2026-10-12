@@ -232,22 +232,7 @@ function closeIosModal() {
 }
 
 function refreshPWAIconsSilently() {
-    try {
-        const cb = Date.now();
-        fetch('manifest.json?v=10160&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses.png?v=10160&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-white.png?v=10160&cb=' + cb, { cache: 'reload' }).catch(() => { });
-        fetch('icon-neto-sunglasses-transparent.png?v=10160&cb=' + cb, { cache: 'reload' }).catch(() => { });
-
-        document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(link => {
-            const baseHref = link.href.split('?')[0];
-            link.href = baseHref + '?v=10160&cb=' + cb;
-        });
-        const manifestLink = document.querySelector('link[rel="manifest"]');
-        if (manifestLink) {
-            manifestLink.href = 'manifest.json?v=10160&cb=' + cb;
-        }
-    } catch (e) { }
+    // Disabled heavy uncached background icon downloads to preserve mobile bandwidth and speed
 }
 
 function toggleInstructionMode() {

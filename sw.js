@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261012-pwa-icons-fixed-2';
+const CACHE_VERSION = 'v20261012-perf-instant-startup-1';
 const CACHE_NAME = 'neto-cache-v1790694504';
 
 self.addEventListener('install', e => {
@@ -44,36 +44,27 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   const url = req.url || '';
 
-  // Prefer current HTML so an online visit loads the latest versioned scripts.
-  if (req.mode === 'navigate') {
-    e.respondWith(
-      fetch(req, { cache: 'no-store' }).then(response => {
-        if (response.ok) {
-          const copy = response.clone();
-          e.waitUntil(caches.open(CACHE_VERSION).then(cache => cache.put(req, copy)));
-        }
-        return response;
-      }).catch(async () => {
-        const cached = await caches.match(req);
-        return cached || Response.error();
-      })
-    );
-    return;
-  }
-
   // Stale-While-Revalidate for HTML/document navigation and core scripts/styles for instant PWA startup
   if (req.mode === 'navigate' || url.includes('index.html') || url.endsWith('/') || url.includes('.css') || url.includes('.js') || url.includes('manifest.json')) {
     e.respondWith(
-      caches.match(req).then(cachedResponse => {
+      caches.match(req, { ignoreSearch: true }).then(async cachedResponse => {
+        let fallbackCached = cachedResponse;
+        if (!fallbackCached && req.mode === 'navigate') {
+          fallbackCached = await caches.match('index.html');
+          if (!fallbackCached) {
+            fallbackCached = await caches.match('./');
+          }
+        }
+
         const fetchPromise = fetch(req).then(networkResponse => {
           if (networkResponse && networkResponse.status === 200) {
             const responseClone = networkResponse.clone();
             caches.open(CACHE_VERSION).then(cache => cache.put(req, responseClone));
           }
           return networkResponse;
-        }).catch(() => cachedResponse);
+        }).catch(() => fallbackCached);
 
-        return cachedResponse || fetchPromise;
+        return fallbackCached || fetchPromise;
       })
     );
     return;
