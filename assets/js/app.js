@@ -1301,7 +1301,7 @@ function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
     return count;
 }
 
-function animateNetDays(finalValue) {
+function animateNetDays(finalValue, targetId = null) {
     if (netDaysAnimationId) { cancelAnimationFrame(netDaysAnimationId); netDaysAnimationId = null; }
     const obj = document.getElementById('main-net-days');
     if (!obj) return;
@@ -1312,22 +1312,46 @@ function animateNetDays(finalValue) {
     }
 
     isAnimatingNetDays = true;
-    const currentText = obj.textContent ? obj.textContent.trim() : '';
-    const currentNum = parseInt(currentText, 10);
+    const currentId = targetId || userConfig.activeTargetId || '';
 
-    let startValue = finalValue + 40;
-    let duration = 800;
-    if (!isNaN(currentNum) && currentNum > 0 && currentNum !== finalValue) {
-        startValue = currentNum;
-        duration = Math.min(600, Math.max(300, Math.abs(finalValue - currentNum) * 10));
+    // בדיקה האם מדובר בחג רחוק / מאוחר יותר בלוח השנה
+    const isLateHoliday = (
+        finalValue >= 90 ||
+        currentId.includes('summer') ||
+        currentId.includes('shavuot') ||
+        currentId.includes('pesach') ||
+        currentId.includes('atzmaut') ||
+        currentId.includes('lagbaomer') ||
+        currentId.includes('purim')
+    );
+
+    // התאמת טווח הימים היורדים ומשך הזמן (ארוך ומותח יותר ככל שהחג רחוק יותר)
+    let offset = 65;
+    let duration = 1500;
+
+    if (finalValue <= 35) {
+        offset = 50;
+        duration = 1300;
+    } else if (finalValue <= 75) {
+        offset = 70;
+        duration = 1700;
+    } else if (finalValue <= 130) {
+        offset = isLateHoliday ? 95 : 80;
+        duration = isLateHoliday ? 2200 : 1900;
+    } else {
+        // חגים רחוקים במיוחד (פסח, שבועות, החופש הגדול וכו') - טעינה מוארכת וכיפית
+        offset = 115;
+        duration = 2700; // 2.7 שניות כדי שהמשתמש יספיק לראות את הספירה במלואה גם אחרי הגלילה למעלה
     }
 
+    const startValue = finalValue + offset;
     let startTimestamp = null;
+
     const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
         const easeProgress = 1 - Math.pow(1 - progress, 3);
-        const currentVal = Math.round(startValue + (finalValue - startValue) * easeProgress);
+        const currentVal = Math.round(startValue - (startValue - finalValue) * easeProgress);
         obj.textContent = currentVal;
 
         if (progress < 1) {
@@ -2146,7 +2170,7 @@ function selectTarget(id, shouldScroll = true) {
     } else {
         targetDaysForAnim = calculateNetDays(target.date, target.noFriday, target.id);
     }
-    animateNetDays(targetDaysForAnim);
+    animateNetDays(targetDaysForAnim, id);
     
     let diff = target.date.getTime() - Date.now();
     if (target.isHappeningNow) { diff = target.endDate.getTime() - Date.now(); }
