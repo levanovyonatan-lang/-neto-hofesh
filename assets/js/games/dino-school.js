@@ -91,8 +91,6 @@
             margin: -5px;
         }
         .dino-element {
-            will-change: transform;
-            contain: layout style;
             -webkit-user-select: none;
             user-select: none;
         }
@@ -295,7 +293,7 @@
             dinoY = 0;
             dinoVelocity = 0;
             isJumping = false;
-            dino.style.transform = `translate3d(0, 0, 0)`;
+            dino.style.transform = 'translateY(0px)';
             dino.innerHTML = '<span class="dino-inner walking">🦖</span>';
             dinoInner = dino.querySelector('.dino-inner');
             isDinoWalking = true;
@@ -351,6 +349,7 @@
 
         gameContainer.style.position = 'relative';
         gameContainer.style.overflow = 'hidden';
+        gameContainer.style.contain = 'paint';
         gameContainer.dataset.hwPrevZIndex = gameContainer.style.zIndex || '';
         gameContainer.style.zIndex = '1000';
 
@@ -492,8 +491,7 @@
         dino.style.width = '35px';
         dino.style.height = '35px';
         dino.style.zIndex = '10';
-        dino.style.willChange = 'transform';
-        dino.style.transform = 'translate3d(0, 0, 0)';
+        dino.style.transform = 'translateY(0px)';
         gameContainer.appendChild(dino);
         dinoInner = dino.querySelector('.dino-inner');
         isDinoWalking = true;
@@ -549,7 +547,7 @@
             dinoVelocity = stage.jumpForce;
             if (navigator.vibrate) navigator.vibrate([15]);
             
-            // Dust effect (flying to the right) with GPU transform
+            // Dust effect (flying to the right)
             const dust = document.createElement('div');
             dust.className = 'dino-element';
             dust.textContent = '💨';
@@ -558,17 +556,18 @@
             dust.style.right = '40px';
             dust.style.fontSize = '20px';
             dust.style.opacity = '0.7';
-            dust.style.transition = 'transform 0.4s ease-out, opacity 0.4s ease-out';
+            dust.style.transition = 'all 0.5s ease-out';
             dust.style.zIndex = '2';
             dust.style.pointerEvents = 'none';
-            dust.style.transform = 'translate3d(0, 0, 0)';
             gameContainer.appendChild(dust);
             
             requestAnimationFrame(() => {
-                dust.style.transform = 'translate3d(30px, -10px, 0) scale(1.4)';
+                dust.style.right = '10px';
+                dust.style.bottom = '40px';
                 dust.style.opacity = '0';
+                dust.style.transform = 'scale(1.5)';
             });
-            setTimeout(() => { if(dust.parentNode) dust.remove(); }, 400);
+            setTimeout(() => { if(dust.parentNode) dust.remove(); }, 500);
         }
     }
 
@@ -631,11 +630,9 @@
         const startX = gameContainer.clientWidth || 360;
         el.style.position = 'absolute';
         el.style.bottom = bottom;
-        el.style.right = '0';
+        el.style.right = startX + 'px';
         el.style.fontSize = size;
         el.style.lineHeight = '1';
-        el.style.willChange = 'transform';
-        el.style.transform = `translate3d(-${startX}px, 0, 0)`;
         if (!el.style.zIndex) el.style.zIndex = '5';
         
         gameContainer.appendChild(el);
@@ -681,7 +678,7 @@
             dinoVelocity = 0;
         }
 
-        dino.style.transform = `translate3d(0, ${dinoY}px, 0)`;
+        dino.style.transform = `translateY(${dinoY}px)`;
 
         // Update walking class based on state transition only
         if (!dinoInner) dinoInner = dino.querySelector('.dino-inner');
@@ -800,14 +797,14 @@
             spawnEntity('cloud');
         }
 
-        // Move obstacles with hardware acceleration (GPU compositing, zero layout recalc)
+        // Move obstacles
         for (let i = obstaclesList.length - 1; i >= 0; i--) {
             const obs = obstaclesList[i];
             obs.x -= gameSpeed * obs.speedMult * timeScale;
-            obs.el.style.transform = `translate3d(-${obs.x}px, 0, 0)`;
+            obs.el.style.right = obs.x + 'px';
 
-            // Pure Mathematical Collision Check (Zero DOM reflows, 60/120fps on mobile)
-            if (obs.type !== 'cloud' && obs.x <= 50 && obs.x >= 17) {
+            // Pure Mathematical Collision Check (Zero DOM reflows, silky 60fps)
+            if (obs.type !== 'cloud' && obs.x <= 53 && obs.x >= 14) {
                 let collides = false;
                 if (obs.type === 'obstacle') {
                     // Ground obstacle: hits if dino is near the ground (dinoY >= -18)
@@ -832,18 +829,17 @@
                         floatText.className = 'dino-element';
                         floatText.textContent = '+20';
                         floatText.style.position = 'absolute';
-                        floatText.style.right = '0';
+                        floatText.style.right = obs.x + 'px';
                         floatText.style.bottom = '110px';
-                        floatText.style.transform = `translate3d(-${obs.x}px, 0, 0)`;
                         floatText.style.color = '#10b981';
                         floatText.style.fontWeight = 'bold';
                         floatText.style.fontSize = '24px';
                         floatText.style.zIndex = '10';
-                        floatText.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out';
+                        floatText.style.transition = 'all 0.5s ease-out';
                         gameContainer.appendChild(floatText);
                         
                         requestAnimationFrame(() => {
-                            floatText.style.transform = `translate3d(-${obs.x}px, -90px, 0)`;
+                            floatText.style.bottom = '200px';
                             floatText.style.opacity = '0';
                         });
                         setTimeout(() => { if (floatText.parentNode) floatText.remove(); }, 500);
@@ -869,14 +865,14 @@
             }
 
             // Score passing logic
-            if (!obs.passed && obs.type !== 'cloud' && obs.type !== 'bonus' && obs.x < 17) {
+            if (!obs.passed && obs.type !== 'cloud' && obs.type !== 'bonus' && obs.x < 14) {
                 obs.passed = true;
                 score += 10;
                 document.getElementById('dino-score-val').textContent = score;
             }
 
-            // Remove off-screen
-            if (obs.x < -100) { // Increased to -100 to allow clouds to fully clear
+            // Remove off-screen immediately as soon as it clears the edge
+            if (obs.x < (obs.type === 'cloud' ? -50 : -30)) {
                 obs.el.remove();
                 obstaclesList.splice(i, 1);
             }
@@ -1318,6 +1314,7 @@
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
         gameContainer.style.overflow = '';
+        gameContainer.style.contain = '';
 
         if (gameContainer.dataset.hwPrevZIndex !== undefined) {
             gameContainer.style.zIndex = gameContainer.dataset.hwPrevZIndex;

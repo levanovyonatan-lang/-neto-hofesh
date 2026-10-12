@@ -26,7 +26,7 @@ a, button, .btn, .glass-card, .event-card, .day-card, .option-card, .smiley-swit
 }
 
 /* אופטימיזציית מאיץ גרפי (GPU Hardware Acceleration) למניעת תקיעות ולריצה חלקה במכשירים ניידים */
-.app-container, .main-timer-card, .holiday-card, .setup-step, #neto-splash, .dino-element {
+.app-container, .main-timer-card, .holiday-card, .setup-step, #neto-splash {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     transform: translateZ(0);
