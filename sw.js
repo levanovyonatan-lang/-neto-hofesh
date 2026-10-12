@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261012-modal-proportions-2';
+const CACHE_VERSION = 'v20261012-stacked-date-time-3';
 const CACHE_NAME = 'neto-cache-v1790694508';
 
 self.addEventListener('install', e => {
