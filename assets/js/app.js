@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=20261012-perf-instant-startup-4').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=20261012-perf-instant-startup-5').then(reg => {
             reg.update();
 
             setInterval(() => {

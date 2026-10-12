@@ -867,26 +867,13 @@
                 document.getElementById('dino-score-val').textContent = score;
             }
 
-            // Clean, graceful fade-out and instant removal:
-            // Eliminates lingering, sticking, or piles of objects behind the dino
-            if (obs.type === 'cloud') {
-                if (obs.x < 25) {
-                    obs.el.style.opacity = Math.max(0, (obs.x / 25) * 0.6);
-                }
-                if (obs.x <= 0) {
-                    obs.el.remove();
-                    obstaclesList.splice(i, 1);
-                    continue;
-                }
-            } else {
-                if (obs.x < 14) {
-                    obs.el.style.opacity = Math.max(0, obs.x / 14);
-                }
-                if (obs.x <= 0) {
-                    obs.el.remove();
-                    obstaclesList.splice(i, 1);
-                    continue;
-                }
+            // Natural off-screen exit:
+            // Obstacles and clouds smoothly scroll past the screen edge (clipped by overflow:hidden)
+            // and are cleanly removed only once they have completely exited the view.
+            const exitThreshold = (obs.type === 'cloud' ? -50 : -35);
+            if (obs.x < exitThreshold) {
+                obs.el.remove();
+                obstaclesList.splice(i, 1);
             }
         }
 
