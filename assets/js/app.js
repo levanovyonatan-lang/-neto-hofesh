@@ -1946,13 +1946,27 @@ function selectTarget(id, shouldScroll = true) {
         }
         if (vacationBox) {
             let lengthText = '';
-            if (target.isSummer) {
+            if (target.isCustom) {
+                lengthText = '';
+            } else if (target.isSummer) {
                 const endOfSchool = new Date(target.date); endOfSchool.setHours(0, 0, 0, 0); const startOfSchool = new Date(target.date.getFullYear(), 8, 1);
                 lengthText = `<b>${Math.round((startOfSchool - endOfSchool) / 86400000)} ימים</b>`;
             } else if (target.id === 'kippurSukkot2026') {
-                lengthText = `<b>${userConfig.schoolType === 'high' ? 15 : 14} ימים רצופים!</b>`;
+                lengthText = userConfig.schoolType === 'high' ? '<b>15 ימים</b> - מראשון עד ראשון' : '<b>14 ימים</b> - מראשון עד שבת';
             } else if (target.id === 'hanukkah2026') {
-                lengthText = '<b>7 ימים</b>';
+                lengthText = '<b>7 ימים</b> - מראשון עד שבת';
+            } else if (target.id === 'roshHashana2026') {
+                lengthText = '<b>שלושה ימים</b> - משישי עד ראשון';
+            } else if (target.id === 'elections2026') {
+                lengthText = '<b>יום אחד (שבתון)</b> - בשלישי';
+            } else if (target.id === 'purim2027') {
+                lengthText = '<b>יומיים</b> - משלישי עד רביעי';
+            } else if (target.id === 'pesach2027') {
+                lengthText = '<b>16 ימים</b> - משלישי עד רביעי';
+            } else if (target.id === 'atzmaut2027' || target.id === 'atzmaut') {
+                lengthText = '<b>יום אחד</b> - ברביעי';
+            } else if (target.id === 'shavuot2027' || target.id === 'shavuot') {
+                lengthText = '<b>שלושה ימים</b> - מחמישי עד שבת';
             } else if (target.lengthText) {
                 lengthText = target.lengthText;
             }
