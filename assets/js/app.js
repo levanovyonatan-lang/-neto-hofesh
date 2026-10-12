@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=20261012-safari-standalone-fix-2').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=20261012-safari-single-start-fix-1').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -992,10 +992,20 @@ function getCountdownNavigationUrl(target) {
     return url.href;
 }
 
+function isNetoStandalone() {
+    return (window.navigator && window.navigator.standalone === true) ||
+           (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+}
+
 function updateCountdownStartLinks() {
+    const isStandalone = isNetoStandalone();
     const hasSchool = !!document.querySelector('input[name="schoolType"]:checked');
     document.querySelectorAll('[data-countdown-start]').forEach(link => {
-        link.href = hasSchool ? getCountdownNavigationUrl(link.dataset.countdownStart) : '#setup-screen';
+        if (isStandalone) {
+            link.href = 'javascript:void(0)';
+        } else {
+            link.href = hasSchool ? getCountdownNavigationUrl(link.dataset.countdownStart) : '#setup-screen';
+        }
     });
 }
 
@@ -1007,8 +1017,8 @@ function prepareCountdownNavigation(event, link) {
         return false;
     }
     const targetIntent = link.dataset.countdownStart || 'next';
-    const navUrl = getCountdownNavigationUrl(targetIntent);
-    link.href = navUrl;
+    const isStandalone = isNetoStandalone();
+
     try {
         localStorage.setItem('neto_userConfig', JSON.stringify({
             schoolType: choice.value,
@@ -1016,25 +1026,43 @@ function prepareCountdownNavigation(event, link) {
             targetIntent: targetIntent,
             activeTargetId: userConfig.activeTargetId
         }));
-        sessionStorage.setItem('neto_justStarted', targetIntent);
     } catch (e) { }
 
     // On iOS Safari added to Home Screen (Standalone WebClip) or installed PWA:
-    // Full document navigation resets the WebClip to the root manifest URL.
-    // Transition directly via SPA mode so the countdown starts immediately without reloading to the setup screen.
-    const isStandalone = (window.navigator && window.navigator.standalone === true) ||
-                         (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    // Full document navigation resets the WebClip or reloads.
+    // Transition in-page via SPA and completely neutralize the link href so WebKit cannot navigate or reload.
     if (isStandalone) {
-        if (event) event.preventDefault();
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+        }
+        link.href = 'javascript:void(0)';
+        try {
+            sessionStorage.removeItem('neto_justStarted');
+            history.replaceState(null, '', getCountdownNavigationUrl(targetIntent));
+        } catch (e) { }
         initApp(targetIntent);
         return false;
     }
+
+    const navUrl = getCountdownNavigationUrl(targetIntent);
+    link.href = navUrl;
+    try {
+        sessionStorage.setItem('neto_justStarted', targetIntent);
+    } catch (e) { }
 
     // Leave the natural link navigation intact so Google AdSense Auto Ads can intercept it and show Vignette transition ads
     return true;
 }
 
 function startCountdownFromUrl() {
+    // If the countdown is already running / visible, never run a duplicate start
+    const mainScreen = document.getElementById('main-screen');
+    if (mainScreen && mainScreen.style.display === 'flex') {
+        return true;
+    }
+
     const params = new URLSearchParams(window.location.search);
     let school = params.get('schoolType');
     if (!school) {
@@ -1077,6 +1105,9 @@ function startCountdownFromUrl() {
     }
     if (!target || !document.querySelector('input[name="schoolType"]:checked')) return false;
 
+    // Clean up temporary session flag so back/forward won't re-trigger
+    try { sessionStorage.removeItem('neto_justStarted'); } catch (e) { }
+
     // This document loads after an offered vignette is dismissed, or immediately if none is served.
     const splash = document.getElementById('neto-splash');
     if (splash) splash.style.display = 'none';
@@ -1085,9 +1116,16 @@ function startCountdownFromUrl() {
     return true;
 }
 
-
+let lastInitAppTimestamp = 0;
 
 function initApp(countdownTarget = 'summer', forceStart = false) {
+    const now = Date.now();
+    // Guard against rapid duplicate trigger (within 2 seconds) when main screen is already up
+    if (!forceStart && (now - lastInitAppTimestamp < 2000) && document.getElementById('main-screen').style.display === 'flex') {
+        return;
+    }
+    lastInitAppTimestamp = now;
+
     let choice = document.querySelector('input[name="schoolType"]:checked');
     if (!choice) {
         try {
@@ -1160,6 +1198,7 @@ function resetApp() {
     if (setupUrl.hash.startsWith('#go-')) setupUrl.hash = '';
     window.history.replaceState(null, '', setupUrl.href);
     if (timerInterval) clearInterval(timerInterval);
+    lastInitAppTimestamp = 0;
     userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' }; confettiFired = false;
     document.getElementById('main-screen').style.display = 'none'; document.getElementById('setup-screen').style.display = 'flex';
 
