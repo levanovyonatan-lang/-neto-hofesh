@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=20261012-vignette-restore-1').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=20261012-safari-standalone-fix-2').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -1006,16 +1006,30 @@ function prepareCountdownNavigation(event, link) {
         document.getElementById('error-message').style.display = 'block';
         return false;
     }
-    const navUrl = getCountdownNavigationUrl(link.dataset.countdownStart);
+    const targetIntent = link.dataset.countdownStart || 'next';
+    const navUrl = getCountdownNavigationUrl(targetIntent);
     link.href = navUrl;
     try {
         localStorage.setItem('neto_userConfig', JSON.stringify({
             schoolType: choice.value,
             studyFriday: document.getElementById('friday-toggle').checked,
-            targetIntent: link.dataset.countdownStart,
+            targetIntent: targetIntent,
             activeTargetId: userConfig.activeTargetId
         }));
+        sessionStorage.setItem('neto_justStarted', targetIntent);
     } catch (e) { }
+
+    // On iOS Safari added to Home Screen (Standalone WebClip) or installed PWA:
+    // Full document navigation resets the WebClip to the root manifest URL.
+    // Transition directly via SPA mode so the countdown starts immediately without reloading to the setup screen.
+    const isStandalone = (window.navigator && window.navigator.standalone === true) ||
+                         (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    if (isStandalone) {
+        if (event) event.preventDefault();
+        initApp(targetIntent);
+        return false;
+    }
+
     // Leave the natural link navigation intact so Google AdSense Auto Ads can intercept it and show Vignette transition ads
     return true;
 }
@@ -1051,7 +1065,16 @@ function startCountdownFromUrl() {
         }
     }
     updateCountdownStartLinks();
-    const target = params.get('targetIntent') || (params.get('started') === 'true' ? 'next' : null);
+    let target = params.get('targetIntent') || (params.get('started') === 'true' ? 'next' : null);
+    if (!target) {
+        try {
+            const justStarted = sessionStorage.getItem('neto_justStarted');
+            if (justStarted) {
+                sessionStorage.removeItem('neto_justStarted');
+                target = justStarted;
+            }
+        } catch (e) { }
+    }
     if (!target || !document.querySelector('input[name="schoolType"]:checked')) return false;
 
     // This document loads after an offered vignette is dismissed, or immediately if none is served.
@@ -1121,6 +1144,7 @@ function initApp(countdownTarget = 'summer', forceStart = false) {
 function resetApp() {
     window.scrollTo(0, 0); trackEvent('click_change_settings');
     try { localStorage.removeItem('neto_userConfig'); } catch (e) { }
+    try { sessionStorage.removeItem('neto_justStarted'); } catch (e) { }
     const subPages = ['/hanukkah', '/taanit-esther', '/purim', '/pesach', '/asru-chag', '/atzmaut', '/lag-baomer', '/shavuot', '/summer-high', '/summer'];
     if (subPages.some(p => window.location.pathname.includes(p))) {
         if (window.location.hostname.includes('neto-hofesh.co.il') || (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1') && window.location.protocol !== 'file:')) {

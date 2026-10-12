@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261012-vignette-restore-1';
+const CACHE_VERSION = 'v20261012-safari-standalone-fix-2';
 const CACHE_NAME = 'neto-cache-v1790694504';
 
 self.addEventListener('install', e => {
