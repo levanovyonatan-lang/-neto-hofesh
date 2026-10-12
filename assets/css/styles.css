@@ -1833,27 +1833,31 @@ body.theme-gold .vip-save-btn {
 
 .premium-modal-close {
     position: absolute;
-    top: 14px;
-    right: 14px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: #94a3b8;
-    font-size: 20px;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: #cbd5e1;
+    font-size: 26px;
+    line-height: 1;
     cursor: pointer;
-    width: 34px;
-    height: 34px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
-    z-index: 5;
+    z-index: 100;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
-.premium-modal-close:hover {
-    background: rgba(255,255,255,0.18);
+.premium-modal-close:hover,
+.premium-modal-close:active {
+    background: rgba(255, 255, 255, 0.22);
     color: white;
-    transform: rotate(90deg);
+    transform: scale(1.08);
 }
 
 .premium-modal-header {

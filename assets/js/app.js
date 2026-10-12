@@ -1853,6 +1853,23 @@ function openCustomCountdownModal(id = null) {
     document.getElementById('custom-countdown-modal').style.display = 'flex';
 }
 
+function closeCustomModal() {
+    const modal = document.getElementById('custom-countdown-modal');
+    if (modal) modal.style.display = 'none';
+    const isSubpage = window.location.pathname.includes('/custom/') || 
+                      window.location.pathname.endsWith('/custom') ||
+                      (window.location.pathname.split('/').filter(Boolean).length > 0 && !window.location.pathname.endsWith('index.html'));
+    if (isSubpage) {
+        window.location.href = '../index.html';
+        return;
+    }
+    try {
+        if (window.location.search.includes('modal=add-personal')) {
+            history.pushState('', document.title, window.location.pathname + window.location.search.replace(/[?&]modal=add-personal/, ''));
+        }
+    } catch(e) {}
+}
+
 function saveCustomCountdown() {
     const nameInput = document.getElementById('custom-name');
     const name = nameInput ? nameInput.value.trim() : '';
