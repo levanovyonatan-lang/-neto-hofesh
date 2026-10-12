@@ -33,7 +33,10 @@ a, button, .btn, .glass-card, .event-card, .day-card, .option-card, .smiley-swit
 }
 
 /* --- התאמות נגישות גלובליות --- */
-html { transition: font-size 0.3s ease; }
+html { 
+    scroll-behavior: smooth;
+    transition: font-size 0.3s ease; 
+}
 *:focus-visible { outline: 3px solid var(--accent) !important; outline-offset: 2px !important; }
 
 body { 
@@ -154,6 +157,11 @@ input:checked + .smiley-handle::after { content: "☹️"; }
 .main-timer-card { 
     padding: 30px 20px; border-radius: 28px; text-align: center; position: relative; overflow: hidden;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06); background: #ffffff; border: 1px solid rgba(0,0,0,0.05);
+    transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+#main-target-title {
+    transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 /* --- Vacation Mode Styling (Soft Glow Concept) --- */

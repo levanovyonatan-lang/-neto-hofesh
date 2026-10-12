@@ -1303,20 +1303,40 @@ function calculateNetDays(targetDate, forceNoFriday = false, targetId = null) {
 
 function animateNetDays(finalValue) {
     if (netDaysAnimationId) { cancelAnimationFrame(netDaysAnimationId); netDaysAnimationId = null; }
-    if (typeof finalValue !== 'number' || finalValue <= 0) { document.getElementById('main-net-days').textContent = finalValue <= 0 ? "הגיע!" : finalValue; isAnimatingNetDays = false; return; }
+    const obj = document.getElementById('main-net-days');
+    if (!obj) return;
+    if (typeof finalValue !== 'number' || finalValue <= 0) {
+        obj.textContent = finalValue <= 0 ? "הגיע!" : finalValue;
+        isAnimatingNetDays = false;
+        return;
+    }
 
-    isAnimatingNetDays = true; const obj = document.getElementById('main-net-days');
-    const startValue = finalValue + 75; const duration = 1500; let startTimestamp = null;
+    isAnimatingNetDays = true;
+    const currentText = obj.textContent ? obj.textContent.trim() : '';
+    const currentNum = parseInt(currentText, 10);
 
+    let startValue = finalValue + 40;
+    let duration = 800;
+    if (!isNaN(currentNum) && currentNum > 0 && currentNum !== finalValue) {
+        startValue = currentNum;
+        duration = Math.min(600, Math.max(300, Math.abs(finalValue - currentNum) * 10));
+    }
+
+    let startTimestamp = null;
     const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
         const easeProgress = 1 - Math.pow(1 - progress, 3);
-        const currentVal = Math.floor(startValue - (startValue - finalValue) * easeProgress);
+        const currentVal = Math.round(startValue + (finalValue - startValue) * easeProgress);
         obj.textContent = currentVal;
 
-        if (progress < 1) netDaysAnimationId = window.requestAnimationFrame(step);
-        else { obj.textContent = finalValue; isAnimatingNetDays = false; netDaysAnimationId = null; }
+        if (progress < 1) {
+            netDaysAnimationId = window.requestAnimationFrame(step);
+        } else {
+            obj.textContent = finalValue;
+            isAnimatingNetDays = false;
+            netDaysAnimationId = null;
+        }
     };
     netDaysAnimationId = window.requestAnimationFrame(step);
 }
@@ -1906,30 +1926,26 @@ function deleteCustomCountdownFromModal() {
     }
 }
 
-function scrollToAppTop() {
-    const mainTimer = document.getElementById('main-timer-bg') || document.getElementById('main-screen');
-    if (mainTimer && typeof mainTimer.scrollIntoView === 'function') {
-        try { mainTimer.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { }
+function setTargetTitle(text) {
+    const el = document.getElementById('main-target-title');
+    if (!el) return;
+    if (el.textContent !== text) {
+        el.style.opacity = '0.5';
+        el.textContent = text;
+        requestAnimationFrame(() => {
+            el.style.opacity = '1';
+        });
     }
+}
+
+function scrollToAppTop() {
+    const currentY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    if (currentY <= 5) return;
     try {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     } catch (e) {
         window.scrollTo(0, 0);
     }
-    setTimeout(() => {
-        const currentY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-        if (currentY > 30) {
-            try { window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); } catch (e) { }
-            setTimeout(() => {
-                const finalY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-                if (finalY > 30) {
-                    window.scrollTo(0, 0);
-                    if (document.documentElement) document.documentElement.scrollTop = 0;
-                    if (document.body) document.body.scrollTop = 0;
-                }
-            }, 80);
-        }
-    }, 60);
 }
 
 function selectTarget(id, shouldScroll = true) {
@@ -1998,7 +2014,7 @@ function selectTarget(id, shouldScroll = true) {
         timerBg.style.background = '#fefce8';
         timerBg.classList.add('vacation-mode');
         timerBg.classList.remove('premium-countdown');
-        document.getElementById('main-target-title').textContent = `${target.name} כבר כאן! ${target.icon}`;
+        setTargetTitle(`${target.name} כבר כאן! ${target.icon}`);
         if (netDaysPrefix) {
             netDaysPrefix.style.display = 'block';
             netDaysPrefix.textContent = 'נשארו:';
@@ -2026,7 +2042,7 @@ function selectTarget(id, shouldScroll = true) {
             timerBg.classList.add('premium-countdown');
         }
 
-        document.getElementById('main-target-title').textContent = `עד ${target.name} ${target.icon}`;
+        setTargetTitle(`עד ${target.name} ${target.icon}`);
         if (netDaysPrefix) {
             netDaysPrefix.style.display = 'block';
             netDaysPrefix.textContent = 'נשארו רק:';
@@ -2105,7 +2121,7 @@ function selectTarget(id, shouldScroll = true) {
         }
         personalLabel.textContent = 'הזמן שנותר לאירוע';
         
-        document.getElementById('main-target-title').textContent = `${target.name} ${target.icon}`;
+        setTargetTitle(`${target.name} ${target.icon}`);
         if (netDaysPrefix) netDaysPrefix.textContent = 'עוד';
         if (netDaysSuffix) netDaysSuffix.textContent = 'ימים לאירוע';
         if (excludingLabel) excludingLabel.style.display = 'none';
