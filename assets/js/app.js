@@ -58,7 +58,7 @@ function initPWA() {
         const hadController = !!navigator.serviceWorker.controller;
         let isRefreshing = false;
 
-        navigator.serviceWorker.register('sw.js?v=20261012-dino-fix-run-3').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=20261012-perf-instant-startup-2').then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -1392,7 +1392,7 @@ function showMainScreen() {
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=20261012-dino-fix-run-3';
+        script.src = 'assets/js/games/dino-school.js?v=20261012-perf-instant-startup-2';
         document.body.appendChild(script);
     }
 
