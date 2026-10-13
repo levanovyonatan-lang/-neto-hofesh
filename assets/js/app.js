@@ -1123,6 +1123,7 @@ function startCountdownFromUrl() {
 let lastInitAppTimestamp = 0;
 
 function initApp(countdownTarget = 'summer', forceStart = false) {
+    const restartingDino = new URLSearchParams(window.location.search).get('dino') === '1';
     const now = Date.now();
     // Guard against rapid duplicate trigger (within 2 seconds) when main screen is already up
     if (!forceStart && (now - lastInitAppTimestamp < 2000) && document.getElementById('main-screen').style.display === 'flex') {
@@ -1177,10 +1178,12 @@ function initApp(countdownTarget = 'summer', forceStart = false) {
 
     showMainScreen();
     // גלילה קלה למטה כדי שיראו את ה"בחרו יעד ספירה" והבאנר לא יסתיר
-    setTimeout(() => {
-        const isAndroid = /Android/i.test(navigator.userAgent);
-        window.scrollTo({ top: isAndroid ? 15 : 50, behavior: 'smooth' });
-    }, 100);
+    if (!restartingDino) {
+        setTimeout(() => {
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            window.scrollTo({ top: isAndroid ? 15 : 50, behavior: 'smooth' });
+        }, 100);
+    }
 }
 
 function resetApp() {
@@ -1474,33 +1477,10 @@ function showMainScreen() {
     const urlParams = new URLSearchParams(window.location.search);
     const isDemo = urlParams.get('show_demo') === 'true' || isExperimentalSite;
 
-    if (urlParams.get('dino') === '1') {
-        urlParams.delete('dino');
-        const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
-        window.history.replaceState({}, '', newUrl);
-        
-        setTimeout(() => {
-            document.documentElement.classList.remove('dino-restarting');
-            if (typeof window.startDinoGame === 'function') {
-                window.startDinoGame();
-            } else {
-                let attempts = 0;
-                const tryStart = setInterval(() => {
-                    if (typeof window.startDinoGame === 'function') {
-                        clearInterval(tryStart);
-                        window.startDinoGame();
-                    } else if (attempts++ > 30) {
-                        clearInterval(tryStart);
-                    }
-                }, 100);
-            }
-        }, 300);
-    }
-
     if (!document.getElementById('dino-school-script') && typeof window.startDinoGame !== 'function') {
         const script = document.createElement('script');
         script.id = 'dino-school-script';
-        script.src = 'assets/js/games/dino-school.js?v=20261012-perf-instant-startup-2';
+        script.src = 'assets/js/games/dino-school.js?v=20261013-dino-vignette-1';
         document.body.appendChild(script);
     }
 
@@ -1684,6 +1664,33 @@ function showMainScreen() {
     renderHolidays();
     selectTarget(userConfig.activeTargetId, false);
     if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(updateDashboard, 1000);
+
+    if (urlParams.get('dino') === '1') {
+        const launchDino = () => {
+            if (typeof window.startDinoGame !== 'function') return false;
+            if (urlParams.get('dinoAdAttempt') === '1') {
+                sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
+                sessionStorage.setItem('dinoGamesSinceAd', '0');
+            }
+            urlParams.delete('dino');
+            urlParams.delete('dinoAdAttempt');
+            const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
+            window.history.replaceState({}, '', newUrl);
+            window.startDinoGame();
+            return true;
+        };
+
+        if (!launchDino()) {
+            let attempts = 0;
+            const tryStart = setInterval(() => {
+                if (launchDino()) clearInterval(tryStart);
+                else if (++attempts >= 30) {
+                    clearInterval(tryStart);
+                    document.documentElement.classList.remove('dino-restarting');
+                }
+            }, 100);
+        }
+    }
 }
 
 function updateActiveHolidayCard(id) {

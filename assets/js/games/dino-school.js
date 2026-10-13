@@ -139,6 +139,7 @@
     let spawnTimer = 0;
     let frameCount = 0;
     let isGameOver = false;
+    let gameSessionId = 0;
     let lastFrameTime = 0; // For delta-time normalization
 
     // trigger button logic removed
@@ -194,33 +195,35 @@
         }, 4500);
     }
 
-    let lastAdClickTime = 0;
+    const AD_INTERVAL_MS = 180000;
+    const GAMES_PER_AD = 3;
+    let replayPending = false;
 
-    // If Google Vignette ad closed in-place on current page (via hash or focus return):
-    window.addEventListener('hashchange', () => {
-        if (isGameOver && lastAdClickTime && !window.location.hash.includes('google_vignette')) {
-            lastAdClickTime = 0;
-            document.documentElement.classList.remove('dino-restarting');
-            setTimeout(() => {
-                if (isGameOver) startGame();
-            }, 80);
-        }
-    });
+    function replayGame() {
+        if (!isGameActive || !isGameOver || replayPending) return;
+        replayPending = true;
+        startGame().finally(() => { replayPending = false; });
+    }
 
-    window.addEventListener('focus', () => {
-        if (isGameOver && lastAdClickTime && (Date.now() - lastAdClickTime > 2000)) {
-            lastAdClickTime = 0;
-            document.documentElement.classList.remove('dino-restarting');
-            setTimeout(() => {
-                if (isGameOver) startGame();
-            }, 80);
-        }
-    });
+    let pendingVignetteRestart = false;
+    function resumeAfterVignette() {
+        if (!pendingVignetteRestart || !isGameOver || document.hidden ||
+            window.location.hash.includes('google_vignette')) return;
+        pendingVignetteRestart = false;
+        sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
+        sessionStorage.setItem('dinoGamesSinceAd', '0');
+        replayGame();
+    }
+
+    // A vignette may return to the original page instead of loading its link target.
+    window.addEventListener('hashchange', resumeAfterVignette);
+    window.addEventListener('pageshow', resumeAfterVignette);
 
     async function startGame() {
         if (!sessionStorage.getItem('dinoLastAdTime')) {
             sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
         }
+        pendingVignetteRestart = false;
         
         // INSTANTLY create and show overlay to prevent main UI flash on reload
         let overlay = document.getElementById('game-lock-overlay');
@@ -325,6 +328,7 @@
         if (document.activeElement) document.activeElement.blur();
 
         isGameActive = true;
+        const sessionId = ++gameSessionId;
         isGameOver = false;
         score = 0;
         currentStageIndex = 0;
@@ -358,6 +362,7 @@
         gameContainer.style.zIndex = '1000';
 
         setTimeout(() => {
+            if (sessionId !== gameSessionId) return;
             window.scrollTo({
                 top: gameContainer.getBoundingClientRect().top + window.scrollY - 80,
                 behavior: 'smooth'
@@ -375,6 +380,7 @@
         });
 
         setTimeout(() => {
+            if (sessionId !== gameSessionId) return;
             hiddenEls.forEach(el => { 
                 el.style.display = 'none'; 
                 el.style.opacity = '';
@@ -526,8 +532,15 @@
 
         announceStage(0);
         } catch(err) {
-            alert("Dino Error: " + err.message + "\n" + err.stack);
-            isGameActive = false;
+            console.error('Dino startup failed:', err);
+            if (isGameActive && gameContainer) {
+                cleanupGame();
+            } else {
+                const overlay = document.getElementById('game-lock-overlay');
+                if (overlay) overlay.style.display = 'none';
+                document.body.style.overflow = '';
+                document.body.style.touchAction = '';
+            }
         }
     }
 
@@ -1063,7 +1076,10 @@
     }
 
     function gameOver(killerEmoji) {
+        if (document.getElementById('dino-game-over')) return;
         isGameOver = true;
+        const gamesSinceAd = parseInt(sessionStorage.getItem('dinoGamesSinceAd') || '0', 10) || 0;
+        sessionStorage.setItem('dinoGamesSinceAd', String(gamesSinceAd + 1));
         if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
         
         const overlay = document.getElementById('game-lock-overlay');
@@ -1201,50 +1217,42 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0');
-        const shouldRefresh = (Date.now() - lastAdTime) > 120000;
-
-        let playAgainBtn;
-        if (shouldRefresh) {
-            playAgainBtn = document.createElement('a');
-            let intent = 'summer';
-            let school = '';
-            let friday = '';
-            try {
-                const saved = JSON.parse(localStorage.getItem('neto_userConfig')) || {};
-                intent = saved.targetIntent || saved.activeTargetId || window.userConfig?.targetIntent || window.userConfig?.activeTargetId || 'summer';
-                if (saved.schoolType || window.userConfig?.schoolType) {
-                    school = saved.schoolType || window.userConfig.schoolType;
-                }
-                if (saved.studyFriday !== undefined || window.userConfig?.studyFriday !== undefined) {
-                    friday = (saved.studyFriday ?? window.userConfig.studyFriday) ? '1' : '0';
-                }
-            } catch(e) {}
-
-            let navUrl = `?started=true&dino=1&targetIntent=${encodeURIComponent(intent)}`;
-            if (school) navUrl += `&schoolType=${encodeURIComponent(school)}`;
-            if (friday) navUrl += `&studyFriday=${encodeURIComponent(friday)}`;
-            navUrl += `#go-${encodeURIComponent(intent)}`;
-
-            playAgainBtn.href = navUrl;
-            playAgainBtn.style.textDecoration = 'none';
+        const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || Date.now();
+        const offerAd = gamesSinceAd + 1 >= GAMES_PER_AD &&
+            Date.now() - lastAdTime >= AD_INTERVAL_MS && !isNewRecord;
+        const playAgainBtn = document.createElement(offerAd ? 'a' : 'button');
+        playAgainBtn.dataset.dinoRestart = '';
+        if (offerAd) {
+            const restartUrl = new URL(window.location.href);
+            restartUrl.searchParams.set('started', 'true');
+            restartUrl.searchParams.set('dino', '1');
+            restartUrl.searchParams.set('dinoAdAttempt', '1');
+            let targetIntent = restartUrl.searchParams.get('targetIntent');
+            if (!targetIntent) {
+                try {
+                    targetIntent = JSON.parse(localStorage.getItem('neto_userConfig') || '{}').targetIntent;
+                } catch (error) { /* Use the default countdown. */ }
+            }
+            restartUrl.searchParams.set('targetIntent', targetIntent || 'summer');
+            restartUrl.hash = '';
+            playAgainBtn.href = restartUrl.pathname + restartUrl.search;
             playAgainBtn.style.display = 'inline-block';
-            playAgainBtn.onclick = () => {
-                sessionStorage.setItem('dinoLastAdTime', Date.now().toString());
-                document.documentElement.classList.add('dino-restarting');
-                lastAdClickTime = Date.now();
-            };
+            playAgainBtn.style.textDecoration = 'none';
+            playAgainBtn.addEventListener('pointerdown', () => { pendingVignetteRestart = true; });
+            playAgainBtn.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') pendingVignetteRestart = true;
+            });
+            playAgainBtn.addEventListener('click', () => { pendingVignetteRestart = true; });
         } else {
-            playAgainBtn = document.createElement('button');
             playAgainBtn.onclick = (e) => {
                 e.stopPropagation();
-                startGame();
+                replayGame();
             };
         }
 
         playAgainBtn.tabIndex = 0;
         playAgainBtn.onkeydown = (e) => {
-            if (e.key === ' ' || e.key === 'Enter') {
+            if (e.key === ' ' || (e.key === 'Enter' && !offerAd)) {
                 e.preventDefault();
                 playAgainBtn.click();
             }
@@ -1292,6 +1300,9 @@
 
     function cleanupGame() {
         if (!isGameActive || !gameContainer) return;
+        const cleanupSessionId = ++gameSessionId;
+        replayPending = false;
+        pendingVignetteRestart = false;
         isGameActive = false;
         const adContainer = document.getElementById('dino-ad-container');
         if (adContainer) adContainer.remove();
@@ -1352,6 +1363,7 @@
         });
 
         setTimeout(() => {
+            if (cleanupSessionId !== gameSessionId) return;
             gameContainer.style.transition = '';
             if (gameContainer.dataset.hwPrevHeight !== undefined) {
                 gameContainer.style.height = gameContainer.dataset.hwPrevHeight;
@@ -1406,6 +1418,7 @@
         document.body.style.overflow = 'hidden';
 
         isGameActive = true;
+        gameSessionId++;
         isGameOver = true;
         score = parseInt(savedScore) || 0;
         currentStageIndex = parseInt(savedStage) || 0;
