@@ -10,7 +10,6 @@ $html = $html.Replace('src="assets/', 'src="../assets/')
 $html = $html.Replace('src="tips.js', 'src="../tips.js')
 $html = $html.Replace('href="avigail-camp.html"', 'href="../avigail-camp.html"')
 $html = $html.Replace('href="fitness.html"', 'href="../fitness.html"')
-$html = $html.Replace('id="custom-save-btn" href="index.html"', 'id="custom-save-btn" href="../index.html"')
 
 # fix absolute links
 $html = [System.Text.RegularExpressions.Regex]::Replace($html, 'href="(?:\.\./)?(hanukkah|taanit-esther|purim|pesach|asru-chag|atzmaut|lag-baomer|shavuot|summer-high|summer)/"', 'href="../$1/"')

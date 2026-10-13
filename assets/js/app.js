@@ -69,6 +69,8 @@ function initPWA() {
         navigator.serviceWorker.addEventListener('controllerchange', () => {
             // An update must not interrupt a run, a replay, or its ad break.
             if (document.getElementById('dino-score-val')) return;
+            const customModal = document.getElementById('custom-countdown-modal');
+            if (customModal && getComputedStyle(customModal).display !== 'none') return;
 
             if (hadController && !isRefreshing) {
                 const lastReload = sessionStorage.getItem('pwa_last_reload');
@@ -1766,15 +1768,6 @@ function renderHolidays() {
 }
 
 function openCustomCountdownModal(id = null) {
-    // --- AdSense Vignette Trigger for SPA ---
-    // Pushing state to history tells AdSense Auto Ads that a "page transition" occurred,
-    // which can trigger a Vignette ad without actually reloading the page or breaking the UI.
-    if (!id && window.location.search.indexOf('modal=add-personal') === -1) {
-        let newSearch = window.location.search;
-        newSearch += newSearch ? '&modal=add-personal' : '?modal=add-personal';
-        history.pushState({ modal: 'add-personal' }, '', window.location.pathname + newSearch);
-    }
-    
     if (!id) {
         trackEvent('open_custom_countdown_modal');
     }
@@ -1971,8 +1964,16 @@ function saveCustomCountdown() {
     let customCountdowns = [];
     try {
         const saved = localStorage.getItem('neto_customCountdowns');
-        if (saved) customCountdowns = JSON.parse(saved);
-    } catch (e) {}
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (!Array.isArray(parsed)) throw new Error('Invalid personal countdown data');
+            customCountdowns = parsed;
+        }
+    } catch (error) {
+        console.error('Cannot read personal countdowns:', error);
+        alert('לא הצלחנו לקרוא את הספירות הקיימות. נסו לרענן את הדף.');
+        return false;
+    }
     
     const idInput = document.getElementById('custom-id');
     const existingId = idInput ? idInput.value : '';
@@ -1992,73 +1993,76 @@ function saveCustomCountdown() {
     };
     
     if (existingId) {
-        trackEvent('update_custom_countdown', { theme: newCustom.theme, color: newCustom.color });
-        trackEvent('update_custom_countdown_success', { theme: newCustom.theme, color: newCustom.color });
         const idx = customCountdowns.findIndex(c => c.id === existingId);
         if (idx !== -1) customCountdowns[idx] = newCustom;
         else customCountdowns.push(newCustom);
     } else {
-        trackEvent('add_custom_countdown', { theme: newCustom.theme, color: newCustom.color });
-        trackEvent('add_custom_countdown_success', { theme: newCustom.theme, color: newCustom.color, total_count: customCountdowns.length + 1 });
-        trackEvent('complete_add_personal_target', { theme: newCustom.theme, color: newCustom.color });
         customCountdowns.push(newCustom);
     }
-    localStorage.setItem('neto_customCountdowns', JSON.stringify(customCountdowns));
-    
-    const modal = document.getElementById('custom-countdown-modal');
-    if (modal) modal.style.display = 'none';
-    
-    // Refresh the UI to show the new countdown
-    userConfig.targetIntent = newCustom.id;
-    showMainScreen();
-    
-    setTimeout(() => {
-        const activeCard = document.querySelector('.holiday-card.active');
-        if (activeCard) {
-            activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        }
-        scrollToAppTop();
-    }, 100);
-    
-    return newCustom;
-}
-
-function handleSaveCustomCountdown(event, link) {
-    const savedCustom = saveCustomCountdown();
-    if (!savedCustom) {
-        if (event) event.preventDefault();
+    try {
+        localStorage.setItem('neto_customCountdowns', JSON.stringify(customCountdowns));
+    } catch (error) {
+        console.error('Cannot save personal countdown:', error);
+        alert('לא הצלחנו לשמור את הספירה. בדקו שיש מקום פנוי בדפדפן ונסו שוב.');
         return false;
     }
 
-    const isStandalone = typeof isNetoStandalone === 'function' && isNetoStandalone();
-    const isSubpage = window.location.pathname.includes('/custom/') || 
-                      window.location.pathname.endsWith('/custom') ||
-                      (window.location.pathname.split('/').filter(Boolean).length > 0 && !window.location.pathname.endsWith('index.html'));
-    
-    let destUrl = isSubpage ? '../index.html' : 'index.html';
-    let searchParams = new URLSearchParams(window.location.search);
-    searchParams.set('targetIntent', savedCustom.id);
-    destUrl += '?' + searchParams.toString();
-
-    if (link) {
-        link.href = destUrl;
+    if (existingId) {
+        trackEvent('update_custom_countdown', { theme: newCustom.theme, color: newCustom.color });
+        trackEvent('update_custom_countdown_success', { theme: newCustom.theme, color: newCustom.color });
+    } else {
+        trackEvent('add_custom_countdown', { theme: newCustom.theme, color: newCustom.color });
+        trackEvent('add_custom_countdown_success', { theme: newCustom.theme, color: newCustom.color, total_count: customCountdowns.length });
+        trackEvent('complete_add_personal_target', { theme: newCustom.theme, color: newCustom.color });
     }
 
-    if (isSubpage) {
-        if (isStandalone) {
-            if (event) event.preventDefault();
-            window.location.href = destUrl;
-            return false;
-        }
-        // Normal web navigation for Google AdSense Vignettes
-        setTimeout(() => { window.location.href = destUrl; }, 200);
-        return true;
+    const isDedicatedPage = window.location.pathname.includes('/custom/') ||
+        window.location.pathname.endsWith('/custom');
+    if (!isDedicatedPage) {
+        const modal = document.getElementById('custom-countdown-modal');
+        if (modal) modal.style.display = 'none';
+
+        userConfig.targetIntent = newCustom.id;
+        showMainScreen();
+
+        setTimeout(() => {
+            const activeCard = document.querySelector('.holiday-card.active');
+            if (activeCard) activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            scrollToAppTop();
+        }, 100);
     }
 
-    // When inside the in-page modal on index.html: stay on page smoothly
+    return newCustom;
+}
+
+let customSaveInProgress = false;
+function handleSaveCustomCountdown(event) {
     if (event) {
         event.preventDefault();
         event.stopPropagation();
+    }
+    if (customSaveInProgress) return false;
+    customSaveInProgress = true;
+
+    const savedCustom = saveCustomCountdown();
+    if (!savedCustom) {
+        customSaveInProgress = false;
+        return false;
+    }
+
+    const isDedicatedPage = window.location.pathname.includes('/custom/') ||
+        window.location.pathname.endsWith('/custom');
+    if (isDedicatedPage) {
+        const destination = new URL('../index.html', window.location.href);
+        const params = new URLSearchParams(window.location.search);
+        params.delete('from');
+        params.delete('modal');
+        params.set('started', 'true');
+        params.set('targetIntent', savedCustom.id);
+        destination.search = params.toString();
+        window.location.assign(destination.href);
+    } else {
+        customSaveInProgress = false;
     }
     return false;
 }

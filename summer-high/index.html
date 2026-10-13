@@ -815,7 +815,7 @@
     <script src="../tips.js?v=tips-file-v3" defer></script>
     <script src="../assets/js/premium-cinematic-themes.js?v=9083" defer></script>
     <script src="../assets/js/modules/holidays.js?v=20261012-vacation-days-range-1" defer></script>
-    <script src="../assets/js/app.js?v=20261013-dino-vignette-1" defer></script>
+    <script src="../assets/js/app.js?v=20261013-custom-countdown-1" defer></script>
     <script src="../assets/js/games/dino-school.js?v=20261013-dino-vignette-1" defer></script>
     <script src="../assets/js/games/emoji-rain.js?v=9083" defer></script>
 
@@ -1040,9 +1040,9 @@
 
             <input type="hidden" id="custom-id" value="">
             <div style="display: flex; gap: 10px;">
-                <a id="custom-save-btn" href="../index.html" class="premium-save-btn" onclick="return handleSaveCustomCountdown(event, this);" style="flex: 1; text-decoration: none;">
+                <button type="button" id="custom-save-btn" class="premium-save-btn" onclick="return handleSaveCustomCountdown(event);" style="flex: 1;">
                     <span class="save-text">שמור ספירה</span>
-                </a>
+                </button>
                 <button id="custom-delete-btn" class="premium-save-btn" onclick="deleteCustomCountdownFromModal()" style="display: none; flex: 1; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);">
                     <span class="save-text">מחק ספירה</span>
                 </button>
@@ -1102,8 +1102,8 @@ if(customBtn) {
         const isStandalone = typeof isNetoStandalone === 'function' && isNetoStandalone();
         if (isStandalone) {
             e.preventDefault();
-            if (typeof openCustomModal === 'function') {
-                openCustomModal();
+            if (typeof openCustomCountdownModal === 'function') {
+                openCustomCountdownModal();
             } else {
                 const modal = document.getElementById('custom-countdown-modal');
                 if (modal) modal.style.display = 'flex';

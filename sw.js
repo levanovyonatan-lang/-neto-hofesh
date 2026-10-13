@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261013-dino-vignette-9';
+const CACHE_VERSION = 'v20261013-custom-countdown-10';
 const CACHE_NAME = 'neto-cache-v1790694508';
 
 self.addEventListener('install', e => {
@@ -8,6 +8,7 @@ self.addEventListener('install', e => {
       return cache.addAll([
         './',
         'index.html',
+        'custom/index.html',
         'assets/css/styles.css',
         'assets/js/premium-cinematic-themes.js',
         'assets/js/modules/holidays.js',
@@ -49,7 +50,15 @@ self.addEventListener('fetch', e => {
     e.respondWith(
       caches.match(req, { ignoreSearch: true }).then(async cachedResponse => {
         let fallbackCached = cachedResponse;
-        if (!fallbackCached && req.mode === 'navigate') {
+        const scopeUrl = new URL(self.registration.scope);
+        const requestPath = new URL(req.url).pathname;
+        const isCustomNavigation = req.mode === 'navigate' &&
+          requestPath === new URL('custom/', scopeUrl).pathname;
+        const isHomeNavigation = req.mode === 'navigate' &&
+          (requestPath === scopeUrl.pathname || requestPath === new URL('index.html', scopeUrl).pathname);
+        if (!fallbackCached && isCustomNavigation) {
+          fallbackCached = await caches.match(new URL('custom/index.html', scopeUrl).href);
+        } else if (!fallbackCached && isHomeNavigation) {
           fallbackCached = await caches.match('index.html');
           if (!fallbackCached) {
             fallbackCached = await caches.match('./');
@@ -62,7 +71,7 @@ self.addEventListener('fetch', e => {
             caches.open(CACHE_VERSION).then(cache => cache.put(req, responseClone));
           }
           return networkResponse;
-        }).catch(() => fallbackCached);
+        }).catch(() => fallbackCached || Response.error());
 
         return fallbackCached || fetchPromise;
       })
