@@ -583,10 +583,13 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 
     let shouldShowTips = false;
     if (target && activeEventsList && activeEventsList.length > 0) {
-        const firstId = activeEventsList[0].id;
-        const lastId = activeEventsList[activeEventsList.length - 1].id;
-        if (target.id === firstId || target.id === lastId) {
-            shouldShowTips = true;
+        const schoolVacations = activeEventsList.filter(e => !e.isCustom && !e.id.startsWith('custom_'));
+        if (schoolVacations.length > 0) {
+            const firstId = schoolVacations[0].id;
+            const lastId = schoolVacations[schoolVacations.length - 1].id;
+            if (target.id === firstId || target.id === lastId) {
+                shouldShowTips = true;
+            }
         }
         if (shouldShowTips && !hasDailyTips(targetId)) {
             shouldShowTips = false;
@@ -1632,6 +1635,9 @@ function showMainScreen() {
     activeEventsList.sort((a, b) => a.date - b.date);
 
     const activeHolidayFromUrl = window.NETO_ACTIVE_HOLIDAY || getActiveHolidayFromUrlOrWindow();
+    const schoolVacations = activeEventsList.filter(t => !t.isCustom && !t.id.startsWith('custom_'));
+    const defaultSchoolVacationId = schoolVacations.length > 0 ? schoolVacations[0].id : (activeEventsList[0] ? activeEventsList[0].id : '');
+
     if (userConfig.targetIntent && userConfig.targetIntent.startsWith('custom_') && activeEventsList.some(t => t.id === userConfig.targetIntent)) {
         userConfig.activeTargetId = userConfig.targetIntent;
         userConfig.targetIntent = null;
@@ -1641,27 +1647,27 @@ function showMainScreen() {
     } else if (userConfig.targetIntent) {
         let selectedId = '';
         if (userConfig.targetIntent === 'next') {
-            const nextVacation = activeEventsList.find(t =>
+            const nextVacation = schoolVacations.find(t =>
                 !t.id.startsWith('atzmaut') &&
                 !t.id.startsWith('lagbaomer') &&
                 t.id !== 'summerMiddlePrep' &&
                 t.id !== 'summerElemLow'
             );
-            selectedId = nextVacation ? nextVacation.id : activeEventsList[0].id;
+            selectedId = nextVacation ? nextVacation.id : defaultSchoolVacationId;
         } else if (userConfig.targetIntent === 'summer') {
-            const nextSummer = activeEventsList.find(t => t.isSummer && !t.isHappeningNow) || activeEventsList.find(t => t.isSummer);
-            selectedId = nextSummer ? nextSummer.id : activeEventsList[0].id;
+            const nextSummer = schoolVacations.find(t => t.isSummer && !t.isHappeningNow) || schoolVacations.find(t => t.isSummer);
+            selectedId = nextSummer ? nextSummer.id : defaultSchoolVacationId;
         } else {
             // Generic: targetIntent is a direct targetId (e.g. 'purim2027', 'pesach2027', etc.)
             const directMatch = activeEventsList.find(t => t.id === userConfig.targetIntent);
-            selectedId = directMatch ? directMatch.id : activeEventsList[0].id;
+            selectedId = directMatch ? directMatch.id : defaultSchoolVacationId;
         }
         userConfig.activeTargetId = selectedId;
         userConfig.targetIntent = null;
     }
 
     if (!activeEventsList.some(t => t.id === userConfig.activeTargetId)) {
-        userConfig.activeTargetId = activeEventsList[0].id;
+        userConfig.activeTargetId = defaultSchoolVacationId;
     }
     renderHolidays();
     selectTarget(userConfig.activeTargetId, false);
