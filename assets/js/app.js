@@ -1793,13 +1793,8 @@ function openCustomCountdownModal(id = null) {
             }
         }
     } else {
-        // Pre-fill tomorrow as default future date
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const yyyy = tomorrow.getFullYear();
-        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
-        const dd = String(tomorrow.getDate()).padStart(2, '0');
-        dateVal = `${yyyy}-${mm}-${dd}`;
+        // Do not pre-fill date - let the user choose
+        dateVal = '';
     }
 
     const nameInput = document.getElementById('custom-name');

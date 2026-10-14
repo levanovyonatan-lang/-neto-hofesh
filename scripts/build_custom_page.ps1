@@ -68,15 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const splash = document.getElementById('neto-splash');
     if (splash) splash.remove();
 
-    // Pre-populate date if empty
+    // Set minimum date to today without pre-populating a date
     const dateInput = document.getElementById('custom-date');
-    if (dateInput && !dateInput.value) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const yyyy = tomorrow.getFullYear();
-        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
-        const dd = String(tomorrow.getDate()).padStart(2, '0');
-        dateInput.value = `${yyyy}-${mm}-${dd}`;
+    if (dateInput) {
         const today = new Date();
         dateInput.min = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     }

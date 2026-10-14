@@ -200,4 +200,8 @@ $($urls -join "`r`n")
 $sitemapPath = Join-Path $baseDir "sitemap.xml"
 [System.IO.File]::WriteAllText($sitemapPath, $sitemapXml, [System.Text.Encoding]::UTF8)
 Write-Host " -> Created: /sitemap.xml (11 URLs)" -ForegroundColor Yellow
+
+# 10. Build dedicated custom page
+& (Join-Path $PSScriptRoot "build_custom_page.ps1")
+
 Write-Host "SEO Pages & Sitemap build completed successfully!" -ForegroundColor Cyan
