@@ -540,39 +540,10 @@ function loadDailyState() {
 function saveDailyState() { localStorage.setItem(dailyTipsStorageKey, JSON.stringify(dailyTipsState)); }
 
 function hasDailyTips(targetId, schoolType = userConfig.schoolType) {
-    if (!window.tipsDatabase) return false;
-    const fallbackSchoolType = schoolType === 'middle' ? 'high' : schoolType;
-    let baseTargetName = targetId.replace(/\d+$/, '');
-    const targetMap = {
-        'summerHigh': 'summer',
-        'summerElem': 'summer',
-        'summerElemLow': 'summer',
-        'summerMiddlePrep': 'summer',
-        'pesach': 'pesach',
-        'atzmaut': 'atzmaut',
-        'roshHashana': 'roshHashana',
-        'kippurSukkot': 'kippurSukkot',
-        'hanukkah': 'hanukkah',
-        'purim': 'purim',
-        'shavuot': 'shavuot',
-        'lagbaomer': 'lagbaomer'
-    };
-    if (targetMap[baseTargetName]) baseTargetName = targetMap[baseTargetName];
-
+    if (!targetId || targetId.startsWith('custom_')) return false;
     const target = typeof activeEventsList !== 'undefined' ? activeEventsList.find(e => e.id === targetId) : null;
-    const isExperimentalSite = window.location.hostname.includes('github.io');
-    const urlParams = new URLSearchParams(window.location.search);
-    const isDemo = urlParams.get('show_demo') === 'true' || isExperimentalSite;
-    const isCountdown = target && !target.isHappeningNow && !isDemo;
-
-    if (isCountdown) {
-        const waitTargetName = baseTargetName === 'kippurSukkot' ? 'sukkot' : baseTargetName;
-        const key = `waiting_${waitTargetName}_${fallbackSchoolType}`;
-        return !!(window.tipsDatabase[key] && window.tipsDatabase[key].length);
-    } else {
-        const key = `vacation_${baseTargetName}_${fallbackSchoolType}_1`;
-        return !!(window.tipsDatabase[key] && window.tipsDatabase[key].length);
-    }
+    if (target && (target.isCustom || target.id.startsWith('custom_'))) return false;
+    return true;
 }
 
 function renderTipBox(targetId, isNewlyClicked = false) {
@@ -583,12 +554,16 @@ function renderTipBox(targetId, isNewlyClicked = false) {
 
     let shouldShowTips = false;
     if (target && activeEventsList && activeEventsList.length > 0) {
-        const schoolVacations = activeEventsList.filter(e => !e.isCustom && !e.id.startsWith('custom_'));
-        if (schoolVacations.length > 0) {
-            const firstId = schoolVacations[0].id;
-            const lastId = schoolVacations[schoolVacations.length - 1].id;
-            if (target.id === firstId || target.id === lastId) {
-                shouldShowTips = true;
+        if (target.isCustom || target.id.startsWith('custom_')) {
+            shouldShowTips = false;
+        } else {
+            const schoolVacations = activeEventsList.filter(e => !e.isCustom && !e.id.startsWith('custom_'));
+            if (schoolVacations.length > 0) {
+                const firstId = schoolVacations[0].id;
+                const lastId = schoolVacations[schoolVacations.length - 1].id;
+                if (target.id === firstId || target.id === lastId) {
+                    shouldShowTips = true;
+                }
             }
         }
         if (shouldShowTips && !hasDailyTips(targetId)) {
@@ -817,7 +792,7 @@ function handleAiTip() {
     loader.style.display = 'inline-block'; btnText.innerHTML = loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
 
     const target = activeEventsList.find(e => e.id === targetId);
-    if (!target) {
+    if (!target || target.isCustom || target.id.startsWith('custom_')) {
         btn.style.opacity = '1'; btn.style.transform = 'scale(1)'; loader.style.display = 'none'; btn.style.pointerEvents = 'auto';
         return;
     }
@@ -1033,7 +1008,7 @@ function prepareCountdownNavigation(event, link) {
             schoolType: choice.value,
             studyFriday: document.getElementById('friday-toggle').checked,
             targetIntent: targetIntent,
-            activeTargetId: userConfig.activeTargetId
+            activeTargetId: (targetIntent === 'next' || targetIntent === 'summer') ? '' : userConfig.activeTargetId
         }));
     } catch (e) { }
 
@@ -1154,6 +1129,11 @@ function initApp(countdownTarget = 'summer', forceStart = false) {
     window.scrollTo(0, 0);
     userConfig.schoolType = choice.value; userConfig.studyFriday = document.getElementById('friday-toggle').checked;
     userConfig.targetIntent = countdownTarget;
+    if (countdownTarget === 'next' || countdownTarget === 'summer') {
+        if (userConfig.activeTargetId && userConfig.activeTargetId.startsWith('custom_')) {
+            userConfig.activeTargetId = '';
+        }
+    }
 
     try {
         localStorage.setItem('neto_userConfig', JSON.stringify({
@@ -1636,7 +1616,7 @@ function showMainScreen() {
 
     const activeHolidayFromUrl = window.NETO_ACTIVE_HOLIDAY || getActiveHolidayFromUrlOrWindow();
     const schoolVacations = activeEventsList.filter(t => !t.isCustom && !t.id.startsWith('custom_'));
-    const defaultSchoolVacationId = schoolVacations.length > 0 ? schoolVacations[0].id : (activeEventsList[0] ? activeEventsList[0].id : '');
+    const defaultSchoolVacationId = schoolVacations.length > 0 ? schoolVacations[0].id : '';
 
     if (userConfig.targetIntent && userConfig.targetIntent.startsWith('custom_') && activeEventsList.some(t => t.id === userConfig.targetIntent)) {
         userConfig.activeTargetId = userConfig.targetIntent;
@@ -1666,7 +1646,7 @@ function showMainScreen() {
         userConfig.targetIntent = null;
     }
 
-    if (!activeEventsList.some(t => t.id === userConfig.activeTargetId)) {
+    if (!userConfig.activeTargetId || !activeEventsList.some(t => t.id === userConfig.activeTargetId)) {
         userConfig.activeTargetId = defaultSchoolVacationId;
     }
     renderHolidays();
