@@ -981,11 +981,23 @@ function isNetoStandalone() {
            (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
 }
 
+function isNetoIOS() {
+    const ua = window.navigator.userAgent || '';
+    return (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
+}
+
+function isNetoIOSStandalone() {
+    // Only iOS Safari in standalone mode (Home Screen WebClip) requires SPA in-page transition
+    // to prevent Safari from opening external tabs or reloading with a white flash.
+    // Android PWA handles internal navigation natively within the app window and triggers AdSense Vignettes cleanly!
+    return isNetoIOS() && isNetoStandalone();
+}
+
 function updateCountdownStartLinks() {
-    const isStandalone = isNetoStandalone();
+    const isIOSStandalone = isNetoIOSStandalone();
     const hasSchool = !!document.querySelector('input[name="schoolType"]:checked');
     document.querySelectorAll('[data-countdown-start]').forEach(link => {
-        if (isStandalone) {
+        if (isIOSStandalone) {
             link.href = 'javascript:void(0)';
         } else {
             link.href = hasSchool ? getCountdownNavigationUrl(link.dataset.countdownStart) : '#setup-screen';
@@ -1001,7 +1013,7 @@ function prepareCountdownNavigation(event, link) {
         return false;
     }
     const targetIntent = link.dataset.countdownStart || 'next';
-    const isStandalone = isNetoStandalone();
+    const isIOSStandalone = isNetoIOSStandalone();
 
     try {
         localStorage.setItem('neto_userConfig', JSON.stringify({
@@ -1012,10 +1024,11 @@ function prepareCountdownNavigation(event, link) {
         }));
     } catch (e) { }
 
-    // On iOS Safari added to Home Screen (Standalone WebClip) or installed PWA:
-    // Full document navigation resets the WebClip or reloads.
-    // Transition in-page via SPA and completely neutralize the link href so WebKit cannot navigate or reload.
-    if (isStandalone) {
+    // Only on iOS Safari added to Home Screen (Standalone WebClip):
+    // Full document navigation resets the WebClip or opens external Safari.
+    // Transition in-page via SPA and neutralize the link href so WebKit does not navigate externally.
+    // On Android PWA / Desktop / Web: natural link navigation stays within the app and allows Google AdSense Vignettes to fire!
+    if (isIOSStandalone) {
         if (event) {
             event.preventDefault();
             event.stopPropagation();

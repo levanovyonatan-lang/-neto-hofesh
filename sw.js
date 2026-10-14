@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261014-time-picker-and-monthly-dino';
-const CACHE_NAME = 'neto-cache-v1790694508';
+const CACHE_VERSION = 'v20261015-android-pwa-vignette-opt';
+const CACHE_NAME = 'neto-cache-v1790694509';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

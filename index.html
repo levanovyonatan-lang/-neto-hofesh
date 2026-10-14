@@ -30,6 +30,9 @@
         if (new URLSearchParams(window.location.search).get('dino') === '1') {
             document.documentElement.classList.add('dino-restarting');
         }
+        if (new URLSearchParams(window.location.search).get('started') === 'true') {
+            document.documentElement.classList.add('started-instant');
+        }
     </script>
 
     <!-- SEO - כותרת ותיאור -->
@@ -266,6 +269,9 @@
     <script>
         (function() {
             try {
+                if (document.documentElement.classList.contains('started-instant')) {
+                    document.body.classList.remove('splash-active');
+                }
                 var theme = localStorage.getItem('neto_premiumTheme');
                 var isDemo = window.location.search.includes('demo_premium=1') || window.location.search.includes('show_demo=true');
                 if (theme || isDemo) {
@@ -1151,8 +1157,8 @@ if(customBtn) {
             gtag('event', 'click_add_personal_target', { transport: 'beacon' });
         }
 
-        const isStandalone = typeof isNetoStandalone === 'function' && isNetoStandalone();
-        if (isStandalone) {
+        const isIOSStandalone = typeof isNetoIOSStandalone === 'function' ? isNetoIOSStandalone() : (typeof isNetoStandalone === 'function' && isNetoStandalone());
+        if (isIOSStandalone) {
             e.preventDefault();
             if (typeof openCustomCountdownModal === 'function') {
                 openCustomCountdownModal();
