@@ -73,6 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dateInput) {
         const today = new Date();
         dateInput.min = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        dateInput.addEventListener('click', function() {
+            if (typeof this.showPicker === 'function') {
+                try { this.showPicker(); } catch (err) {}
+            }
+        });
     }
 
     const modal = document.getElementById('custom-countdown-modal');

@@ -2000,6 +2000,15 @@ body.theme-gold .vip-save-btn {
     text-align-last: center !important;
     direction: ltr !important;
     -webkit-text-align: center !important;
+    cursor: pointer !important;
+}
+
+.premium-input-wrapper:has(.date-time-input),
+.premium-input-wrapper:has(#custom-date),
+.premium-input-wrapper:has(#custom-time),
+label[for="custom-date"],
+label[for="custom-time"] {
+    cursor: pointer !important;
 }
 
 /* iOS Safari specific date & time container centering */

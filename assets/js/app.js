@@ -1811,6 +1811,10 @@ function openCustomCountdownModal(id = null) {
     const timeInput = document.getElementById('custom-time');
     if(timeInput) timeInput.value = timeVal;
     
+    if (typeof initCustomDateTimePickers === 'function') {
+        initCustomDateTimePickers();
+    }
+    
     const emojiInput = document.getElementById('custom-emoji');
     if(emojiInput) emojiInput.value = emojiVal;
 
@@ -2833,6 +2837,64 @@ window.addEventListener('hashchange', function() {
         }
     }
 });
+
+// Open date and time picker natively on clicking anywhere inside personal countdown fields
+function initCustomDateTimePickers() {
+    ['custom-date', 'custom-time'].forEach(id => {
+        const input = document.getElementById(id);
+        if (!input || input._pickerBound) return;
+        input._pickerBound = true;
+        input.addEventListener('click', function() {
+            if (typeof this.showPicker === 'function') {
+                try { this.showPicker(); } catch (err) {}
+            }
+        });
+        const wrapper = input.closest('.premium-input-wrapper');
+        if (wrapper && !wrapper._pickerBound) {
+            wrapper._pickerBound = true;
+            wrapper.style.cursor = 'pointer';
+            wrapper.addEventListener('click', function(e) {
+                if (e.target !== input) {
+                    if (typeof input.showPicker === 'function') {
+                        try { input.showPicker(); } catch (err) { input.focus(); }
+                    } else {
+                        input.focus();
+                    }
+                }
+            });
+        }
+    });
+
+    const dateLabel = document.querySelector('label[for="custom-date"]');
+    if (dateLabel && !dateLabel._pickerBound) {
+        dateLabel._pickerBound = true;
+        dateLabel.style.cursor = 'pointer';
+        dateLabel.addEventListener('click', function() {
+            const input = document.getElementById('custom-date');
+            if (input && typeof input.showPicker === 'function') {
+                try { input.showPicker(); } catch (err) {}
+            }
+        });
+    }
+
+    const timeLabel = document.querySelector('label[for="custom-time"]');
+    if (timeLabel && !timeLabel._pickerBound) {
+        timeLabel._pickerBound = true;
+        timeLabel.style.cursor = 'pointer';
+        timeLabel.addEventListener('click', function() {
+            const input = document.getElementById('custom-time');
+            if (input && typeof input.showPicker === 'function') {
+                try { input.showPicker(); } catch (err) {}
+            }
+        });
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCustomDateTimePickers);
+} else {
+    initCustomDateTimePickers();
+}
 
 
 

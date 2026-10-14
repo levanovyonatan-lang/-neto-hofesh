@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v20261014-no-default-custom-date';
+const CACHE_VERSION = 'v20261014-custom-date-picker-click';
 const CACHE_NAME = 'neto-cache-v1790694508';
 
 self.addEventListener('install', e => {

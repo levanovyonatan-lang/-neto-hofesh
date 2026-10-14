@@ -1181,7 +1181,7 @@ window.openAddTimerModal = function() {
                 <div class="fb-subtitle" style="margin-bottom:15px;">למה אתם מחכים?</div>
                 <input type="text" id="pt-title" class="fb-input" placeholder="לדוגמה: טיסה ליוון, טסט שני..." maxlength="30" style="text-align: center;">
                 <div style="font-size: 14px; font-weight: bold; margin-bottom: 5px; color: #475569;">תאריך יעד:</div>
-                <input type="date" id="pt-date" class="fb-input" style="text-align: center;">
+                <input type="date" id="pt-date" class="fb-input" onclick="try{this.showPicker()}catch(e){}" style="text-align: center; cursor: pointer;">
                 <button onclick="window.savePrivateTimer()" class="fb-btn" style="background: #eab308; color: white;">הוסף ספירה</button>
             </div>
         `;

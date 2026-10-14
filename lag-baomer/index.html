@@ -102,7 +102,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20261012-flatter-theme-tiles-1">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20261014-custom-date-picker-click">
     <style>
         /* סגנונות לבאנר הדגמה */
         .sticky-banner-container {
@@ -791,7 +791,7 @@
     <script src="../tips.js?v=tips-file-v3" defer></script>
     <script src="../assets/js/premium-cinematic-themes.js?v=9083" defer></script>
     <script src="../assets/js/modules/holidays.js?v=20261012-vacation-days-range-1" defer></script>
-    <script src="../assets/js/app.js?v=20261014-no-default-custom-date" defer></script>
+    <script src="../assets/js/app.js?v=20261014-custom-date-picker-click" defer></script>
     <script src="../assets/js/games/dino-school.js?v=20261013-dino-vignette-1" defer></script>
     <script src="../assets/js/games/emoji-rain.js?v=9083" defer></script>
 
@@ -905,17 +905,17 @@
             </div>
 
             <div class="premium-input-group">
-                <label for="custom-date" class="premium-label">תאריך היעד 📅</label>
-                <div class="premium-input-wrapper">
-                    <input type="date" id="custom-date" class="premium-input date-time-input">
+                <label for="custom-date" class="premium-label" style="cursor: pointer;">תאריך היעד 📅</label>
+                <div class="premium-input-wrapper" style="cursor: pointer;" onclick="const el=this.querySelector('input');if(el){try{el.showPicker()}catch(e){el.focus()}}">
+                    <input type="date" id="custom-date" class="premium-input date-time-input" onclick="try{this.showPicker()}catch(e){}">
                     <div class="input-glow"></div>
                 </div>
             </div>
 
             <div class="premium-input-group">
-                <label for="custom-time" class="premium-label">שעת האירוע ⏰</label>
-                <div class="premium-input-wrapper">
-                    <input type="time" id="custom-time" value="08:00" class="premium-input date-time-input">
+                <label for="custom-time" class="premium-label" style="cursor: pointer;">שעת האירוע ⏰</label>
+                <div class="premium-input-wrapper" style="cursor: pointer;" onclick="const el=this.querySelector('input');if(el){try{el.showPicker()}catch(e){el.focus()}}">
+                    <input type="time" id="custom-time" value="08:00" class="premium-input date-time-input" onclick="try{this.showPicker()}catch(e){}">
                     <div class="input-glow"></div>
                 </div>
             </div>
