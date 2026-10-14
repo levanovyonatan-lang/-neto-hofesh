@@ -504,10 +504,10 @@ window.showLeaderboard = async function(score, stage, killer, isTabSwitch = fals
             const timeElapsed = localStorage.getItem('dinoTimeElapsed');
             
             if (maxScore > 0 && !localStorage.getItem('forceSync_v2_modal')) {
-                await window.saveDinoHighScore(maxScore, token, timeElapsed, true);
+                await window.saveDinoHighScore(maxScore, token, timeElapsed, true, false);
                 localStorage.setItem('forceSync_v2_modal', 'true');
             } else if (localScore > serverScore) {
-                await window.saveDinoHighScore(localScore, token, timeElapsed);
+                await window.saveDinoHighScore(localScore, token, timeElapsed, false, false);
             }
         }
     }

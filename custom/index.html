@@ -136,7 +136,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20261014-custom-date-picker-click">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20261014-time-picker-and-monthly-dino">
     <style>
         /* סגנונות לבאנר הדגמה */
         .sticky-banner-container {
@@ -908,12 +908,12 @@
     <script src="../tips.js?v=tips-file-v3" defer></script>
     <script src="../assets/js/premium-cinematic-themes.js?v=9083" defer></script>
     <script src="../assets/js/modules/holidays.js?v=20261012-vacation-days-range-1" defer></script>
-    <script src="../assets/js/app.js?v=20261014-custom-date-picker-click" defer></script>
-    <script src="../assets/js/games/dino-school.js?v=20261013-dino-vignette-1" defer></script>
+    <script src="../assets/js/app.js?v=20261014-time-picker-and-monthly-dino" defer></script>
+    <script src="../assets/js/games/dino-school.js?v=20261014-time-picker-and-monthly-dino" defer></script>
     <script src="../assets/js/games/emoji-rain.js?v=9083" defer></script>
 
-    <script type="module" src="../assets/js/firebase-init.js?v=9060" defer></script>
-    <script src="../assets/js/firebase-ui.js?v=9060" defer></script>
+    <script type="module" src="../assets/js/firebase-init.js?v=20261014-time-picker-and-monthly-dino" defer></script>
+    <script src="../assets/js/firebase-ui.js?v=20261014-time-picker-and-monthly-dino" defer></script>
 
     <!-- Creator Networks Modal -->
     <div id="creator-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px); flex-direction: column;" onclick="this.style.display='none'">
@@ -1219,6 +1219,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         dateInput.min = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
         dateInput.addEventListener('click', function() {
+            if (typeof this.showPicker === 'function') {
+                try { this.showPicker(); } catch (err) {}
+            }
+        });
+    }
+
+    const timeInput = document.getElementById('custom-time');
+    if (timeInput) {
+        timeInput.addEventListener('click', function() {
             if (typeof this.showPicker === 'function') {
                 try { this.showPicker(); } catch (err) {}
             }

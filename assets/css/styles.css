@@ -1978,18 +1978,21 @@ body.theme-gold .vip-save-btn {
     font-variant-numeric: tabular-nums;
     color-scheme: dark;
     cursor: pointer;
+    position: relative;
 }
 
 .date-time-input::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    opacity: 0.75;
-    cursor: pointer;
-    padding: 4px;
-    transition: opacity 0.2s;
-}
-
-.date-time-input::-webkit-calendar-picker-indicator:hover {
-    opacity: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+    cursor: pointer !important;
 }
 
 /* Perfect centering for time and date values (iOS Safari, WebKit, Blink) */
@@ -2009,6 +2012,28 @@ body.theme-gold .vip-save-btn {
 label[for="custom-date"],
 label[for="custom-time"] {
     cursor: pointer !important;
+}
+
+.premium-input-wrapper:has(#custom-date)::after {
+    content: "📅";
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+.premium-input-wrapper:has(#custom-time)::after {
+    content: "⏰";
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    pointer-events: none;
+    opacity: 0.85;
 }
 
 /* iOS Safari specific date & time container centering */

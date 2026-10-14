@@ -136,7 +136,7 @@ onAuthStateChanged(auth, async (user) => {
                 const maxScore = Math.max(serverDinoScore, localDinoScore);
                 if (!localStorage.getItem('forceSync_v2') && maxScore > 0) {
                     if (window.saveDinoHighScore) {
-                        window.saveDinoHighScore(maxScore, null, null, true);
+                        window.saveDinoHighScore(maxScore, null, null, true, false);
                     }
                     localStorage.setItem('forceSync_v2', 'true');
                 }
@@ -199,7 +199,7 @@ onAuthStateChanged(auth, async (user) => {
                 const maxDeviceScore = Math.max(serverDinoScore, localDinoScore);
                 if (!localStorage.getItem('forceSync_local_v2') && maxDeviceScore > 0) {
                     if (window.saveDinoHighScore) {
-                        window.saveDinoHighScore(maxDeviceScore, null, null, true);
+                        window.saveDinoHighScore(maxDeviceScore, null, null, true, false);
                     }
                     localStorage.setItem('forceSync_local_v2', 'true');
                 }
@@ -295,7 +295,7 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
 };
 
 // פונקציה לשמירת שיא בדינוזאור
-window.saveDinoHighScore = async (score, token, timeElapsed, force = false) => {
+window.saveDinoHighScore = async (score, token, timeElapsed, force = false, isLiveGame = false) => {
     const user = auth.currentUser;
     const uid = user ? user.uid : window.currentUid;
     if (!uid || !window.currentUserProfile) return false;
@@ -371,13 +371,27 @@ window.saveDinoHighScore = async (score, token, timeElapsed, force = false) => {
         updated = true;
     }
 
-    if (score > serverMonthly) {
+    // שיא חודשי - נשמר בטבלה אך ורק אם השיא נשבר בפועל בחודש הנוכחי!
+    // שיא שנשבר בעבר (לפני החודש הנוכחי) יישמר רק בטבלת 'כל הזמנים' ולא בשיא החודשי
+    const localMonthly = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonth)) || 0;
+    const localHighScoreMonth = localStorage.getItem('dinoHighScoreMonth');
+    const isBrokenThisMonth = isLiveGame === true || (localHighScoreMonth === currentMonth && score === localHighScore);
+    let bestMonthlyScore = serverMonthly;
+
+    if (isBrokenThisMonth && score > bestMonthlyScore) {
+        bestMonthlyScore = score;
+    }
+    if (localMonthly > bestMonthlyScore) {
+        bestMonthlyScore = localMonthly;
+    }
+
+    if (bestMonthlyScore > serverMonthly) {
         if (!window.currentUserProfile.monthlyScores) window.currentUserProfile.monthlyScores = {};
-        window.currentUserProfile.monthlyScores[currentMonth] = score;
-        userMergeData.monthlyScores = { [currentMonth]: score };
-        scoreMergeData.monthlyScores = { [currentMonth]: score };
+        window.currentUserProfile.monthlyScores[currentMonth] = bestMonthlyScore;
+        userMergeData.monthlyScores = { [currentMonth]: bestMonthlyScore };
+        scoreMergeData.monthlyScores = { [currentMonth]: bestMonthlyScore };
         updated = true;
-    } else if (force && serverMonthly > 0) {
+    } else if (serverMonthly > 0) {
         scoreMergeData.monthlyScores = { [currentMonth]: serverMonthly };
     }
 
@@ -422,7 +436,9 @@ window.getTopDinoScores = async (type = 'monthly') => {
             if (type === 'monthly') {
                 displayScore = (data.monthlyScores && data.monthlyScores[currentMonth]) ? data.monthlyScores[currentMonth] : 0;
             }
-            leaderboard.push({ ...data, uid: doc.id, displayScore: displayScore });
+            if (displayScore > 0) {
+                leaderboard.push({ ...data, uid: doc.id, displayScore: displayScore });
+            }
         });
         return leaderboard;
     } catch (error) {

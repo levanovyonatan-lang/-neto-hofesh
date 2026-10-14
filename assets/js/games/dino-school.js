@@ -1117,7 +1117,7 @@
                 const serverMonthly = (window.currentUserProfile.monthlyScores && window.currentUserProfile.monthlyScores[currentMonth]) ? window.currentUserProfile.monthlyScores[currentMonth] : 0;
                 
                 if (intScore > serverAllTime || intScore > serverMonthly) {
-                    window.saveDinoHighScore(intScore, token, timeElapsed);
+                    window.saveDinoHighScore(intScore, token, timeElapsed, false, true /* isLiveGame */);
                 }
             }
             
@@ -1133,6 +1133,7 @@
                 localStorage.setItem('dinoHighScore', currentHighScore);
                 localStorage.setItem('dinoHighScoreToken', token);
                 localStorage.setItem('dinoTimeElapsed', timeElapsed.toString());
+                localStorage.setItem('dinoHighScoreMonth', currentMonth);
                 
                 isNewRecord = true;
                 const hsEl = document.getElementById('dino-high-score-val');

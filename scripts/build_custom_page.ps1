@@ -80,6 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const timeInput = document.getElementById('custom-time');
+    if (timeInput) {
+        timeInput.addEventListener('click', function() {
+            if (typeof this.showPicker === 'function') {
+                try { this.showPicker(); } catch (err) {}
+            }
+        });
+    }
+
     const modal = document.getElementById('custom-countdown-modal');
     if(modal) {
         modal.style.display = 'flex';
