@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261018-faster-dino-start';
-const CACHE_NAME = 'neto-cache-v1790694513';
+const CACHE_VERSION = 'v20261018-dino-interstitial-fix';
+const CACHE_NAME = 'neto-cache-v1790694514';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

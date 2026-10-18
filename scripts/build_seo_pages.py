@@ -245,7 +245,7 @@ def generate_seo_page(base_html, holiday):
     return html
 
 def build_all():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     index_path = os.path.join(base_dir, "index.html")
     
     with open(index_path, "r", encoding="utf-8") as f:

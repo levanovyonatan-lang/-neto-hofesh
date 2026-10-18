@@ -206,45 +206,6 @@
         startGame().finally(() => { replayPending = false; });
     }
 
-    function triggerDinoInterstitialAd(onDone) {
-        let handled = false;
-        const finish = () => {
-            if (handled) return;
-            handled = true;
-            sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
-            sessionStorage.setItem('dinoGamesSinceAd', '0');
-            if (typeof onDone === 'function') onDone();
-        };
-
-        const safetyTimer = setTimeout(() => {
-            finish();
-        }, 4000);
-
-        if (typeof window.adBreak === 'function') {
-            try {
-                window.adBreak({
-                    type: 'next',
-                    name: 'dino_replay',
-                    beforeAd: () => {
-                        clearTimeout(safetyTimer);
-                    },
-                    afterAd: () => {
-                        finish();
-                    },
-                    adBreakDone: (placementInfo) => {
-                        clearTimeout(safetyTimer);
-                        finish();
-                    }
-                });
-                return;
-            } catch(e) {
-                console.warn('AdSense adBreak invocation failed:', e);
-            }
-        }
-
-        finish();
-    }
-
     let pendingVignetteRestart = false;
     function resumeAfterVignette() {
         if (!pendingVignetteRestart || !isGameOver || document.hidden ||
@@ -1278,11 +1239,15 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        const lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10) || 0;
-        const offerAd = (Date.now() - lastAdTime) >= AD_INTERVAL_MS;
-        const playAgainBtn = document.createElement(offerAd ? 'a' : 'button');
-        playAgainBtn.dataset.dinoRestart = '';
-        if (offerAd) {
+        const now = Date.now();
+        let lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10);
+        if (!lastAdTime) {
+            lastAdTime = now;
+            sessionStorage.setItem('dinoLastAdTime', String(now));
+        }
+        const offerAd = (now - lastAdTime) >= AD_INTERVAL_MS;
+
+        function getRestartHref() {
             const restartUrl = new URL(window.location.href);
             restartUrl.searchParams.set('started', 'true');
             restartUrl.searchParams.set('dino', '1');
@@ -1295,26 +1260,46 @@
             }
             restartUrl.searchParams.set('targetIntent', targetIntent || 'summer');
             restartUrl.hash = '';
-            playAgainBtn.href = restartUrl.pathname + restartUrl.search;
+
+            // Ensure destination pathname differs so Google Auto Ads ALWAYS detects page transition and fires Vignette
+            let path = restartUrl.pathname;
+            if (path.endsWith('/index.html')) {
+                restartUrl.pathname = path.substring(0, path.length - 10) || '/';
+            } else if (path.endsWith('/')) {
+                restartUrl.pathname = path + 'index.html';
+            } else {
+                restartUrl.pathname = path + '/index.html';
+            }
+            return restartUrl.pathname + restartUrl.search;
+        }
+
+        const playAgainBtn = document.createElement(offerAd ? 'a' : 'button');
+        playAgainBtn.dataset.dinoRestart = '';
+        if (offerAd) {
+            playAgainBtn.href = getRestartHref();
             playAgainBtn.style.display = 'inline-block';
             playAgainBtn.style.textDecoration = 'none';
             playAgainBtn.addEventListener('pointerdown', () => { pendingVignetteRestart = true; });
             playAgainBtn.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') pendingVignetteRestart = true;
+                if (event.key === 'Enter' || event.key === ' ') pendingVignetteRestart = true;
             });
-            playAgainBtn.addEventListener('click', (event) => {
+            playAgainBtn.addEventListener('click', () => {
                 pendingVignetteRestart = true;
-                if (typeof window.adBreak === 'function' && !window.__dismissAd) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    triggerDinoInterstitialAd(() => {
-                        replayGame();
-                    });
-                }
+                sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
+                sessionStorage.setItem('dinoGamesSinceAd', '0');
             });
         } else {
             playAgainBtn.onclick = (e) => {
                 e.stopPropagation();
+                const clickNow = Date.now();
+                const curLastAd = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10);
+                if (curLastAd && (clickNow - curLastAd) >= AD_INTERVAL_MS) {
+                    pendingVignetteRestart = true;
+                    sessionStorage.setItem('dinoLastAdTime', String(clickNow));
+                    sessionStorage.setItem('dinoGamesSinceAd', '0');
+                    window.location.href = getRestartHref();
+                    return;
+                }
                 replayGame();
             };
         }
