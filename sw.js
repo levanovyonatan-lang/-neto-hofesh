@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261018-dino-interstitial-fix';
-const CACHE_NAME = 'neto-cache-v1790694514';
+const CACHE_VERSION = 'v20261018-production-ready';
+const CACHE_NAME = 'neto-cache-v1790694515';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -15,7 +15,12 @@ self.addEventListener('install', e => {
         'assets/js/app.js',
         'tips.js',
         'assets/js/games/dino-school.js',
+        'assets/js/games/emoji-rain.js',
+        'assets/js/firebase-init.js',
+        'assets/js/firebase-ui.js',
         'manifest.json',
+        'official-sun-neto-transparent.png',
+        'icon-neto-sunglasses-white.png',
         'icon-192.png',
         'icon-512.png'
       ]).catch(() => {});
