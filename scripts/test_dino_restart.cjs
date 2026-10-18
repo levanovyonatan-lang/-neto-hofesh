@@ -124,20 +124,18 @@ async function assertRunning(fixture, { navigated, games }) {
             } finally { await fixture.page.close(); }
         }
 
-        for (const gate of ['games', 'time', 'record']) {
+        for (const gate of ['time']) {
             const fixture = await setup(browser, base, { finish: false });
             try {
                 const { page } = fixture;
                 await page.evaluate(gate => {
-                    if (gate === 'games') sessionStorage.setItem('dinoGamesSinceAd', '0');
                     if (gate === 'time') sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
-                    if (gate === 'record') localStorage.setItem('dinoHighScore', '-1');
                     window.showDinoGameOver(0, 0, '');
                 }, gate);
                 const button = page.locator('[data-dino-restart]');
                 assert.equal(await button.evaluate(el => el.tagName), 'BUTTON');
                 await button.click();
-                await assertRunning(fixture, { navigated: false, games: gate === 'games' ? '1' : '3' });
+                await assertRunning(fixture, { navigated: false, games: '1' });
                 console.log('PASS eligibility:', gate);
             } finally { await fixture.page.close(); }
         }

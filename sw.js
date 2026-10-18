@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261018-dino-landscape-mode';
-const CACHE_NAME = 'neto-cache-v1790694510';
+const CACHE_VERSION = 'v20261018-dino-interstitial-ads';
+const CACHE_NAME = 'neto-cache-v1790694511';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
