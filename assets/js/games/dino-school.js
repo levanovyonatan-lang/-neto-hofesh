@@ -442,6 +442,17 @@
         scoreDisplay = document.createElement('div');
         scoreDisplay.className = 'dino-element';
         
+        const currentMonthStr = new Date().toISOString().substring(0, 7);
+        const lastActiveMonth = localStorage.getItem('dinoActiveMonth');
+        if (lastActiveMonth && lastActiveMonth !== currentMonthStr) {
+            // חודש חדש נכנס - מנקים מפתחות חודשיים קודמים כדי לאפס שיא חודשי ל-0
+            try {
+                localStorage.removeItem('dinoMonthlyScore_' + lastActiveMonth);
+            } catch(e) {}
+        }
+        localStorage.setItem('dinoActiveMonth', currentMonthStr);
+
+        // שיא כל הזמנים - תמידי ולא מתאפס לעולם
         let highScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         if (window.currentUserProfile && window.currentUserProfile.dinoHighScore) {
             let profileHighScore = window.currentUserProfile.dinoHighScore;
@@ -451,9 +462,9 @@
             }
         }
         
-        let currentMonthStr = new Date().toISOString().substring(0, 7);
+        // שיא חודשי - מתאפס בתחילת כל חודש ונצבר אך ורק ממשחקים בחודש הנוכחי
         let monthlyScore = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonthStr)) || 0;
-        if (window.currentUserProfile && window.currentUserProfile.monthlyScores && window.currentUserProfile.monthlyScores[currentMonthStr]) {
+        if (window.currentUserProfile && window.currentUserProfile.monthlyScores && typeof window.currentUserProfile.monthlyScores[currentMonthStr] === 'number') {
             let profileMonthly = window.currentUserProfile.monthlyScores[currentMonthStr];
             if (profileMonthly > monthlyScore) {
                 monthlyScore = profileMonthly;
@@ -461,12 +472,10 @@
             }
         }
 
-        // Sanity check: All-time high score should never be less than the monthly score
+        // שיא כללי לעולם לא יפחת מהשיא החודשי
         if (monthlyScore > highScore) {
             highScore = monthlyScore;
             localStorage.setItem('dinoHighScore', highScore);
-            // We don't automatically trigger a server save here to avoid spamming the DB, 
-            // it will be saved naturally on next game over if needed.
         }
         
         scoreDisplay.innerHTML = `
@@ -1133,6 +1142,7 @@
         
         let currentHighScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         let isNewRecord = false;
+        let isMonthlyRecord = false;
         
         // Anti-cheat validation
         const timeElapsed = Date.now() - gameStartTime;
@@ -1164,6 +1174,7 @@
             
             let localMonthly = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonth)) || 0;
             if (intScore > localMonthly) {
+                isMonthlyRecord = true;
                 localStorage.setItem('dinoMonthlyScore_' + currentMonth, intScore);
                 const msEl = document.getElementById('dino-monthly-score-val');
                 if (msEl) msEl.textContent = intScore;
@@ -1239,8 +1250,15 @@
             const isDemoMode = urlDemo || localStorage.getItem('isDemoMode') === 'true';
             
             if (isDemoMode && window.currentUserProfile && window.saveDinoHighScore) {
-                window.saveDinoHighScore(currentHighScore);
+                window.saveDinoHighScore(currentHighScore, null, null, false, false);
             }
+        } else if (isMonthlyRecord && score > 0) {
+            const recordEl = document.createElement('div');
+            recordEl.style.fontSize = '13px';
+            recordEl.style.color = '#60a5fa';
+            recordEl.style.fontWeight = 'bold';
+            recordEl.innerHTML = '🌟 שיא חודשי חדש! 🌟';
+            title.appendChild(recordEl);
         }
 
         gameContainer.appendChild(title);
@@ -1543,15 +1561,20 @@
             scoreDisplay.style.position = 'absolute';
             scoreDisplay.style.top = '10px';
             scoreDisplay.style.right = '20px';
-            scoreDisplay.style.fontSize = '18px';
             scoreDisplay.style.fontWeight = 'bold';
-            scoreDisplay.style.color = '#334155';
+            scoreDisplay.style.color = '#333';
+            scoreDisplay.style.display = 'block';
+            scoreDisplay.style.textAlign = 'right';
             scoreDisplay.style.zIndex = '20';
-            scoreDisplay.style.fontFamily = 'monospace';
-            scoreDisplay.style.background = 'rgba(255,255,255,0.7)';
-            scoreDisplay.style.padding = '2px 8px';
-            scoreDisplay.style.borderRadius = '10px';
-            scoreDisplay.innerHTML = 'HI <span id="dino-high-score-val">' + (parseInt(localStorage.getItem('dinoHighScore'))||0) + '</span> | <span id="dino-score-val">0</span>';
+
+            const currentMonthStr = new Date().toISOString().substring(0, 7);
+            const curHighScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
+            const curMonthlyScore = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonthStr)) || 0;
+            scoreDisplay.innerHTML = `
+                <div id="dino-score-val" style="font-size: 22px; line-height: 1;">0</div>
+                <div class="dino-score-text" style="font-size: 11px; color: #4b5563; font-weight: 500; margin-top: 2px; line-height: 1;">שיא כללי: <span id="dino-high-score-val">${curHighScore}</span></div>
+                <div class="dino-score-text" style="font-size: 11px; color: #3b82f6; font-weight: bold; margin-top: 2px; line-height: 1;">שיא חודשי: <span id="dino-monthly-score-val">${curMonthlyScore}</span></div>
+            `;
             gameContainer.appendChild(scoreDisplay);
         }
 

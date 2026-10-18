@@ -452,7 +452,7 @@ window.submitRegistration = async function() {
         // Update any current high score they just achieved
         const currentHS = parseInt(localStorage.getItem('dinoHighScore')) || 0;
         if(currentHS > 0 && window.saveDinoHighScore) {
-            window.saveDinoHighScore(currentHS);
+            window.saveDinoHighScore(currentHS, null, null, false, false);
         }
 }
 
@@ -716,7 +716,7 @@ window.handleLocalLogin = async function() {
     if(currentHS > 0 && window.saveDinoHighScore) {
         const token = localStorage.getItem('dinoHighScoreToken');
         const timeElapsed = localStorage.getItem('dinoTimeElapsed');
-        window.saveDinoHighScore(currentHS, token, timeElapsed);
+        window.saveDinoHighScore(currentHS, token, timeElapsed, false, false);
     }
 }
 

@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261018-dino-interstitial-ads';
-const CACHE_NAME = 'neto-cache-v1790694511';
+const CACHE_VERSION = 'v20261018-monthly-score-reset-fix';
+const CACHE_NAME = 'neto-cache-v1790694512';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

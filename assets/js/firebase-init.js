@@ -124,11 +124,11 @@ onAuthStateChanged(auth, async (user) => {
                     const hsEl = document.getElementById('dino-high-score-val');
                     if (hsEl) hsEl.textContent = serverDinoScore;
                 } else if (localDinoScore > serverDinoScore) {
-                    // יש שיא מקומי גבוה יותר, נעדכן את השרת
+                    // יש שיא מקומי גבוה יותר, נעדכן את השרת (רק שיא כל הזמנים, לא חודשי)
                     if (window.saveDinoHighScore) {
                         const token = localStorage.getItem('dinoHighScoreToken');
                         const timeElapsed = localStorage.getItem('dinoTimeElapsed');
-                        window.saveDinoHighScore(localDinoScore, token, timeElapsed);
+                        window.saveDinoHighScore(localDinoScore, token, timeElapsed, false, false);
                     }
                 }
                 
@@ -191,7 +191,7 @@ onAuthStateChanged(auth, async (user) => {
                     if (window.saveDinoHighScore) {
                         const token = localStorage.getItem('dinoHighScoreToken');
                         const timeElapsed = localStorage.getItem('dinoTimeElapsed');
-                        window.saveDinoHighScore(localDinoScore, token, timeElapsed);
+                        window.saveDinoHighScore(localDinoScore, token, timeElapsed, false, false);
                     }
                 }
 
@@ -279,7 +279,7 @@ window.completeUserRegistration = async (user, nickname, optInNewsletter, emoji 
         if (localDinoScore > 0 && window.saveDinoHighScore) {
             const token = localStorage.getItem('dinoHighScoreToken');
             const timeElapsed = localStorage.getItem('dinoTimeElapsed');
-            await window.saveDinoHighScore(localDinoScore, token, timeElapsed);
+            await window.saveDinoHighScore(localDinoScore, token, timeElapsed, false, false);
         }
         
         window.leaderboardLastFetch = 0;
@@ -371,27 +371,25 @@ window.saveDinoHighScore = async (score, token, timeElapsed, force = false, isLi
         updated = true;
     }
 
-    // שיא חודשי - נשמר בטבלה אך ורק אם השיא נשבר בפועל בחודש הנוכחי!
-    // שיא שנשבר בעבר (לפני החודש הנוכחי) יישמר רק בטבלת 'כל הזמנים' ולא בשיא החודשי
-    const localMonthly = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonth)) || 0;
-    const localHighScoreMonth = localStorage.getItem('dinoHighScoreMonth');
-    const isBrokenThisMonth = isLiveGame === true || (localHighScoreMonth === currentMonth && score === localHighScore);
-    let bestMonthlyScore = serverMonthly;
-
-    if (isBrokenThisMonth && score > bestMonthlyScore) {
-        bestMonthlyScore = score;
-    }
-    if (localMonthly > bestMonthlyScore) {
-        bestMonthlyScore = localMonthly;
-    }
-
-    if (bestMonthlyScore > serverMonthly) {
-        if (!window.currentUserProfile.monthlyScores) window.currentUserProfile.monthlyScores = {};
-        window.currentUserProfile.monthlyScores[currentMonth] = bestMonthlyScore;
-        userMergeData.monthlyScores = { [currentMonth]: bestMonthlyScore };
-        scoreMergeData.monthlyScores = { [currentMonth]: bestMonthlyScore };
-        updated = true;
+    // שיא חודשי - נשמר בטבלה אך ורק אם השיא נשבר בפועל במשחק חי בחודש הנוכחי!
+    // שיא ישן משנה/חודש קודם נשמר אך ורק ב'כל הזמנים' ולא מתועד כשיא חודשי.
+    if (isLiveGame === true && score > 0) {
+        const localMonthly = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonth)) || 0;
+        const bestMonthly = Math.max(score, localMonthly, serverMonthly);
+        
+        if (bestMonthly > serverMonthly) {
+            if (!window.currentUserProfile.monthlyScores) window.currentUserProfile.monthlyScores = {};
+            window.currentUserProfile.monthlyScores[currentMonth] = bestMonthly;
+            userMergeData.monthlyScores = { [currentMonth]: bestMonthly };
+            scoreMergeData.monthlyScores = { [currentMonth]: bestMonthly };
+            localStorage.setItem('dinoMonthlyScore_' + currentMonth, bestMonthly);
+            localStorage.setItem('dinoHighScoreMonth', currentMonth);
+            updated = true;
+        } else if (serverMonthly > 0) {
+            scoreMergeData.monthlyScores = { [currentMonth]: serverMonthly };
+        }
     } else if (serverMonthly > 0) {
+        // בטעינה רגילה או סנכרון ללא משחק פעיל - משמרים אך ורק את השיא החודשי הלגיטימי שכבר קיים בשרת
         scoreMergeData.monthlyScores = { [currentMonth]: serverMonthly };
     }
 
