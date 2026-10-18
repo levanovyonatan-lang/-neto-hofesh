@@ -187,6 +187,7 @@
         stageTxt.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
         stageTxt.style.opacity = '1';
         stageTxt.style.transition = 'opacity 1s ease';
+        stageTxt.style.pointerEvents = 'none';
         gameContainer.appendChild(stageTxt);
         
         setTimeout(() => {
@@ -333,7 +334,7 @@
             document.getElementById('dino-score-val').textContent = '0';
             isGameOver = false;
             gameSpeed = GAME_SPEED_START;
-            spawnTimer = 240;
+            spawnTimer = 70;
             frameCount = 0;
             lastFrameTime = 0;
             gameStartTime = Date.now();
@@ -378,7 +379,7 @@
         frameCount = 0;
         lastFrameTime = 0;
         gameStartTime = Date.now();
-        spawnTimer = 240; // 4 seconds runway before obstacles arrive
+        spawnTimer = 70; // Quick snappy start before obstacles arrive
 
         if (navigator.vibrate) navigator.vibrate([30]);
 
