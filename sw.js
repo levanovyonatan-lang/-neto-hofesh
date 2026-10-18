@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261015-android-pwa-vignette-opt';
-const CACHE_NAME = 'neto-cache-v1790694509';
+const CACHE_VERSION = 'v20261018-dino-landscape-mode';
+const CACHE_NAME = 'neto-cache-v1790694510';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

@@ -242,6 +242,7 @@
         }
         overlay.style.display = 'block';
         document.body.style.overflow = 'hidden';
+        document.body.classList.add('dino-game-active');
 
         try {
         document.documentElement.classList.remove('dino-restarting');
@@ -363,8 +364,9 @@
 
         setTimeout(() => {
             if (sessionId !== gameSessionId) return;
+            const isLandscape = window.innerHeight < 550;
             window.scrollTo({
-                top: gameContainer.getBoundingClientRect().top + window.scrollY - 80,
+                top: gameContainer.getBoundingClientRect().top + window.scrollY - (isLandscape ? 10 : 80),
                 behavior: 'smooth'
             });
         }, 400);
@@ -1324,6 +1326,7 @@
 
         document.body.style.touchAction = ''; 
         document.body.style.overflow = '';
+        document.body.classList.remove('dino-game-active');
         gameContainer.style.overflow = '';
         gameContainer.style.contain = '';
 
