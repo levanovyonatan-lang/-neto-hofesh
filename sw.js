@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261024-smooth-countdown-transition';
-const CACHE_NAME = 'neto-cache-v1790694516';
+const CACHE_VERSION = 'v20261024-score-sync-fix';
+const CACHE_NAME = 'neto-cache-v1790694517';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

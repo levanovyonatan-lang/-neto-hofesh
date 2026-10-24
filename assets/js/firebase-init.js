@@ -131,6 +131,18 @@ onAuthStateChanged(auth, async (user) => {
                         window.saveDinoHighScore(localDinoScore, token, timeElapsed, false, false);
                     }
                 }
+
+                // סנכרון שיא חודשי ל-localStorage
+                const currentMonthStr = new Date().toISOString().substring(0, 7);
+                if (window.currentUserProfile.monthlyScores && typeof window.currentUserProfile.monthlyScores[currentMonthStr] === 'number') {
+                    const serverMonthly = window.currentUserProfile.monthlyScores[currentMonthStr];
+                    const localMonthly = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonthStr)) || 0;
+                    if (serverMonthly > localMonthly) {
+                        localStorage.setItem('dinoMonthlyScore_' + currentMonthStr, serverMonthly);
+                        const msEl = document.getElementById('dino-monthly-score-val');
+                        if (msEl) msEl.textContent = serverMonthly;
+                    }
+                }
                 
                 // One-time sync to fix users whose scores didn't make it to the leaderboard
                 const maxScore = Math.max(serverDinoScore, localDinoScore);
@@ -192,6 +204,18 @@ onAuthStateChanged(auth, async (user) => {
                         const token = localStorage.getItem('dinoHighScoreToken');
                         const timeElapsed = localStorage.getItem('dinoTimeElapsed');
                         window.saveDinoHighScore(localDinoScore, token, timeElapsed, false, false);
+                    }
+                }
+
+                // סנכרון שיא חודשי ל-localStorage
+                const currentMonthStr = new Date().toISOString().substring(0, 7);
+                if (window.currentUserProfile.monthlyScores && typeof window.currentUserProfile.monthlyScores[currentMonthStr] === 'number') {
+                    const serverMonthly = window.currentUserProfile.monthlyScores[currentMonthStr];
+                    const localMonthly = parseInt(localStorage.getItem('dinoMonthlyScore_' + currentMonthStr)) || 0;
+                    if (serverMonthly > localMonthly) {
+                        localStorage.setItem('dinoMonthlyScore_' + currentMonthStr, serverMonthly);
+                        const msEl = document.getElementById('dino-monthly-score-val');
+                        if (msEl) msEl.textContent = serverMonthly;
                     }
                 }
 
