@@ -13,6 +13,9 @@ html.dino-restarting #neto-splash,
 html.dino-restarting #setup-screen,
 html.started-instant #neto-splash,
 html.started-instant #setup-screen { display: none !important; }
+html.started-instant #main-screen { display: flex !important; }
+html.started-instant body:not(.app-ready) footer,
+html.started-instant body:not(.app-ready) .sticky-banner-container { opacity: 0 !important; }
 html.dino-restarting body.splash-active .app-container,
 html.started-instant body.splash-active .app-container { visibility: visible !important; }
 

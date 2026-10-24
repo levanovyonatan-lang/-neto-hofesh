@@ -38,6 +38,12 @@
         }
         if (new URLSearchParams(window.location.search).get('started') === 'true') {
             document.documentElement.classList.add('started-instant');
+            try {
+                if ('scrollRestoration' in history) {
+                    history.scrollRestoration = 'manual';
+                }
+                window.scrollTo(0, 0);
+            } catch(e) {}
         }
     </script>
 

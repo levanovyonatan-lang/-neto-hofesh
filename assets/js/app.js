@@ -1006,14 +1006,21 @@ function updateCountdownStartLinks() {
 }
 
 function prepareCountdownNavigation(event, link) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+    }
     const choice = document.querySelector('input[name="schoolType"]:checked');
     if (!choice) {
-        if (event) event.preventDefault();
-        document.getElementById('error-message').style.display = 'block';
+        const errMsg = document.getElementById('error-message');
+        if (errMsg) {
+            errMsg.style.display = 'block';
+            errMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         return false;
     }
-    const targetIntent = link.dataset.countdownStart || 'next';
-    const isIOSStandalone = isNetoIOSStandalone();
+    const targetIntent = (link && link.dataset && link.dataset.countdownStart) ? link.dataset.countdownStart : 'next';
 
     try {
         localStorage.setItem('neto_userConfig', JSON.stringify({
@@ -1024,33 +1031,41 @@ function prepareCountdownNavigation(event, link) {
         }));
     } catch (e) { }
 
-    // Only on iOS Safari added to Home Screen (Standalone WebClip):
-    // Full document navigation resets the WebClip or opens external Safari.
-    // Transition in-page via SPA and neutralize the link href so WebKit does not navigate externally.
-    // On Android PWA / Desktop / Web: natural link navigation stays within the app and allows Google AdSense Vignettes to fire!
-    if (isIOSStandalone) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            if (event.stopImmediatePropagation) event.stopImmediatePropagation();
-        }
-        link.href = 'javascript:void(0)';
-        try {
-            sessionStorage.removeItem('neto_justStarted');
-            history.replaceState(null, '', getCountdownNavigationUrl(targetIntent));
-        } catch (e) { }
-        initApp(targetIntent);
-        return false;
-    }
-
     const navUrl = getCountdownNavigationUrl(targetIntent);
-    link.href = navUrl;
     try {
-        sessionStorage.setItem('neto_justStarted', targetIntent);
+        sessionStorage.removeItem('neto_justStarted');
+        history.replaceState(null, '', navUrl);
     } catch (e) { }
 
-    // Leave the natural link navigation intact so Google AdSense Auto Ads can intercept it and show Vignette transition ads
-    return true;
+    // Instantly pin scroll to top so the user never sees any bottom elements
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
+    // Smooth aesthetic transition from setup screen to main countdown screen
+    const setupScreen = document.getElementById('setup-screen');
+    if (setupScreen) {
+        setupScreen.style.transition = 'opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+        setupScreen.style.opacity = '0';
+        setTimeout(() => {
+            setupScreen.style.display = 'none';
+            setupScreen.style.opacity = '';
+            setupScreen.style.transition = '';
+            initApp(targetIntent, true);
+        }, 180);
+    } else {
+        initApp(targetIntent, true);
+    }
+
+    // Trigger AdSense interstitial / vignette if available via Google Ad Placement API
+    if (typeof window.adBreak === 'function') {
+        try {
+            window.adBreak({
+                type: 'browse',
+                name: 'start_countdown'
+            });
+        } catch (e) { }
+    }
+
+    return false;
 }
 
 function startCountdownFromUrl() {
@@ -1107,7 +1122,12 @@ function startCountdownFromUrl() {
 
     // This document loads after an offered vignette is dismissed, or immediately if none is served.
     const splash = document.getElementById('neto-splash');
-    if (splash) splash.style.display = 'none';
+    if (splash) {
+        splash.classList.add('splash-hiding');
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 350);
+    }
     document.body.classList.remove('splash-active');
     initApp(target, true);
     return true;
@@ -1206,6 +1226,7 @@ function resetApp() {
     lastInitAppTimestamp = 0;
     userConfig = { schoolType: '', studyFriday: false, activeTargetId: '' }; confettiFired = false;
     document.getElementById('main-screen').style.display = 'none'; document.getElementById('setup-screen').style.display = 'flex';
+    document.documentElement.classList.remove('started-instant');
 
     const premiumSelector = document.getElementById('premium-theme-selector');
     if (premiumSelector) {
@@ -1462,6 +1483,7 @@ function applyHolidayLandingPageMode() {
 
 function showMainScreen() {
     document.getElementById('setup-screen').style.display = 'none'; document.getElementById('main-screen').style.display = 'flex';
+    document.body.classList.add('app-ready');
     document.getElementById('excluding-label').textContent = userConfig.studyFriday ? "(בלי חגים ושבת)" : "(בלי חגים, שישי ושבת)";
 
     const demoBanner = document.getElementById('demo-banner');
