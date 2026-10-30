@@ -1055,16 +1055,6 @@ function prepareCountdownNavigation(event, link) {
         initApp(targetIntent, true);
     }
 
-    // Trigger AdSense interstitial / vignette if available via Google Ad Placement API
-    if (typeof window.adBreak === 'function') {
-        try {
-            window.adBreak({
-                type: 'browse',
-                name: 'start_countdown'
-            });
-        } catch (e) { }
-    }
-
     return false;
 }
 

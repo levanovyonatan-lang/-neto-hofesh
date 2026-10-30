@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261030-dino-clean-restart';
-const CACHE_NAME = 'neto-cache-v1790694518';
+const CACHE_VERSION = 'v20261030-dino-clean-restart-2';
+const CACHE_NAME = 'neto-cache-v1790694519';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
