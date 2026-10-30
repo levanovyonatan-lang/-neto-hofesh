@@ -1239,76 +1239,18 @@
         btnContainer.style.alignItems = 'center';
         btnContainer.style.justifyContent = 'center';
         
-        const now = Date.now();
-        let lastAdTime = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10);
-        if (!lastAdTime) {
-            lastAdTime = now;
-            sessionStorage.setItem('dinoLastAdTime', String(now));
-        }
-        const offerAd = (now - lastAdTime) >= AD_INTERVAL_MS;
-
-        function getRestartHref() {
-            const restartUrl = new URL(window.location.href);
-            restartUrl.searchParams.set('started', 'true');
-            restartUrl.searchParams.set('dino', '1');
-            restartUrl.searchParams.set('dinoAdAttempt', '1');
-            let targetIntent = restartUrl.searchParams.get('targetIntent');
-            if (!targetIntent) {
-                try {
-                    targetIntent = JSON.parse(localStorage.getItem('neto_userConfig') || '{}').targetIntent;
-                } catch (error) { /* Use the default countdown. */ }
-            }
-            restartUrl.searchParams.set('targetIntent', targetIntent || 'summer');
-            restartUrl.hash = '';
-
-            // Ensure destination pathname differs so Google Auto Ads ALWAYS detects page transition and fires Vignette
-            let path = restartUrl.pathname;
-            if (path.endsWith('/index.html')) {
-                restartUrl.pathname = path.substring(0, path.length - 10) || '/';
-            } else if (path.endsWith('/')) {
-                restartUrl.pathname = path + 'index.html';
-            } else {
-                restartUrl.pathname = path + '/index.html';
-            }
-            return restartUrl.pathname + restartUrl.search;
-        }
-
-        const playAgainBtn = document.createElement(offerAd ? 'a' : 'button');
+        const playAgainBtn = document.createElement('button');
         playAgainBtn.dataset.dinoRestart = '';
-        if (offerAd) {
-            playAgainBtn.href = getRestartHref();
-            playAgainBtn.style.display = 'inline-block';
-            playAgainBtn.style.textDecoration = 'none';
-            playAgainBtn.addEventListener('pointerdown', () => { pendingVignetteRestart = true; });
-            playAgainBtn.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter' || event.key === ' ') pendingVignetteRestart = true;
-            });
-            playAgainBtn.addEventListener('click', () => {
-                pendingVignetteRestart = true;
-                sessionStorage.setItem('dinoLastAdTime', String(Date.now()));
-                sessionStorage.setItem('dinoGamesSinceAd', '0');
-            });
-        } else {
-            playAgainBtn.onclick = (e) => {
-                e.stopPropagation();
-                const clickNow = Date.now();
-                const curLastAd = parseInt(sessionStorage.getItem('dinoLastAdTime') || '0', 10);
-                if (curLastAd && (clickNow - curLastAd) >= AD_INTERVAL_MS) {
-                    pendingVignetteRestart = true;
-                    sessionStorage.setItem('dinoLastAdTime', String(clickNow));
-                    sessionStorage.setItem('dinoGamesSinceAd', '0');
-                    window.location.href = getRestartHref();
-                    return;
-                }
-                replayGame();
-            };
-        }
+        playAgainBtn.onclick = (e) => {
+            e.stopPropagation();
+            replayGame();
+        };
 
         playAgainBtn.tabIndex = 0;
         playAgainBtn.onkeydown = (e) => {
-            if (e.key === ' ' || (e.key === 'Enter' && !offerAd)) {
+            if (e.key === ' ' || e.key === 'Enter') {
                 e.preventDefault();
-                playAgainBtn.click();
+                replayGame();
             }
         };
 
