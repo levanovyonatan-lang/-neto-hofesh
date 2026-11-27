@@ -689,11 +689,11 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
         if (tipNumber === 1) {
             if (isHigh && dailyData.tip1High) foundTip = dailyData.tip1High;
             else if (!isHigh && dailyData.tip1Elem) foundTip = dailyData.tip1Elem;
-            else foundTip = dailyData.tip1 || dailyData.missionHigh || dailyData.tipHigh || '';
+            else foundTip = dailyData.tip1 || (isHigh ? dailyData.tip1Elem : dailyData.tip1High) || dailyData.missionHigh || dailyData.tipHigh || '';
         } else if (tipNumber === 2) {
             if (isHigh && dailyData.tip2High) foundTip = dailyData.tip2High;
             else if (!isHigh && dailyData.tip2Elem) foundTip = dailyData.tip2Elem;
-            else foundTip = dailyData.tip2 || dailyData.tip || dailyData.tipElem || '';
+            else foundTip = dailyData.tip2 || (isHigh ? dailyData.tip2Elem : dailyData.tip2High) || dailyData.tip || dailyData.tipElem || '';
         }
 
         if (foundTip && typeof foundTip === 'string' && foundTip.trim().length > 5) {

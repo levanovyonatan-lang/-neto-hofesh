@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'v20261127-daily-tips-doc-sync-1';
-const CACHE_NAME = 'neto-cache-v20261127-doc-sync-1';
+const CACHE_VERSION = 'v20261127-daily-tips-doc-sync-2';
+const CACHE_NAME = 'neto-cache-v20261127-doc-sync-2';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
