@@ -446,10 +446,10 @@ async function loadDailyTipsDatabase() {
 
     const isSub = document.querySelector('link[href^="../"]') !== null || (window.location.pathname.replace(/^\/|-neto-hofesh\/?/g, '').split('/').filter(Boolean).length > 0);
     const prefix = isSub ? '../' : '';
-    const fetchUrl = `${prefix}assets/data/daily-tips.json?v=10162`;
+    const fetchUrl = `${prefix}assets/data/daily-tips.json?v=10165`;
 
     dailyTipsPromise = fetch(fetchUrl)
-        .catch(() => fetch('/assets/data/daily-tips.json?v=10162'))
+        .catch(() => fetch('/assets/data/daily-tips.json?v=10165'))
         .then(response => {
             if (!response.ok) throw new Error('Failed to load daily-tips.json');
             return response.json();
@@ -696,7 +696,7 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
             else foundTip = dailyData.tip2 || dailyData.tip || dailyData.tipElem || '';
         }
 
-        if (foundTip && typeof foundTip === 'string' && foundTip.trim().length > 5 && !foundTip.includes('💀📝')) {
+        if (foundTip && typeof foundTip === 'string' && foundTip.trim().length > 5) {
             return foundTip.trim();
         }
     }
