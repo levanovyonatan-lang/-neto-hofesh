@@ -235,11 +235,13 @@ def generate_seo_page(base_html, holiday):
     
     # 4. Convert relative asset URLs to ../ so they work inside /slug/index.html
     html = html.replace('href="official-sun-neto-transparent.png', 'href="../official-sun-neto-transparent.png')
+    html = html.replace('src="official-sun-neto-transparent.png', 'src="../official-sun-neto-transparent.png')
     html = html.replace('href="icon-neto-sunglasses-white.png', 'href="../icon-neto-sunglasses-white.png')
+    html = html.replace('src="icon-neto-sunglasses-white.png', 'src="../icon-neto-sunglasses-white.png')
     html = html.replace('href="manifest.json', 'href="../manifest.json')
     html = html.replace('href="assets/', 'href="../assets/')
     html = html.replace('src="assets/', 'src="../assets/')
-    html = html.replace('src="tips.js"', 'src="../tips.js"')
+    html = html.replace('src="tips.js', 'src="../tips.js')
     html = html.replace('href="avigail-camp.html"', 'href="../avigail-camp.html"')
     html = html.replace('href="fitness.html"', 'href="../fitness.html"')
     return html

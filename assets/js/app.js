@@ -2,7 +2,8 @@ const loadingPhrases = ["טוען פאנץ' מוחץ... 🤖", "מחשב אנר�
 const tipsDataVersion = 'tips-file-v3';
 const dailyTipsStorageKey = `holiday_calc_daily_tips_${tipsDataVersion}`;
 const tipHistoryStorageKey = `holiday_calc_tip_history_${tipsDataVersion}`;
-const tipsScriptSrc = `tips.js?v=${tipsDataVersion}`;
+const isSubpagePath = document.querySelector('link[href^="../"]') !== null || (window.location.pathname.replace(/^\/|-neto-hofesh\/?/g, '').split('/').filter(Boolean).length > 0);
+const tipsScriptSrc = `${isSubpagePath ? '../' : ''}tips.js?v=${tipsDataVersion}`;
 const schoolTipKeys = { elem: 'elementary', middle: 'highschool', high: 'highschool' };
 let tipsDatabasePromise = null;
 let dailyTipsPromise = null;
@@ -56,9 +57,9 @@ function trackEvent(eventName, params = {}) {
 function initPWA() {
     if ('serviceWorker' in navigator) {
         const hadController = !!navigator.serviceWorker.controller;
-        let isRefreshing = false;
-
-        navigator.serviceWorker.register('sw.js?v=20261012-safari-single-start-fix-1').then(reg => {
+        const swPath = (isSubpagePath ? '../' : '') + 'sw.js?v=20261127-daily-tips-fix';
+        const swOptions = isSubpagePath ? { scope: '../' } : {};
+        navigator.serviceWorker.register(swPath, swOptions).then(reg => {
             reg.update();
 
             setInterval(() => {
@@ -402,8 +403,6 @@ function loadTipsDatabase() {
     if (tipsDatabasePromise) return tipsDatabasePromise;
 
     tipsDatabasePromise = new Promise((resolve, reject) => {
-        const existingScript = document.querySelector('script[data-tips-database="true"]');
-
         const finishLoading = () => {
             if (window.tipsDatabase && typeof window.tipsDatabase === 'object') {
                 resolve(window.tipsDatabase);
@@ -413,7 +412,11 @@ function loadTipsDatabase() {
             }
         };
 
+        const existingScript = document.querySelector('script[src*="tips.js"]');
         if (existingScript) {
+            if (window.tipsDatabase && typeof window.tipsDatabase === 'object') {
+                return finishLoading();
+            }
             existingScript.addEventListener('load', finishLoading, { once: true });
             existingScript.addEventListener('error', () => {
                 tipsDatabasePromise = null;
@@ -441,10 +444,12 @@ async function loadDailyTipsDatabase() {
     if (window.dailyTips) return window.dailyTips;
     if (dailyTipsPromise) return dailyTipsPromise;
 
-    // Use absolute URL from origin to avoid 404s on subpages
-    const fetchUrl = window.location.origin + '/assets/data/daily-tips.json?v=10160';
+    const isSub = document.querySelector('link[href^="../"]') !== null || (window.location.pathname.replace(/^\/|-neto-hofesh\/?/g, '').split('/').filter(Boolean).length > 0);
+    const prefix = isSub ? '../' : '';
+    const fetchUrl = `${prefix}assets/data/daily-tips.json?v=10162`;
 
     dailyTipsPromise = fetch(fetchUrl)
+        .catch(() => fetch('/assets/data/daily-tips.json?v=10162'))
         .then(response => {
             if (!response.ok) throw new Error('Failed to load daily-tips.json');
             return response.json();
@@ -484,20 +489,30 @@ function getSchoolTipKey(schoolType) {
 
 function resolveTipPool(tipsDb, targetId, schoolType) {
     tipsDb = tipsDb || {};
-    const schoolTipKey = getSchoolTipKey(schoolType);
-    const keys = [];
+    const fallbackSchoolType = (schoolType === 'middle' || schoolType === 'high') ? 'high' : 'elem';
+    let baseTargetName = (targetId || '').replace(/\d+$/, '');
+    if (baseTargetName === 'kippurSukkot') baseTargetName = 'sukkot';
 
-    if (tipsDb[targetId]) keys.push(targetId);
-    if (targetId === 'shavuot') keys.push('shavuot');
-    keys.push(schoolTipKey);
+    const preferredKeys = [
+        `waiting_${baseTargetName}_${fallbackSchoolType}`,
+        `vacation_${baseTargetName}_${fallbackSchoolType}_1`,
+        `waiting_summer_${fallbackSchoolType}`,
+        `vacation_summer_${fallbackSchoolType}_1`
+    ];
 
-    const uniqueKeys = [...new Set(keys)];
-    const pool = uniqueKeys.flatMap((key) => flattenTips(tipsDb[key])).filter(Boolean);
-    const fallbackPool = pool.length ? pool : flattenTips(tipsDb);
+    for (const key of preferredKeys) {
+        if (tipsDb[key] && Array.isArray(tipsDb[key]) && tipsDb[key].length > 0) {
+            return {
+                pool: flattenTips(tipsDb[key]),
+                poolKey: key
+            };
+        }
+    }
 
+    const fallbackPool = flattenTips(tipsDb);
     return {
-        pool: fallbackPool,
-        poolKey: `${targetId}_${schoolType || 'default'}_${uniqueKeys.join('_') || 'all'}`
+        pool: fallbackPool.length ? fallbackPool : ["חופש נעים ומלא אנרגיות חיוביות! ✨🏖️"],
+        poolKey: `${targetId}_fallback`
     };
 }
 
@@ -557,14 +572,7 @@ function renderTipBox(targetId, isNewlyClicked = false) {
         if (target.isCustom || target.id.startsWith('custom_')) {
             shouldShowTips = false;
         } else {
-            const schoolVacations = activeEventsList.filter(e => !e.isCustom && !e.id.startsWith('custom_'));
-            if (schoolVacations.length > 0) {
-                const firstId = schoolVacations[0].id;
-                const lastId = schoolVacations[schoolVacations.length - 1].id;
-                if (target.id === firstId || target.id === lastId) {
-                    shouldShowTips = true;
-                }
-            }
+            shouldShowTips = true;
         }
         if (shouldShowTips && !hasDailyTips(targetId)) {
             shouldShowTips = false;
@@ -676,15 +684,20 @@ async function getSmartTip(targetId, schoolType, tipNumber) {
     if (dailyTipsData && dailyTipsData[dateKey]) {
         const dailyData = dailyTipsData[dateKey];
         const isHigh = schoolType === 'high' || schoolType === 'middle';
+        let foundTip = '';
 
         if (tipNumber === 1) {
-            if (isHigh && dailyData.tip1High) return dailyData.tip1High;
-            if (!isHigh && dailyData.tip1Elem) return dailyData.tip1Elem;
-            return dailyData.tip1 || dailyData.missionHigh || dailyData.tipHigh || '';
+            if (isHigh && dailyData.tip1High) foundTip = dailyData.tip1High;
+            else if (!isHigh && dailyData.tip1Elem) foundTip = dailyData.tip1Elem;
+            else foundTip = dailyData.tip1 || dailyData.missionHigh || dailyData.tipHigh || '';
         } else if (tipNumber === 2) {
-            if (isHigh && dailyData.tip2High) return dailyData.tip2High;
-            if (!isHigh && dailyData.tip2Elem) return dailyData.tip2Elem;
-            return dailyData.tip2 || dailyData.tip || dailyData.tipElem || '';
+            if (isHigh && dailyData.tip2High) foundTip = dailyData.tip2High;
+            else if (!isHigh && dailyData.tip2Elem) foundTip = dailyData.tip2Elem;
+            else foundTip = dailyData.tip2 || dailyData.tip || dailyData.tipElem || '';
+        }
+
+        if (foundTip && typeof foundTip === 'string' && foundTip.trim().length > 5 && !foundTip.includes('💀📝')) {
+            return foundTip.trim();
         }
     }
 

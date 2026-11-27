@@ -10,7 +10,7 @@ html = html.replace('src="icon-neto-sunglasses-white.png', 'src="../icon-neto-su
 html = html.replace('href="manifest.json', 'href="../manifest.json')
 html = html.replace('href="assets/', 'href="../assets/')
 html = html.replace('src="assets/', 'src="../assets/')
-html = html.replace('src="tips.js"', 'src="../tips.js"')
+html = html.replace('src="tips.js', 'src="../tips.js')
 html = html.replace('href="avigail-camp.html"', 'href="../avigail-camp.html"')
 html = html.replace('href="fitness.html"', 'href="../fitness.html"')
 
